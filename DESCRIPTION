@@ -1,0 +1,27 @@
+Package: correa
+Type: Package
+Title: Create Darwin Core Archives
+Version: 0.1.0
+Authors@R:
+    c(person(given = "Martin",
+             family = "Westgate",
+             email = "martin.westgate@csiro.au",
+             role = c("aut", "cre")),
+      person(given = "Dax",
+             family = "Kellie",
+             email = "dax.kellie@csiro.au",
+             role = c("aut")))
+Description: Simple tools for converting data into DwC format.
+Depends: 
+  R (>= 4.1.0)
+Imports:
+  dplyr,
+  janitor,
+  readr
+Suggests:
+  testthat (>= 3.0.0)
+License: GNU
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.1
+Config/testthat/edition: 3
