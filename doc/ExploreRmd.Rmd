@@ -1,0 +1,87 @@
+---
+title: "Exploring exisiting DwC tools"
+author: "Fonti Kar"
+date: "2023-03-29"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, skimr)
+```
+
+## Installation and set up
+
+```{r}
+devtools::install_github("bd-R/bddwc.app")
+library(bddwc.app)
+```
+
+## Run the app
+
+```{r}
+bddwc_app()
+```
+
+## Read in "Darwinised" data
+
+```{r}
+output <- readRDS("output/darwinizedData-2023-03-29.RDS")
+
+skim(output)
+glimpse(output)
+```
+
+## Inline functions
+
+```{r}
+# Package example data
+data_reptiles <- bdDwC:::data_reptiles
+
+head(data_reptiles)
+skim(data_reptiles)
+glimpse(data_reptiles)
+
+# Package data dictionary "metadata"
+dictionary <-  bdDwC:::data_darwin_cloud$data
+
+head(dictionary)
+skim(dictionary)
+glimpse(dictionary)
+```
+
+### Name match or "darwinise"
+
+Inconsistencies with documentation camel case to snake case
+
+```{r}
+result <-bdDwC::darwinize_names( data_reptiles,
+                                 dictionary)
+head(result)
+skim(result)
+glimpse(result)
+```
+
+### Rename data
+
+```{r}
+updated <- bdDwC::rename_user_data(data_reptiles, result)
+
+head(updated)
+skim(updated)
+glimpse(updated)
+```
+
+### Download latest dictionary cloud
+
+```{r}
+dictionary_updated <- bdDwC::download_cloud_data()
+
+head(dictionary_updated)
+skim(dictionary_updated)
+glimpse(dictionary_updated)
+```
+
