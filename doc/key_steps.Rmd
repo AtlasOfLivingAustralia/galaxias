@@ -1,0 +1,158 @@
+---
+title: "Package functions"
+author: "Fonti Kar"
+date: "2023-04-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preamble
+
+This document maps out the key steps for converting a `.csv` data file into a Darwin Core XML file. These steps will become eventual functions for this R package.
+
+### Packages/dependencies we need
+
+```{r}
+pacman::p_load(tidyverse, here, skimr, janitor)
+```
+
+### Example data
+
+I retrieved some example data from [Dyrad](https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.j9kd51cgr), the respective publication found [here](https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.16501). This study looks like compiled unpublished and unpublished as well collected field data e.g ("A. Westerband" in References field are field collected and presumably unpublished). 
+
+1. Create a folder within the package and name it 'ignore'. This folder is not detected by git and will not be pushed to the repo.
+2. Download the zip folder and unzip into `ignore/`.
+3. Save the enclosed `.xlsx` file as a `.csv` (manual step)
+```{r}
+# Read in data
+westerband_2022 <- readr::read_csv(here("ignore/doi_10.5061_dryad.j9kd51cgr__v4/Westerband_2022_GCB_DRYAD.csv"))
+
+#Preview
+dplyr::glimpse(westerband_2022)
+skimr::skim(westerband_2022)
+```
+
+### Identify relevant columns
+
+Relying on the ALA [data ingestion documentation](https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala) here to choose relevant columns
+
+#### Species name
+
+```{r}
+potential_names <- c("species",  "SPECIES",
+                     "name", "NAME",
+                     "species_name", "speciesName", "SPECIES_NAME",
+                     "scientific_name", "scientificName", "SCIENTIFIC_NAME",
+                     "latin_name", "latinName", "LATIN_NAME",
+                     "valid_name", "validName", "VALID_NAME", 
+                     "complete_name", "completeName" ,"COMPLETE_NAME"
+                      )
+
+# String matching
+# str_which(potential_names, pattern = regex("species|name|scientific", ignore_case = TRUE))
+str_which(names(westerband_2022), pattern = regex("species|name|scientific", ignore_case = TRUE))
+
+# Select the matched column
+westerband_2022 |> 
+  select(str_which(names(westerband_2022), pattern = regex("species|name|scientific", ignore_case = TRUE))) 
+```
+#### Date information
+
+```{r}
+# Generate some random dates
+westerband_2022 <- westerband_2022 |> 
+  mutate(Collection_date = sample(seq(as.Date('2022/01/01'), as.Date('2023/01/01'), by="day"), nrow(westerband_2022), replace = TRUE))
+
+# write_csv(westerband_2022, here("data/westerband_2022_wdate.csv"))
+
+# Testing what happens with readr::read_csv when you read in a .csv that contains dates. Does it parse as string? 
+westerband_2022_wdate <- read_csv(here("data/westerband_2022_wdate.csv"))
+
+glimpse(westerband_2022_wdate) # Yes it guesses the date since it is formatted as yyyy-mm-dd
+
+# Select date column
+select_if(westerband_2022, function(x) inherits(x, 'Date'))
+```
+
+What if date information is inputted in other formats e.g 1-Jul-1998, 20-Mar-23, 06-30-2018 (June 30th - North American formatting) 
+We will need to split the string up and guess if its a month, day, year base on number of characters and ranges of the column.
+
+Wonder if we can use {pointblank} for these checks
+
+```{r}
+# Example 1
+date_1 <- tibble(date = c("1-Jul-1998", "1-Aug-1998", "1-Sept-1998", "1-Oct-1998"))
+date_1
+
+# Example 2 d/m/yyyy
+date_2 <- tibble(date = c("1/7/1998", "1/8/1998", "1/9/1998", "1/10/1998"))
+date_2
+
+# Example 3 m.d.yyyy
+date_3 <- tibble(date = c("7.1.1998", "8.9.1998", "9.15.1998", "10.27.1998"))
+date_3
+
+#Split string by common date seperators - / . 
+date_separators <- c("-", "/", "\\.")
+
+# Separate date to guess date format
+split_date <- date_1 |> 
+  separate_wider_delim(cols = date,
+                       delim = regex(paste(date_separators, collapse = "|")),
+                       names = c("first", "second", "third"))
+
+# Which column contains letters?
+map_lgl(split_date,
+    ~any(str_detect(.x, pattern = regex("[:alpha:]")) ))
+
+letters_res <- map_lgl(split_date,
+    ~any(str_detect(.x, pattern = regex("[:alpha:]")) ))
+
+# Letters column is likely to be month
+# Detect month letter strings
+month_letter_pattern <-  c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+str_detect(split_date[letters_res] |> pull() , pattern = regex(paste(month_letter_pattern, collapse = "|"))) |> any()
+
+# Mutate column as month
+split_date |> 
+  mutate(month = split_date[letters_res] |> pull())
+
+# Which column contains digits?
+digit_res <- map_lgl(split_date,
+    ~any(str_detect(.x, pattern = regex("[:digit:]")) ))
+
+
+# How many characters do values in each column have?
+map_vec(split_date[which(digit_res)],
+        ~ nchar(.x) |> unique())
+
+# Likely year if 4 characters
+year_char_test <- map_vec(split_date[which(digit_res)],
+        ~ nchar(.x) |> unique() == 4)
+
+split_date[which(year_char_test == TRUE)]
+
+# If digit, convert to numeric
+# Test if values are between 1-12
+map(split_date[which(digit_res)],
+        ~ as.numeric(.x))
+
+map_vec(split_date[which(digit_res)],
+    ~ as.numeric(max(.x)) <= 31)
+
+# Check if max is less than 12, if FALSE then its a month
+split_date$first |> as.numeric() |> max() > 12
+```
+
+
+#### Location information
+
+```{r}
+#site, collection_site, location, character, state, country, latitude, longitude
+```
+
