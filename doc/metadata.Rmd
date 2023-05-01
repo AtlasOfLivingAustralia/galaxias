@@ -1,0 +1,55 @@
+---
+title: "metadata"
+author: "Fonti Kar"
+date: "2023-04-30"
+output: html_document
+---
+
+# ALA Dataset Metadata
+
+Currently made for mandatory fields only, template found [here](https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala#minimum-fields)
+
+## Data Resource
+
+```{r, Title}
+Australia-wide photosynthetic trait dataset
+```
+URL: https://doi.org/10.5061/dryad.j9kd51cgr
+
+```{r, URL}
+https://doi.org/10.5061/dryad.j9kd51cgr
+```
+
+## Description
+
+```{r, Public short description}
+
+```
+
+## Citation and Rights
+
+```{r, Citation}
+Westerband, Andrea et al. (2022), Australia-wide photosynthetic trait dataset, Dryad, Dataset, https://doi.org/10.5061/dryad.j9kd51cgr
+```
+
+```{r, Creator}
+Firstname Lastname
+```
+
+CC0, CC-BY, CC-BY-NC preferred
+
+```{r, License}
+CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+```
+
+## Primary Contact(s) 
+
+```{r, Name}
+Firstname Lastname
+```
+
+```{r, Email}
+youremail@email.com
+```
+
+

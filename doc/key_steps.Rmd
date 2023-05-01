@@ -228,5 +228,11 @@ westerband_subset <- bind_cols(species, date, location)
 write_csv(westerband_subset, here("output/csv/westerband_subset.csv"))
 ```
 
+### 5) Meta data
 
+Currently made for mandatory fields only, template found [here](https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala#minimum-fields)
+
+```{r}
+knitr::purl(here("doc/metadata.Rmd"), output=here("output/script/metadata.R"), docmentation = 1)
+```
 
