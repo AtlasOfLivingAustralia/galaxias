@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This document maps out the key steps for converting a `.csv` data file into a Darwin Core XML file. These steps will become eventual functions for this R package.
 
-### Packages/dependencies we need
+## Packages/dependencies we need
 
 ```{r}
 pacman::p_load(tidyverse, here, skimr, janitor)
 ```
 
-### Example data
+## Example data
 
 I retrieved some example data from [Dyrad](https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.j9kd51cgr), the respective publication found [here](https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.16501). This study looks like compiled unpublished and unpublished as well collected field data e.g ("A. Westerband" in References field are field collected and presumably unpublished). 
 
@@ -35,11 +35,51 @@ dplyr::glimpse(westerband_2022)
 skimr::skim(westerband_2022)
 ```
 
-### Identify relevant columns
+Generate some random dates
+
+```{r}
+westerband_2022 <- westerband_2022 |> 
+  mutate(Collection_date = sample(seq(as.Date('2022/01/01'), as.Date('2023/01/01'), by="day"), nrow(westerband_2022), replace = TRUE))
+
+# write_csv(westerband_2022, here("data/westerband_2022_wdate.csv"))
+
+# Testing what happens with readr::read_csv when you read in a .csv that contains dates. Does it parse as string? 
+westerband_2022_wdate <- read_csv(here("data/westerband_2022_wdate.csv"))
+
+glimpse(westerband_2022_wdate) # Yes it guesses the date since it is formatted as yyyy-mm-dd
+
+# What if dates are in non-POSIT formats? See # Checking dates
+```
+
+### 1) Assign a unique identifier
+
+```{r}
+# https://samfirke.com/2018/08/22/generating-unique-ids-using-r/
+create_unique_ids <- function(n, seed_no = 1, char_len = 5){
+  set.seed(seed_no)
+  pool <- c(letters, LETTERS, 0:9)
+  
+  res <- character(n) # pre-allocating vector is much faster than growing it
+  for(i in seq(n)){
+    this_res <- paste0(sample(pool, char_len, replace = TRUE), collapse = "")
+    while(this_res %in% res){ # if there was a duplicate, redo
+      this_res <- paste0(sample(pool, char_len, replace = TRUE), collapse = "")
+    }
+      res[i] <- this_res
+  }
+  res
+}
+
+westerband_2022_wdate |> 
+  mutate(occurrenceID = create_unique_ids(nrow(westerband_2022))) 
+```
+
+
+### 2) Identify relevant columns
 
 Relying on the ALA [data ingestion documentation](https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala) here to choose relevant columns
 
-#### Species name
+#### a - Species name
 
 ```{r}
 potential_names <- c("species",  "SPECIES",
@@ -53,29 +93,28 @@ potential_names <- c("species",  "SPECIES",
 
 # String matching
 # str_which(potential_names, pattern = regex("species|name|scientific", ignore_case = TRUE))
-str_which(names(westerband_2022), pattern = regex("species|name|scientific", ignore_case = TRUE))
+str_which(names(westerband_2022_wdate), pattern = regex("species|name|scientific", ignore_case = TRUE))
 
 # Select the matched column
-westerband_2022 |> 
-  select(str_which(names(westerband_2022), pattern = regex("species|name|scientific", ignore_case = TRUE))) 
+species <- westerband_2022_wdate |> 
+  select(str_which(names(westerband_2022_wdate), pattern = regex("species|name|scientific", ignore_case = TRUE))) 
+
+# Rename as scientificName
+species <- species |> 
+  rename(raw_scientificName = Species) 
 ```
-#### Date information
+#### b - Date information
 
 ```{r}
-# Generate some random dates
-westerband_2022 <- westerband_2022 |> 
-  mutate(Collection_date = sample(seq(as.Date('2022/01/01'), as.Date('2023/01/01'), by="day"), nrow(westerband_2022), replace = TRUE))
-
-# write_csv(westerband_2022, here("data/westerband_2022_wdate.csv"))
-
-# Testing what happens with readr::read_csv when you read in a .csv that contains dates. Does it parse as string? 
-westerband_2022_wdate <- read_csv(here("data/westerband_2022_wdate.csv"))
-
-glimpse(westerband_2022_wdate) # Yes it guesses the date since it is formatted as yyyy-mm-dd
-
 # Select date column
-select_if(westerband_2022, function(x) inherits(x, 'Date'))
+date <- select_if(westerband_2022_wdate, function(x) inherits(x, 'Date'))
+
+# Rename as raw_eventDate
+date <- date |> 
+  rename(raw_eventDate = Collection_date) 
 ```
+
+##### Checking dates
 
 What if date information is inputted in other formats e.g 1-Jul-1998, 20-Mar-23, 06-30-2018 (June 30th - North American formatting) 
 We will need to split the string up and guess if its a month, day, year base on number of characters and ranges of the column.
@@ -149,10 +188,45 @@ map_vec(split_date[which(digit_res)],
 split_date$first |> as.numeric() |> max() > 12
 ```
 
+#### c - Location information
 
-#### Location information
+Should site here be...locationRemarks? or verbatimLocality? 
 
 ```{r}
 #site, collection_site, location, character, state, country, latitude, longitude
+
+location <- westerband_2022_wdate |> 
+  select(str_which(names(westerband_2022), pattern = regex("site|location|state|country|province|latitude|longitude", ignore_case = TRUE))) 
+
+# Rename columns respectively 
+location <- location |> 
+  rename(raw_decimalLatitude =  Latitude,
+         raw_decimaleLongitude = Longitude,
+         verbatimLocality = Site)
 ```
+
+##### Check location information
+
+Presumably the user needs to filter some of these sites out? Some of these are plant genuses e.g Transcontinentalis
+Maybe a check box that users can click to include in data? 
+
+```{r}
+location$verbatimLocality |> tabyl()
+```
+
+### 3) Put seperate datasets together 
+
+Just the bare minimum data here
+
+```{r}
+westerband_subset <- bind_cols(species, date, location)
+```
+
+### 4) Export as .csv
+
+```{r}
+write_csv(westerband_subset, here("output/csv/westerband_subset.csv"))
+```
+
+
 
