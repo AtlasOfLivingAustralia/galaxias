@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Preamble
 
-This document maps out the key steps for converting a `.csv` data file into a Darwin Core XML file. These steps will become eventual functions for this R package.
+This document maps out the key steps for converting a `.csv` data file into a Darwin Core XML file. These steps will become eventual functions for this R package. The below is a minimal product (no multimedia and mandatory fields/data only)
 
 ## Packages/dependencies we need
 
@@ -103,6 +103,7 @@ species <- westerband_2022_wdate |>
 species <- species |> 
   rename(raw_scientificName = Species) 
 ```
+
 #### b - Date information
 
 ```{r}
@@ -228,11 +229,210 @@ westerband_subset <- bind_cols(species, date, location)
 write_csv(westerband_subset, here("output/csv/westerband_subset.csv"))
 ```
 
-### 5) Meta data
+### 5) Meta data template eml.xml "Environmental meta-data"
 
 Currently made for mandatory fields only, template found [here](https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala#minimum-fields)
 
 ```{r}
-knitr::purl(here("doc/metadata.Rmd"), output=here("output/script/metadata.R"), docmentation = 1)
+knitr::purl( here("doc/metadata.Rmd"), output = here("output/script/metadata.R"), documentation = 2)
 ```
 
+### 6) Convert meta data R script to XML
+
+R object to list to XML? Possible? Explore
+
+https://xml2.r-lib.org/
+
+A guide to XML documents: https://www.w3schools.com/xml/xml_tree.asp
+
+On the {XML} package: https://stackoverflow.com/questions/57624678/generate-xml-document-in-r
+
+This looks promising too {minixml}: https://coolbutuseless.github.io/2019/09/30/introducing-the-minixml-package-for-creating-xml-documents-in-r/
+
+XML template: 
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<eml:eml xmlns:d="eml://ecoinformatics.org/dataset-2.1.0" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/terms/" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd" system="ALA-Registry" scope="system" xml:lang="en">
+  <dataset>
+    <alternateIdentifier>48458dk392-dfkal-b7e4-609</alternateIdentifier>
+    <alternateIdentifier>https://collections-test.ala.org.au/public/show/dr860275602765</alternateIdentifier>
+    <title xmlns:lang="en">Dataset Name</title>
+    <creator>
+      <organizationName>Organisation Name</organizationName>
+    </creator>
+    <metadataProvider>
+      <organizationName>Organisation Name</organizationName>
+    </metadataProvider>
+    <associatedParty>
+      <organizationName>Atlas of Living Australia</organizationName>
+      <address>
+        <deliveryPoint>CSIRO Ecosystems Services</deliveryPoint>
+        <city>Canberra</city>
+        <administrativeArea>ACT</administrativeArea>
+        <postalCode>2601</postalCode>
+        <country>Australia</country>
+      </address>
+      <electronicMailAddress />
+      <role>distributor</role>
+    </associatedParty>
+    <pubDate>2022-06-21</pubDate>
+    <language>English</language>
+    <abstract>
+    <para>And then bandicoot from case in point. Lilly pilly cane toad kingfisher. Tasmanian devil lemon myrtle blue-ringed octopus.</para>
+</abstract>
+    <intellectualRights>
+      <para>
+        <ulink url="https://creativecommons.org/licenses/by/4.0/">
+          <citetitle>Creative Commons Attribution 4.0 International (CC-BY 4.0)</citetitle>
+        </ulink>
+      </para>
+    </intellectualRights>
+    <distribution>
+      <online>
+        <url function="information">https://collections-test.ala.org.au/public/show/dr860275602765</url>
+      </online>
+    </distribution>
+    <coverage />
+    <purpose>
+      <para></para>
+    </purpose>
+    <contact>
+      <individualName>
+        <givenName>Jay</givenName>
+        <surName>Citizen</surName>
+      </individualName>
+    </contact>
+    <methods />
+  </dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+        <dateStamp>2022-06-21T04:45:31</dateStamp>
+        <hierarchyLevel>dataset</hierarchyLevel>
+        <resourceLogoUrl>https://collections-test.ala.org.au/data/dataProvider/test.png</resourceLogoUrl>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>
+
+```
+
+Try reproduce the template above with {xml2}
+
+```{r}
+# install.packages("xml2")
+library(xml2)
+
+# Create a new XML document with root
+eml <- xml_new_root(version="1.0", encoding="utf-8",
+                    "eml") 
+
+eml # How do I preview the document? 
+
+# Add an element/a parent node called dataset
+eml <- eml |> xml_add_parent("dataset")
+
+eml
+
+# Add a child element
+eml <- eml |> xml_add_child("alternateIdentifier") # How do I give this a value?
+
+eml # How do I continually build on a document? 
+
+```
+
+Try reproduce the template above with {EML}
+
+```{r}
+# install.packages("EML")
+library(EML)
+
+person <- list(individualName = list(givenName = "Firstname", surName = "Surname"))
+
+eml <- list(
+  dataset = list(
+    title = "Australia-wide photosynthetic trait dataset",
+    creator = list(
+    organizationName = "Organisation Name",
+    metadataProvider = "Organisation Name"
+    ),
+    associatedParty = list(
+      organizationName = "Atlas of Living Australia",
+      address = list(
+      deliveryPoint = "CSIRO Ecosystems Services",
+      city = "Canberra",
+      administrativeArea = "ACT",
+      postalCode = "2601",
+      country = "Australia"
+    ) ,
+    role = "distributor"
+    ),
+  pubDate = "2022-06-21",
+  language = "English",
+  abstract = "The quick brown fox jumps over the lazy dog",
+  intellectualRights = "Organisation Name"
+  )
+)
+
+write_eml(eml, here("output/eml/test"))
+```
+
+
+
+### Creating meta.xml field (mapping fields to fields)
+
+This step is a mystery atm
+occurrence.csv is the user supplied data
+NB: Peggy has Python matching occurrence cols to fields in meta.xml
+
+```
+<?xml version="1.0" ?>
+<archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml">
+  <core encoding="UTF-8" rowType="http://rs.tdwg.org/dwc/terms/Occurrence" fieldsTerminatedBy="," linesTerminatedBy="\r\n" fieldsEnclosedBy="&quot;" ignoreHeaderLines="1">
+    <files>
+      <location>occurrence.csv</location>
+    </files>
+    <id index="0"/>
+    <field index="1" term="http://rs.tdwg.org/dwc/terms/catalogNumber"/>
+    <field index="2" term="http://rs.tdwg.org/dwc/terms/taxonID"/>
+    <field index="3" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
+    <field index="4" term="http://rs.tdwg.org/dwc/terms/vernacularName"/>
+    <field index="5" term="http://rs.tdwg.org/dwc/terms/occurrenceID"/>
+    <field index="6" term="http://rs.tdwg.org/dwc/terms/decimalLatitude"/>
+    <field index="7" term="http://rs.tdwg.org/dwc/terms/decimalLongitude"/>
+    <field index="8" term="http://rs.tdwg.org/dwc/terms/verbatimElevation"/>
+    <field index="9" term="http://rs.tdwg.org/dwc/terms/recordedBy"/>
+    <field index="10" term="http://rs.tdwg.org/dwc/terms/individualCount"/>
+    <field index="11" term="http://rs.tdwg.org/dwc/terms/eventDate"/>
+    <field index="12" term="http://rs.tdwg.org/dwc/terms/occurrenceRemarks"/>
+    <field index="13" term="http://rs.tdwg.org/dwc/terms/identifiedBy"/>
+    <field index="14" term="http://rs.tdwg.org/dwc/terms/dateIdentified"/>
+    <field index="15" term="http://rs.tdwg.org/dwc/terms/locality"/>
+    <field index="16" term="http://rs.tdwg.org/dwc/terms/stateProvince"/>
+    <field index="17" term="http://rs.tdwg.org/dwc/terms/basisOfRecord"/>
+    <field index="18" term="http://rs.tdwg.org/dwc/terms/taxonRemarks"/>
+    <field index="19" term="http://rs.tdwg.org/dwc/terms/dynamicProperties"/>
+  </core>
+  <extension encoding="UTF-8" rowType="http://rs.gbif.org/terms/1.0/Multimedia" fieldsTerminatedBy="," linesTerminatedBy="\r\n" fieldsEnclosedBy="&quot;" ignoreHeaderLines="1">
+    <files>
+      <location>multimedia.csv</location>
+    </files>
+    <coreid index="0"/>
+    <field index="1" term="http://rs.tdwg.org/dwc/terms/catalogNumber"/>
+    <field index="2" term="http://purl.org/dc/terms/identifier"/>
+    <field index="3" term="captureDevice"/>
+    <field index="4" term="http://purl.org/dc/terms/type"/>
+    <field index="5" term="http://purl.org/dc/terms/format"/>
+  </extension>
+</archive>
+
+```
+
+### 7) Zip it all together and ship it to Data team
+Is email the best way? 
+Size requirement:
+
+One-off complete datasets under 10MB (compressed) can simply be emailed to the ALA at data_management@ala.org.au.
+
+For a large dataset (over 10MB) or where there will be regular updates, please contact the team at the same address to arrange machine-to-machine delivery. 
