@@ -247,7 +247,86 @@ scan_output <- scan(here("doc/westerband_template.md"),
 
 str(scan_output)
 
-readLines(con = here("doc/westerband_template.md"))
+# This format might be better since not every word is separated as a string
+rl_output <- readLines(con = here("doc/westerband_template.md")) 
+
+str(rl_output)
+
+# Make as tibble
+rl_df <- tibble(input = rl_output)
+
+# Count the # at the start of the string
+# Testing the regex pattern
+str_subset(rl_df$input, regex("^#"))
+
+# Create grouping variable
+rl_df <- rl_df |>
+  mutate(group_id = str_detect(input, regex("^#")) |> cumsum())
+
+# Split by group id for now to have a look
+split(rl_df, f = rl_df$group_id)
+
+# Concatenate strings below header e.g. see split(rl_df, f = rl_df$group_id)[[11]]
+md <- split(rl_df, f = rl_df$group_id)[[11]]
+
+# The element of each list is always the header, we need to concatenate the elements from 2:n
+md |> slice(2:nrow(md))
+
+# Take anything below the 1st row, trim the white space or exclude the empty elements and join strings
+md |> 
+  slice(2:nrow(md)) |> 
+  filter(! input == "") |> 
+  pull(input) |> 
+  paste(collapse="") # Whoa this seemed to work! 
+
+# Create a function to do this
+join_user_text <- function(group_df){
+  group_df |> 
+  slice(2:nrow(group_df)) |>  # Take anything below the 1st row
+  filter(! input == "") |>  # Exclude the empty elements of input 
+  pull(input) |>  # Isolate column as vector
+  paste(collapse="")  #  Join strings
+}
+
+# Try in a vectorised way
+str_subset(md |> pull(input),
+           regex("^#|^$"), negate = TRUE)
+
+join_user_text_vectorised <- function(vec){
+  str_subset(vec,
+           regex("^#|^$"), negate = TRUE)
+}
+
+# Mapping across the group_id
+rl_nest <- rl_df |> 
+  nest(text = input) |> 
+  mutate(joined_str = map(text,
+                          ~join_user_text(.x)))
+
+# Create header variable to denote the section the text is from
+find_header <- function(group_df){
+  group_df |> 
+    slice(1) |> 
+    pull()
+}
+
+md |> 
+  slice(1) |> 
+  pull(input) |> 
+  str_extract(pattern = "[:alpha:]+[:space:]+[:alpha:]+")
+  
+
+rl_nest |> 
+  mutate(header = map(text,
+                      ~))
+
+
+
+
+
+
+
+
 ```
 
 
