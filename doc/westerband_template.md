@@ -7,7 +7,7 @@ For further information about data sharing with ALA visit this [page](https://su
 
 ## Data Resource
 
-### Title * 
+### Title *
 
 Australia-wide photosynthetic trait dataset
 
@@ -22,11 +22,11 @@ https://doi.org/10.5061/dryad.j9kd51cgr
 
 ## Description
 
-### Public Short Description*
+### Public Short Description *
 
 Climate data were extracted for each site from the eMAST data project. Soil data were measured for a subset of sites and extracted from the CSIRO SoilGrids for the remaining sites. Environmental/experimental conditions: All data were collected on native plant species growing under natural conditions in the field. 
 
-### Public Description 
+### Public Description
 
 ### Technical Description
 
@@ -84,7 +84,7 @@ firstname.lastname@email.com
 
 ## External Identifiers 
 
-### Source, Identifier,  URL
+### Source, Identifier, URL
 
 <!--- Multiple entries are accepted, please enter each as new line under header --->
 
