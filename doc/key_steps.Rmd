@@ -579,7 +579,7 @@ eml <- list(
 )
 
 write_eml(eml, 
-          here("output/eml/test_eml"),
+          here("output/eml/ex_eml"),
           )
 ```
 
@@ -588,17 +588,40 @@ write_eml(eml,
 
 `<title xmlns:lang="en">` this syntax here has something to do with the "namespace"
 
+ALA version
+
 ```
-<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="8c83091d-f2d8-4a64-9d96-8d8c091c6f3b" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+<eml:eml xmlns:d="eml://ecoinformatics.org/dataset-2.1.0" xmlns:eml="eml://ecoinformatics.org/eml-2.1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/terms/" xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd" system="ALA-Registry" scope="system" xml:lang="en">
 ```
 
+EML package version
+
+```
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="250cd7cf-e886-4519-875d-f17b0f5a0650" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+```
 
 ```{r}
-eml |> 
+library(xml2)
+
+eml <- read_xml(here("output/eml/ex_eml"))
+
+test <- xml_set_namespace(eml, 
+                  prefix = "system",
+                  uri = "ALA-Register")
+
+
+
+xml_ns(eml)
+xml_ns(test)
+?xml_set_namespace
+
 ```
 
+##### Attributes
 
-
+```{r}
+em
+```
 
 ### Creating meta.xml field (mapping fields to fields)
 
@@ -646,8 +669,13 @@ NB: Peggy has Python matching occurrence cols to fields in meta.xml
     <field index="5" term="http://purl.org/dc/terms/format"/>
   </extension>
 </archive>
+```
+
+```{r}
 
 ```
+
+
 
 ### 7) Zip it all together and ship it to Data team
 Is email the best way? 
