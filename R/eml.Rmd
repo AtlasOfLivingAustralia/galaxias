@@ -190,7 +190,7 @@ title_updated_eml <- list_modify(updated_eml, dataset = list(title = named_data_
 write_eml(title_updated_eml, "output/eml/updated.xml")
 ```
 
-## Add systems attribute to namespace
+## Add systems attribute
 
 ```{r}
 library(xml2)
@@ -212,7 +212,7 @@ write_eml(EML::as_emld(updated_xml), "output/eml/attr_updated.xml")
 
 ```
 
-## Add scope attribute to namespace
+## Add scope attribute
 
 ```{r}
 xml_set_attr(updated_xml, "scope", value = "system")
@@ -220,59 +220,4 @@ xml_set_attr(updated_xml, "scope", value = "system")
 EML::as_emld(updated_xml)
 ```
 
-## Add attribute to Title node
-
-```
-<title xmlns:lang="en">Dataset Name</title>
-```
-
-```{r}
-xml_structure(updated_xml)
-xml_ns(updated_xml)
-```
-
-## Add ALA ns to our one
-
-Really helpful guide: https://cran.r-project.org/web/packages/xml2/vignettes/modification.html
-
-```{r}
-ala_eml <- read_xml("ignore/example/eml.xml")
-xml_ns(ala_eml)
-
-# Can we just overwrite the existing one? 
-xml_ns(updated_xml) <- xml_ns(ala_eml) # No
-
-# Create it from scratch and have as a template
-from_scratch <- xml_new_root("eml",
-    schemaLocation = "eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd",
-    system ="ALA-Registry",
-    scope ="system",
-    lang ="en",
-    "xmlns:d" = "eml://ecoinformatics.org/dataset-2.1.0",
-    "xmlns:eml" = "eml://ecoinformatics.org/eml-2.1.1", 
-    "xmlns:xsi" ="http://www.w3.org/2001/XMLSchema-instance",
-    "xmlns:dc" ="http://purl.org/dc/terms/")
-
-
-xml_ns(from_scratch) # OK this seems to work well
-```
-
-## Adding paragraphs to fields
-
-e.g 
-
-```
-<abstract>
-    <para>And then bandicoot from case in point. Lilly pilly cane toad kingfisher. Tasmanian devil lemon myrtle blue-ringed octopus.</para>
-</abstract>
-```
-
-```{r}
-dataset = list(abstract = "<p>This is some <b>text</b>. This is more.</p>")
-
-
-
-list_merge(title_updated_eml, dataset)
- 
-```
 

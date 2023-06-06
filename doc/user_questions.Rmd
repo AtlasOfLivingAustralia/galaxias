@@ -1,0 +1,32 @@
+---
+title: "questions"
+author: "Fonti Kar"
+date: "2023-04-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Basis of Record
+I think this field should be a manual inputted one -  we won't be able to guess this information
+
+```{r}
+
+```
+
+#### Location precision
+
+It’s important to provide as much information as possible about the spatial location of the occurrence. This includes information about the accuracy and precision of the location and how the location was determined.
+
+
+Strongly recommended: geodeticDatum, coordinatePrecision, coordinateUncertaintyInMeters, stateProvince, country, locality
+
+Share if available: dataGeneralizations, informationWithheld
+
+Useful: verbatimLatitude, verbatimLongitude, verbatimCoordinateSystem, georeferencedBy georeferenceProtocol, georeferenceSources, georeferenceVerificationStatus
+
+```{r}
+
+```
