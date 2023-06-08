@@ -7,6 +7,18 @@ Authors@R:
              family = "Westgate",
              email = "martin.westgate@csiro.au",
              role = c("aut", "cre")),
+      person(given = "Fonti",
+             family = "Kar",
+             email = "fonti.kar@csiro.au",
+             role = c("aut", "cre")),
+      person(given = "Shandiya",
+             family = "Balasubramanium",
+             email = "shandiya.balasubramanium@csiro.au",
+             role = c("aut", "cre")),
+      person(given = "Margot",
+             family = "Schneider",
+             email = "margot.schneider@csiro.au",
+             role = c("aut", "cre")),
       person(given = "Dax",
              family = "Kellie",
              email = "dax.kellie@csiro.au",
@@ -17,11 +29,13 @@ Depends:
 Imports:
   dplyr,
   janitor,
-  readr
+  readr,
+  rlang
 Suggests:
   testthat (>= 3.0.0)
 License: GNU
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
 Config/testthat/edition: 3
