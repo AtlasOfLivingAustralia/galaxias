@@ -5,7 +5,7 @@
 #' @importFrom tibble tibble
 #' @importFrom snakecase to_lower_camel_case
 #' @importFrom emo ji_find
-#' @importFrom crayon green red blurred
+#' @importFrom crayon green red
 #' @importFrom glue glue glue_collapse
 #' @importFrom readr read_csv
 #' @export
@@ -17,6 +17,7 @@ detect_column_names <- function(data) {
   user_col_names <- names(data) |> to_lower_camel_case(abbreviations = c("ID"))
   user_total_cols <- ncol(data)
 
+  # Check for complete match
   if(all(user_col_names %in% dwc_terms)) {
     party <- emo::ji_find("party")$emoji[5]
     inform(glue::glue("{crayon::green('100% of columns match DarwinCore terms')} {party}"))
@@ -33,7 +34,29 @@ detect_column_names <- function(data) {
     )
     inform(bullets)
   }
-  # browser()
+
+
+  # Check whether user is missing required columns
+  #TODO: This does not work
+  if(!all(user_col_names %in% c("scientificName", "eventDate"))) {
+    unmatched <- names(data[,!user_col_names %in% required_cols])
+    list_of_unmatched <- glue::glue_collapse(unmatched,
+                                             sep = ", ")
+    browser()
+    if(any(user_col_names == "basisOfRecord"))
+
+    bullets <- c(
+      "Missing required columns.",
+      i = glue("Darwin Core standards require that
+               `scientificName`, `eventDate` & `basisOfRecord`
+               columns are supplied."),
+      x = glue("Missing column(s): {list_of_unmatched}")
+    )
+    abort(bullets, call = caller_env())
+
+  }
+
+  # Identify and rename incorrectly formatted columns
   if(any(user_col_names %in% dwc_terms) & any(user_col_names != names(data))) {
 
     matched_cols <- names(data[, user_col_names %in% dwc_terms]) |> sort() # TODO: Uses alphabetical order to match cols. This is hacky. Fix
@@ -41,12 +64,12 @@ detect_column_names <- function(data) {
 
     # ask if user wants to convert column names to DarwinCore case
     rename_q_answer <-
-      menu(c("Yes", "No"),
+      menu(c("Proceed", "Exit"),
            title = glue("
            ---
            Your columns are not in standard DarwinCore case format.
 
-           Reformat matched columns to DarwinCore?
+           We will need reformat matched columns to DarwinCore to proceed.
            "))
     if(rename_q_answer == 1) {
       bullets <- c(
