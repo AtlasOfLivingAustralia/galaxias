@@ -21,6 +21,7 @@
 
 # RStudio files
 .Rproj.user/
+.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -43,4 +44,6 @@ vignettes/*.pdf
 # Specific folders
 /output
 /ignore
+
+.Rproj.user
 
