@@ -40,4 +40,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Specific folders
+/output
+/ignore
+
 .Rproj.user
+
