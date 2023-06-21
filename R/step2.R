@@ -6,13 +6,17 @@
 #'
 #' @examples
 edit_metadata_md <-  function(){
-  # This path will eventually be from inst/extdata/user_template.md
-  path_to_md_template <- "doc/user_template.md"
+  # Template stored in inst/markdown/user_template.md
+  path_to_md_template <- system.file("markdown/user_template.md", package = "correa")
   
-  edit_file(path_to_md_template)
+  # Copy the template to root of directory
+  file.copy(path_to_md_template, ".")
   
-  # TODO: Need a mechanism to save the edited file locally.
-  # May need usethis::use_template and usethis::edit_template 
+  # Edit in RStudio
+  edit_file("./user_template.md")
+  
+  # TODO: 
+  # Need a mechanism to rename the file, perhaps a menu() prompt and wraps around file.rename()
 }
 
 #' Load in metadata information into R
