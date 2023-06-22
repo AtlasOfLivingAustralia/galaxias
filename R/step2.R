@@ -26,6 +26,9 @@ edit_metadata_md <-  function(path = "."){
 #'
 #' @return tibble containing concatenated strings from each field
 #' @export
+#' @examples
+#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "correa")
+#' metadata_ls <- read_metadata_md(path_to_md_template)
 
 read_metadata_md <- function(path){
   scan_output <- scan(path,

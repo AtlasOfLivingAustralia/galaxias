@@ -47,3 +47,5 @@ vignettes/*.pdf
 
 .Rproj.user
 
+user_template.md
+
