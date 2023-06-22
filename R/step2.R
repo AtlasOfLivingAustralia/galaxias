@@ -1,11 +1,12 @@
 #' Edit metadata template
 #'
-#'
+#' @param path file path where metadata template will be copied to
 #' @return template file opened in RStudio as 
 #' @importFrom usethis edit_file
 #'
 #' @examples
-edit_metadata_md <-  function(){
+#' edit_metadata_md()
+edit_metadata_md <-  function(path = "."){
   # Template stored in inst/markdown/user_template.md
   path_to_md_template <- system.file("markdown/user_template.md", package = "correa")
   
@@ -13,7 +14,7 @@ edit_metadata_md <-  function(){
   file.copy(path_to_md_template, ".")
   
   # Edit in RStudio
-  edit_file("./user_template.md")
+  edit_file(paste0(path),"/user_template.md")
   
   # TODO: 
   # Need a mechanism to rename the file, perhaps a menu() prompt and wraps around file.rename()
@@ -41,7 +42,7 @@ return(scan_output)
 #'
 #' @return tibble where text from each field is concatenated by header
 #' @importFrom dplyr tibble mutate slice filter pull select
-#' @importFrom stringr str_detect regex trimws
+#' @importFrom stringr str_detect regex str_replace
 #' @importFrom tidyr nest unnest
 #' @importFrom purrr map
 #'
@@ -94,11 +95,30 @@ extract_md_contents <- function(scan_output){
   return(metadata_tibble)
 }
 
+#' Detect required fields in metadata template
+#' 
+#' @param metadata_tibble 
+
+detect_required_metadata <- function(metadata_tibble){
+  required_md_fields <- c("Title", "Public Short Description",
+                          "Citation", "Creator", "License")
+  
+  required_md_data <- md_tibble |> 
+    filter(header %in% required_md_fields) 
+  
+  if(any(required_md_data$joined_str == "")){
+    # TODO: Dax's cool detect columns and report percentage code
+  }
+}
+
+
 #' Convert metadata tibble into list
 #'
 #' @param metadata_tibble 
 #'
-#' @return
+#' @return named list
+#' @importFrom dplyr select 
+#' @importFrom purrr map list_transpose set_names
 
 convert_md_tibble_to_list <- function(metadata_tibble){
   # Convert tibble to list

@@ -15,7 +15,7 @@ For further information about data sharing with ALA visit this [page](https://su
 
 ## Description
 
-### Public Short Description*
+### Public Short Description *
 
 ### Public Description 
 
