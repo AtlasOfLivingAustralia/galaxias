@@ -1,0 +1,8 @@
+template:
+  bootstrap: 5
+  bslib:
+    code_font: {google: "Source Code Pro"}
+  params:
+    bootswatch: cerulean
+development:
+  mode: auto

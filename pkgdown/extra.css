@@ -1,0 +1,21 @@
+h1, h2, h3, h4, .h1, .h2, .h3, .main-title, .main-subtitle {
+  font-weight: normal;
+  color: #29a65d;
+}
+
+a {
+    color: #29a65d;
+    text-decoration: none;
+}
+
+a:hover {
+  color: #29a65d;
+}
+
+.navbar {
+  background: #29a65d;
+}
+
+.navbar.bg-primary {
+  background-image: linear-gradient(to bottom, #29a65d, #057a36);
+}

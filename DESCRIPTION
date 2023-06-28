@@ -6,23 +6,23 @@ Authors@R:
     c(person(given = "Martin",
              family = "Westgate",
              email = "martin.westgate@csiro.au",
-             role = c("aut", "cre")),
+             role = c("aut")),
       person(given = "Fonti",
              family = "Kar",
              email = "fonti.kar@csiro.au",
-             role = c("aut", "cre")),
+             role = c("aut")),
       person(given = "Shandiya",
              family = "Balasubramanium",
              email = "shandiya.balasubramanium@csiro.au",
-             role = c("aut", "cre")),
+             role = c("aut")),
       person(given = "Margot",
              family = "Schneider",
              email = "margot.schneider@csiro.au",
-             role = c("aut", "cre")),
+             role = c("aut")),
       person(given = "Dax",
              family = "Kellie",
              email = "dax.kellie@csiro.au",
-             role = c("aut")))
+             role = c("aut", "cre")))
 Description: Simple tools for converting data into DwC format.
 Depends: 
   R (>= 4.1.0)
