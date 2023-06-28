@@ -7,12 +7,10 @@
 #' names.
 #' @details
 #' This function is in progress and behaviour may change. At present it...
-#' @import rlang
 #' @importFrom utils menu
 #' @importFrom tibble tibble
 #' @importFrom snakecase to_lower_camel_case
 # @importFrom emo ji_find
-#' @importFrom crayon green red
 #' @importFrom glue glue glue_collapse
 #' @importFrom readr read_csv
 #' @export
@@ -20,48 +18,15 @@
 detect_column_names <- function(data) {
 
   dwc_terms <- dwc_terms_archived$column_name
-
-  user_col_names <- names(data) |> to_lower_camel_case(abbreviations = c("ID"))
-  user_total_cols <- ncol(data)
-
-  # Check for complete match
-  if(all(user_col_names %in% dwc_terms)) {
-    # party <- emo::ji_find("party")$emoji[5]
-    inform(glue::glue("{crayon::green('100% of columns match DarwinCore terms')}")) # {party}
-  }
-  else {
-    n_matched <- sum(user_col_names %in% dwc_terms)
-    prop_matched <- paste(round(n_matched / user_total_cols*100, 1), "%", sep = "")
-    unmatched <- names(data[,!user_col_names %in% dwc_terms])
-    unmatched_names_list <- glue_collapse(unmatched, sep = ", ", last = " and ")
-
-    bullets <- c(
-      glue("{crayon::red(prop_matched)} {crayon::red('of columns match DarwinCore terms')}"),
-      x = glue("Unmatched columns: {unmatched_names_list}")
-    )
-    inform(bullets)
-  }
-
-
-  # Check whether user is missing required columns
-  #TODO: This does not work
-  if(!all(user_col_names %in% c("scientificName", "eventDate"))) {
-    unmatched <- names(data[,!user_col_names %in% required_cols])
-    list_of_unmatched <- glue::glue_collapse(unmatched,
-                                             sep = ", ")
-    browser()
-    if(any(user_col_names == "basisOfRecord"))
-
-    bullets <- c(
-      "Missing required columns.",
-      i = glue("Darwin Core standards require that
-               `scientificName`, `eventDate` & `basisOfRecord`
-               columns are supplied."),
-      x = glue("Missing column(s): {list_of_unmatched}")
-    )
-    abort(bullets, call = caller_env())
-
-  }
+  
+  user_col_names <- names(data) |> 
+    to_lower_camel_case(abbreviations = c("ID")) |>
+    check_percent_match_columns() |>
+    check_unique_identifier_columns() |>
+    check_mandatory_columns() |>
+    check_recommended_columns()
+  
+  colnames(data) <- user_col_names # q: is this sensible at this point?
 
   # Identify and rename incorrectly formatted columns
   if(any(user_col_names %in% dwc_terms) & any(user_col_names != names(data))) {
@@ -87,11 +52,18 @@ detect_column_names <- function(data) {
 
       data_dwc_names <- rename_columns(data, matched_cols, correct_names)
       return(data_dwc_names)
+    }else{
+      return(data)
     }
+  }else{
+    return(data)
   }
-
 }
 
+#' Internal function to rename columns
+#' @noRd
+#' @keywords Internal
+#' @importFrom dplyr rename_with
 rename_columns <- function(data, matched_cols, correct_names) {
     # rename columns
     data_dwc_names <- data |>
