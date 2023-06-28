@@ -2,12 +2,14 @@
 #'
 #' @param path file path where metadata template will be copied to
 #'
-#' @return template file opened in RStudio as 
+#' @return template file opened in RStudio for user to edit
 #' @export
 #' @importFrom usethis edit_file
 #'
-#' @example
+#' @examples
+#' \dontrun{
 #' edit_metadata_md()
+#' }
 edit_metadata_md <-  function(path = "."){
   # Template stored in inst/markdown/user_template.md
   path_to_md_template <- system.file("markdown/user_template.md", package = "correa")

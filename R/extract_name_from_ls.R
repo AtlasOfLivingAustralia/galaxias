@@ -8,7 +8,10 @@
 #' @keywords internal
 #' @importFrom stringr word
 #' @importFrom purrr pluck
-#' @example
+#' @examples
+#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "correa")
+#' scan_output <- read_metadata_md(path_to_md_template)
+#' metadata_tibble <- extract_md_contents(scan_output)
 #' convert_md_tibble_to_list(metadata_tibble) |> extract_name_from_ls(which = "last")
 
 extract_name_from_ls <- function(list, var = "Name", which){
