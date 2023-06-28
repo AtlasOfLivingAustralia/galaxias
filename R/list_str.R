@@ -56,6 +56,8 @@ eml_template_ls <- function(){
       )
     )
   )
+  
+  # TODO: Alternatively, this can be internal data sorted in data-raw/ - actually this might be better!
 }
 
 #' Extract first or last name from Name field
