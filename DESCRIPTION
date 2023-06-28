@@ -27,10 +27,13 @@ Description: Simple tools for converting data into DwC format.
 Depends: 
   R (>= 4.1.0)
 Imports:
+  crayon,
   dplyr,
   janitor,
   readr,
-  rlang
+  rlang,
+  snakecase,
+  tibble
 Suggests:
   testthat (>= 3.0.0)
 License: GNU

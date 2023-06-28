@@ -6,6 +6,17 @@
 \usage{
 detect_column_names(data)
 }
+\arguments{
+\item{data}{a \code{tibble} containing biological observations}
+}
+\value{
+A tibble identical to the input, except with 'corrected' column
+names.
+}
 \description{
-Detects DarwinCore column names
+This function takes a tibble of user-supplied data, and seeks to match
+supplied column names to those given in the DarwinCore schema.
+}
+\details{
+This function is in progress and behaviour may change. At present it...
 }

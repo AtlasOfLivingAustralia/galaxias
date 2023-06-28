@@ -1,10 +1,17 @@
 #' Detects DarwinCore column names
 #'
+#' This function takes a tibble of user-supplied data, and seeks to match 
+#' supplied column names to those given in the DarwinCore schema.
+#' @param data a `tibble` containing biological observations
+#' @returns A tibble identical to the input, except with 'corrected' column 
+#' names.
+#' @details
+#' This function is in progress and behaviour may change. At present it...
 #' @import rlang
 #' @importFrom utils menu
 #' @importFrom tibble tibble
 #' @importFrom snakecase to_lower_camel_case
-#' @importFrom emo ji_find
+# @importFrom emo ji_find
 #' @importFrom crayon green red
 #' @importFrom glue glue glue_collapse
 #' @importFrom readr read_csv
@@ -19,8 +26,8 @@ detect_column_names <- function(data) {
 
   # Check for complete match
   if(all(user_col_names %in% dwc_terms)) {
-    party <- emo::ji_find("party")$emoji[5]
-    inform(glue::glue("{crayon::green('100% of columns match DarwinCore terms')} {party}"))
+    # party <- emo::ji_find("party")$emoji[5]
+    inform(glue::glue("{crayon::green('100% of columns match DarwinCore terms')}")) # {party}
   }
   else {
     n_matched <- sum(user_col_names %in% dwc_terms)
@@ -91,6 +98,4 @@ rename_columns <- function(data, matched_cols, correct_names) {
       rename_with(~ correct_names[which(matched_cols == .x)], .cols = matched_cols)
 
     return(data_dwc_names)
-
 }
-
