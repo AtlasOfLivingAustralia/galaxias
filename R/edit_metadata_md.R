@@ -12,7 +12,7 @@
 #' }
 edit_metadata_md <-  function(path = "."){
   # Template stored in inst/markdown/user_template.md
-  path_to_md_template <- system.file("markdown/user_template.md", package = "correa")
+  path_to_md_template <- system.file("markdown/user_template.md", package = "galaxia")
   
   # Copy the template to root of directory
   file.copy(path_to_md_template, ".")

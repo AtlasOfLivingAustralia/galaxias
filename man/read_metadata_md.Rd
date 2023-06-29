@@ -16,7 +16,7 @@ tibble containing concatenated strings from each field
 Read metadata md information into R
 }
 \examples{
-path_to_md_template <- system.file("markdown/westerband_template.md", package = "correa")
+path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxia")
 metadata_ls <- read_metadata_md(path_to_md_template)
 }
 \keyword{internal}

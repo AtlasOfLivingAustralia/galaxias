@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(correa)
+library(galaxia)
 
-test_check("correa")
+test_check("galaxia")

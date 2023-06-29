@@ -1,4 +1,4 @@
-# correa
+# galaxia
 
 This package is intended to support data submission to biodiversity data
 infrastructures such as the [ALA](https://www.ala.org.au) and 

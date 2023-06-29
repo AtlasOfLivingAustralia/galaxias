@@ -16,7 +16,7 @@ named list with field name as name
 Convert metadata tibble into list
 }
 \examples{
-path_to_md_template <- system.file("markdown/westerband_template.md", package = "correa")
+path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxia")
 scan_output <- read_metadata_md(path_to_md_template)
 metadata_tibble <- extract_md_contents(scan_output)
 metadata_ls <- metadata_tibble |> md_tibble_to_list()

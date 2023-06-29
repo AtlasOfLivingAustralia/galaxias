@@ -26,7 +26,7 @@ Extract first or last name from Name field
 Extract first or last name from Name field
 }
 \examples{
-path_to_md_template <- system.file("markdown/westerband_template.md", package = "correa")
+path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxia")
 scan_output <- read_metadata_md(path_to_md_template)
 metadata_tibble <- extract_md_contents(scan_output)
 convert_md_tibble_to_list(metadata_tibble) |> extract_name_from_ls(which = "last")
