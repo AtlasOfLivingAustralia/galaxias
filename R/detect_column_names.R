@@ -23,8 +23,21 @@ detect_column_names <- function(data) {
     to_lower_camel_case(abbreviations = c("ID")) |>
     check_percent_match_columns() |>
     check_unique_identifier_columns() |>
+      # search for unique identifiers if not supplied
+      # add new function build_unique_identifiers(from_columns, random, sequential)
     check_mandatory_columns() |>
     check_recommended_columns()
+  
+  # check scientific names - detect languages? 2 words with particular suffixes?
+  # check_dates
+  # check_places
+  # check_country_codes
+  
+  # possible outputs:
+    # report showing e.g. field names, missing values etc, set.seed(n)
+    # code to regenerate that DWCA from the provided inputs
+  
+  # option to check against ALA name matching (search_taxa())
   
   colnames(data) <- user_col_names # q: is this sensible at this point?
 
