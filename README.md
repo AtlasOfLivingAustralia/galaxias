@@ -32,7 +32,7 @@ install_github("atlasoflivingaustralia/galaxias")
 library(galaxias)
 ```
 
-# What is Darwin Core?
+## What is Darwin Core?
 
 The ‘Darwin Core’ format is the data format used by GBIF and it’s node
 member organisations. It stores observations of plants and animals
@@ -52,7 +52,7 @@ A Darwin Core archive contains three files:
 These components are placed inside a zip file, which is then known as a
 Darwin Core ‘Archive’ (DwC-A).
 
-# What does `galaxias` do?
+## What does `galaxias` do?
 
 This package is designed to help people who have made field-based
 biological observations to submit those observations to the ALA. It does
