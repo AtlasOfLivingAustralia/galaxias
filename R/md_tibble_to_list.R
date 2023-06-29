@@ -7,7 +7,7 @@
 #' @importFrom purrr map list_transpose set_names
 #' @export
 #' @examples 
-#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxia")
+#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxias")
 #' scan_output <- read_metadata_md(path_to_md_template)
 #' metadata_tibble <- extract_md_contents(scan_output)
 #' metadata_ls <- metadata_tibble |> md_tibble_to_list()

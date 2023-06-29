@@ -5,13 +5,13 @@
 #' biodiversity data and associated metadata that allows facilities 
 #' like the Atlas of Living Australia (ALA) to efficiently integrate and share 
 #' openly with the community. Creating DwCAs by hand is a notoriously fiddly,
-#' task. 'galaxia' enables users to efficiently reformat their data to Darwin
+#' task. 'galaxias' enables users to efficiently reformat their data to Darwin
 #' Core Standards and generate production-ready DwCA in a reproducible and
 #' transparent workflow.
 #' 
-#' `galaxia` is named for a genus of Australian freshwater fish.
+#' `galaxias` is named for a genus of Australian freshwater fish.
 #' 
-#' @name galaxia
+#' @name galaxias
 #' @docType package
 #' @references If you have any questions, comments or suggestions, please email
 #' [support@ala.org.au](mailto:support@ala.org.au).

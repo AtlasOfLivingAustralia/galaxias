@@ -1,4 +1,4 @@
-# This script builds all information stored within galaxia/R/sysdata.rda
+# This script builds all information stored within galaxias/R/sysdata.rda
 # storing of such code in /data-raw is recommended in 'R Packages' by
 # Hadley Wickham, section 8.3 'Internal data'
 # https://r-pkgs.org/data.html

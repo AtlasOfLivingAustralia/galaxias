@@ -12,7 +12,7 @@ sticker(
   s_y = 1.25,
   s_width = 0.8,
   s_height = 0.8,
-  package = "galaxia",
+  package = "galaxias",
   p_color = "#29a65d",
   p_y = 1,
   p_family = "mono",

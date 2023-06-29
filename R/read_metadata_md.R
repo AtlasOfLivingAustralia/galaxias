@@ -5,7 +5,7 @@
 #' @return tibble containing concatenated strings from each field
 #' @keywords internal
 #' @examples
-#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxia")
+#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxias")
 #' metadata_ls <- read_metadata_md(path_to_md_template)
 
 read_metadata_md <- function(path){

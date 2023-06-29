@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(galaxia)
+library(galaxias)
 
-test_check("galaxia")
+test_check("galaxias")
