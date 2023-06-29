@@ -20,7 +20,7 @@
 #' @section Functions:
 #' **Prepare data**
 #'
-#'   * [detect_column_names()] 
+#'   * [tibble_to_dwc()]
 #' 
 #' **Build eml.XML**
 #' 

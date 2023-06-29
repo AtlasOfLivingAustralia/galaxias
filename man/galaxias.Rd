@@ -20,7 +20,7 @@ transparent workflow.
 
 \strong{Prepare data}
 \itemize{
-\item \code{\link[=detect_column_names]{detect_column_names()}}
+\item \code{\link[=tibble_to_dwc]{tibble_to_dwc()}}
 }
 
 \strong{Build eml.XML}
