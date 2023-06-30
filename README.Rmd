@@ -127,5 +127,6 @@ eml_template_updated |> pluck("eml", "dataset", "contact")
 
 Finally, we run ..., which builds the `meta.xml` file and packages the archive:
 ```{r, eval=FALSE}
-# This hasn't been written yet
+# In progress currently implemented for the occurrence data only
+make_core_xml(file_name = "DwC_occurrence.csv")
 ```
