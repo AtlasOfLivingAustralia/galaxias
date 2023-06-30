@@ -7,8 +7,14 @@
 #' @export
 #'
 #' @examples
-#' DwC_occurrence_data <- tibble(field_names =  c("basisOfRecord", "eventDate", "decimalLatitude"))
-#' make_core_xml(DwC_occurrence_data)
+#'   DwC_occurrence_data <- 
+#'   tibble(basisOfRecord =  "HUMAN_OBSERVATION",
+#'   scientificName = "Galaxias maculatus",
+#'   eventDate = "2002-12-07",
+#'   decimalLatitude = -33.366551,
+#'   decimalLongtitude = 151.47635)
+#'   
+#'   make_core_xml(DwC_occurrence_data)
 make_core_xml <- function(
     x,
     file_name = "occurrence.csv"
