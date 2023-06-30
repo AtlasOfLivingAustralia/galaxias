@@ -3,6 +3,7 @@
 export(build_composite_identifier)
 export(build_random_identifier)
 export(edit_metadata_md)
+export(make_core_xml)
 export(md_tibble_to_list)
 export(md_to_tibble)
 export(rename_camel_case)
