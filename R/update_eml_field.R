@@ -44,6 +44,9 @@ update_title<- function(template, metadata_ls){
   template_title <- assign_in(template, c("eml", "dataset", "title"), 
                               metadata_ls$Title)
   
+  # Set attributes
+  attributes(template_title$eml$dataset$title) <-"xmlns:lang"
+  
   return(template_title)
   
   # TODO: Expand function to have argument denoting which field needs to be updated, then create a big switch function, changing depending on specified field
