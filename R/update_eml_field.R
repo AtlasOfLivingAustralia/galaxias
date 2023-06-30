@@ -13,10 +13,10 @@
 #' update_names(eml,metadata_ls)
 
 update_names <- function(template, metadata_ls){
-  template_firstnm <- assign_in(template, c("dataset", "contact", "individualName", "givenName"), 
+  template_firstnm <- assign_in(template, c("eml", "dataset", "contact", "individualName", "givenName"), 
                                 extract_name_from_ls(metadata_ls, which = "first"))
   
-  template_names_updated <- assign_in(template_firstnm, c("dataset", "contact", "individualName", "surName"), 
+  template_names_updated <- assign_in(template_firstnm, c("eml", "dataset", "contact", "individualName", "surName"), 
                                       extract_name_from_ls(metadata_ls, which = "last"))
   
   return(template_names_updated)
@@ -41,7 +41,7 @@ update_names <- function(template, metadata_ls){
 #' update_title(eml,metadata_ls)
 
 update_title<- function(template, metadata_ls){
-  template_title <- assign_in(template, c("dataset", "title"), 
+  template_title <- assign_in(template, c("eml", "dataset", "title"), 
                               metadata_ls$Title)
   
   return(template_title)

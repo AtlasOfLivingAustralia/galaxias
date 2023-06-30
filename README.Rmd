@@ -90,7 +90,39 @@ y <- detect_dwc_columns(x)
 Once you are happy with how your data is formatted, you need to start on 
 metadata:
 ```{r, eval=FALSE}
-# Fonti to outline steps here
+library(purrr)
+
+# Opens metadata template interactively in RStudio for you to edit
+# By default, this function copies the template to the root of your project directory
+# Feel free to move this file to where you see fit
+edit_metadata_md()
+
+# Read completed template back into R
+# Specify the path to the metadata template file
+# For purpose of demo, will read example md
+md_template <- read_metadata_md("inst/markdown/westerband_template.md")
+
+# Convert md_text into tibble
+md_tibble <- md_to_tibble(md_template)
+
+# Convert tibble into list
+# This step preps the metadata text so that 
+# it can easily interact with the XML template 
+md_list <- md_tibble_to_list(md_tibble)
+
+# Retrieve blank eml list structure (stored internally in package)
+eml_template_list 
+str(eml_template_list)
+
+# Update fields in eml_template_list
+# Currently implemented for Title and Name only
+eml_template_updated <- 
+  update_title(eml_template_list, md_list)|> 
+  update_names(md_list) 
+
+# Preview updated changes
+eml_template_updated |> pluck("eml", "dataset", "title")
+eml_template_updated |> pluck("eml", "dataset", "contact")
 ```
 
 Finally, we run ..., which builds the `meta.xml` file and packages the archive:
