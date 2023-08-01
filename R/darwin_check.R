@@ -10,5 +10,22 @@
 #' is TRUE, a modified data frame will be returned.
 
 darwin_check <- function(data, mend) {
-
+  message("
+----------------------------------------
+        Data Quality Check
+----------------------------------------
+")
 }
+
+
+
+# Compliance with Darwin Core Standards:
+# - scientificName: OK
+# - eventDate: Inconsistent date formats found
+# - basisOfRecord: OK
+
+# Recommendations:
+# - Fill in missing values in eventDate column with valid dates
+# - Correct taxonomic names in the scientificName column
+
+# ----------------------------------------
