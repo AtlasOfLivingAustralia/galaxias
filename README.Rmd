@@ -106,19 +106,19 @@ md_template <- read_metadata_md("inst/markdown/westerband_template.md")
 md_tibble <- md_to_tibble(md_template)
 
 # Convert tibble into list
-# This step preps the metadata text so that 
-# it can easily interact with the XML template 
+# This step preps the metadata text so that
+# it can easily interact with the XML template
 md_list <- md_tibble_to_list(md_tibble)
 
 # Retrieve blank eml list structure (stored internally in package)
-eml_template_list 
+eml_template_list
 str(eml_template_list)
 
 # Update fields in eml_template_list
 # Currently implemented for Title and Name only
-eml_template_updated <- 
-  update_title(eml_template_list, md_list)|> 
-  update_names(md_list) 
+eml_template_updated <-
+  update_title(eml_template_list, md_list) |>
+  update_names(md_list)
 
 # Preview updated changes
 eml_template_updated |> pluck("eml", "dataset", "title")
@@ -128,12 +128,34 @@ eml_template_updated |> pluck("eml", "dataset", "contact")
 Finally, we run ..., which builds the `meta.xml` file and packages the archive:
 ```{r, eval=FALSE}
 # In progress currently implemented for the occurrence data only
-DwC_occurrence_data <- tibble(basisOfRecord =  "HUMAN_OBSERVATION",
-                                scientificName = "Galaxias maculatus",
-                                eventDate = "2002-12-07",
-                                decimalLatitude = -33.366551,
-                                decimalLongtitude = 151.47635)
+DwC_occurrence_data <- tibble(
+  basisOfRecord = "HUMAN_OBSERVATION",
+  scientificName = "Galaxias maculatus",
+  eventDate = "2002-12-07",
+  decimalLatitude = -33.366551,
+  decimalLongtitude = 151.47635
+)
 
 make_core_xml(DwC_occurrence_data,
-              file_name = "DwC_occurrence.csv")
+  file_name = "DwC_occurrence.csv"
+)
 ```
+
+---
+
+## In progress
+
+- The current aim is a MVP, no warranty provided way to create a DwC archive
+- The packge will have a main function entry point
+- There are two main user facing processes:
+  - Check (validate)
+  - Modify (basic modifications to data where possible)
+  - Build (zip)
+- There are three products required for a DwC archive:
+  - data.csv
+  - meta.xml
+  - eml.xml
+
+### Check
+
+### Build
