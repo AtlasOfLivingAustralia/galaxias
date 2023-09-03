@@ -93,10 +93,29 @@ rename_interactive <- function(data, unique_columns) {
   return(data)
 }
 
+#' Check fields
+#'
+#' Check fields required and recommended by Darwin Core standards.
+#' @param data A tibble
+#' @param all_fields A logical indicating whether to check all fields, or only
+#' required fields. Default is `TRUE`.
+check_fields <- function(data, all_fields = TRUE) {
+  if (all_fields) {
+    check_required_fields(data)
+    check_recommended_fields(data)
+  } else {
+    check_required_fields(data)
+  }
+  check_percent_match(data)
+  return(invisible(NULL))
+}
+
+#'
 #' @rdname check-dwc
 #' @importFrom rlang abort
 check_required_fields <- function(data) {
-  message("Checking fields required by Darwin Core...")
+  message("\nChecking fields required by Darwin Core...")
+  message("---------------------------------------------\n")
   column_names <- colnames(data)
   required_cols <- c("scientificName", "eventDate", "basisOfRecord")
   missing_required_fields <- !(required_cols %in% column_names)
@@ -112,14 +131,16 @@ check_required_fields <- function(data) {
     )
     message(bullets)
   } else {
-    NULL
+    message("All required fields present...")
   }
+  return(invisible(NULL))
 }
 
 #' @rdname check-dwc
 #' @importFrom rlang inform
 check_recommended_fields <- function(data) {
-  message("Checking fields recommended by Darwin Core...")
+  message("\nChecking fields recommended by Darwin Core...")
+  message("---------------------------------------------\n")
   column_names <- colnames(data)
   suggested_cols <- c(
     "kingdom", "taxonRank",
@@ -128,18 +149,20 @@ check_recommended_fields <- function(data) {
     "individualCount", "organismQuantity", "organismQuantityType"
   )
   if (!all(column_names %in% suggested_cols)) {
-    unmatched <- names(data[, !user_col_names %in% suggested_cols])
+    unmatched <- names(data[, !column_names %in% suggested_cols])
     list_of_unmatched <- glue::glue_collapse(unmatched,
-      sep = ", "
+      sep = "\n - "
     )
     bullets <- c(
-      "Missing suggested columns.",
-      i = "Darwin Core standards recommend that the following columns are supplied:",
-      i = glue_collapse(suggested_cols, sep = ", ", last = " & ")
+      "Missing suggested columns.\n",
+      i = "Darwin Core standards recommend that the following columns are supplied:\n",
+      x = glue::glue("\nMissing column(s):\n - {list_of_unmatched}")
     )
-    inform(bullets, call = caller_env())
+    message(bullets)
+  } else {
+    message("All recommended fields present...")
   }
-  return(data)
+  return(invisible(NULL))
 }
 
 # TODO: the check will perform at the end, using the data that has by now been
@@ -151,19 +174,26 @@ check_recommended_fields <- function(data) {
 #' @importFrom rlang abort
 #' @importFrom rlang inform
 check_percent_match <- function(data) {
+  message("\nChecking total percent match to Darwin Core terms...")
+  message("---------------------------------------------\n")
   column_names <- colnames(data)
   dwc_terms <- dwc_terms_archived$column_name
   user_total_cols <- length(column_names)
 
   # Check for complete match
   if (all(column_names %in% dwc_terms)) {
-    # party <- emo::ji_find("party")$emoji[5]
-    inform(glue::glue("{crayon::green('100% of columns match DarwinCore terms')}")) # {party}
+    inform(glue::glue("{crayon::green('100% of columns match DarwinCore terms')}"))
   } else {
     n_matched <- sum(column_names %in% dwc_terms)
-    prop_matched <- paste(round(n_matched / user_total_cols * 100, 1), "%", sep = "")
+    prop_matched <- paste(round(n_matched / user_total_cols * 100, 1),
+      "%",
+      sep = ""
+    )
     unmatched <- column_names[!column_names %in% dwc_terms]
-    unmatched_names_list <- glue_collapse(unmatched, sep = ", ", last = " and ")
+    unmatched_names_list <- glue_collapse(unmatched,
+      sep = ", ",
+      last = " and "
+    )
 
     bullets <- c(
       glue("{crayon::red(prop_matched)} {crayon::red('of columns match DarwinCore terms')}"),
@@ -172,5 +202,5 @@ check_percent_match <- function(data) {
     inform(bullets)
   }
 
-  return(data)
+  return(NULL)
 }
