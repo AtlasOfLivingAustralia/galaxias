@@ -22,6 +22,7 @@ make_core_xml <- function(x,
   field_names <- colnames(x)
 
   # Create files sublist
+  # Question: what is this?
   files <- list(
     location = file_name
   )
