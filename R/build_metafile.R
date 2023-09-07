@@ -1,3 +1,23 @@
+# TODO: has root node > 1, invalid xml
+# Datasets require documentation. This is achieved in a DwC-A by including a
+# resource metadata document that provides information about the dataset itself
+# such as a description (abstract) of the dataset, the agents responsible for
+# authorship, publication and documentation, bibliographic and citation
+# information, collection methods and much more.
+
+# A descriptor metafile describes how the files in your archive are organized.
+# It describes the files in the archive and maps each data column to a
+# corresponding standard Darwin Core or Extension term. The metafile is a
+# relatively simple XML file format. GBIF provides an online tool for making
+# this file but the format is simple enough that many data administrators will
+# be able to generate it manually. These options are described in the Publishing
+# Options section of this document.
+
+# A metafile is required when an archive includes any extension files or if a
+# single core data file uses non-standard column names in the first (header) row
+# of data.
+
+# See here for description of the metafile: https://dwc.tdwg.org/text/
 #' Create core subfield
 #'
 #' @param x output of Darwinised occurrence data, output from `detect_dwc_columns()`

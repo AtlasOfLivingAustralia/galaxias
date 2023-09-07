@@ -84,7 +84,7 @@ update_title <- function(template, metadata_ls) {
   )
 
   # Set attributes
-  attributes(template_title$eml$dataset$title) <- "xmlns:lang"
+  attr(template_title$eml$dataset$title, "xmlns:lang") <- "en"
 
   return(template_title)
 

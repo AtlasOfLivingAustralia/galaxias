@@ -1,6 +1,18 @@
 #' Functions to open metadata markdown templates, and read markdown
 #' into R for use.
-#'
+#' Required metadata fields
+# title
+# description
+# publishing organization
+# type
+# license
+# contact(s)
+# creator(s)
+# metadata provider(s)
+# Recommended metadata fields
+# sampling methodology - in situations where data comes from a sampling event
+# citation - to ensure your dataset gets cited the way you want
+
 #' @param path file path where metadata template will be copied to
 #'
 #' @return template file opened in RStudio for user to edit
@@ -172,10 +184,15 @@ make_list <- function(metadata_tibble) {
 #' @importFrom stringr word
 #' @importFrom purrr pluck
 #' @examples
-#' path_to_md_template <- system.file("markdown/westerband_template.md", package = "galaxias")
+#' path_to_md_template <- system.file("markdown/westerband_template.md",
+#'   package = "galaxias"
+#' )
 #' scan_output <- read_metadata_md(path_to_md_template)
 #' metadata_tibble <- extract_md_contents(scan_output)
-#' convert_md_tibble_to_list(metadata_tibble) |> extract_name_from_ls(which = "last")
+#' convert_md_tibble_to_list(metadata_tibble) |> extract_name_from_ls(
+#'   which =
+#'     "last"
+#' )
 #'
 extract_name_from_ls <- function(list, var = "Name", which) {
   if (which == "first") {

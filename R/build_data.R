@@ -11,6 +11,7 @@ build_random_identifier <- function(data,
                                     random_seed = NULL) {
   # For now a simple sequential ID?
   data$occurrenceID <- paste0("id", 1:nrow(data))
+  return(data)
 }
 
 #' Create a composite identifier from two or more columns, separated by a colon.
@@ -21,7 +22,7 @@ build_random_identifier <- function(data,
 #' @export
 build_composite_identifier <- function(data,
                                        cols = NULL) {
-  # check if the columns specified are contained / found in the data
+  # TODO: check if the columns specified are contained / found in the data
   # if not, warning and check for spelling etc.
   # This method assumes string values - unchecked with other column types
   concatenated_values <- apply(data[cols], 1, function(row) {
@@ -29,6 +30,5 @@ build_composite_identifier <- function(data,
   })
   # TODO: For now just adding a sequential numeric value
   data$occurrenceID <- paste0(concatenated_values, ":", 1:nrow(data))
-  return(data)
+  return(invisible(data))
 }
-cols <- c("Species", "Site")
