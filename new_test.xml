@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eml:eml xmlns:eml="https://eml.ecoinformatics.org/eml-2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stmml="http://www.xml-cml.org/schema/stmml-1.2" packageId="7b9f7faf-efa2-4424-98cd-c97866a6af9c" system="uuid" xsi:schemaLocation="https://eml.ecoinformatics.org/eml-2.2.0 https://eml.ecoinformatics.org/eml-2.2.0/eml.xsd">
+  <dataset>
+    <creator>
+        Andrea Westerband
+      </creator>
+    <contact>
+        Andrea Westerband
+      </contact>
+    <methods>
+        Light-saturated rates of photosynthesis were measured at ambient
+        CO2 levels using a portable gas exchange system. Stomatal
+        conductance to water vapor and Ci:Ca correspond to
+        light-saturated rates of photosynthesis. Carboxylation capacity,
+        Vcmax, was estimated via the one-point method when it was not
+        provided from A-ci curves. Concentrations of leaf nitrogen and
+        phosphorus were measured using an elemental analyzer. LMA was
+        measured by dividing the leaf dry mass by the surface area of a
+        fresh leaf.
+      </methods>
+    <methods>
+        Raw data were used to calculate species means for all sites,
+        which were then compiled to produce one data file. This was done
+        using RStudio Version 1.3.959
+      </methods>
+  </dataset>
+</eml:eml>
