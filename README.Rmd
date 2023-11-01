@@ -14,81 +14,119 @@ knitr::opts_chunk$set(
 <img src="man/figures/logo.png" align="left" style="margin: 20px 10px 0px 0px;" alt="" width="120"/><br>
 <h2>Create Darwin-Core Archives in R</h2>
 
-This package is intended to support data submission to biodiversity data
-infrastructures such as the [ALA](https://www.ala.org.au) and 
-[GBIF](https://gbif.org), by providing the following features:
+`Galaxias` is an R package designed to simplify the process of converting
+biodiversity data into [Darwin Core](https://dwc.tdwg.org) archives (DwC-A),
+facilitating data submission to infrastructures such as the [Atlas of Living
+Australia (ALA)](https://www.ala.org.au) and the [Global Biodiversity
+Information Facility (GBIF)](https://gbif.org). The key features include:
 
- - auto-detect field headings and data types (`{janitor}`, `{lubridate}` etc) IN PROGRESS
- - provide metadata in `.md` format, tools for converting to and from `xml` IN PROGRESS
- - (optionally) manually re-assign column headings for unrecognised fields
- - ask sensible questions to fill unavailable columns (e.g. spatial resolution, unique record identifier)
- - generate (and optionally submit) a Darwin Core Archive
- - optionally output revised objects in standard formats (`.csv`, `.md`)
- - run the above using functions in R or via `{shiny}`
- 
-This package is currently under active development.
+- Check and conform data columns and values to meet Darwin Core standards
+- Automatic metafile creation
+- User friendly workflow for creating a resource metadata document (`eml.xml`)
+using simple markdown
+- Final export of a compressed (`ZIP`) DwC-A from the above components
 
-``` r
-# Install the development version of this package:
-library(remotes)
-install_github("atlasoflivingaustralia/galaxias")
+## Quick start
 
-# Load package
+This package is under active development, and is not yet available on CRAN. You
+can install the latest development version from GitHub with:
+
+```r
+devtools::install_github("atlasoflivingaustralia/galaxias")
+```
+
+Load the package:
+
+```r
 library(galaxias)
 ```
 
 ## What is Darwin Core?
-The 'Darwin Core' format is the data format used by GBIF and it's node 
-member organisations. It stores observations of plants and animals 
-('occurrences') in a standardised manner to facilitate sharing and re-use. It is 
-maintained by the Biodiversity Information Standards group 
-(https://www.tdwg.org).
 
-A Darwin Core archive contains three files:
+Darwin Core (DwC) is a standardised framework used for compiling biodiversity
+data, and is maintained by the Biodiversity Information Standards group
+(https://www.tdwg.org). As a data standard, DwC facilitates the sharing and use
+of open-access biodiversity data, and is used by GBIF and it's node member
+organisations. 
 
-- `data.csv`: A dataset containing one occurrence per row, using standardised 
-  column names
-- `eml.xml`: A metadata file containing information about the provider, and how
-  the data were collected
-- `meta.xml`: A file describing mapping each column name in `data.csv` to a 
-  corresponding name from the Darwin Core standard
+In practice, the DwC standards and terms are used to create a single,
+self-contained dataset, known as a Darwin Core Archive (DwC-A). The format of
+this archive is a `ZIP` file containing text files of data and metadata, and
+represents the fundamental unit required to share DwC compliant biodiversity
+data.
+
+A DwC-A can contain a range of different files, but there are three main files that are required:
+
+- A data core: A core dataset, such as an Occurrence or Event core
+- `eml.xml`: A resource metadata file describing the dataset, in the Ecological
+  Metadata Language (EML) format
+- `meta.xml`: A metadata file describing the structure and relationships of
+files within the archive
   
-These components are placed inside a zip file, which is then known as a Darwin 
-Core 'Archive' (DwC-A).
+## What does `galaxias` do? And who is it for?
 
-## What does `galaxias` do?
-This package is designed to help people who have made field-based biological 
-observations to submit those observations to the ALA. It does this by providing:
+The collection of field-based biological observations is widespread across a
+range of scientific disiplines. The importance and value in sharing this data
+for re-use is well understood by the research community. However, various
+constraints such as limited time, or unfamiliarity with the standards and data
+structures required by online services such as the ALA and GBIF, can hinder user
+contributions. 
 
-- Simple tools for checking column names, and converting them to 
-  Darwin Core standards
-- Boilerplate text for what metadata is required with your submission, and
-  converting it to the required format
-- Functions for zipping these derived files into a DwC-A
+The aim of `galaxias` is therefore to facilitate the sharing of data, by
+streamlining the process of creating a DwC-A from field-based biological
+observations, for submission to online data infrastructures such as the ALA. As
+an R package, `galaxias` can integrate seamlessly with existing workflows,
+making the process of submitting data to online services as fast and seamless as
+possible. 
 
-Our intention is to make the process of submitting data to ALA as quick and 
-seamless as possible, without requiring the user to master lots of complex
-functions, and without requiring an in-depth knowledge of the data structures
-used by ALA and GBIF.
+We provide tools to assist with the creation and compliance of the three main
+components required by a DwC-A:
+
+- Core data file: 
+  - Generate a summary report of the data's compatibility with Darwin Core
+  required fields and formats
+  - Import or create a lookup table (dictionary) for mapping column headings
+  with Darwin Core terms. 
+  - Tools to assist with conforming data to the DwC standards (fill missing
+  fields, convert to required formats, etc.)
+- Automatic descriptor metafile (`meta.xml`) creation
+- Resource metadata document (`eml.xml`):
+  - Create and edit the required resource metadata file using simple markdown
+  and our provided template, with tools for converting to and from `xml`
+- Final export of a compressed (`ZIP`) DwC-A from the above components
+
+A function to allow direct upload of DwC-As to the ALA via API is also in
+progress.
 
 ## Example workflow
 
-First we import data:
+Starting with our core data file, we will import observation data into R:
 
 ```{r, eval=FALSE}
-library(readr)
-x <- read_csv("a_file.csv")
+occurrence_data <- read.csv(
+  system.file("data/westerband_2022_wdate.csv", package = "galaxias")
+)
 ```
 
-We can then check this data using `galaxias`:
+We can then perform a check of this data using `check_fields()`. Primarily, this
+function checks for the presence of columns that comply with DwC terms. This
+check is also interactive, and can be used to correct any issues with some of
+our supported fixes (e.g. unique identifiers, date formats (TBD)).
+
 ```{r, eval=FALSE}
 library(galaxias)
-y <- detect_dwc_columns(x)
-# Q: should we add reporting loop in here?
+occurrence_data_out <- check_fields(occurrence_data)
 ```
 
-Once you are happy with how your data is formatted, you need to start on 
-metadata:
+A report is shown in the console, and you could then use this report to fix any
+issues reported. By default, presence of both DwC required and recommended
+fields (for Occurrence data) is checked. But we can also specify
+check_fields(data, all_fields = FALSE) to check only the required fields.  
+
+Once you are happy with how your data is formatted, and all required fields have
+been detected, we can then create a lookup table (dictionary) for mapping column
+headings with Darwin Core terms. This is done using `create_lookup_table()`. 
+
 ```{r, eval=FALSE}
 library(purrr)
 

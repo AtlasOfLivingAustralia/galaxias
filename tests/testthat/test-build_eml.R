@@ -12,3 +12,5 @@
 # empty list 3) empty string
 
 # validate_output_path tests - move this function to helper functions file
+
+# add tests for the validate output path function

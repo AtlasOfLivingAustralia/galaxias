@@ -1,0 +1,49 @@
+# Handover notes - Oct 2023
+
+Summary of package changes, both complete and in progress, with notes and ideas
+on future directions and priorities. 
+
+## Changelog
+
+- EML creation fixed
+  - Using `build_eml()` which is a slightly purpose modified version of the
+    function from the EML package
+    - The input markdown template is first converted to docbook format, which is
+      an XML schema
+    - It is then read into R as an XML object
+    - The `xml2` package is used to interact with the object, and extract
+      elements of text
+    - The extracted text is converted into a list format
+    - The list is then used to build a valid EML object, using the
+      `EML::eml$eml` function
+- Restructuring
+  - main.R contains the primary entrypoint wrapper functions
+  - three types of function groups
+    - check
+      - check is the primary group
+    - modify
+      - I thought this would be useful but I haven't decided if this is
+        necessary yet. It might make more sense to have modifying functions
+        grouped with their associated check, as I have done with
+        `check_data_unique.R`. This way, groups of functions can continue to be
+        separated out into their own check_* files if they become too large
+        within the umbrella files `check_data_fields.R` and
+        `check_data_values.R`
+      - But `modify_*` files / functions would be useful for functions that are
+        non specific and can be used across multiple checks
+    - build
+  - removed the rename camel case function
+    - i don't think its a useful component, because if your column names already
+    don't match dwc terms, in most cases they still won't match after camel
+    casing. And most of the fixing of column names in galaxias will be through a
+    lookup table. So having columns renamed automatically to camel case will
+    break a lookup table. 
+    - If you did have columns that are named correctly but not in camel case, I
+    think its something you would fix yourself, just one line of code
+
+## Misc. notes and todos
+These were existing notes and todos within the package that I've removed and
+collated here:
+- From `README`: 
+  - auto-detect field headings and data types (`{janitor}`, `{lubridate}` etc) IN PROGRESS
+- ask sensible questions to fill unavailable columns (e.g. spatial resolution)

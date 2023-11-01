@@ -1,0 +1,173 @@
+<eml:eml xmlns:eml="eml://ecoinformatics.org/eml-2.1.1"
+         xmlns:dc="http://purl.org/dc/terms/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd"
+         packageId="a8ee9bc6-5914-427d-9fba-f8545250ac34/v25.18" system="http://gbif.org" scope="system"
+         xml:lang="eng">
+
+<dataset>
+  <alternateIdentifier>a8ee9bc6-5914-427d-9fba-f8545250ac34</alternateIdentifier>
+  <alternateIdentifier>http://ipt.vertnet.org:8080/ipt/resource?r=cumv_amph</alternateIdentifier>
+  <title xml:lang="eng">CUMV Amphibian and Reptile Collection</title>
+      <creator>
+    <individualName>
+        <givenName>Casey</givenName>
+      <surName>Dillman</surName>
+    </individualName>
+    <organizationName>Cornell University Museum of Vertebrates</organizationName>
+    <positionName>Curator of Fishes, Amphibians and Reptiles</positionName>
+    <address>
+        <deliveryPoint>159 Sapsucker Woods Road</deliveryPoint>
+        <city>Ithaca</city>
+        <administrativeArea>NY</administrativeArea>
+        <postalCode>14850-1923</postalCode>
+        <country>US</country>
+    </address>
+    <phone>+1 607-254-2162</phone>
+    <electronicMailAddress>cbd63@cornell.edu</electronicMailAddress>
+    <onlineUrl>http://www.cumv.cornell.edu</onlineUrl>
+      </creator>
+      <metadataProvider>
+    <individualName>
+        <givenName>Casey</givenName>
+      <surName>Dillman</surName>
+    </individualName>
+    <organizationName>Cornell University Museum of Vertebrates</organizationName>
+    <positionName>Curator of Fishes, Amphibians and Reptiles</positionName>
+    <address>
+        <deliveryPoint>159 Sapsucker Woods Road</deliveryPoint>
+        <city>Ithaca</city>
+        <administrativeArea>NY</administrativeArea>
+        <postalCode>14850-1923</postalCode>
+        <country>US</country>
+    </address>
+    <phone>+1 607-254-2162</phone>
+    <electronicMailAddress>cbd63@cornell.edu</electronicMailAddress>
+    <onlineUrl>http://www.cumv.cornell.edu</onlineUrl>
+      </metadataProvider>
+      <associatedParty>
+    <individualName>
+        <givenName>David</givenName>
+      <surName>Bloom</surName>
+    </individualName>
+    <organizationName>VertNet</organizationName>
+    <positionName>Coordinator</positionName>
+    <electronicMailAddress>dbloom@vertnet.org</electronicMailAddress>
+    <onlineUrl>http://www.vertnet.org</onlineUrl>
+    <role>programmer</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>John</givenName>
+      <surName>Wieczorek</surName>
+    </individualName>
+    <organizationName>Museum of Vertebrate Zoology at UC Berkeley</organizationName>
+    <positionName>Information Architect</positionName>
+    <electronicMailAddress>tuco@berkeley.edu</electronicMailAddress>
+    <role>programmer</role>
+      </associatedParty>
+      <associatedParty>
+    <individualName>
+        <givenName>Charles</givenName>
+      <surName>Dardia</surName>
+    </individualName>
+    <organizationName>Cornell University Museum of Vertebrates</organizationName>
+    <positionName>Collections Manager</positionName>
+    <address>
+        <deliveryPoint>159 Sapsucker Woods Road</deliveryPoint>
+        <city>Ithaca</city>
+        <administrativeArea>NY</administrativeArea>
+        <postalCode>14850-1923</postalCode>
+        <country>US</country>
+    </address>
+    <phone>+1 607-254-2161</phone>
+    <electronicMailAddress>cmd7@cornell.edu</electronicMailAddress>
+    <onlineUrl>http://www.cumv.cornell.edu</onlineUrl>
+    <role>pointOfContact</role>
+      </associatedParty>
+  <pubDate>
+      2018-08-18
+  </pubDate>
+  <language>eng</language>
+  <abstract>
+    <para>The CUMV Amphibian &amp; Reptile Collection became one of the leading university based herp collections in North America during the first half of this century, largely because of the efforts of Professor Albert Hazen Wright and his wife, Anna Allen Wright. The major strengths of the collection, amphibians from the southeastern United States and both reptiles and amphibians from the Northeast, reflects the intensive collection by the Wrights. Much of the material collected by the Wrights in New York and Georgia is not duplicated elsewhere. The last 15 years have been seen important acquisitions for the collection. To complement our traditional strength in North American taxa, we have made a concerted effort to obtain foreign material, especially synoptic series representing geographic areas. Through collecting, exchanges and acquisition of other various collections we now have good representation of Costa Rican viperids, lizards from Western and South Australia, amphibians and reptiles from Puerto Rico, snakes and lizards from Mexico, and a more representative collection of African and European species.</para>
+  </abstract>
+      <keywordSet>
+            <keyword>Specimen</keyword>
+        <keywordThesaurus>GBIF Dataset Subtype Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_subtype.xml</keywordThesaurus>
+      </keywordSet>
+      <keywordSet>
+            <keyword>Occurrence</keyword>
+        <keywordThesaurus>GBIF Dataset Type Vocabulary: http://rs.gbif.org/vocabulary/gbif/dataset_type.xml</keywordThesaurus>
+      </keywordSet>
+  <additionalInfo>
+    <para>http://vertnet.org/resources/norms.html</para>
+  </additionalInfo>
+  <intellectualRights>
+    <para>To the extent possible under law, the publisher has waived all rights to these data and has dedicated them to the <ulink url="http://creativecommons.org/publicdomain/zero/1.0/legalcode"><citetitle>Public Domain (CC0 1.0)</citetitle></ulink>. Users may copy, modify, distribute and use the work, including for commercial purposes, without restriction.</para>
+  </intellectualRights>
+  <distribution scope="document">
+    <online>
+      <url function="information">https://www.cumv.cornell.edu/</url>
+    </online>
+  </distribution>
+  <coverage>
+      <geographicCoverage>
+          <geographicDescription>The major strengths of the collection, amphibians from the southeastern United States and both reptiles and amphibians from the Northeast. The last 15 years have been seen important acquisitions for the collection. To complement our traditional strength in North American taxa, we have made a concerted effort to obtain foreign material, especially synoptic series representing geographic areas. This material includes research specimens collected by Dr. F. Harvey Pough in Western and South Australia. The donation of his personal collection by Dr. Kraig Adler (Neurobiology and Behavior) has added more than 100 new species to the collection. Through collecting, exchanges and acquisition of other various collections we now have good representation of Costa Rican viperids, lizards from Western and South Australia, amphibians and reptiles from Puerto Rico, snakes and lizards from Mexico, and a more representative collection of African and European species.</geographicDescription>
+        <boundingCoordinates>
+          <westBoundingCoordinate>-180</westBoundingCoordinate>
+          <eastBoundingCoordinate>180</eastBoundingCoordinate>
+          <northBoundingCoordinate>90</northBoundingCoordinate>
+          <southBoundingCoordinate>-90</southBoundingCoordinate>
+        </boundingCoordinates>
+      </geographicCoverage>
+          <taxonomicCoverage>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Amphibia</taxonRankValue>
+              </taxonomicClassification>
+              <taxonomicClassification>
+                  <taxonRankName>class</taxonRankName>
+                <taxonRankValue>Reptilia</taxonRankValue>
+              </taxonomicClassification>
+          </taxonomicCoverage>
+  </coverage>
+  <maintenance>
+    <description>
+      <para></para>
+    </description>
+    <maintenanceUpdateFrequency>unkown</maintenanceUpdateFrequency>
+  </maintenance>
+
+      <contact>
+    <individualName>
+        <givenName>Casey</givenName>
+      <surName>Dillman</surName>
+    </individualName>
+    <organizationName>Cornell University Museum of Vertebrates</organizationName>
+    <positionName>Curator of Fishes, Amphibians and Reptiles</positionName>
+    <address>
+        <deliveryPoint>159 Sapsucker Woods Road</deliveryPoint>
+        <city>Ithaca</city>
+        <administrativeArea>NY</administrativeArea>
+        <postalCode>14850-1923</postalCode>
+        <country>US</country>
+    </address>
+    <phone>+1 607-254-2162</phone>
+    <electronicMailAddress>cbd63@cornell.edu</electronicMailAddress>
+    <onlineUrl>http://www.cumv.cornell.edu</onlineUrl>
+      </contact>
+</dataset>
+  <additionalMetadata>
+    <metadata>
+      <gbif>
+          <dateStamp>2013-04-24T02:42:57.901-05:00</dateStamp>
+          <hierarchyLevel>dataset</hierarchyLevel>
+            <citation>Cornell University Museum of Vertebrates, Amphibian and Reptile Collection</citation>
+          <resourceLogoUrl>http://ipt.vertnet.org:8080/ipt/logo.do?r=cumv_amph</resourceLogoUrl>
+              <livingTimePeriod>1860 to present</livingTimePeriod>
+          <dc:replaces>a8ee9bc6-5914-427d-9fba-f8545250ac34/v25.18.xml</dc:replaces>
+      </gbif>
+    </metadata>
+  </additionalMetadata>
+</eml:eml>
