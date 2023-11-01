@@ -5,22 +5,12 @@ on future directions and priorities.
 
 ## Changelog
 
-- EML creation fixed
-  - Using `build_eml()` which is a slightly purpose modified version of the
-    function from the EML package
-    - The input markdown template is first converted to docbook format, which is
-      an XML schema
-    - It is then read into R as an XML object
-    - The `xml2` package is used to interact with the object, and extract
-      elements of text
-    - The extracted text is converted into a list format
-    - The list is then used to build a valid EML object, using the
-      `EML::eml$eml` function
 - Restructuring
   - main.R contains the primary entrypoint wrapper functions
   - three types of function groups
     - check
-      - check is the primary group
+      - checking terms etc
+      - atm `check_fields()` function is the main entry point
     - modify
       - I thought this would be useful but I haven't decided if this is
         necessary yet. It might make more sense to have modifying functions
@@ -32,6 +22,17 @@ on future directions and priorities.
       - But `modify_*` files / functions would be useful for functions that are
         non specific and can be used across multiple checks
     - build
+- EML creation fixed
+  - Using `build_eml()` which is a slightly purpose modified version of the
+    function from the EML package
+    - The input markdown template is first converted to docbook format, which is
+      an XML schema
+    - It is then read into R as an XML object
+    - The `xml2` package is used to interact with the object, and extract
+      elements of text
+    - The extracted text is converted into a list format
+    - The list is then used to build a valid EML object, using the
+      `EML::eml$eml` function
   - removed the rename camel case function
     - i don't think its a useful component, because if your column names already
     don't match dwc terms, in most cases they still won't match after camel
