@@ -33,7 +33,7 @@ on future directions and priorities.
     - The extracted text is converted into a list format
     - The list is then used to build a valid EML object, using the
       `EML::eml$eml` function
-  - removed the rename camel case function
+  - removed the rename to camel case function
     - i don't think its a useful component, because if your column names already
     don't match dwc terms, in most cases they still won't match after camel
     casing. And most of the fixing of column names in galaxias will be through a
@@ -42,7 +42,21 @@ on future directions and priorities.
     - If you did have columns that are named correctly but not in camel case, I
     think its something you would fix yourself, just one line of code
 
+## Style
+
+- I use VScode with auto formatting to wrap lines at 80 characters
+  - Purely stylistic, it's not a big deal, but just mentioning as an FYI in case
+  you want to keep to that in the future.
+  - Not sure how to do it in Rstudio, probably there is a package
+  - Also as an FYI as to why some text outputs are wrapped in `paste0()` - it
+  lets you break printed text into multiple lines, for readability in the code,
+  without having the line breaks appear in the output.
+- Top-to-Bottom Approach (Caller First): If you have a main function that calls
+several helper functions, the main function would go at the top, followed by the
+helpers.
+
 ## Misc. notes and todos
+
 These were existing notes and todos within the package that I've removed and
 collated here:
 - From `README`: 
