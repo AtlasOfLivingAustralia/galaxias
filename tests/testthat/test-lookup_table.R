@@ -14,3 +14,28 @@ length(intersect(words1, words2))
 col <- "infraspecific epithet"
 
 test_mapping <- map_to_dwc(occurrence_data)
+
+
+
+cli_ul(cli::cli_dl(c("column" = col, index = which(colnames(data) == col))))
+
+cat(create_border_line(), "\n")
+cat(create_bullet_list(suggestions), "\n")
+
+create_border_line <- function() {
+  return(paste(rep("─", 80), collapse = ""))
+}
+
+create_bullet_list <- function(items) {
+  bullet_list <- ""
+  for (i in seq_along(items)) {
+    bullet_list <- paste0(
+      bullet_list,
+      crayon::cyan(sprintf(
+        " • %s\n",
+        items[i]
+      ))
+    )
+  }
+  return(bullet_list)
+}
