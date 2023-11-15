@@ -134,14 +134,18 @@ data_clean <- read.csv(
   
 ```{r, eval=FALSE}
 check_unique_identifiers(data_clean)
+check_unique_identifiers(occurrence_data)
+
 check_fields(data_clean)
+check_fields(occurrence_data)
+
 check_percent_match(data_clean)
+check_percent_match(occurrence_data)
 ```
 
 With valid terms, we can run some validation steps on the data.
 ```{r, eval=FALSE}
 validate(data_clean)
-data_clean$decimalLatitude
 generate_report(data_clean)
 ```
 
@@ -153,7 +157,7 @@ build_eml("./user_template.md")
 
 ## Meta
 ```{r, eval=FALSE}
-make_core_xml(data_clean)
+build_metafile(data_clean)
 ```
 
 ## Final archive

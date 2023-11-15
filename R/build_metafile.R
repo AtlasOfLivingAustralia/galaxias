@@ -1,31 +1,12 @@
-# TODO: has root node > 1, invalid xml
-# Datasets require documentation. This is achieved in a DwC-A by including a
-# resource metadata document that provides information about the dataset itself
-# such as a description (abstract) of the dataset, the agents responsible for
-# authorship, publication and documentation, bibliographic and citation
-# information, collection methods and much more.
-
-# A descriptor metafile describes how the files in your archive are organized.
-# It describes the files in the archive and maps each data column to a
-# corresponding standard Darwin Core or Extension term. The metafile is a
-# relatively simple XML file format. GBIF provides an online tool for making
-# this file but the format is simple enough that many data administrators will
-# be able to generate it manually. These options are described in the Publishing
-# Options section of this document.
-
-# A metafile is required when an archive includes any extension files or if a
+#' Create meta.xml file
+#'
+#' A metafile is required when an archive includes any extension files or if a
 # single core data file uses non-standard column names in the first (header) row
-# of data.
-
-# See here for description of the metafile: https://dwc.tdwg.org/text/
-#' Create core subfield
-#'
-#' @param x output of Darwinised occurrence data, output from `detect_dwc_columns()`
+# of data. See here for description https://dwc.tdwg.org/text/
+#' @param data data frame Validated DwC dataset
 #' @param file_name file name of DwC standard occurrence data
-#'
 #' @return xml document
 #' @export
-#'
 #' @examples
 #' DwC_occurrence_data <-
 #'   tibble(
@@ -37,23 +18,17 @@
 #'   )
 #'
 #' make_core_xml(DwC_occurrence_data)
-make_core_xml <- function(x,
-                          file_name = "occurrence.csv") {
-  field_names <- colnames(x)
-
-  # Create files sublist
-  # Question: what is this?
+build_metafile <- function(data, file_name = "occurrence.csv") {
+  field_names <- colnames(data)
   files <- list(
     location = file_name
   )
-
-  # Create id sublist
   id <- list()
 
   # Set id name and attribute
   attributes(id) <- list(index = "0")
 
-  # Create field sublists
+  # Create field list
   n_fields <- length(field_names)
   field <- lapply(seq_len(n_fields), function(a) {
     out <- list()
@@ -79,8 +54,11 @@ make_core_xml <- function(x,
     ignoreHeaderLines = "1"
   )
 
-  return(purrr::set_names(core, names_core))
-
-  # TODO: Accept output tibble from `detect_dwc_columns()`
-  # filename = occurrence.csv may be hardcoded, not 100% sure need to check with Data team, if so remove as arg
+  # return(purrr::set_names(core, names_core))
+  # export the xml as meta.xml
+  browser()
+  core_named <- purrr::set_names(core, names_core)
+  root_node <- list(root = core_named)
+  xml_doc <- xml2::as_xml_document(root_node)
+  xml2::write_xml(xml_doc, "meta.xml")
 }

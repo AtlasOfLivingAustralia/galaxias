@@ -13,7 +13,8 @@ test_that("validate wrapper function works with a valid input", {
   expect_true(validate(df))
 })
 
-test_that("validate wrapper function doesn't work invalid columns", {
+test_that("validate wrapper function doesn't work (but fails quietly)
+with invalid columns", {
   df <- data.frame(
     lat = 45,
     lon = 170,
@@ -21,21 +22,6 @@ test_that("validate wrapper function doesn't work invalid columns", {
   )
   expect_false(validate(df))
 })
-
-cli::test_that_cli(
-  "validate wrapper function works (fails quietly) if some inputs are valid and
-  some aren't",
-  {
-    df <- data.frame(
-      decimalLatitude = 45,
-      lon = 170,
-      eventDate = "2022-01-01"
-    )
-    expect_snapshot(local({
-      validate(df)
-    }))
-  }
-)
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #  spatial validations

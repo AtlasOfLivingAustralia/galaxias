@@ -1,5 +1,6 @@
 #' Report generation
-#' Understanding the logging and report behaviours and edge cases
+#'
+#' Understanding the logging and report behaviours and edge cases:
 #' The idea of the log environment is that a user can run individual functions
 #' within a session, and then decide to print a report at the end of their
 #' session. As the list is in an env, we can access it anywhere. The downside is
@@ -9,16 +10,18 @@
 #' easier handling of logs - just passing a named list through the pipeline
 #' appending logs, which would probably be more reliable and easier to manage.
 #'
-#' Notes on log env behaviours:
+#' Notes on log env behaviours (in progress):
 #' * entries are overwritten
-#'   * If I run validate latitude twice, the first log entry will be overwritten
+#'   * run validate latitude twice, the first log entry will be overwritten
 #' * Using `load_all()` clears the log_env because of `.onLoad()`
 #' * Custom output directory possible but requires extra steps
+#' @param data data frame to be used in the report
 generate_report <- function(data) {
   template_path <- system.file("markdown/report_template.qmd",
     package = "galaxias"
   )
   # Compile logs if needed
+  # This collapses the log messages into a single string w/ newlines
   user_actions_log <- paste(
     get_log_messages("user_actions"),
     collapse = "\n"
@@ -28,6 +31,8 @@ generate_report <- function(data) {
     collapse = "\n"
   )
 
+  # Just passing validation log for now
+  # Data frame can't be passed to quarto render unless serialised first
   quarto::quarto_render(
     input = template_path,
     execute_params = list(

@@ -56,13 +56,13 @@ get_log_messages <- function(category, name = NULL) {
   }
 }
 
-default_log_path <- "default_logs.RData"
-# Function to get the current log path
-get_log_path <- function() {
-  return(Sys.getenv("MY_PACKAGE_LOG_PATH", default_log_path))
-}
+# --- Alternative method in progress ---
 
-# --- Alternative method ---
+# default_log_path <- "default_logs.RData"
+# Function to get the current log path
+# get_log_path <- function() {
+# return(Sys.getenv("MY_PACKAGE_LOG_PATH", default_log_path))
+# }
 
 # user set custom log path
 # set_log_path <- function(new_path) {
@@ -93,4 +93,5 @@ get_log_path <- function() {
 # }
 # in generate report:
 # logs <- load_logs()
-# validation_log <- if ("validation" %in% names(logs)) logs$validation else list()
+# validation_log <- if ("validation" %in% names(logs))
+# logs$validation else list()

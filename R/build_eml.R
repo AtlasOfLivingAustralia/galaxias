@@ -29,7 +29,7 @@ edit_template <- function(path = ".",
       )
     }
   )
-  file.copy(path_to_md_template, ".")
+  file.copy(path_to_md_template, path)
   edit_file(paste0(path, "/user_template.md"))
 }
 
@@ -38,11 +38,12 @@ edit_template <- function(path = ".",
 #'
 #' Based on the function `set_TextType()` from the EML package.
 #'
-#' @param template string Path to input markdown template
+#' @param template string Path to input markdown file
 #' @param output_dir string Path to output EML file, defaults to current working
 #'   directory `./eml.xml`
-#' @param validate_eml logical Validate the EML file using the EML
-#'   package function `eml_validate()` when TRUE (default: FALSE).
+#' @param validate_eml logical Validate the EML file agaisnt required ALA terms
+#' ( or TODO using the EML package function `eml_validate()` when TRUE default:
+#' FALSE).
 #' @return Writes EML file to output directory
 #' @examples
 #' \dontrun{
@@ -62,6 +63,7 @@ build_eml <- function(template,
     output = paste0(tempdir(), "/temp.xml"),
     options = "-s"
   )
+  browser()
   docbook <- xml2::read_xml(paste0(tempdir(), "/temp.xml"))
   docbook <- xml2::xml_ns_strip(docbook)
   sections <- xml2::xml_find_all(docbook, "//section", flatten = FALSE)
