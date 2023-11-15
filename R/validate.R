@@ -1,12 +1,12 @@
 #' Validate
-#' Validation checks on data. Logs are saved.
-#' Todo: store <- list() store true/false or other results from each
-#' validation for a final report output
+#' Wrapper for validation checks on data. Logs are saved.
+#' Todo: add something to store results e.g. store <- list()  append true/false
+#' or other results from each validation step for final report output
 #' @param data A data frame
 #' @return Console output
 #' @export
 validate <- function(data) {
-  validate_decimal_latitude(data, store)
+  validate_decimal_latitude(data)
   validate_decimal_longitude(data)
   validate_event_date(data)
 }
@@ -41,9 +41,10 @@ validate_decimal_latitude <- function(data) {
       return(invisible(FALSE))
     }
   } else {
-    # No log needed, better to log a complete column check all together
+    # no log needed; better to add a complete column check of dataset for
+    # logging in a different location
     cli::cli_alert_warning("Warning: 'decimalLatitude' column not found.")
-    return(invisible("warning"))
+    return(invisible(FALSE))
   }
 }
 
@@ -130,6 +131,7 @@ validate_event_date <- function(data) {
     }
   } else {
     cli::cli_alert_warning("Warning: 'eventDate' column not found.")
+    return(invisible(FALSE))
   }
 }
 
@@ -141,9 +143,8 @@ validate_event_date <- function(data) {
 #' @rdname validate
 #' @keywords internal
 validate_month_day <- function(date) {
-  # Extract year, month, and day using regex
+  # extracts year, month, day using regex
   matches <- regmatches(date, regexec("(\\d{4})-(\\d{2})-(\\d{2})", date))
-  # browser()
   if (length(matches[[1]]) < 4) {
     return(TRUE)
   } else {
@@ -151,7 +152,7 @@ validate_month_day <- function(date) {
     month <- as.integer(matches[[1]][3])
     day <- as.integer(matches[[1]][4])
 
-    # Check if month and day are valid
+    # check if valid
     return(month %in% 1:12 &&
       day %in% 1:31 &&
       !is.na(ISOdate(year, month, day)))

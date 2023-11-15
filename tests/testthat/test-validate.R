@@ -1,6 +1,41 @@
+# snapshot tests will not run interactively, use:
+# testthat::test_file("./tests/testthat/test-validate.R")
+
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #  wrapper
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+test_that("validate wrapper function works with a valid input", {
+  df <- data.frame(
+    decimalLatitude = 45,
+    decimalLongitude = 170,
+    eventDate = "2022-01-01"
+  )
+  expect_true(validate(df))
+})
+
+test_that("validate wrapper function doesn't work invalid columns", {
+  df <- data.frame(
+    lat = 45,
+    lon = 170,
+    date = "2022-01-01"
+  )
+  expect_false(validate(df))
+})
+
+cli::test_that_cli(
+  "validate wrapper function works (fails quietly) if some inputs are valid and
+  some aren't",
+  {
+    df <- data.frame(
+      decimalLatitude = 45,
+      lon = 170,
+      eventDate = "2022-01-01"
+    )
+    expect_snapshot(local({
+      validate(df)
+    }))
+  }
+)
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #  spatial validations
@@ -8,25 +43,61 @@
 
 #  Latitude ++++
 
-test_that("validate_decimal_latitude correctly validates a valid latitude", {
-  expect_true(validate_decimal_latitude(data.frame(decimalLatitude = 45.1234)))
+test_that("validate_decimal_latitude validates a valid latitude", {
+  expect_true(validate_decimal_latitude(data.frame(decimalLatitude = 45)))
 })
+
 test_that("validate_decimal_latitude identifies an invalid latitude
  (greater than 90)", {
-  expect_false(validate_decimal_latitude(data.frame(decimalLatitude = 95.1234)))
+  expect_false(validate_decimal_latitude(data.frame(decimalLatitude = 95)))
 })
+
 test_that("validate_decimal_latitude identifies an invalid latitude
  (less than -90)", {
   expect_false(
-    validate_decimal_latitude(data.frame(decimalLatitude = -95.1234))
+    validate_decimal_latitude(data.frame(decimalLatitude = -95))
   )
 })
-test_that("validate_decimal_latitude gives warning if no decimalLatitude
-column is found", {
-  expect_snapshot(local({
-    validate_decimal_latitude(data.frame(latitude = -95.1234))
-  }))
+
+cli::test_that_cli(
+  "CLI warning message if no `decimalLatitude` column detected",
+  {
+    expect_snapshot(local({
+      validate_decimal_latitude(data.frame(latitude = 50))
+    }))
+  }
+)
+
+#  Longitude ++++
+
+test_that("validate_decimal_Longitude  validates a valid longitude", {
+  expect_true(validate_decimal_longitude(
+    data.frame(decimalLongitude = 170)
+  ))
 })
+
+test_that("validate_decimal_Longitude identifies an invalid longitude
+ (greater than 180)", {
+  expect_false(validate_decimal_longitude(
+    data.frame(decimalLongitude = 181)
+  ))
+})
+
+test_that("validate_decimal_Longitude identifies an invalid longitude
+ (less than -180)", {
+  expect_false(
+    validate_decimal_longitude(data.frame(decimalLongitude = -200.5))
+  )
+})
+
+cli::test_that_cli(
+  "CLI warning message if no `decimalLongitude` column detected",
+  {
+    expect_snapshot(local({
+      validate_decimal_longitude(data.frame(Longitude = 20))
+    }))
+  }
+)
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #  temporal validations
@@ -73,3 +144,12 @@ test_that("validate_month_day identifies date with an invalid month", {
 test_that("validate_month_day correctly identifies date with an invalid day", {
   expect_false(validate_month_day("2022-01-32"))
 })
+
+cli::test_that_cli(
+  "CLI warning message if no `eventDate` column detected",
+  {
+    expect_snapshot(local({
+      validate_event_date(data.frame(date = "hello"))
+    }))
+  }
+)
