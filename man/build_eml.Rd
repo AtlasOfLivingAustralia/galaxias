@@ -7,13 +7,14 @@
 build_eml(template, output_dir = "./eml.xml", validate = FALSE)
 }
 \arguments{
-\item{template}{string Path to input markdown template}
+\item{template}{string Path to input markdown file}
 
 \item{output_dir}{string Path to output EML file, defaults to current working
 directory \code{./eml.xml}}
 
-\item{validate_eml}{logical Validate the EML file using the EML
-package function \code{eml_validate()} when TRUE (default: FALSE).}
+\item{validate_eml}{logical Validate the EML file agaisnt required ALA terms
+( or TODO using the EML package function \code{eml_validate()} when TRUE default:
+FALSE).}
 }
 \value{
 Writes EML file to output directory
