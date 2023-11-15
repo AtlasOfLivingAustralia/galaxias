@@ -1,31 +1,55 @@
-# Map user columns to Darwin Core terms
-# Interactive function
-# Suggests DwC terms based on column names
-# Suggestions based on two methods: word component matches and string distance
-map_to_dwc <- function(data) {
-  cli::cli_h1("Mapping terms")
+# TODO: need to prevent duplicate column naming
+#' Map User Columns to Darwin Core Terms
+#'
+#' @description
+#' For now, mappings are used to rename columns. Can be modified or extended to
+#' output a dictionary for the meta.xml and preserve column names etc.
+#'
+#' This interactive function assists in mapping user data columns to the
+#' standard Darwin Core (DwC) terms. It suggests potential DwC matches for each
+#' column name in the user's dataset. Suggestions are generated based on word
+#' component matches and string distance metrics to provide the best possible
+#' matches.
+#'
+#' Suggestions are presented to the user in a numbered list, and the user is
+#' then prompted to select the correct DwC term. If no correct match was found,
+#' the user is prompted to manually input the correct term if known, or skip the
+#' column, before continuing to the next column.
+#'
+#' Note that a minimum of five matches is always returned, even if they are
+#' only low confidence matches.
+#'
+#' @param data data frame Containing a dataset of which to map DwC
+#'   terms to.
+#'
+#' @return data frame With renamed columns based on the mapping. Exiting the
+#' mapping early (by using the `exit` command when prompted) will return a data
+#' frame with any mappings that were made prior to exiting.
+#' @export
+map_fields <- function(data) {
+  simple_h1("Mapping column names to DwC terms")
+
   # Initialize an empty named vector to store the mappings
   column_mappings <- setNames(character(ncol(data)), colnames(data))
 
-  # TODO
-  # if any col == DwC, skip, append to a list
-  # print these cols were skipped at the end
+  # Skip columns w/ valid terms
   skip <- colnames(data)[(colnames(data) %in% dwc_terms_archived$column_name)]
-  
-  # For each column in the user data
-  for (col in colnames(data)) {
-    
+
+  # For each column in the user data...
+  # for (col in colnames(data)) {
+  for (index in cli::cli_progress_along(colnames(data))) {
+    col <- colnames(data)[index]
     if (col %in% skip) {
       next
     }
-    cat("Mapping column:", col, "\n")
-    cli::cli_h2("Heading 2")
-
+    suggestions <- ""
+    suggestions_overlap <- ""
+    suggestions_distance <- ""
+    simple_h2("Mapping column:", index, "-", col)
     # Method 1: word component matches
     overlap_scores <- sapply(dwc_terms_archived$column_name, function(term) {
       word_overlap_score(col, term)
     })
-
     # Get top suggestions based on word overlap
     if (max(overlap_scores) > 0) {
       filtered <- which(overlap_scores > 0)
@@ -42,7 +66,7 @@ map_to_dwc <- function(data) {
     suggestions_distance <- dwc_terms_archived$column_name[order(matches)[1:5]]
 
     # If suggestions_overlap exists, append to suggestions (unique only)
-    if (exists("suggestions_overlap")) {
+    if (suggestions_overlap != "") {
       suggestions <- unique(c(suggestions_overlap, suggestions_distance))
     } else {
       suggestions <- suggestions_distance
@@ -51,19 +75,18 @@ map_to_dwc <- function(data) {
     # Print suggestions
     # Always prints the top 5 matches (suggestions) based on distance, but will
     # print > 5 matches in cases of unique word overlap method matches
-    cat("Top suggestions based on your column name:\n")
-    for (i in cli::cli_progress_along(seq_along(suggestions))) {
-      cat(i, "-", suggestions[i], "\n")
-    }
+    cli::cli_alert_info("Top suggestions based on your column name:\n")
+    cli::cli_ol(suggestions)
 
     # Ask user for mapping
-    input <- readline(
-      prompt = paste0(
-        "> Enter a number corresponding to the right term\n",
-        "> Enter 0 for no matching term\n",
-        "> Type 'exit' to leave early and save current mappings\n"
-      )
+    instruction <- c("Number (>0)", "0", "Type 'exit'")
+    definition <- c(
+      "Map a suggested term",
+      "No matches, continue to manual input",
+      "Exit early (session mappings will be preserved)"
     )
+    cat(create_aligned_prompt(instruction, definition))
+    input <- readline(prompt = "Please enter your choice: ")
 
     # Early exit condition
     if (tolower(input) == "exit") {
@@ -93,47 +116,102 @@ map_to_dwc <- function(data) {
       cat("Invalid input. Column skipped.\n")
     }
   }
-  # For now, rename columns based on mappings, but could easily be changed to
-  # output a dictionary that can be used in the build xml
+
   # Filter out empty mappings
   valid_mappings <- column_mappings[column_mappings != ""]
   names(data)[names(data) %in% names(valid_mappings)] <- valid_mappings
   cli::cli_alert_success("Mapping complete")
   cli::cli_alert_success("{length(valid_mappings)} columns mapped")
 
+  if (length(skip) > 0) {
+    cli::cli_alert_info("{length(skip)} existing DwC terms skipped:")
+    cli_ul("{.var .strong {skip}}")
+  }
+
   return(data)
 }
 
-# Some matches are difficult using string distance, like Species to
-# scientificName, yet this is common naming convention. In these cases, it makes
-# sense to have some more targeted checks.
-unlikely_matches <- function() {
-
+#' Import an existing lookup table for DwC terms
+#'
+#' @description
+#' Imports a mapping table, ensuring dataset column names align with DwC terms.
+#'
+#' * Requires a data frame with at least two columns:
+#'   - First: Column names of your dataset.
+#'   - Second: Corresponding DwC terms.
+#' * Each row must correctly pair a dataset column name with a DwC term, e.g.,
+#'   `data.frame("sci name", "scientificName")`.
+#' @section dev notes:
+#' In progress, potential use cases:
+#' * meta xml mapping process
+#' * E2E use; pipeline w/ existing lookup table
+#' * Importing a lookup table created in a previous session (with `map2dwc()`)
+#' @param mapping data frame Containing at least two columns
+#' @param index numeric vector of length 2. The first element is the column
+#'   index to use for the data column names, the second element is the column
+#'   index to use for the DwC terms e.g. `index = c(1, 2)`.
+#' @param dataset data frame Optional dataset to which the lookup table
+#'   pertains, used for validation.
+#' @keywords internal
+import_map <- function(mapping, index, dataset = NULL) {
+  # Check that index is numeric length 2
+  if (!is.numeric(index) || length(index) != 2) {
+    stop(cli::format_error(c(" ",
+      "x" = "Index must be a numeric vector of length 2"
+    )))
+  }
+  # Check that the index is valid for the data frame
+  if (any(index > ncol(data))) {
+    stop(cli::format_error(c(" ",
+      "x" = "Index contains values > than number of columns"
+    )))
+  }
+  # UNTESTED Check if all terms are valid
+  if (!all(mapping[, index[2]] %in% dwc_terms_archived$column_name)) {
+    stop(cli::format_error(c(" ",
+      "x" = "Invalid DwC terms detected"
+    )))
+  }
+  # UNTESTED Check column names in lookup table are present in dataset
+  if (!is.null(dataset)) {
+    if (!all(mapping[, index[1]] %in% colnames(dataset))) {
+      stop(cli::format_error(c(" ",
+        "x" = "Column names in lookup table not present in dataset"
+      )))
+    }
+  }
 }
-#' Import an existing lookup table, in the format of two named columns, where
-#' the first contains the user supplied column names, second containing the
-#' matching DwC terms.
-import_lookup_table <- function(data) {
 
-}
-
-
-# Compute word component overlap between two strings
-# Returns numeric, the number of word components that overlap (0 no matches, 1 =
-# one match, etc.)
+#' Word overlap score
+#' @param string1 string
+#' @param string2 string
+#' @return numeric The number of word components that overlap/match between
+#'   words (0 no matches, 1 = one match, etc.)
+#' @seealso Called by [map_fields()]; calls [split_into_words()]
+#' @keywords internal
 word_overlap_score <- function(string1, string2) {
   words1 <- split_into_words(string1)
   words2 <- split_into_words(string2)
   length(intersect(words1, words2))
 }
 
-# Split a string into word components
+#' Split a string into words
+#'
+#' Splits on non-alphanumeric characters/spaces and handles camel case by
+#' inserting spaces before uppercase letters following lowercase ones. Properly
+#' handles acronyms: splits 'languageEnglish', 'languageEN', but not 'EN'.
+#' @param string string
+#' @return character vector
+#' @seealso Called by [word_overlap_score()]
+#' @keywords internal
 split_into_words <- function(string) {
-  # Add spaces to string - camel case handling
-  # The regex logic is important and includes some acronym handling
-  # languageEnglish is split, languageEN is split, languageENregion is not
-  # split, EN is not split.
   string_with_spaces <- gsub("([a-z])([A-Z])", "\\1 \\2", string)
-  # Split the string on non-alphanumeric characters and spaces
   unlist(strsplit(tolower(string_with_spaces), split = "[^a-zA-Z0-9]+"))
+}
+
+# Placeholder - check for matches that are difficult to detect with
+# string distance, but common enough that it makes sense to implement specific
+# logic. Example: species to scientificName.
+unlikely_matches <- function() {
+
 }

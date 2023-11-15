@@ -79,7 +79,7 @@ make_core_xml <- function(x,
     ignoreHeaderLines = "1"
   )
 
-  return(set_names(core, names_core))
+  return(purrr::set_names(core, names_core))
 
   # TODO: Accept output tibble from `detect_dwc_columns()`
   # filename = occurrence.csv may be hardcoded, not 100% sure need to check with Data team, if so remove as arg

@@ -21,7 +21,6 @@
 #' @importFrom utils menu
 #' @importFrom tibble tibble
 #' @importFrom janitor clean_names
-#' @importFrom emo ji_find
 #' @importFrom glue glue glue_collapse
 #' @importFrom readr read_csv
 darwin_check <- function(data, mend, all_fields = TRUE) {
@@ -35,10 +34,9 @@ darwin_check <- function(data, mend, all_fields = TRUE) {
     abort("`data` is missing, with no default")
   }
 
-  data |>
-    check_unique_identifiers() |>
-    check_fields(all_fields) |>
-    check_percent_match()
+  data <- check_unique_identifiers(data)
+  data <- check_fields(data, all_fields = all_fields)
+  data <- check_percent_match(data)
 
   # check scientific names - two words (not always, subspecies), no numbers, no
   # symbols, no full stop abbreviations?

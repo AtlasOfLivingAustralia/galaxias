@@ -118,6 +118,7 @@ rename_interactive <- function(data, unique_columns) {
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#' Create a random identifier column
 #' @param data A tibble
 #' @param random_seed Integer: seed value (optional)
 #' @keywords internal

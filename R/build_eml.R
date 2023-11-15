@@ -1,13 +1,21 @@
 #' Open a markdown template file for creating EML metadata
-#' @param path File path where metadata template will be copied to
-#' @param type Which template flavour to open (default: "ALA", more to come)
-#' @param licence Numeric value corresponding to a valid licence to use for the
-#' dataset. Read more [here:](https://support.ala.org.au/support/solutions/articles/6000197133-what-licence-should-i-use-)
-#' #' \itemize{
+#' @param path string Directory where metadata template will be copied to,
+#'   defaults to current working directory.
+#' @param type
+#' string Which template flavour to use:
+#' * ALA (default)
+#' * More to come...
+#' @param licence
+#' numeric Which licence to use for the dataset:
+#' \itemize{
 #'   \item 1 = Creative Commons Zero - CC0
 #'   \item 2 = Attribution – CC BY (4.0)
 #'   \item 3 = Attribution-Noncommercial – CC BY-NC
-#' @return Template file opened in RStudio for user to edit
+#' }
+#' See
+#' [article](https://support.ala.org.au/support/solutions/articles/
+#' 6000197133-what-licence-should-i-use-) for more information.
+#' @return The template file is opened in RStudio.
 #' @export
 #' @importFrom usethis edit_file
 edit_template <- function(path = ".",
@@ -27,21 +35,25 @@ edit_template <- function(path = ".",
 
 
 #' Build and export an EML file using an input markdown template
-#' Reference: EML package function `set_TextType()`
-#' @param template Path to input markdown template
-#' @param output_dir Path to output directory to save EML file. Defaults to
-#' current working directly ("./eml.xml")
-#' @param validate_eml Logical; whether to validate the EML file using the EML
-#' package function `eml_validate()`
-#' @return EML written to output directory
-#' @export
+#'
+#' Based on the function `set_TextType()` from the EML package.
+#'
+#' @param template string Path to input markdown template
+#' @param output_dir string Path to output EML file, defaults to current working
+#'   directory `./eml.xml`
+#' @param validate_eml logical Validate the EML file using the EML
+#'   package function `eml_validate()` when TRUE (default: FALSE).
+#' @return Writes EML file to output directory
 #' @examples
+#' \dontrun{
 #' build_eml(template = "./user_template.md")
 #' build_eml(
 #'   template = "./user_template.md",
 #'   output_dir = "./metadata/my_eml.xml",
 #'   validate = TRUE
 #' )
+#' }
+#' @export
 build_eml <- function(template,
                       output_dir = "./eml.xml",
                       validate = FALSE) {
@@ -106,8 +118,8 @@ build_eml <- function(template,
 }
 
 #' Validate a user input output path / file name
-#' @param filepath path to output file
-#' @return NULL - console output. Stops if validation fails.
+#' @param filepath string Path to output file
+#' @return Console report. Stops if validation fails.
 #' @keywords internal
 validate_output_path <- function(filepath) {
   # Extract the directory from the filepath

@@ -110,10 +110,6 @@ check_unique_identifiers <- function(data) {
 # alone before running the complete check, to get a quick overview.
 # TODO: The dwc_terms_archived is all possible terms or only required? Should
 # have two versions one for required and one for required and recommended.
-#' @importFrom crayon green red
-#' @importFrom glue glue
-#' @importFrom rlang abort
-#' @importFrom rlang inform
 check_percent_match <- function(data) {
   message("\nChecking total percent match to Darwin Core terms...")
   message("---------------------------------------------\n")

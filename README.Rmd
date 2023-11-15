@@ -108,79 +108,64 @@ occurrence_data <- read.csv(
 )
 ```
 
-We can then perform a check of this data using `check_fields()`. Primarily, this
-function checks for the presence of columns that comply with DwC terms. This
-check is also interactive, and can be used to correct any issues with some of
-our supported fixes (e.g. unique identifiers, date formats (TBD)).
+### Dataset validation
+
+If you have an existing lookup table, which matches column names from your data
+set to valid DwC terms, you can import it with `import_map()`. Otherwise, we can
+use the `map_fields()` function to interactively create a lookup table. This
+functions offers suggestions for mappings which can help speed up the process.
 
 ```{r, eval=FALSE}
-library(galaxias)
-occurrence_data_out <- check_fields(occurrence_data)
+occurrence_data_mapped <- map_fields(occurrence_data)
 ```
 
-A report is shown in the console, and you could then use this report to fix any
-issues reported. By default, presence of both DwC required and recommended
-fields (for Occurrence data) is checked. But we can also specify
-check_fields(data, all_fields = FALSE) to check only the required fields.  
-
-Once you are happy with how your data is formatted, and all required fields have
-been detected, we can then create a lookup table (dictionary) for mapping column
-headings with Darwin Core terms. This is done using `create_lookup_table()`. 
+We can check if our dataset contains all required and suggested DwC fields using
+`check_fields()`. This check is also interactive, offering suggested fixes where
+supported (e.g. unique identifiers, date formats (TBD)). A report is shown in
+the console, identifying needed fixes. By default, both presence of required and
+recommended fields (for Occurrence data) are checked. Specify
+`check_fields(data, all_fields = FALSE) to check only the required fields.  
 
 ```{r, eval=FALSE}
-library(purrr)
-
-# Opens metadata template interactively in RStudio for you to edit
-# By default, this function copies the template to the root of your project directory
-# Feel free to move this file to where you see fit
-edit_metadata_md()
-
-# Read completed template back into R
-# Specify the path to the metadata template file
-# For purpose of demo, will read example md
-md_template <- read_metadata_md("inst/markdown/westerband_template.md")
-
-# Convert md_text into tibble
-md_tibble <- md_to_tibble(md_template)
-
-# Convert tibble into list
-# This step preps the metadata text so that
-# it can easily interact with the XML template
-md_list <- md_tibble_to_list(md_tibble)
-
-# Retrieve blank eml list structure (stored internally in package)
-eml_template_list
-str(eml_template_list)
-
-# Update fields in eml_template_list
-# Currently implemented for Title and Name only
-eml_template_updated <-
-  update_title(eml_template_list, md_list) |>
-  update_names(md_list)
-
-# Preview updated changes
-eml_template_updated |> pluck("eml", "dataset", "title")
-eml_template_updated |> pluck("eml", "dataset", "contact")
-```
-
-Finally, we run ..., which builds the `meta.xml` file and packages the archive:
-```{r, eval=FALSE}
-# In progress currently implemented for the occurrence data only
-DwC_occurrence_data <- tibble(
-  basisOfRecord = "HUMAN_OBSERVATION",
-  scientificName = "Galaxias maculatus",
-  eventDate = "2002-12-07",
-  decimalLatitude = -33.366551,
-  decimalLongtitude = 151.47635
-)
-
-make_core_xml(DwC_occurrence_data,
-  file_name = "DwC_occurrence.csv"
+data_clean <- read.csv(
+  system.file("data/occurrence_exemplar.csv", package = "galaxias")
 )
 ```
+  
+```{r, eval=FALSE}
+check_unique_identifiers(data_clean)
+check_fields(data_clean)
+check_percent_match(data_clean)
+```
 
----
+With valid terms, we can run some validation steps on the data.
+```{r, eval=FALSE}
+validate(data_clean)
+data_clean$decimalLatitude
+generate_report(data_clean)
+```
 
+## EML 
+```{r, eval=FALSE}
+edit_template()
+build_eml("./user_template.md")
+```
+
+## Meta
+```{r, eval=FALSE}
+make_core_xml(data_clean)
+```
+
+## Final archive
+
+```{r, eval=FALSE}
+archive(
+  data = data_clean,
+  meta = NULL,
+  eml = eml_template_updated,
+  folder = "./archive"
+)
+```
 ## In progress
 
 - The current aim is a MVP, no warranty provided way to create a DwC archive

@@ -1,7 +1,6 @@
 #' Check for required ALA fields in an EML list
-#' @param eml_list
-#' @return NULL - console output
-
+#' @param eml_list list? of EML fields
+#' @return Console output
 check_eml <- function(eml_list) {
   message("Checking required fields...\n")
   present_count <- 0
