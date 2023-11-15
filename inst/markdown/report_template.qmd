@@ -1,0 +1,35 @@
+---
+title: "DwC Validation Report"
+format: html
+params:
+  data: "No data"
+  validation_log: "No validation logs"
+  user_actions_log: "No user actions logs"
+  general_log: "No general logs"
+---
+
+# Validation Log
+
+```{r}
+plot(cars)
+params$validation_log$decimal_latitude
+print(params$validation_log$decimal_latitude)
+# print(params$validation_log$decimal_longitude)
+```
+
+```{r}
+user_data <- jsonlite::fromJSON(params$data)
+head(user_data)
+summary(user_data)
+plot(decimalLatitude ~ decimalLongitude, data = user_data)
+```
+
+Hello `r params$validation_log$decimal_latitude`
+
+# User Actions Log
+
+<!-- `r params$user_actions_log` -->
+
+# General Log
+
+<!-- `r params$general_log` -->

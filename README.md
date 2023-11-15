@@ -9,10 +9,8 @@ This package is intended to support data submission to biodiversity data
 infrastructures such as the [ALA](https://www.ala.org.au) and
 [GBIF](https://gbif.org), by providing the following features:
 
-- auto-detect field headings and data types (`{janitor}`, `{lubridate}`
-  etc) IN PROGRESS
-- provide metadata in `.md` format, tools for converting to and from
-  `xml` IN PROGRESS
+- check column names against Darwin Core standards
+
 - (optionally) manually re-assign column headings for unrecognised
   fields
 - ask sensible questions to fill unavailable columns (e.g. spatial
@@ -20,7 +18,8 @@ infrastructures such as the [ALA](https://www.ala.org.au) and
 - generate (and optionally submit) a Darwin Core Archive
 - optionally output revised objects in standard formats (`.csv`, `.md`)
 - run the above using functions in R or via `{shiny}`
-
+- provide metadata in `.md` format, tools for converting to and from
+  `xml` IN PROGRESS
 This package is currently under active development.
 
 ``` r
