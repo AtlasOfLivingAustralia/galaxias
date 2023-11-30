@@ -31,12 +31,14 @@ Imports:
   crayon,
   dplyr,
   EML,
+  glue,
   janitor,
   readr,
   rlang,
   snakecase,
   stringdist,
-  tibble
+  tibble,
+  xml2
 Suggests:
   testthat (>= 3.0.0)
 License: GNU
