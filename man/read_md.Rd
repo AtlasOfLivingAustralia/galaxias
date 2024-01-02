@@ -17,5 +17,5 @@ xml page.}
 }
 \description{
 With \code{write_md()}, export format is chosen based on the file suffix; GitHub
-(.md), Rmarkdown (.Rmd) and Quarto (.Qmd) are supported.
+(.md), Rmarkdown (.Rmd) and Quarto (.qmd) are supported.
 }
