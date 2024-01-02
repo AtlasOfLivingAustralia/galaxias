@@ -31,9 +31,4 @@
 #'   * [md_tibble_to_list()] 
 #'   * [update_title()] 
 #'   * [update_names()] 
-
 "_PACKAGE"
-
-## usethis namespace: start
-## usethis namespace: end
-NULL

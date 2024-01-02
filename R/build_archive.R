@@ -5,9 +5,10 @@
 #' @param meta A data frame of your metadata
 #' @param eml A data frame of your EML metadata
 #' @param path A path to save the zip file to (root by default)
-#' @return NULL
-
-archive <- function(data, meta = NULL, eml = NULL, folder = ".") {
+#' @return No object is returned; this function is called for the side-effect
+#' of building a 'Darwin Core Archive' (i.e. a zip file)
+#' @export
+build_archive <- function(data, meta = NULL, eml = NULL, folder = ".") {
   # Check data
   # darwin_check(data, mend = FALSE)
   eml_xml <- as_xml_document(eml)
@@ -20,6 +21,5 @@ archive <- function(data, meta = NULL, eml = NULL, folder = ".") {
   write.csv(data, paste0(folder, "/occurrence.csv"), row.names = FALSE)
   message("Creating ZIP ...")
   # TODO hardcoding this for now
-
   zip(zipfile = "dwc.zip", files = folder)
 }

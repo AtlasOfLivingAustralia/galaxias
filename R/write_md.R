@@ -1,23 +1,56 @@
-#' wrapper function to convert xml to a .rmd file
-#' @param xml An `xml` object imported using `xml2`
+
+#' @rdname read_md
+#' @param xml A xml object, either imported using `xml2`, or the url or a valid
+#' xml page.
 #' @param file (string) file name to save text, typically to `.md` or `.Rmd`
 #' @importFrom xml2 as_list
 #' @importFrom glue glue
 #' @export
-xml_to_rmd <- function(xml, file){
+write_md <- function(xml, file, title){
   # add a boilerplate `rmd` header to support rendering
   # note: possible instead to populate header with dataset title, date
-  header <- glue("---
-title: \"Darwin Core Metadata\"
+  cat(switch_headers(file, title), 
+      file = file)
+  input <- xml2::as_list(x)$eml
+  md_recurse(input, file = file)
+}
+
+#' @noRd
+#' @keywords Internal
+#' @importFrom stringr str_extract
+switch_headers <- function(filename, title){
+  file_extension <- basename(filename) |>
+    str_extract("\\.[:alpha:]+$")
+  switch(file_extension, 
+         ".rmd" = build_rmd_header(title),
+         ".qmd" = build_qmd_header(title),
+         "") # GitHub Markdown doesn't require YAML
+}
+
+#' @noRd
+#' @keywords Internal
+#' @importFrom glue glue
+build_rmd_header <- function(title){
+  glue("---
+title: {title}
 output: 
   html_document:
     toc: true
     toc_float: true
 date: \"{Sys.Date()}\"
 ---")
-  cat(header, file = file)
-  input <- xml2::as_list(x)$eml
-  md_recurse(input, file = file)
+}
+
+#' @noRd
+#' @keywords Internal
+#' @importFrom glue glue
+build_qmd_header <- function(title){
+  glue("---
+title: {title}
+format:
+  html:
+    toc: true
+---")
 }
 
 #' Internal recursive function
@@ -67,7 +100,7 @@ md_recurse <- function(x, level = 1, file){
 # # test with real XML
 # library(xml2)
 # x <- read_xml("https://collections.ala.org.au/ws/eml/dr368")
-# xml_to_md(x, "test.md")
+# xml_to_md(x, "test.rmd")
 # md_to_xml("test.md") |> str()
 
 # NOTES:

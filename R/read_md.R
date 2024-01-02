@@ -1,9 +1,13 @@
-#' function to parse md to xml
+#' Convert between markdown and xml
+#' 
+#' With `write_md()`, export format is chosen based on the file suffix; GitHub 
+#' (.md), Rmarkdown (.Rmd) and Quarto (.qmd) are supported. 
 #' @importFrom snakecase to_lower_camel_case
 #' @importFrom tibble tibble
 #' @importFrom xml2 as_xml_document
+#' @name read_md
 #' @export
-rmd_to_xml <- function(file){
+read_md <- function(file){
   x <- readLines(file)
   is_title <- grepl("^#", x) |> which()
   title_length <- attr(regexpr("^#{1,}", x[is_title]), "match.length")
@@ -27,7 +31,7 @@ rmd_to_xml <- function(file){
 }
 
 #' Internal function to recursively build nested lists from a tibble
-#' @param x A `tibble` built within `md_to_xml()`
+#' @param x A `tibble` built within `read_md()`
 #' @noRd
 #' @keywords Internal
 xml_recurse <- function(x, level = 1){

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 <img src="man/figures/logo.png" align="left" style="margin: 20px 10px 0px 0px;" alt="" width="120"/><br>
 <h2>Create Darwin-Core Archives in R</h2>
 
-`Galaxias` is an R package designed to simplify the process of converting
+`galaxias` is an R package designed to simplify the process of converting
 biodiversity data into [Darwin Core](https://dwc.tdwg.org) archives (DwC-A),
 facilitating data submission to infrastructures such as the [Atlas of Living
 Australia (ALA)](https://www.ala.org.au) and the [Global Biodiversity
@@ -26,20 +26,74 @@ Information Facility (GBIF)](https://gbif.org). The key features include:
 using simple markdown
 - Final export of a compressed (`ZIP`) DwC-A from the above components
 
-## Quick start
-
+## Installation
 This package is under active development, and is not yet available on CRAN. You
 can install the latest development version from GitHub with:
 
-```r
-devtools::install_github("atlasoflivingaustralia/galaxias")
+```{r}
+# devtools::install_github("atlasoflivingaustralia/galaxias")
+devtools::load_all()
 ```
 
 Load the package:
 
-```r
-library(galaxias)
+```{r, eval = FALSE}
+# library(galaxias)
 ```
+
+## Basic usage
+
+A 'Darwin Core Archive' is a zip file containing three files:
+
+- A table of biodiversity observations
+- A metadata statement about what the data is, and who collected it
+- A file that maps your column headings to those of the Darwin Core standard
+
+`galaxias` helps you generate, store, modify, and validate these files. To get 
+started, simply start a pipe using the `dwca()` function:
+
+```{r}
+archive <- dwca()
+archive
+```
+
+You can then amend this object using `add_` functions to supply the required 
+information:
+
+```{r, eval = FALSE}
+archive <- archive |>
+  add_data(file = "your_data_here.csv") |>
+  add_metadata(file = "your_metadata_here.Rmd") |>
+  add_column_mappings()
+```
+
+These functions work by interacting with files in your working directory. While
+the data `csv` is in a simple format, both the metadata and column mapping 
+functions use `xml` internally. Rather than work natively with `xml`, however,
+`galaxias` contains functions to convert `xml` to Markdown formats, particularly
+`rmarkdown` (`.Rmd`) and Quarto (`.qmd`).
+
+```{r, eval = FALSE}
+read_xml()
+write_xml()
+```
+
+In practice, supplying valid metadata is tricky, so best practice is to download
+an example from ALA and modify it to your needs:
+
+```{r, eval = FALSE}
+get_metadata(id = "df368", 
+             file = "example.Rmd")
+```
+
+Column mapping is trickier still; it is generally best to build your objects 
+and let `add_column_mappings()` do the heavy lifting; if a file or 
+object is not supplied to `add_column_mappings()`, it will attempt to build one. 
+This differs from `add_data()` and `add_metadata()`, which will not attempt to 
+guess what data you want to provide.
+
+You can then use the following functions to complete your archive:
+
 
 ## What is Darwin Core?
 
@@ -103,7 +157,7 @@ progress.
 Starting with our core data file, we will import observation data into R:
 
 ```{r, eval=FALSE}
-occurrence_data <- read.csv(
+occurrence_data <- read_csv(
   system.file("data/westerband_2022_wdate.csv", package = "galaxias")
 )
 ```
@@ -127,7 +181,7 @@ recommended fields (for Occurrence data) are checked. Specify
 `check_fields(data, all_fields = FALSE) to check only the required fields.  
 
 ```{r, eval=FALSE}
-data_clean <- read.csv(
+data_clean <- read_csv(
   system.file("data/occurrence_exemplar.csv", package = "galaxias")
 )
 ```
