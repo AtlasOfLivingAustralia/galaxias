@@ -67,6 +67,21 @@ archive <- archive |>
   add_column_mappings()
 ```
 
+and finally, you can run `check()` to check conformance with Darwin Core
+Standards, or `copy_to()` to put your data in the queue for addition to the ALA.
+
+## Mapping to DwC
+For many people, the challenging part of building a Darwin Core Archive will
+be mapping your column names to the terms required by the standard. 
+
+You can view terms using the `{tawnydragon}` package.
+
+To map them to your columns, you have two choices:
+- use a standard data manipulation pathway, using `base::colnames()` or 
+  `dplyr::rename()` or `dplyr::mutate()`.
+- use our inbuilt shiny app by calling `map_terms()`
+
+## Details
 These functions work by interacting with files in your working directory. While
 the data `csv` is in a simple format, both the metadata and column mapping 
 functions use `xml` internally. Rather than work natively with `xml`, however,
