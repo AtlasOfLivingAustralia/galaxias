@@ -7,5 +7,5 @@
 check(.dwca)
 }
 \description{
-pointblank-based checking of a \code{dwca} object
+Description to follow.
 }
