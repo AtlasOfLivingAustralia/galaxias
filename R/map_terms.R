@@ -24,7 +24,7 @@ map_terms_ui <- function(df){
     title = "galaxias::map_terms",
     theme = bs_theme(bootswatch = "minty"),
     layout_columns(
-      widths = c(6, 6),
+      col_widths = c(4, 8),
       left_col(),
       right_col()
     )
@@ -63,19 +63,11 @@ left_col <- function(){
 right_col <- function(){
   div(
     h4("Darwin Core terms"),
-    # selectInput(
-    #   inputId = "select_class",
-    #   label = "Choose Darwin Core class",
-    #   choices = get_terms()$parents$code,
-    #   selected = "Occurrence"
-    # ),
-    # textOutput("current_description"),
     br(),
-    terms_div({get_terms() |>
-        pluck("terms") |>
-        filter(parent_class == "Occurrence")}),
-    # uiOutput("current_terms"), # seems to break stuff
-    move_term_to_colname(),
+    terms_list(),
+    move_term_to_colname(group = {get_terms() |> 
+        pluck("parents") |> 
+        pull("code")}),
     remove_terms_from_list(df)
   )
 }
@@ -99,41 +91,7 @@ map_terms_server <- function(input, output) {
       names(x) <- colnames(df)
       x
     }
-    # visible_terms = {
-    #   get_terms() |>
-    #     pluck("terms") |>
-    #     filter(parent_class == "Occurrence")
-    # },
-    # class_text = {
-    #   get_terms() |>
-    #     pluck("parents") |>
-    #     filter(code == "Occurrence") |>
-    #     pull("description")
-    # }
   )
-  
-  ## This approach - updating displayed fields via `selectInput` - 
-  ## appears to break drag-and-drop for unknown reasons
-  # # track the selector for DwC classes
-  # observeEvent(input$select_class, {
-  #   mapping$visible_terms <- get_terms() |>
-  #     pluck("terms") |>
-  #     filter(parent_class == input$select_class)
-  #   mapping$class_text <- get_terms() |>
-  #     pluck("parents") |>
-  #     filter(code == input$select_class) |>
-  #     pull("description")
-  # })
-  # 
-  # # update class text to give a description
-  # output$current_description <- renderText({
-  #   mapping$class_text
-  # })
-  # 
-  # # update UI to show only selected terms
-  # output$current_terms <- renderUI({
-  #   terms_div(mapping$visible_terms)
-  # })
 
   # as changes are made, update data storage with user mappings
   observe({
@@ -184,6 +142,30 @@ colnames_div <- function(df){
     )
 }
 
+#' @importFrom bslib navset_pill_list
+#' @importFrom bslib nav_panel
+#' @noRd
+#' @keywords Internal
+terms_list <- function(){
+  navset_pill_list(
+    !!!map(
+      .x = get_terms()$parents$code,
+      .f = \(x){
+        nav_panel(
+          title = x,
+          terms_div(
+            terms = {get_terms() |>
+                pluck("terms") |>
+                filter(parent_class == x)},
+            group = x)
+        )
+      }
+    ),
+    well = FALSE
+  )
+}
+
+
 #' Internal function to convert terms to divs
 #' @importFrom bslib card
 #' @importFrom bslib card_body
@@ -196,13 +178,12 @@ colnames_div <- function(df){
 #' @importFrom purrr pluck
 #' @noRd
 #' @keywords Internal
-terms_div <- function(terms){
+terms_div <- function(terms, group){
   div(
     class = "panel-body",
-    id = "sort_terms",
+    id = paste0("sort_terms_", group),
     map(.x = seq_len(nrow(terms)),
            .f = \(x){
-             # tag("button", list(class = "terms", x)) # works
              card(class = "terms",
                   card_header(terms$code[x]),
                   card_body(terms$description[x]))
@@ -236,18 +217,21 @@ detect_colnames <- function(df){
 #' @importFrom sortable sortable_options
 #' @noRd
 #' @keywords Internal
-move_term_to_colname <- function(){
-  sortable_js(
-    css_id = "sort_terms",
-    options = sortable_options(
-      group = list(
-        name = "sortGroup1",
-        put = TRUE
-      ),
-      sort = FALSE
-      # onSort = sortable_js_capture_input("terms_remaining")
-    )
-  )
+move_term_to_colname <- function(group){
+  map(.x = group,
+      .f = \(x){
+        sortable_js(
+          css_id = paste0("sort_terms_", x),
+          options = sortable_options(
+            group = list(
+              name = "sortGroup1",
+              put = TRUE
+            ),
+            sort = FALSE
+            # onSort = sortable_js_capture_input("terms_remaining")
+          )
+        )
+      })
 }
 
 #' Support dropping divs into a new table
