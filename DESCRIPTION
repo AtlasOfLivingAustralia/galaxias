@@ -43,6 +43,7 @@ Imports:
   snakecase,
   sortable,
   stringdist,
+  stringr,
   tawnydragon,
   tibble,
   xml2
