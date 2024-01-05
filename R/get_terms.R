@@ -4,9 +4,9 @@
 #' @importFrom dplyr desc
 #' @importFrom dplyr filter
 #' @importFrom dplyr group_by
+#' @importFrom dplyr left_join
 #' @importFrom dplyr relocate
 #' @importFrom dplyr rename
-#' @importFrom dplyr right_join
 #' @importFrom dplyr select
 #' @importFrom dplyr summarize
 #' @importFrom purrr pluck
@@ -23,14 +23,11 @@ get_terms <- function(){
                    status == "recommended") |>
     tdwg_terms() |>
     pluck("terms")
-  
-  # CHECK FOR PARENT CLASSES THAT ARE NOT BEING CAPTURED
-  # E.G. decimalLatitude is in class `Location` - where is that??
-  
+
   # get parents list
   parents <- terms_full |>
     filter(is.na(parent_class) & 
-             code %in% parent_class) |>
+           code %in% parent_class) |>
     select("code", "description")
   
   # get reduced terms list
@@ -58,9 +55,10 @@ get_terms <- function(){
     group_by(parent_class) |>
     summarize(weight = sum(weight)) |>
     arrange(desc(weight)) |>
-    right_join(parents, by = c("parent_class" = "code")) |>
+    left_join(parents, by = c("parent_class" = "code")) |>
     relocate("weight", .after = "description") |>
     rename("code" = "parent_class")
+  parents$description[parents$code == "Location"] <- "Spatial information."
   
   # return a list
   list(parents = parents, terms = terms)
