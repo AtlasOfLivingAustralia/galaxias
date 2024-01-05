@@ -91,7 +91,14 @@ or object is not supplied to `add_column_mappings()`, it will attempt to
 build one. This differs from `add_data()` and `add_metadata()`, which
 will not attempt to guess what data you want to provide.
 
-You can then use the following functions to complete your archive:
+You can then use the following functions to complete your archive (NONE
+COMPLETE):
+
+- `check()` runs checks in the console (or optionally via API? or should
+  that be `validate()`?)
+- `report()` runs checks as a report
+- `build()` constructs an archive
+- `copy_to()` pushes your archive to ALA.
 
 # Below here is old content
 

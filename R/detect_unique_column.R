@@ -7,6 +7,8 @@
 #' @param data A tibble
 #' @return Based on user choice, 1) input tibble with a renamed column, 2) input
 #' tibble with a new column, or 3) NULL
+#' @noRd
+#' @keywords Internal
 detect_unique_column <- function(data) {
   result <- data %>%
     dplyr::summarise(dplyr::across(
@@ -77,6 +79,7 @@ detect_unique_column <- function(data) {
 #' @param data A tibble
 #' @param unique_columns A character vector of column names
 #' @return A tibble with renamed columns
+#' @noRd
 #' @keywords internal
 rename_interactive <- function(data, unique_columns) {
   for (col in unique_columns) {
@@ -121,6 +124,7 @@ rename_interactive <- function(data, unique_columns) {
 #' Create a random identifier column
 #' @param data A tibble
 #' @param random_seed Integer: seed value (optional)
+#' @noRd
 #' @keywords internal
 build_random_identifier <- function(data,
                                     random_seed = NULL) {
@@ -135,6 +139,7 @@ build_random_identifier <- function(data,
 #' Should be globally unique - it may be necessary to still add a random number?
 #' Depends on what columns are used to build it.
 #' @param cols character vector of columns to use
+#' @noRd
 #' @keywords internal
 build_composite_identifier <- function(data,
                                        cols = NULL) {

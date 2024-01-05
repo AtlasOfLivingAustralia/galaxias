@@ -4,7 +4,12 @@
 \alias{check}
 \title{pointblank-based checking of a \code{dwca} object}
 \usage{
-check(.dwca)
+check(.dwca, max_n = NULL)
+}
+\arguments{
+\item{.dwca}{An object of class \code{dwca}, created using \code{dwca()}}
+
+\item{max_n}{Optional limit to the number of failed tests allowed}
 }
 \description{
 Description to follow.

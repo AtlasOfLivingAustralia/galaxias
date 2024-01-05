@@ -15,7 +15,7 @@
 add_data <- function(.dwca, 
                      df,
                      file){
-  if(!missing(object)){
+  if(!missing(df)){
     .dwca$data <- df
   }else if(!missing(file)){
     .dwca$data <- read_csv(file, show_col_types = FALSE)
