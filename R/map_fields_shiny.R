@@ -1,9 +1,7 @@
-#' Shiny app for mapping terms
-#' 
-#' Details to follow
+#' @rdname map_fields
 #' @importFrom shiny shinyApp
 #' @export
-map_terms <- function(df){
+map_fields_shiny <- function(df){
   if(missing(df)){
     stop("'data' argument is missing, with no default")}
   if(!inherits(df, "data.frame")){
