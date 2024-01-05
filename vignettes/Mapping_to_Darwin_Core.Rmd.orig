@@ -1,0 +1,140 @@
+---
+title: "Mapping to Darwin Core"
+author: "Martin Westgate"
+date: '`r Sys.Date()`'
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mapping to Darwin Core}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+The most important part of building a Darwin Core Archive is mapping your 
+dataset to the column names - and associated contents - required by the standard.
+This vignette discusses some common ways to do this.
+
+## Darwin Core terms
+Before we start making changes, it would be useful to know what the valid 
+Darwin Core terms are. We can find this out using `tawnydragon::show_terms()` 
+to get the results as a `tibble`, or `galaxias::view_terms()` to see them
+in a Shiny app.
+
+[Add screenshot from `view_terms()` here]
+
+
+## Converting a dataset to DwC-compliance
+The most reliable and reproducible way to manipulate data into a Darwin
+Core-compatible format is by constructing a data manipulation workflow. This 
+allows you to control all aspects of the dataset, and is much more reproducible 
+than automated approaches.
+
+Let's work with a simple example - a dataset of two biodiversity observations.
+While we've built this in the browser using `tibble` for convenience, a more 
+common use case is to have this information stored in a `.csv` file which is 
+imported with `readr::read_csv()`. Our example looks like this:
+
+```{r}
+library(tibble)
+
+df <- tibble(
+  latitude = c(-35.310, -35.273),
+  longitude = c(149.125, 149.133),
+  date = c("14-01-2023", "15-01-2023"),
+  time = c("10:23", "11:25"),
+  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
+  n = c(2, 3)
+)
+```
+This is exactly the sort of data we might reasonably expect to share through
+a biodiversity repository, with some minor exceptions:
+
+- the field (column) names don't match the Darwin Core standard
+- `date` and `time` are shown together rather than separately
+- some potentially useful fields are missing, such as who collected the data
+
+A standard data manipulation workflow 
+to amend our data might include the following steps:
+
+```{r}
+library(dplyr)
+library(glue)
+library(lubridate)
+
+dwc_df <- df |>
+
+  # rename columns
+  rename(decimalLatitude = latitude,
+         decimalLongitude = longitude,
+         scientificName = species,
+         individualCount = n) |>
+         
+  # amend date column to standard format
+  mutate(date = dmy(date)) |>
+  
+  # add previously missing information supported or required by Darwin Core
+  mutate(occurrenceID = seq_len(nrow(df)),
+         eventDate = glue("{date}T{time}:00Z"),
+         taxonRank = "species",
+         basisOfRecord = "humanObservation",
+         recordedBy = "Martin Westgate",
+         ) |>
+         
+  # place columns in a sensible order
+  select(occurrenceID, eventDate, decimalLatitude, decimalLongitude,
+         scientificName, taxonRank, individualCount, recordedBy,
+         basisOfRecord)
+
+dwc_df
+```
+As you can see above, this approach is fully reproducible, and is very clear
+about how data is manipulated and added at each stage. It also allows you to 
+check carefully that each field contains the correct information.
+
+
+## Populating taxonomic fields
+One thing that is missing from our earlier example is detailed additional 
+taxonomic information. You can auto-populate this by looking up your supplied 
+species names in your preferred taxonomic database, e.g.
+
+```{r}
+library(galah)
+
+taxonomy <- dwc_df |>
+  pull(scientificName) |>
+  search_taxa()
+taxonomy
+```
+
+```{r}
+## Next:
+  # remove non-DwC terms
+  # reformat columns to camelCase
+  # left_join() with dwc_df
+```
+
+This has the added benefit of showing how the atlas in question will 
+interpret your provided taxonomic information. This can be useful for 
+taxonomically ambiguous groups where more care may be required to ensure 
+correct interpretation.
+
+## Mapping tools
+`galaxias` provides a set of tools to help you map columns to Darwin Core if 
+you'd like. These are:
+
+- `map_fields_tibble()`: Supply a lookup table to rename columns
+- `map_fields_console()`: Use the console to get recommendations for renaming columns
+- `map_fields_shiny()`: Use a browser to map to Darwin Core terms
+
+See `?map_fields` for more information
+
+
+## Building an archive
+Once you have finished manipulating your dataset, you can pipe it into a 
+`dwca` object using `add_data()`:
+
+```{r}
+archive <- dwca() |>
+  add_data(dwc_df)
+```
+
+Finally, you can add metadata and use `build()`, `check()` or `copy_to()`.
