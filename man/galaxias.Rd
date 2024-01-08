@@ -18,9 +18,11 @@ transparent workflow.
 }
 \section{Functions}{
 
-\strong{Prepare data}
+\strong{Set up a DWCA}
 \itemize{
-\item \code{\link[=tibble_to_dwc]{tibble_to_dwc()}}
+\item \code{\link[=dwca]{dwca()}}
+\item \code{\link[=add_core]{add_core()}}
+\item \code{\link[=add_metadata]{add_metadata()}}
 }
 
 \strong{Build eml.XML}

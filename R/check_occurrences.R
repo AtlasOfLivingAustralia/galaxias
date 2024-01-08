@@ -1,19 +1,8 @@
-#' pointblank-based checking of a `dwca` object
-#' 
-#' Description to follow.
-#' @param .dwca An object of class `dwca`, created using `dwca()`
-#' @param max_n Optional limit to the number of failed tests allowed
-#' @importFrom pointblank col_exists
-#' @importFrom pointblank create_agent
-#' @importFrom pointblank get_agent_report
-#' @importFrom rlang abort
-#' @export
-check <- function(.dwca,
-                  max_n = NULL){
-  if(!inherits(.dwca, "dwca")){
-    abort("`check` only accepts `dwca` objects")
-  }
-  x <- .dwca$data
+#' Internal function to check occurrence datasets
+#' @param x a tibble of occurrences
+#' @noRd
+#' @keywords Internal
+check_occurrences <- function(x){
   x |>
     create_agent(label = "::QUIET::") |> # hack here to turn off reporting
     check_required_cols() |>
@@ -25,24 +14,15 @@ check <- function(.dwca,
     galaxias_interrogate(max_n = max_n) |>
     get_agent_report(keep = "all",
                      display_table = FALSE) # disabled for testing
-                                             # final version should output a tibble
+  # final version should output a tibble
+  
+  # check scientific names - two words (not always, subspecies), no numbers, no
+  # symbols, no full stop abbreviations?
+  # check_dates
+  # check_places
+  # check_country_codes
+  # option to check against ALA name matching (search_taxa())
 }
-
-#' Internal function to run `interrogate` with a more limited set of options
-#' @importFrom pointblank interrogate
-#' @noRd
-#' @keywords Internal
-galaxias_interrogate <- function(.x, max_n){
-  if(is.null(max_n)){
-    .x |>
-      interrogate(extract_failed = FALSE)
-  }else{
-    .x |>
-      interrogate(extract_failed = TRUE, get_first_n = max_n)
-  }
-}
-# NOTE: max_n currently doesn't limit the number of tests run by `interrogate()`
-# unclear why
 
 #' check all required columns are provided
 #' @importFrom pointblank specially

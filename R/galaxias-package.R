@@ -18,9 +18,11 @@
 #'
 #' @keywords internal
 #' @section Functions:
-#' **Prepare data**
+#' **Set up a DWCA**
 #'
-#'   * [tibble_to_dwc()]
+#'   * [dwca()]
+#'   * [add_core()]
+#'   * [add_metadata()]
 #' 
 #' **Build eml.XML**
 #' 
