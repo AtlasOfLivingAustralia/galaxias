@@ -20,11 +20,11 @@ facilitating data submission to infrastructures such as the [Atlas of Living
 Australia (ALA)](https://www.ala.org.au) and the [Global Biodiversity
 Information Facility (GBIF)](https://gbif.org). The key features include:
 
-- Check and conform data columns and values to meet Darwin Core standards
-- Automatic metafile creation
-- User friendly workflow for creating a resource metadata document (`eml.xml`)
-using simple markdown
-- Final export of a compressed (`ZIP`) DwC-A from the above components
+- Support for Darwin Core objects (via a new `S3` class `dwca`)
+- Vignettes for formatting data for DwC (using `dplyr` syntax)
+- Check data against Darwin Core standards (via `pointblank`)
+- Source, adapt and save appropriate metadata using markdown (using `rmarkdown` or `Quarto`)
+- Final export of a compressed DwC-A from the above components (`.zip` format)
 
 ## Installation
 This package is under active development, and is not yet available on CRAN. You

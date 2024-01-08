@@ -27,21 +27,16 @@ Description: Simple tools for converting data into DwC format.
 Depends: 
   R (>= 4.1.0)
 Imports:
-  bslib,
   cli,
   crayon,
   dplyr,
   EML,
   glue,
-  htmltools,
-  htmlwidgets (<= 1.6.2),
   janitor,
   pointblank,
   readr,
   rlang,
-  shiny,
   snakecase,
-  sortable,
   stringdist,
   stringr,
   tawnydragon,
