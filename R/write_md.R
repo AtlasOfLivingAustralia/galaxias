@@ -6,7 +6,7 @@
 #' @importFrom xml2 as_list
 #' @importFrom glue glue
 #' @export
-write_md <- function(xml, file, title){
+write_md <- function(xml, file, title = "Example DwC metadata"){
   # add a boilerplate `rmd` header to support rendering
   # note: possible instead to populate header with dataset title, date
   cat(switch_headers(file, title), 
@@ -77,14 +77,18 @@ md_recurse <- function(x, level = 1, file){
       cat(file = file, append = TRUE)
   }else{
     invisible(lapply(seq_along(x), function(a){
-      prefix <- paste(rep("#", level), collapse = "")
       if(x_names[a] != ""){
-        paste0("\n", 
-               prefix, 
-               " ",
-               to_title_case(x_names[a]), 
-               "\n") |>
-          cat(file = file, append = TRUE)        
+        current_attr <- attributes(x[[a]])
+        current_title <- to_title_case(x_names[a])
+        if(length(current_attr) > 1){
+          header <- glue("<h{level} {names(current_attr)[2]}=\"{current_attr[2]}\">{current_title}</h{level}>")
+          paste0("\n", header, "\n") |> # get around bug with `glue` deleting `\n`
+            cat(file = file, append = TRUE)  
+        }else{
+          header <- glue("\n<h{level}>{current_title}</h{level}>\n")
+          paste0("\n", header, "\n") |>
+            cat(file = file, append = TRUE)  
+        }
       }
       if(is.list(x[[a]])){
         md_recurse(x[[a]], level = level + 1, file = file)  
@@ -100,9 +104,5 @@ md_recurse <- function(x, level = 1, file){
 # # test with real XML
 # library(xml2)
 # x <- read_xml("https://collections.ala.org.au/ws/eml/dr368")
-# xml_to_md(x, "test.rmd")
-# md_to_xml("test.md") |> str()
-
-# NOTES:
-  # attributes are not preserved. This is potentially a problem when e.g. urls are stored as attributes
-  # boilerplate content for eml headers is also not given yet
+# write_md(x, "test.rmd")
+# write_xml("test.md") |> str()
