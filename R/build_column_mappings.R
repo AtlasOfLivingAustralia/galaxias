@@ -18,7 +18,7 @@
 #'   )
 #'
 #' make_core_xml(DwC_occurrence_data)
-build_metafile <- function(data, file_name = "occurrence.csv") {
+build_column_mappings <- function(data, file_name = "occurrence.csv") {
   field_names <- colnames(data)
   files <- list(
     location = file_name

@@ -24,6 +24,23 @@ check_occurrences <- function(x){
   # option to check against ALA name matching (search_taxa())
 }
 
+#' Internal function to run `interrogate` with a more limited set of options
+#' Called by all of the `check_` subfunctions
+#' @importFrom pointblank interrogate
+#' @noRd
+#' @keywords Internal
+galaxias_interrogate <- function(.x, max_n){
+  if(is.null(max_n)){
+    .x |>
+      interrogate(extract_failed = FALSE)
+  }else{
+    .x |>
+      interrogate(extract_failed = TRUE, get_first_n = max_n)
+  }
+}
+# NOTE: max_n currently doesn't limit the number of tests run by `interrogate()`
+# unclear why
+
 #' check all required columns are provided
 #' @importFrom pointblank specially
 #' @noRd

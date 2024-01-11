@@ -39,23 +39,3 @@ add_metadata <- function(.dwca,
   }
   .dwca
 }
-
-#' @name add_
-#' @param xml Optional R object imported with `xml2` (class `xml_document`).
-#' @order 3
-#' @importFrom xml2 read_xml
-#' @export
-add_column_mappings <- function(.dwca,
-                         xml,
-                         file, 
-                         ...){
-  if(!missing(xml)){
-    result <- xml
-  }else if(!missing(file)){
-    result <- read_xml(file, ...)
-  }else{
-    result <- build_column_mappings(.dwca)
-  }
-  .dwca$column_mappings <- result
-  .dwca
-}

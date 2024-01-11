@@ -7,6 +7,8 @@ build_random_identifier <- function(data,
                                     random_seed = NULL) {
   # For now just a simple sequential ID for proof of concept
   data$occurrenceID <- paste0("id", 1:nrow(data))
+  # this needs to change of course. 
+  # One option is uuid::UUIDgenerate(), but not sure of behaviour
   message("Random identifier column `occurrenceID` has been added to the data.\n")
   return(data)
 }

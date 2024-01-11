@@ -8,7 +8,12 @@
 #' @return No object is returned; this function is called for the side-effect
 #' of building a 'Darwin Core Archive' (i.e. a zip file)
 #' @export
-build_archive <- function(data, meta = NULL, eml = NULL, folder = ".") {
+build_dwca <- function(.dwca,
+                          folder = ".") {
+  
+  
+  build_column_mappings(.dwca)
+  
   # Check data
   # darwin_check(data, mend = FALSE)
   eml_xml <- as_xml_document(eml)
