@@ -5,7 +5,7 @@
 #' recommended to use the more specific functions `add_occurrences()`,
 #' `add_events()` and `add_media()`. `add_metadata()` is also mandatory and 
 #' requires either an `xml` object/file or a markdown file (`rmd` or `md` 
-#' preferred). `add_column_mappings()` is called internally and there is no
+#' preferred). `add_schema()` is called internally and there is no
 #' requirement for the user to call it, but it is shipped here as it may be 
 #' useful for debugging purposes.
 #' @param .dwca An object of class `dwca`, constructed with `dwca()`.
@@ -77,8 +77,8 @@ add_data <- function(.dwca,
 #' @rdname add_
 #' @order 6
 #' @export
-add_column_mappings <- function(.dwca){
-  obj <- list(column_mappings = build_column_mappings(.dwca))
+add_schema <- function(.dwca){
+  obj <- list(column_mappings = build_schema(.dwca))
   update_dwca(.dwca, obj)
 }
 

@@ -7,7 +7,7 @@
 \alias{add_media}
 \alias{add_metadata}
 \alias{add_data}
-\alias{add_column_mappings}
+\alias{add_schema}
 \title{Add information to a \code{dwca} object}
 \usage{
 add_occurrences(.dwca, df = NULL)
@@ -20,7 +20,7 @@ add_metadata(.dwca, xml = NULL)
 
 add_data(.dwca, df = NULL, slot = NULL)
 
-add_column_mappings(.dwca)
+add_schema(.dwca)
 }
 \arguments{
 \item{.dwca}{An object of class \code{dwca}, constructed with \code{dwca()}.}
@@ -42,7 +42,7 @@ object. The underlying workhorse function is \code{add_data()}, but it is
 recommended to use the more specific functions \code{add_occurrences()},
 \code{add_events()} and \code{add_media()}. \code{add_metadata()} is also mandatory and
 requires either an \code{xml} object/file or a markdown file (\code{rmd} or \code{md}
-preferred). \code{add_column_mappings()} is called internally and there is no
+preferred). \code{add_schema()} is called internally and there is no
 requirement for the user to call it, but it is shipped here as it may be
 useful for debugging purposes.
 }
