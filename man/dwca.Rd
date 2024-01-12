@@ -5,7 +5,7 @@
 \alias{print.dwca}
 \title{Start a pipe to build a Darwin Core Archive}
 \usage{
-dwca(type = "occurrence-core", extentions = NULL)
+dwca()
 
 \method{print}{dwca}(x, ...)
 }

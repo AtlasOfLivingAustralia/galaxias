@@ -41,33 +41,6 @@ galaxias_interrogate <- function(.x, max_n){
 # NOTE: max_n currently doesn't limit the number of tests run by `interrogate()`
 # unclear why
 
-#' check all required columns are provided
-#' @importFrom pointblank specially
-#' @noRd
-#' @keywords Internal
-check_required_cols <- function(.x){
-  .x |>
-    specially(fn = \(x){
-      cols <- c("scientificName", "eventDate", "basisOfRecord")
-      all(cols %in% colnames(x))
-    })
-}
-
-#' check all recommended columns are provided
-#' @importFrom pointblank specially
-#' @noRd
-#' @keywords Internal
-check_recommended_cols <- function(.x){
-  .x |>
-    specially(fn = \(x){
-      cols <-  c("kingdom", "taxonRank",
-                 "decimalLatitude", "decimalLongitude", "geodeticDatum",
-                 "countryCode",
-                 "individualCount", "organismQuantity", "organismQuantityType")
-      all(cols %in% colnames(x))
-    })
-}
-
 #' check for decimalLatitude
 #' @importFrom pointblank specially
 #' @importFrom pointblank test_col_vals_between
@@ -110,6 +83,48 @@ check_longitude <- function(.x){
     })
 }
 
+#' check all recommended columns are provided
+#' @importFrom pointblank specially
+#' @noRd
+#' @keywords Internal
+check_recommended_cols <- function(.x){
+  .x |>
+    specially(fn = \(x){
+      cols <-  c("kingdom", "taxonRank",
+                 "decimalLatitude", "decimalLongitude", "geodeticDatum",
+                 "countryCode",
+                 "individualCount", "organismQuantity", "organismQuantityType")
+      all(cols %in% colnames(x))
+    })
+}
+
+#' check all required columns are provided
+#' @importFrom pointblank specially
+#' @noRd
+#' @keywords Internal
+check_required_cols <- function(.x){
+  .x |>
+    specially(fn = \(x){
+      cols <- c("scientificName", "eventDate", "basisOfRecord")
+      all(cols %in% colnames(x))
+    })
+}
+
+#' check species names - this is slow so may not be advisable
+#' @importFrom galah search_taxa
+#' @noRd
+#' @keywords Internal
+# check_species_in_atlas <- function(a){
+#   if(any(colnames(a) == "species")){
+#     # something with `pour` to change target atlas?
+#     species_list <- unique(a$species)
+#     result <- search_taxa(species_list)
+#     all(!is.na(result$taxon_concept_id))
+#   }else{
+#     FALSE
+#   }
+# }
+
 #' Check for unique identifier columns, and if present, check they are actually unique
 #' @importFrom dplyr pull
 #' @importFrom pointblank specially
@@ -136,18 +151,3 @@ check_unique_identifiers <- function(.x){
       }
     })
 }
-
-#' check species names
-#' @importFrom galah search_taxa
-#' @noRd
-#' @keywords Internal
-# check_species_in_atlas <- function(a){
-#   if(any(colnames(a) == "species")){
-#     # something with `pour` to change target atlas?
-#     species_list <- unique(a$species)
-#     result <- search_taxa(species_list)
-#     all(!is.na(result$taxon_concept_id))
-#   }else{
-#     FALSE
-#   }
-# }

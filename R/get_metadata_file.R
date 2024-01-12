@@ -7,7 +7,7 @@
 #' @importFrom galah search_all
 #' @importFrom rlang abort
 #' @export
-get_metadata <- function(search = NULL,
+get_metadata_file <- function(search = NULL,
                          id = NULL,
                          file = "metadata.rmd"){
   if(!is.null(id)){
@@ -19,10 +19,18 @@ get_metadata <- function(search = NULL,
     }else{
       abort("No datasets found")
     }
-  }else{
-    abort("One of `search` or `id` must be supplied")
   }
-  write_md(xml = url, 
-           file = file,
-           title = "Example metadata file")
+  
+  if(is.null(url)){ # if none supplied get template
+    path_to_md_template <- system.file(
+      "markdown/user_template.md",
+      package = "galaxias"
+    )
+    file.copy(path_to_md_template, file)
+  }else{
+    write_md(xml = url, 
+             file = file,
+             title = "Example metadata file")    
+  }
+  # edit_file(file) # optionally open the file for editting
 }

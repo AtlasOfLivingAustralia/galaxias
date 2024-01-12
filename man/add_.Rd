@@ -2,31 +2,47 @@
 % Please edit documentation in R/add_.R
 \name{add_}
 \alias{add_}
-\alias{add_data}
+\alias{add_occurrences}
+\alias{add_events}
+\alias{add_media}
 \alias{add_metadata}
+\alias{add_data}
 \alias{add_column_mappings}
 \title{Add information to a \code{dwca} object}
 \usage{
-add_data(.dwca, df, file)
+add_occurrences(.dwca, df = NULL)
 
-add_metadata(.dwca, xml, file, ...)
+add_events(.dwca, df = NULL)
 
-add_column_mappings(.dwca, xml, file, ...)
+add_media(.dwca, df = NULL)
+
+add_metadata(.dwca, xml = NULL)
+
+add_data(.dwca, df = NULL, slot = NULL)
+
+add_column_mappings(.dwca)
 }
 \arguments{
 \item{.dwca}{An object of class \code{dwca}, constructed with \code{dwca()}.}
 
-\item{df}{Optional R object; \code{tibble} or \code{data.frame}.}
+\item{df}{Object of class \code{tibble} or \code{data.frame}.}
 
-\item{file}{Optional file name to be imported with \code{readr::read_csv()} for
-\code{.csv}, \code{xml2::read_xml()} for \code{.xml}, or \code{galaxias::read_md()} for
-\code{.md}, \code{.rmd} or \code{.qmd}.}
+\item{xml}{Object of class \code{xml_document}, such as imported from
+\code{.xml} with \code{xml2::read_xml()} or from markdown (\code{.rmd}) using
+\code{galaxias::read_md()}.}
 
-\item{xml}{Optional R object imported with \code{xml2} (class \code{xml_document}).}
-
-\item{...}{Additional information passed to \code{read_csv()} or \code{read_xml()}.}
+\item{slot}{Name of the slot where this data should go.}
+}
+\value{
+An object of class \code{dwca}, updated with the provided information.
 }
 \description{
 These are all pipable functions for adding relevant information to a \code{dwca}
-object
+object. The underlying workhorse function is \code{add_data()}, but it is
+recommended to use the more specific functions \code{add_occurrences()},
+\code{add_events()} and \code{add_media()}. \code{add_metadata()} is also mandatory and
+requires either an \code{xml} object/file or a markdown file (\code{rmd} or \code{md}
+preferred). \code{add_column_mappings()} is called internally and there is no
+requirement for the user to call it, but it is shipped here as it may be
+useful for debugging purposes.
 }
