@@ -18,7 +18,7 @@ add_occurrences <- function(.dwca,
                             df = NULL
                             ){
   check_tibble(df)
-  add_data(.dwca, df = df, file = file, slot = "occurrences")
+  add_data(.dwca, df = df, slot = "occurrences")
 }
 
 #' @rdname add_
@@ -28,7 +28,7 @@ add_events <- function(.dwca,
                        df = NULL
 ){
   check_tibble(df)
-  add_data(.dwca, df = df, file = file, slot = "events")
+  add_data(.dwca, df = df, slot = "events")
 } 
 
 #' @rdname add_
@@ -38,7 +38,7 @@ add_media <- function(.dwca,
                        df = NULL
 ){
   check_tibble(df)
-  add_data(.dwca, df = df, file = file, slot = "media")
+  add_data(.dwca, df = df, slot = "media")
 } 
 
 #' @name add_
@@ -63,8 +63,6 @@ add_data <- function(.dwca,
                      slot = NULL){
   if(!is.null(df)){
     obj <-  df
-  }else if(!is.null(file)){
-    obj <- read_csv(file, show_col_types = FALSE)
   }else{
     obj <- NULL
   }
@@ -78,7 +76,7 @@ add_data <- function(.dwca,
 #' @order 6
 #' @export
 add_schema <- function(.dwca){
-  obj <- list(column_mappings = build_schema(.dwca))
+  obj <- list(schema = build_schema(.dwca))
   update_dwca(.dwca, obj)
 }
 
