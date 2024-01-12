@@ -20,17 +20,20 @@
 #' @section Functions:
 #' **Set up a DWCA**
 #'
-#'   * [dwca()]
-#'   * [add_core()]
-#'   * [add_metadata()]
+#'   * [dwca()] create pipable `dwca` objects
+#'   * [add_occurrences()], [add_events()], [add_multimedia()], [add_metadata()] to add data to `dwca` objects
+#'   
+#' **Construct identifiers**
+#'  
+#'   * [build_random_identifier()], [build_composite_identifier()] uuids
+#'   
+#' **Metadata handling**
 #' 
-#' **Build eml.XML**
+#'    * [get_metadata_file()] get example or boilerplate metadata file as md
+#'    * [read_md()], [write_md()] to convert between markdown and xml
+#'    
+#'  **Concluding**
+#'    * [check_dwca()] check a `dwca` object for compliance with DwC
+#'    * [build_dwca] build a `dwca` into a zip file
 #' 
-#'   * [edit_metadata_md()] 
-#'   * [read_metadata_md()] 
-#'   * [md_to_tibble()] 
-#'   * [detect_required_metadata_fields()] 
-#'   * [md_tibble_to_list()] 
-#'   * [update_title()] 
-#'   * [update_names()] 
 "_PACKAGE"

@@ -20,20 +20,25 @@ transparent workflow.
 
 \strong{Set up a DWCA}
 \itemize{
-\item \code{\link[=dwca]{dwca()}}
-\item \code{\link[=add_core]{add_core()}}
-\item \code{\link[=add_metadata]{add_metadata()}}
+\item \code{\link[=dwca]{dwca()}} create pipable \code{dwca} objects
+\item \code{\link[=add_occurrences]{add_occurrences()}}, \code{\link[=add_events]{add_events()}}, \code{\link[=add_multimedia]{add_multimedia()}}, \code{\link[=add_metadata]{add_metadata()}} to add data to \code{dwca} objects
 }
 
-\strong{Build eml.XML}
+\strong{Construct identifiers}
 \itemize{
-\item \code{\link[=edit_metadata_md]{edit_metadata_md()}}
-\item \code{\link[=read_metadata_md]{read_metadata_md()}}
-\item \code{\link[=md_to_tibble]{md_to_tibble()}}
-\item \code{\link[=detect_required_metadata_fields]{detect_required_metadata_fields()}}
-\item \code{\link[=md_tibble_to_list]{md_tibble_to_list()}}
-\item \code{\link[=update_title]{update_title()}}
-\item \code{\link[=update_names]{update_names()}}
+\item \code{\link[=build_random_identifier]{build_random_identifier()}}, \code{\link[=build_composite_identifier]{build_composite_identifier()}} uuids
+}
+
+\strong{Metadata handling}
+\itemize{
+\item \code{\link[=get_metadata_file]{get_metadata_file()}} get example or boilerplate metadata file as md
+\item \code{\link[=read_md]{read_md()}}, \code{\link[=write_md]{write_md()}} to convert between markdown and xml
+}
+
+\strong{Concluding}
+\itemize{
+\item \code{\link[=check_dwca]{check_dwca()}} check a \code{dwca} object for compliance with DwC
+\item \link{build_dwca} build a \code{dwca} into a zip file
 }
 }
 

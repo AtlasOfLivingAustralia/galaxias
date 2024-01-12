@@ -4,7 +4,7 @@
 \alias{add_}
 \alias{add_occurrences}
 \alias{add_events}
-\alias{add_media}
+\alias{add_multimedia}
 \alias{add_metadata}
 \alias{add_data}
 \alias{add_schema}
@@ -14,7 +14,7 @@ add_occurrences(.dwca, df = NULL)
 
 add_events(.dwca, df = NULL)
 
-add_media(.dwca, df = NULL)
+add_multimedia(.dwca, df = NULL)
 
 add_metadata(.dwca, xml = NULL)
 

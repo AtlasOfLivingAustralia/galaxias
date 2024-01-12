@@ -34,7 +34,7 @@ add_events <- function(.dwca,
 #' @rdname add_
 #' @order 3
 #' @export
-add_media <- function(.dwca,
+add_multimedia <- function(.dwca,
                        df = NULL
 ){
   check_tibble(df)
