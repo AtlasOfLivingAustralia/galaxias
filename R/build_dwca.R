@@ -1,30 +1,52 @@
-#' `archive` will attempt to zip a complete Darwin Core archive.
-#' It will call `darwin_check` to make sure the data conforms to Darwin Core
-#' standards. It will also need a valid `meta.xml` file and `eml.xml` file.
-#' @param data A data frame of your data
-#' @param meta A data frame of your metadata
-#' @param eml A data frame of your EML metadata
-#' @param path A path to save the zip file to (root by default)
+#' Build a Darwin Core Archive from a `dwca` object
+#' @param .dwca A `dwca` object
+#' @param path Name of the zip file
 #' @return No object is returned; this function is called for the side-effect
 #' of building a 'Darwin Core Archive' (i.e. a zip file)
+#' @importFrom glue glue
+#' @importFrom readr write_csv
+#' @importFrom rlang inform
+#' @importFrom xml2 write_xml
+#' @importFrom zip zip
 #' @export
 build_dwca <- function(.dwca,
-                          folder = ".") {
+                       file = "dwca.zip") {
+  # convert `metadata` slot to be named `eml`
+  nmz <- names(.dwca)
+  if(any(nmz == "metadata")){
+    nmz[nmz == "metadata"] <- "eml"
+  }
+  names(.dwca) <- nmz
   
+  # add `schema`
+  .dwca$meta <- build_schema(.dwca)
   
-  build_column_mappings(.dwca)
+  # create a temporary directory to store objects
+  temp_dir <- tempdir()
+  temp_loc <- Sys.time() |> 
+    as.character() |>
+    gsub("\\s", "-", x = _)
+  store_dir <- glue("{temp_dir}/galaxias-{temp_loc}")
+  dir.create(store_dir)
   
-  # Check data
-  # darwin_check(data, mend = FALSE)
-  eml_xml <- as_xml_document(eml)
-  message("Writing EML file to disk...\n")
-  xml2::write_xml(eml_xml, paste0(folder, "/eml.xml"))
-  message("Writing META file to disk...\n")
-  # meta_xml <- as_xml_document(meta)
-  message("Writing CORE file to disk...")
-  # TODO hardcoding this for now
-  write.csv(data, paste0(folder, "/occurrence.csv"), row.names = FALSE)
-  message("Creating ZIP ...")
-  # TODO hardcoding this for now
-  zip(zipfile = "dwc.zip", files = folder)
+  # loop across objects, saving the correct type to the correct name
+  object_names <- names(.dwca)
+  for(i in seq_along(object_names)){
+    obj <- .dwca[[i]]
+    file_name <- object_names[i]
+    if(inherits(obj, "data.frame")){
+      write_csv(obj, file = glue("{store_dir}/{file_name}.csv"))
+    }else{
+      write_xml(obj, file = glue("{store_dir}/{file_name}.xml"))
+    }
+  }
+  all_files <- list.files(store_dir)
+  
+  # build zip file
+  inform(glue("Building {file}"))
+  zip::zip(zipfile = file, 
+           files = glue("{store_dir}/{all_files}"),
+           mode = "cherry-pick")
+  inform("Cleaning temporary directory")
+  unlink(store_dir)
 }

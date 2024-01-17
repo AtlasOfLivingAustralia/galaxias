@@ -2,27 +2,19 @@
 % Please edit documentation in R/build_dwca.R
 \name{build_dwca}
 \alias{build_dwca}
-\title{\code{archive} will attempt to zip a complete Darwin Core archive.
-It will call \code{darwin_check} to make sure the data conforms to Darwin Core
-standards. It will also need a valid \code{meta.xml} file and \code{eml.xml} file.}
+\title{Build a Darwin Core Archive from a \code{dwca} object}
 \usage{
-build_dwca(.dwca, folder = ".")
+build_dwca(.dwca, file = "dwca.zip")
 }
 \arguments{
-\item{data}{A data frame of your data}
+\item{.dwca}{A \code{dwca} object}
 
-\item{meta}{A data frame of your metadata}
-
-\item{eml}{A data frame of your EML metadata}
-
-\item{path}{A path to save the zip file to (root by default)}
+\item{path}{Name of the zip file}
 }
 \value{
 No object is returned; this function is called for the side-effect
 of building a 'Darwin Core Archive' (i.e. a zip file)
 }
 \description{
-\code{archive} will attempt to zip a complete Darwin Core archive.
-It will call \code{darwin_check} to make sure the data conforms to Darwin Core
-standards. It will also need a valid \code{meta.xml} file and \code{eml.xml} file.
+Build a Darwin Core Archive from a \code{dwca} object
 }
