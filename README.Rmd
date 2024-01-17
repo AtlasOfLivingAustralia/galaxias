@@ -139,16 +139,16 @@ To check a `dwca` object locally, use `check_dwca()`:
 
 *Q: Include a report option?*
 
-The online version works via an API to ALA. Inevitably, this will take longer,
-but also includes checks against the ALA system that are challenging within
-R:
+Once you've checked your object locally, you can use `build_dwca()` to convert
+it into a 'real' DwCA (i.e. a `.zip` file). 
 
 ```{r}
-# No syntax for this yet
+archive |>
+  build_dwca("my_dwca.zip")
 ```
 
-Remaining functions to build and document:
+The validate function takes a DwCA as an input, and passes it to to the ALA 
+validation API for checking. 
 
-- `build()` constructs an archive
-- `copy_to()` pushes your archive to ALA.
+*Q: function name to 'submit' data?*
 

@@ -1,7 +1,7 @@
 Package: galaxias
 Type: Package
 Title: Create Darwin Core Archives
-Version: 0.1.0
+Version: 0.1.0.9999
 Authors@R:
     c(person(given = "Martin",
              family = "Westgate",
