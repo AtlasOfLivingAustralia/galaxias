@@ -8,8 +8,9 @@ check_occurrences <- function(x, max_n = NULL){
     create_agent(label = "::QUIET::") |> # hack here to turn off reporting
     check_required_cols() |>
     check_recommended_cols() |>
-    check_latitude() |>
-    check_longitude() |>
+    check_decimalLatitude() |>
+    check_decimalLongitude() |>
+    check_eventDate() |>
     # specially(fn = \(a){check_species_in_atlas(a)}) |>
     # build report and return `tibble`
     galaxias_interrogate(max_n = max_n) |>
@@ -43,11 +44,12 @@ galaxias_interrogate <- function(.x, max_n){
 # unclear why
 
 #' check for decimalLatitude
+#' @importFrom pointblank col_exists
 #' @importFrom pointblank specially
 #' @importFrom pointblank test_col_vals_between
 #' @noRd
 #' @keywords Internal
-check_latitude <- function(.x){
+check_decimalLatitude <- function(.x){
   .x |>
     col_exists(columns = "decimalLatitude") |>
     specially(fn = \(a){
@@ -68,7 +70,7 @@ check_latitude <- function(.x){
 #' @importFrom pointblank test_col_vals_between
 #' @noRd
 #' @keywords Internal
-check_longitude <- function(.x){
+check_decimalLongitude <- function(.x){
   .x |>
     col_exists(columns = "decimalLongitude") |>
     specially(fn = \(a){
@@ -82,6 +84,52 @@ check_longitude <- function(.x){
         FALSE
       }
     })
+}
+
+#' check for eventDate
+#' @importFrom pointblank col_exists
+#' @importFrom pointblank specially
+#' @importFrom pointblank test_col_vals_between
+#' @noRd
+#' @keywords Internal
+check_eventDate <- function(.x){
+  .x |>
+    col_exists(columns = "eventDate") |>
+    specially(fn = \(a){
+      if(any(colnames(a) == "eventDate")){
+        pattern <- "\\d{4}(-(0[1-9]|1[012])(-((0[1-9])|1\\d|2\\d|3[01])(T(0\\d|1\\d|2[0-3])(:[0-5]\\d){0,2})?)?)?|\\-\\-(0[1-9]|1[012])(-(0[1-9]|1\\d|2\\d|3[01]))?|\\-\\-\\-(0[1-9]|1\\d|2\\d|3[01])"
+        test_col_vals_regex(object = a,
+                            columns = "eventDate",
+                            regex = pattern)
+      }else{
+        FALSE
+      }   
+    })
+    # NOTE: may wish to add a more stringent test here,
+    # looking specifically for the format we are seeking; the regex above
+    # is quite inclusive.
+}
+
+#' Borrowed code from previous version; to be integrated with `check_eventDate`
+#' @param data data frame
+#' @return A message to the console
+#' @rdname validate
+#' @noRd
+#' @keywords internal
+check_month_day <- function(date) {
+  # extracts year, month, day using regex
+  matches <- regmatches(date, regexec("(\\d{4})-(\\d{2})-(\\d{2})", date))
+  if (length(matches[[1]]) < 4) {
+    return(TRUE)
+  } else {
+    year <- as.integer(matches[[1]][2])
+    month <- as.integer(matches[[1]][3])
+    day <- as.integer(matches[[1]][4])
+    # check if valid
+    return(month %in% 1:12 &&
+             day %in% 1:31 &&
+             !is.na(ISOdate(year, month, day)))
+  }
 }
 
 #' check all recommended columns are provided
