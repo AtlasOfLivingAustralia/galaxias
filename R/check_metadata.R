@@ -1,6 +1,7 @@
 #' Check that a supplied metadata statement is valid according to GBIF schema
 #' @param metadata xml object representing metadata
-#' @return tibble showing parsed errors
+#' @return A tibble showing parsed errors
+#' @importFrom xml2 read_xml
 #' @noRd
 #' @keywords Internal
 check_metadata <- function(metadata) {
@@ -8,7 +9,8 @@ check_metadata <- function(metadata) {
   # 1. validate against "./data-raw/eml-gbif-profile.xsd" with xml2::xml_validate()
   validator <- xml_validate(
     metadata, 
-    eml_validator_xsd)
+    read_xml("http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd")) 
+  # Q: how to store this object internally? seems to fail for some reason
   
   if(!validator){
     errors_df <- attr(validator, "errors") |>
@@ -38,25 +40,28 @@ required_fields <- function(){
   "intellectualRights"
 )}
 
-
 #' Internal function to extract information from `xml_validate()` error strings
+#' @importFrom dplyr bind_rows
+#' @importFrom dplyr mutate
+#' @importFrom purrr map
+#' @importFrom stringr str_extract
 #' @noRd
 #' @keywords Internal
 parse_validator_errors <- function(strings){
   strings <- strings[!grepl("Skipping import of schema", x = strings)]
   element <- str_extract(strings, "^Element '[[:graph:]]+'") |>
     gsub("^Element '|'$", "", x = _)
-  
   elements_list <- str_extract(strings, "':([[:graph:]]|\\s)+") |>
     sub("':\\s", "", x = _) |>
     strsplit("\\.\\s") 
-  lapply(elements_list, \(x){
-    if(length(x) < 2){
-      x[[2]] <- ""
-    }
-    names(x) <- c("description", "remedy")
-    x
-  }) |>
+  map(.x = elements_list,
+      .f = \(x){
+        if(length(x) < 2){
+          x[[2]] <- ""
+        }
+        names(x) <- c("description", "remedy")
+        x
+      }) |>
     bind_rows() |>
     mutate(element = element, .before = "description")
 }

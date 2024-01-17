@@ -21,14 +21,9 @@ check_dwca <- function(.dwca,
   names(report) <- names(.dwca)
   
   # check occurrences data via {pointblank}
-  if(.dwca$core$type == "Occurrences"){ # not sure of terminology or structure here yet
-    check_occurrences(.dwca$data) 
+  if(any(names(.dwca) == "occurrences")){ # not sure of terminology or structure here yet
+    report$occurrences <- check_occurrences(.dwca$occurrences) 
   }
-  # NOTE: at present, this only returns a tibble
-  # Need to parse this to return either:
-    # report to the console (as per `{testthat}`)
-    # html report to the viewer (as per `{pointblank}`)
-  # Q: should the above be separate functions?
   
   # metadata checking via `xml_validate()`
   if(is.null(.dwca$metadata)){
@@ -39,11 +34,6 @@ check_dwca <- function(.dwca,
   
   report
 }
-
-# Build report in pieces - one for each check function
-# Make functions return logical, and if true do nothing, false add to report
-# Section 0 - Summary (percentage match, settings used, missing vals, seed)
-# Section 1 - compliance
-# Section 2 - interactive fixes performed
-# Section 3 - further recommendations
-# Save to working directory as plain markdown
+# NOTE: at present, this only returns a list of tibbles
+# Each tibble needs to be parsed to say something informative
+# We also need to use these tibbles to report to the console (presumably via `rlang::inform()`)

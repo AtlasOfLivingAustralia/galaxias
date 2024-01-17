@@ -1,8 +1,9 @@
 #' Internal function to check occurrence datasets
 #' @param x a tibble of occurrences
+#' @param max_n (optional) limit on the number of errors to report
 #' @noRd
 #' @keywords Internal
-check_occurrences <- function(x){
+check_occurrences <- function(x, max_n = NULL){
   x |>
     create_agent(label = "::QUIET::") |> # hack here to turn off reporting
     check_required_cols() |>
