@@ -86,7 +86,7 @@ md_recurse <- function(x, level = 1, file){
           paste0("\n", header, "\n") |> # get around bug with `glue` deleting `\n`
             cat(file = file, append = TRUE)  
         }else{
-          header <- glue("\n<h{level}>{current_title}</h{level}>\n")
+          header <- glue("{strrep('#', level)} {current_title}")
           paste0("\n", header, "\n") |>
             cat(file = file, append = TRUE)  
         }
