@@ -3,7 +3,7 @@
 # Test for null response if no missing columns
 
 # Read in an example dataset
-occurrence_data <- read.csv(file = "data-raw/westerband_2022_wdate.csv")
+occurrence_data <- read_csv(file = "data-raw/westerband_2022_wdate.csv")
 
 # Test that check_required_fields returns a message because required fields are
 # missing

@@ -5,129 +5,151 @@
 Create Darwin-Core Archives in R
 </h2>
 
-This package is intended to support data submission to biodiversity data
-infrastructures such as the [ALA](https://www.ala.org.au) and
-[GBIF](https://gbif.org), by providing the following features:
+`galaxias` is an R package designed to simplify the process of
+converting biodiversity data into [Darwin Core](https://dwc.tdwg.org)
+archives (DwCA), facilitating data submission to infrastructures such as
+the [Atlas of Living Australia (ALA)](https://www.ala.org.au) and the
+[Global Biodiversity Information Facility (GBIF)](https://gbif.org).
 
-- check column names against Darwin Core standards
+## Installation
 
-- (optionally) manually re-assign column headings for unrecognised
-  fields
-- ask sensible questions to fill unavailable columns (e.g. spatial
-  resolution, unique record identifier)
-- generate (and optionally submit) a Darwin Core Archive
-- optionally output revised objects in standard formats (`.csv`, `.md`)
-- run the above using functions in R or via `{shiny}`
-- provide metadata in `.md` format, tools for converting to and from
-  `xml` IN PROGRESS
-This package is currently under active development.
+This package is under active development, and is not yet available on
+CRAN. You can install the latest development version from GitHub with:
 
 ``` r
-# Install the development version of this package:
-library(remotes)
-install_github("atlasoflivingaustralia/galaxias")
-
-# Load package
-library(galaxias)
+# devtools::install_github("atlasoflivingaustralia/galaxias")
+devtools::load_all()
+#> ℹ Loading galaxias
 ```
 
-## What is Darwin Core?
-
-The ‘Darwin Core’ format is the data format used by GBIF and it’s node
-member organisations. It stores observations of plants and animals
-(‘occurrences’) in a standardised manner to facilitate sharing and
-re-use. It is maintained by the Biodiversity Information Standards group
-(<https://www.tdwg.org>).
-
-A Darwin Core archive contains three files:
-
-- `data.csv`: A dataset containing one occurrence per row, using
-  standardised column names
-- `eml.xml`: A metadata file containing information about the provider,
-  and how the data were collected
-- `meta.xml`: A file describing mapping each column name in `data.csv`
-  to a corresponding name from the Darwin Core standard
-
-These components are placed inside a zip file, which is then known as a
-Darwin Core ‘Archive’ (DwC-A).
-
-## What does `galaxias` do?
-
-This package is designed to help people who have made field-based
-biological observations to submit those observations to the ALA. It does
-this by providing:
-
-- Simple tools for checking column names, and converting them to Darwin
-  Core standards
-- Boilerplate text for what metadata is required with your submission,
-  and converting it to the required format
-- Functions for zipping these derived files into a DwC-A
-
-Our intention is to make the process of submitting data to ALA as quick
-and seamless as possible, without requiring the user to master lots of
-complex functions, and without requiring an in-depth knowledge of the
-data structures used by ALA and GBIF.
-
-## Example workflow
-
-First we import data:
+Load the package:
 
 ``` r
-library(readr)
-x <- read_csv("a_file.csv")
+# library(galaxias)
 ```
 
-We can then check this data using `galaxias`:
+## Basic usage
+
+To construct a Darwin Core Archive, you’ll need two things:
+
+- some biodiversity data, ideally in a csv or similar
+- a metadata statement saying what the data is, and who owns it (usually
+  you, the submitter)
+
+Below we’ll provide a quick example of each element.
+
+### Biodiversity data
+
+At their most simple, Darwin Core Archives contain observations of
+biodiversity, known as “occurrences”. They may *also* contain additional
+information, such as how your survey events were structured, or what
+images, sounds or videos you took; we will cover these in later
+vignettes. An occurrence dataset is a table where each row is an
+observation, and each column is a feature of that you observed:
 
 ``` r
-library(galaxias)
-y <- detect_dwc_columns(x)
-# Q: should we add reporting loop in here?
+df <- tibble(
+  occurrenceID = c("galaxias-example-01", "galaxias-example-02"),
+  decimalLatitude = c(-35.310, -35.273),
+  decimalLongitude = c(149.125, 149.133),
+  # coordinatePrecision ?
+  eventDate = c("14-01-2023T0:23::00Z", "15-01-2023T11:25:00Z"),
+  scientificName = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
+  taxonRank = "species",
+  basisOfRecord = "humanObservation")
 ```
 
-Once you are happy with how your data is formatted, you need to start on
-metadata:
+Note that normally you’d import your data from an external file
+(e.g. reading a `.csv` file with `utils::read.csv()` or
+`readr::read_csv()`), but we’ve constructed one here for example
+purposes.
+
+The columns of your dataset need to conform to the Darwin Core Standard;
+typically this will require some renaming and perhaps some data
+manipulation, as described in the `Mapping to Darwin Core` vignette.
+There are a lot of Darwin Core terms, but you probably won’t need them
+all. You can find out more using the `{tawnydragon}` package, most
+easily using the function `tawnydragon::view_terms()`.
+
+### Metadata
+
+Darwin Core Archives use `xml` files to store metadata, but this format
+is tricky to work with for data entry. Therefore, we suggest that you
+store your metadata as a markdown file, and use `read_md()` and
+`write_md()` to migrate between markdown and xml:
 
 ``` r
-library(purrr)
-
-# Opens metadata template interactively in RStudio for you to edit
-# By default, this function copies the template to the root of your project directory
-# Feel free to move this file to where you see fit
-edit_metadata_md()
-
-# Read completed template back into R
-# Specify the path to the metadata template file
-# For purpose of demo, will read example md
-md_template <- read_metadata_md("inst/markdown/westerband_template.md")
-
-# Convert md_text into tibble
-md_tibble <- md_to_tibble(md_template)
-
-# Convert tibble into list
-# This step preps the metadata text so that 
-# it can easily interact with the XML template 
-md_list <- md_tibble_to_list(md_tibble)
-
-# Retrieve blank eml list structure (stored internally in package)
-eml_template_list 
-str(eml_template_list)
-
-# Update fields in eml_template_list
-# Currently implemented for Title and Name only
-eml_template_updated <- 
-  update_title(eml_template_list, md_list)|> 
-  update_names(md_list) 
-
-# Preview updated changes
-eml_template_updated |> pluck("eml", "dataset", "title")
-eml_template_updated |> pluck("eml", "dataset", "contact")
+get_blank_metadata() |>
+  write_md("test.rmd") # also supports `.qmd` suffix
 ```
 
-Finally, we run …, which builds the `meta.xml` file and packages the
-archive:
+If you’d prefer a bit more guidance on what to include, you can use an
+existing metadata entry as an example, and modify it to your needs:
 
 ``` r
-# In progress currently implemented for the occurrence data only
-make_core_xml(file_name = "DwC_occurrence.csv")
+get_example_metadata(id = "df368") |>
+  write_md("example.rmd")
 ```
+
+Storing metadata in markdown files has several advantages over xml:
+
+- **clarity:** markdown is easy to read and edit
+- **persistence:** markdown files live in your file structure rather
+  than your R environment, so are easy to store, share and update
+- **visualisation:** it is straightforward to render the file as a PDF
+  or HTML for viewing or sharing
+
+Once you are done editting your markdwown file, use `read_md()` to
+import back into R as an `xml` object:
+
+``` r
+metadata <- read_md("test.rmd")
+```
+
+### Constructing an archive
+
+In `galaxias`, we construct Darwin Core Archives by adding data to a
+single object, created using the `dwca()` function:
+
+``` r
+archive <- dwca() |>
+  add_occurrences(df) |>
+  add_metadata(metadata)
+
+archive
+#> An object of class `dwca` containing: 
+#> • occurrences; metadata
+```
+
+We suggest using piped syntax. The sequence in which arguments are added
+doesn’t matter this time, but would matter if you were adding multiple
+different kinds of data. See the `Structure of DwCAs` vignette for
+details.
+
+### Checking and submitting
+
+`galaxias` provides two ways to check a DwCA; locally and online. We
+suggest using both, in sequence, to avoid any surprises.
+
+To check a `dwca` object locally, use `check_dwca()`:
+
+``` r
+# check_dwca(archive)
+```
+
+*Q: Include a report option?*
+
+Once you’ve checked your object locally, you can use `build_dwca()` to
+convert it into a ‘real’ DwCA (i.e. a `.zip` file).
+
+``` r
+archive |>
+  build_dwca("my_dwca.zip")
+#> Building my_dwca.zip
+#> Cleaning temporary directory
+```
+
+The validate function takes a DwCA as an input, and passes it to to the
+ALA validation API for checking.
+
+*Q: function name to ‘submit’ data?*
