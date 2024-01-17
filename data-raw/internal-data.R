@@ -11,7 +11,7 @@ library(usethis) # adding content to sysdata.rda
 download.file(
   url = "http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd",
   destfile = "./data-raw/eml-gbif-profile.xsd")
-eml_validator_xsd <- read_xml("http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd")
+metadata_validator_xsd <- read_xml("http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd")
 # NOTE: using `read_xml()` on local file causes `xml_validate()` to break
 # Hence we cache the file here for safety reasons, but load it with `read_xml`
 # from the url to ensure it actually works.
@@ -22,12 +22,12 @@ eml_validator_xsd <- read_xml("http://rs.gbif.org/schema/eml-gbif-profile/1.1/em
 # https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala
 # Example found in inst/example_xml/eml_completed.xml
 # Blank eml.xml found in inst/example_xml/eml_blank.xml
-eml_template <- read_xml("inst/example_xml/eml_blank.xml") 
+# metadata_template <- read_xml("inst/example_xml/eml_blank.xml") # fails to load, for some reason
 # eml_template_list <- eml_template |> as_list() 
 
 # add to r/sysdata.rda
 use_data(
-  eml_template,
-  eml_validator_xsd,
+  # metadata_template,
+  metadata_validator_xsd,
   internal = TRUE,
   overwrite = TRUE)

@@ -3,16 +3,17 @@
 #' @param xml A xml object, either imported using `xml2`, or the url or a valid
 #' xml page.
 #' @param file (string) file name to save text, typically to `.md` or `.Rmd`
-#' @importFrom xml2 as_list
 #' @importFrom glue glue
+#' @importFrom purrr pluck
+#' @importFrom xml2 as_list
 #' @export
 write_md <- function(xml, file, title = "Example DwC metadata"){
   # add a boilerplate `rmd` header to support rendering
   # note: possible instead to populate header with dataset title, date
   cat(switch_headers(file, title), 
       file = file)
-  input <- xml2::as_list(x)$eml
-  md_recurse(input, file = file)
+  md_recurse(x = pluck(as_list(xml), "eml"), 
+             file = file)
 }
 
 #' @noRd
@@ -105,4 +106,4 @@ md_recurse <- function(x, level = 1, file){
 # library(xml2)
 # x <- read_xml("https://collections.ala.org.au/ws/eml/dr368")
 # write_md(x, "test.rmd")
-# write_xml("test.md") |> str()
+# y <- read_md("test.rmd)

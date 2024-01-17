@@ -109,7 +109,7 @@ check_xml <- function(xml){
   if(is.null(xml)){
     abort("`xml` is missing, with no default")
   }
-  if(!inherits(df, "xml_document")){
-    abort("`df` must be an `xml_document`")
+  if(!inherits(xml, "xml_document")){
+    abort("`xml` must be an `xml_document`")
   }
 }
