@@ -24,21 +24,21 @@ transparent workflow.
 \item \code{\link[=add_occurrences]{add_occurrences()}}, \code{\link[=add_events]{add_events()}}, \code{\link[=add_multimedia]{add_multimedia()}}, \code{\link[=add_metadata]{add_metadata()}} to add data to \code{dwca} objects
 }
 
-\strong{Construct identifiers}
+\strong{Data handling}
 \itemize{
 \item \code{\link[=build_random_identifier]{build_random_identifier()}}, \code{\link[=build_composite_identifier]{build_composite_identifier()}} uuids
 }
 
 \strong{Metadata handling}
 \itemize{
-\item \code{\link[=get_metadata_file]{get_metadata_file()}} get example or boilerplate metadata file as md
+\item \code{\link[=get_blank_metadata]{get_blank_metadata()}}, \code{\link[=get_example_metadata]{get_example_metadata()}} get example metadata in xml
 \item \code{\link[=read_md]{read_md()}}, \code{\link[=write_md]{write_md()}} to convert between markdown and xml
 }
 
 \strong{Concluding}
 \itemize{
 \item \code{\link[=check_dwca]{check_dwca()}} check a \code{dwca} object for compliance with DwC
-\item \link{build_dwca} build a \code{dwca} into a zip file
+\item \code{\link[=build_dwca]{build_dwca()}} build a \code{dwca} into a zip file
 }
 }
 
@@ -47,13 +47,13 @@ If you have any questions, comments or suggestions, please email
 \href{mailto:support@ala.org.au}{support@ala.org.au}.
 }
 \author{
-\strong{Maintainer}: Dax Kellie \email{dax.kellie@csiro.au}
+\strong{Maintainer}: Martin Westgate \email{martin.westgate@csiro.au}
 
 Authors:
 \itemize{
-  \item Martin Westgate \email{martin.westgate@csiro.au}
   \item Shandiya Balasubramanium \email{shandiya.balasubramanium@csiro.au}
   \item Fonti Kar \email{fonti.kar@csiro.au}
+  \item Dax Kellie \email{dax.kellie@csiro.au}
   \item Andrew Schwenke \email{andrew.schwenke@csiro.au}
 }
 

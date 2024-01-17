@@ -23,17 +23,17 @@
 #'   * [dwca()] create pipable `dwca` objects
 #'   * [add_occurrences()], [add_events()], [add_multimedia()], [add_metadata()] to add data to `dwca` objects
 #'   
-#' **Construct identifiers**
+#' **Data handling**
 #'  
 #'   * [build_random_identifier()], [build_composite_identifier()] uuids
 #'   
 #' **Metadata handling**
 #' 
-#'    * [get_metadata_file()] get example or boilerplate metadata file as md
+#'    * [get_blank_metadata()], [get_example_metadata()] get example metadata in xml
 #'    * [read_md()], [write_md()] to convert between markdown and xml
 #'    
 #'  **Concluding**
 #'    * [check_dwca()] check a `dwca` object for compliance with DwC
-#'    * [build_dwca] build a `dwca` into a zip file
+#'    * [build_dwca()] build a `dwca` into a zip file
 #' 
 "_PACKAGE"
