@@ -20,7 +20,9 @@ read_md <- function(file){
   title_length_h <- str_extract(x[is_title], "^<h[:digit:]") |>
     sub("^<h", "", x = _) |>
     as.integer()
-  title_length <- pmax.int(title_length_hash, title_length_h)
+  title_length <- pmax.int(title_length_hash, 
+                           title_length_h, 
+                           na.rm = TRUE)
   
   # parse out attributes 
   equals_check <- grepl("=", x[is_title]) # note: can only happen with `<hn>` structure
@@ -53,22 +55,6 @@ read_md <- function(file){
     name = titles,
     content = content)
   
-  # # update attr content
-  # if(!is.null(attr_tibble)){
-  #   added_cols <- tibble(attr_title = rep(NA, nrow(result)))
-  #   added_cols$attr_title[is_title[equals_check]] <- attr_tibble$attr_title
-  #   
-  #   titles <- attr_tibble$attr_title
-  #   result$attr_title[is_title[equals_check]] <- 
-  #   result$attr_body[is_title[equals_check]] <- attr_tibble$attr_body
-  # }else{
-  #   result <- bind_cols(result, 
-  #                       tibble(attr_title = NA,
-  #                              attr_body = NA))
-  # }
-  ## this fails for some reason!!?!
-  ## up to here
-  
   # convert to xml
   object <- list(`eml:eml` = structure(
     xml_recurse(result), 
@@ -92,7 +78,6 @@ xml_recurse <- function(x, level = 1){
   if(nrow(x) == 1){
     list(x$content)
   }else{
-    # if(level == 2){browser()}
     this_level <- x$depth == level
     x_list <- split(x, cumsum(this_level))
     if(level > 1){
