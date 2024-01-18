@@ -4,7 +4,7 @@
 \alias{publish}
 \title{Publish a DwCA to the ALA}
 \usage{
-publish(.dwca)
+publish(.dwca = NULL, file = NULL)
 }
 \description{
 Submitted via API
