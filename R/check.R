@@ -1,4 +1,4 @@
-#' Check a `dwca` for inconsistencies with the standard
+#' Check a `dwca` for consistency with the standard
 #' 
 #' @details
 #' `type = "remote"` uses the ALA `validate` API, which in turn calls 

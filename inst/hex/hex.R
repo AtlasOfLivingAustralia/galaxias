@@ -1,28 +1,29 @@
 # script to build an example hex sticker
 
 library(hexSticker)
+library(showtext)
 library(ggplot2)
-
+font_add_google("Lato", family = "lato")
 p <- ggplot() + theme_void()
 
 # export as sticker
 sticker(
-  s_x = 1,
   subplot = p,
-  s_y = 1.25,
-  s_width = 0.8,
-  s_height = 0.8,
+  # package name
   package = "galaxias",
-  p_color = "#29a65d",
+  p_color = "#c98502",
   p_y = 1,
-  p_family = "mono",
-  p_size = 6.5,
+  p_family = "lato",
+  p_size = 9,
   # border
   h_fill = "#ffffff",
-  h_color = "#29a65d",
+  h_color = "#000000",
+  h_size = 1.5,
   filename = "man/figures/logo.png",
   # url
   url = "ala.org.au",
-  u_family = "mono",
-  u_color = "black"
+  u_family = "lato",
+  u_color = "black",
+  u_y = 0.12,
+  u_size = 2.5
 )

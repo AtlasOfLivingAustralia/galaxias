@@ -4,7 +4,7 @@
 \alias{check}
 \alias{check_local}
 \alias{check_remote}
-\title{Check a \code{dwca} for inconsistencies with the standard}
+\title{Check a \code{dwca} for consistency with the standard}
 \usage{
 check(.dwca, type = c("local", "remote"))
 
@@ -18,7 +18,7 @@ check_remote(.dwca = NULL, file = NULL)
 \item{max_n}{Optional limit to the number of failed tests allowed}
 }
 \description{
-Check a \code{dwca} for inconsistencies with the standard
+Check a \code{dwca} for consistency with the standard
 }
 \details{
 \code{type = "remote"} uses the ALA \code{validate} API, which in turn calls
