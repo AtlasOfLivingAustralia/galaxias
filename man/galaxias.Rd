@@ -27,7 +27,7 @@ transparent workflow.
 \strong{Data handling}
 \itemize{
 \item \code{\link[=build_random_identifier]{build_random_identifier()}}, \code{\link[=build_composite_identifier]{build_composite_identifier()}} uuids
-\item \code{\link[=get_blank_metadata]{get_blank_metadata()}}, \code{\link[=get_example_metadata]{get_example_metadata()}} get example metadata in xml
+\item \code{\link[=get_metadata_template]{get_metadata_template()}}, \code{\link[=get_metadata_example]{get_metadata_example()}} get example metadata in xml
 \item \code{\link[=read_md]{read_md()}}, \code{\link[=write_md]{write_md()}} to convert between markdown and xml
 }
 

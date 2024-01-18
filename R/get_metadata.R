@@ -1,11 +1,11 @@
 #' Get example metadata from ALA
 #' 
 #' Wrapper function to show some example metadata
-#' @name get_blank_metadata
+#' @name get_metadata_template
 #' @order 1
 #' @importFrom xml2 read_xml
 #' @export
-get_blank_metadata <- function(){
+get_metadata_template <- function(){
   system.file(
     "./inst/example_xml/eml_blank.xml",
     package = "galaxias"
@@ -13,7 +13,7 @@ get_blank_metadata <- function(){
     read_xml()
 }
 
-#' @rdname get_blank_metadata
+#' @rdname get_metadata_template
 #' @param search A string to search using `galah::search_all_collections()`
 #' @param id An ALA data resource number
 #' @order 2
@@ -21,8 +21,8 @@ get_blank_metadata <- function(){
 #' @importFrom rlang abort
 #' @importFrom xml2 read_xml
 #' @export
-get_example_metadata <- function(search = NULL,
-                         id = NULL){
+get_metadata_example <- function(search = NULL,
+                                 id = NULL){
   if(!is.null(id)){
     url <- paste0("https://collections.ala.org.au/ws/dataResource/", id)
   }else if(!is.null(search)){

@@ -26,7 +26,7 @@
 #' **Data handling**
 #'  
 #'   * [build_random_identifier()], [build_composite_identifier()] uuids
-#'   * [get_blank_metadata()], [get_example_metadata()] get example metadata in xml
+#'   * [get_metadata_template()], [get_metadata_example()] get example metadata in xml
 #'   * [read_md()], [write_md()] to convert between markdown and xml
 #'    
 #'  **Checking and publication**

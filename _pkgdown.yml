@@ -38,7 +38,7 @@ reference:
 - title: Data handling
   contents:
   - build_random_identifier
-  - get_blank_metadata
+  - get_metadata_template
   - read_md
 - title: Checking and publication
   contents:
