@@ -6,3 +6,18 @@ template:
     bootswatch: cerulean
 development:
   mode: auto
+reference:
+- title: Setting up an archive
+  contents: 
+  - dwca
+  - add_
+- title: Data handling
+  contents:
+  - build_random_identifier
+  - get_blank_metadata
+  - read_md
+- title: Checking and publication
+  contents:
+  - build
+  - check
+  - publish

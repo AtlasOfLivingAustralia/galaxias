@@ -18,7 +18,7 @@
 #'
 #' @keywords internal
 #' @section Functions:
-#' **Set up a DWCA**
+#' **Setting up an archive**
 #'
 #'   * [dwca()] create pipable `dwca` objects
 #'   * [add_occurrences()], [add_events()], [add_multimedia()], [add_metadata()] to add data to `dwca` objects
@@ -26,14 +26,12 @@
 #' **Data handling**
 #'  
 #'   * [build_random_identifier()], [build_composite_identifier()] uuids
-#'   
-#' **Metadata handling**
-#' 
-#'    * [get_blank_metadata()], [get_example_metadata()] get example metadata in xml
-#'    * [read_md()], [write_md()] to convert between markdown and xml
+#'   * [get_blank_metadata()], [get_example_metadata()] get example metadata in xml
+#'   * [read_md()], [write_md()] to convert between markdown and xml
 #'    
-#'  **Concluding**
-#'    * [check_dwca()] check a `dwca` object for compliance with DwC
-#'    * [build_dwca()] build a `dwca` into a zip file
+#'  **Checking and publication**
+#'    * [build()] build a `dwca` into a zip file
+#'    * [check()] check a `dwca` object locally or via API
+#'    * [publish()] send your data to the ALA for publication
 #' 
 "_PACKAGE"

@@ -1,6 +1,20 @@
-#' pointblank-based checking of a `dwca` object
+#' Check a `dwca` for inconsistencies with the standard
 #' 
-#' Description to follow.
+#' @details
+#' `type = "remote"` uses the ALA `validate` API, which in turn calls 
+#' `dwca-validator` Python. `type = "local"` duplicates this functionality 
+#' via `{pointblank}`
+#' @name check
+#' @export
+check <- function(.dwca, 
+                  type = c("local", "remote")){
+  type <- match.arg(type)
+  switch(type,
+         "local" = check_local(.dwca),
+         "remote" = check_remote(.dwca))
+}
+
+#' @rdname check
 #' @param .dwca An object of class `dwca`, created using `dwca()`
 #' @param max_n Optional limit to the number of failed tests allowed
 #' @importFrom pointblank col_exists
@@ -9,8 +23,8 @@
 #' @importFrom rlang abort
 #' @importFrom rlang inform
 #' @export
-check_dwca <- function(.dwca,
-                  max_n = NULL){
+check_local <- function(.dwca,
+                        max_n = NULL){
   # error catching
   if(!inherits(.dwca, "dwca")){
     abort("`check` only accepts `dwca` objects")
@@ -37,3 +51,18 @@ check_dwca <- function(.dwca,
 # NOTE: at present, this only returns a list of tibbles
 # Each tibble needs to be parsed to say something informative
 # We also need to use these tibbles to report to the console (presumably via `rlang::inform()`)
+
+#' @rdname check
+#' @export
+check_remote <- function(.dwca = NULL, 
+                         file = NULL){
+  # checking
+  if(is.null(.dwca) & is.null(file)){
+    abort("One of `.dwca` or `file` must be supplied")
+  }else{
+    if(!is.null(.dwca)){
+      
+    }
+  }
+  
+}

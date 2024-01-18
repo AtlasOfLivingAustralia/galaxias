@@ -1,16 +1,18 @@
 #' Build a Darwin Core Archive from a `dwca` object
 #' @param .dwca A `dwca` object
-#' @param path Name of the zip file
-#' @return No object is returned; this function is called for the side-effect
-#' of building a 'Darwin Core Archive' (i.e. a zip file)
+#' @param path (Optional) Name of the zip file. Defaults to `NULL`, indicating
+#' that the file in question should be saved to a temporary directory.
+#' @return Returns an object of class `dwca`, with an added `path` slot showing
+#' the location of the zip file. However, this function is primarily called for 
+#' the side-effect of building a 'Darwin Core Archive' (i.e. a zip file).
 #' @importFrom glue glue
 #' @importFrom readr write_csv
 #' @importFrom rlang inform
 #' @importFrom xml2 write_xml
 #' @importFrom zip zip
 #' @export
-build_dwca <- function(.dwca,
-                       file = "dwca.zip") {
+build <- function(.dwca,
+                  file = NULL) {
   # convert `metadata` slot to be named `eml`
   nmz <- names(.dwca)
   if(any(nmz == "metadata")){
@@ -29,6 +31,11 @@ build_dwca <- function(.dwca,
   store_dir <- glue("{temp_dir}/galaxias-{temp_loc}")
   dir.create(store_dir)
   
+  # if no file given, store DwCA in a temporary directory
+  if(is.null(file)){
+    file <- glue("{temp_dir}/galaxias-{temp_loc}.zip")
+  }
+  
   # loop across objects, saving the correct type to the correct name
   object_names <- names(.dwca)
   for(i in seq_along(object_names)){
@@ -43,10 +50,10 @@ build_dwca <- function(.dwca,
   all_files <- list.files(store_dir)
   
   # build zip file
-  inform(glue("Building {file}"))
   zip::zip(zipfile = file, 
            files = glue("{store_dir}/{all_files}"),
            mode = "cherry-pick")
-  inform("Cleaning temporary directory")
   unlink(store_dir)
+  .dwca$path <- file
+  .dwca
 }
