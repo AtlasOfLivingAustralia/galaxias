@@ -6,6 +6,30 @@ template:
     bootswatch: cerulean
 development:
   mode: auto
+navbar:
+  structure:
+    left:
+    - home
+    - quickstart
+    - articles
+    - reference
+    right:
+    - news
+    - github
+  components:
+    quickstart:
+      text: Quick start guide
+      href: articles/quick_start_guide.html
+    articles:
+      text: Articles
+      menu:
+      - text: Mapping to Darwin Core
+        href: articles/Mapping_to_Darwin_Core.html
+      - text: Structure of DwCA
+        href: articles/Structure_of_DwCAs.html
+    news:
+      text: News
+      href: news/index.html
 reference:
 - title: Setting up an archive
   contents: 

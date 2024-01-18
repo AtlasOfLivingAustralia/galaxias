@@ -17,6 +17,8 @@ lapply(seq_along(selected_files), function(a){knit(
   out_files[[a]]
 )})
 
+unlink("./vignettes/test.rmd")
+
 ## render README.md
 # knitr::knit("README.Rmd", "README.md")
 

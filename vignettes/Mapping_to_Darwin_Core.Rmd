@@ -1,7 +1,7 @@
 ---
 title: "Mapping to Darwin Core"
 author: "Martin Westgate"
-date: '2024-01-05'
+date: '2024-01-18'
 output:
   rmarkdown::html_vignette
 vignette: >
@@ -104,11 +104,11 @@ dwc_df
 
 ```
 ## # A tibble: 2 × 9
-##   occurrenceID eventDate  decimalLatitude decimalLongitude scientificName taxonRank individualCount
-##          <int> <glue>               <dbl>            <dbl> <chr>          <chr>               <dbl>
-## 1            1 2023-01-1…           -35.3             149. Callocephalon… species                 2
-## 2            2 2023-01-1…           -35.3             149. Eolophus rose… species                 3
-## # ℹ 2 more variables: recordedBy <chr>, basisOfRecord <chr>
+##   occurrenceID eventDate            decimalLatitude decimalLongitude scientificName   taxonRank
+##          <int> <glue>                         <dbl>            <dbl> <chr>            <chr>    
+## 1            1 2023-01-14T10:23:00Z           -35.3             149. Callocephalon f… species  
+## 2            2 2023-01-15T11:25:00Z           -35.3             149. Eolophus roseic… species  
+## # ℹ 3 more variables: individualCount <dbl>, recordedBy <chr>, basisOfRecord <chr>
 ```
 As you can see above, this approach is fully reproducible, and is very clear
 about how data is manipulated and added at each stage. It also allows you to 
@@ -130,7 +130,7 @@ taxonomy <- dwc_df |>
 ```
 
 ```
-## Querying API ■■■■■■■■■■■■■■■■ 50% | ETA: 4s
+## Querying API ■■■■■■■■■■■■■■■■ 50% | ETA: 3s
 ```
 
 ```r
@@ -139,10 +139,10 @@ taxonomy
 
 ```
 ## # A tibble: 2 × 15
-##   search_term      scientific_name scientific_name_auth…¹ taxon_concept_id rank  match_type kingdom
-##   <chr>            <chr>           <chr>                  <chr>            <chr> <chr>      <chr>  
-## 1 Callocephalon f… Callocephalon … (Grant, 1803)          https://biodive… spec… exactMatch Animal…
-## 2 Eolophus roseic… Eolophus rosei… (Vieillot, 1817)       https://biodive… spec… exactMatch Animal…
+##   search_term  scientific_name scientific_name_auth…¹ taxon_concept_id rank  match_type kingdom
+##   <chr>        <chr>           <chr>                  <chr>            <chr> <chr>      <chr>  
+## 1 Callocephal… Callocephalon … (Grant, 1803)          https://biodive… spec… exactMatch Animal…
+## 2 Eolophus ro… Eolophus rosei… (Vieillot, 1817)       https://biodive… spec… exactMatch Animal…
 ## # ℹ abbreviated name: ¹​scientific_name_authorship
 ## # ℹ 8 more variables: phylum <chr>, class <chr>, order <chr>, family <chr>, genus <chr>,
 ## #   species <chr>, vernacular_name <chr>, issues <chr>
@@ -160,30 +160,3 @@ This has the added benefit of showing how the atlas in question will
 interpret your provided taxonomic information. This can be useful for 
 taxonomically ambiguous groups where more care may be required to ensure 
 correct interpretation.
-
-## Mapping tools
-`galaxias` provides a set of tools to help you map columns to Darwin Core if 
-you'd like. These are:
-
-- `map_fields_tibble()`: Supply a lookup table to rename columns
-- `map_fields_console()`: Use the console to get recommendations for renaming columns
-- `map_fields_shiny()`: Use a browser to map to Darwin Core terms
-
-See `?map_fields` for more information
-
-
-## Building an archive
-Once you have finished manipulating your dataset, you can pipe it into a 
-`dwca` object using `add_data()`:
-
-
-```r
-archive <- dwca() |>
-  add_data(dwc_df)
-```
-
-```
-## Error in missing(object): 'missing' can only be used for arguments
-```
-
-Finally, you can add metadata and use `build()`, `check()` or `copy_to()`.
