@@ -147,6 +147,18 @@ check_recommended_cols <- function(.x){
     })
 }
 
+#' check that all fields that are used in assertions are present
+#' @importFrom pointblank specially
+#' @noRd
+#' @keywords Internal
+check_assertion_dependency_cols <- function(.x){
+  .x |>
+    specially(fn = \(x){
+      cols <- "something"
+      all(cols %in% colnames(x))      
+    })
+}
+
 #' check all required columns are provided
 #' @importFrom pointblank specially
 #' @noRd

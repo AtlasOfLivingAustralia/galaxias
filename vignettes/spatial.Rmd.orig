@@ -1,0 +1,96 @@
+---
+title: "Spatial fields"
+author: "Martin Westgate"
+date: '`r Sys.Date()`'
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Spatial fields}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+A critical factor in the usability of biodiversity data is knowing where an 
+observation was made. The Darwin Core class 'location' contains several fields 
+to describe these localities, but they are not all equally important, nor 
+equally widely-used. Below we will go through them in decreasing order of 
+importance. 
+
+When building a Darwin Core archive, it is important to recognise that spatial
+data need only be provided once. If you are providing an occurrence-core 
+dataset, these will need to be included in the `tibble` that is passed to
+`add_occurrences()`. If your data are event-core, they will be in 
+`add_events()`. You don't need to supply them in both places.
+
+
+## Latitude and Longitude
+
+There are three fields that are critical to effective interpretation of your
+Darwin Core Archive: `decimalLatitude`, `decimalLongitude` and `geodeticDatum`.
+DwCA's assume that you are providing decimal latitude and longitudes in WGS84.
+
+```{r}
+dataset <- tibble(
+  decimalLatitude = 10,
+  decimalLongitude = 5,
+  geodeticDatum = "WGS84"
+)
+```
+
+### Spatial precision
+A critical consideration when providing data is how precisely you want that
+information to be available. For most people, it would be 
+
+```{r}
+# add helper function for calculating precision?
+```
+
+
+### Reprojecting
+If your data are in a different format, you'll need to convert them. We suggest
+the `{sf}` package for this purpose. Note, however, that `galaxias` doesn't 
+recognise spatial objects, so you'll need to extract your information back to a 
+`tibble` to add it to your DwCA.
+
+```{r}
+# example workflow
+# add helper function for this?
+```
+
+If you've got these elements in your dataset, it's totally fine to stop
+reading now. This is because nearly every other piece of spatial information
+required by a DwCA can be derived from `decimalLatitude`, `decimalLongitude` and
+`geodeticDatum` by spatial joining. However, it is often safer to provide more
+information, just in case there is confusion or debate at a later time. Below we
+describe some examples.
+
+
+### Localities
+Several fields support structured information on where the observation was made.
+These include:
+
+  - `continent`
+  - `country`
+  - `stateProvince`
+  - `locality`
+
+In this same category is `countryCode`, which 
+[TDWG recommend](https://dwc.tdwg.org/list/#dwc_countryCode) should be a code
+from the [ISO 3166-1 ALPHA-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+standard. It is recommended to supply this in addition to `country` for 
+improved clarity.
+
+In most cases all of your observations will be within a single jusridiction, 
+meaning it is straightforward to add them with a simple `mutate()` call:
+
+```{r}
+df <- df |>
+  mutate(
+    continent = "Oceania",
+    country = "Australia",
+    countryCode = "AU",
+    stateProvince = "Australian Capital Territory",
+    locality = "Acton")
+```
+
+### 
+
