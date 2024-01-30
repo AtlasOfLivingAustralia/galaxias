@@ -56,7 +56,7 @@ create_file_index <- function(field_names, type, core = TRUE){
   result_xml <- as_xml_document(result)
   xml_set_attrs(result_xml, c(
     encoding = "UTF-8",
-    rowType = glue("http://rs.tdwg.org/dwc/terms/{type}"), # REPLACE with class lookup c/o {tawnydragon}
+    rowType = glue("http://rs.tdwg.org/dwc/terms/{type}"), # REPLACE with class lookup c/o {dwc_terms()}
     fieldsTerminatedBy = ",",
     linesTerminatedBy = "\r\n",
     fieldsEnclosedBy = "&quot;",
@@ -99,7 +99,7 @@ create_field_list <- function(field_names){
       out <- list()
       attributes(out) <- list(
         index = as.character(a),
-        url = glue("http://rs.tdwg.org/dwc/terms/{field_names[[a]]}") # REPLACE with terms lookup c/o {tawnydragon}
+        url = glue("http://rs.tdwg.org/dwc/terms/{field_names[[a]]}") # REPLACE with terms lookup c/o {dwc_terms()}
       )
       return(out)
     })

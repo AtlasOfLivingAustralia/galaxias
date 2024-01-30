@@ -27,6 +27,8 @@ navbar:
         href: articles/Mapping_to_Darwin_Core.html
       - text: Structure of DwCA
         href: articles/Structure_of_DwCAs.html
+      - text: Spatial
+        href: articles/spatial.html
     news:
       text: News
       href: news/index.html

@@ -15,12 +15,7 @@ This vignette discusses some common ways to do this.
 
 ## Darwin Core terms
 Before we start making changes, it would be useful to know what the valid 
-Darwin Core terms are. We can find this out using `tawnydragon::show_terms()` 
-to get the results as a `tibble`, or `galaxias::view_terms()` to see them
-in a Shiny app.
-
-[Add screenshot from `view_terms()` here]
-
+Darwin Core terms are. We can find this out using `dwc_terms()`.
 
 ## Converting a dataset to DwC-compliance
 The most reliable and reproducible way to manipulate data into a Darwin

@@ -56,8 +56,7 @@ The columns of your dataset need to conform to the Darwin Core Standard;
 typically this will require some renaming and perhaps some data manipulation, 
 as described in the `Mapping to Darwin Core` vignette. There are a lot of Darwin 
 Core terms, but you probably won't need them all. You can find out more using 
-the `{tawnydragon}` package, most easily using the function 
-`tawnydragon::view_terms()`.
+the `dwc_terms()` function.
 
 ## Metadata
 Darwin Core Archives use `xml` files to store metadata, but this format is 
