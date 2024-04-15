@@ -1,4 +1,5 @@
 #' Build a Darwin Core Archive from a `dwca` object
+#' @rdname read_dwca
 #' @param .dwca A `dwca` object
 #' @param path (Optional) Name of the zip file. Defaults to `NULL`, indicating
 #' that the file in question should be saved to a temporary directory.
@@ -11,8 +12,8 @@
 #' @importFrom xml2 write_xml
 #' @importFrom zip zip
 #' @export
-build <- function(.dwca,
-                  file = NULL) {
+write_dwca <- function(.dwca,
+                       file = NULL) {
   # convert `metadata` slot to be named `eml`
   nmz <- names(.dwca)
   if(any(nmz == "metadata")){

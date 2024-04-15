@@ -34,3 +34,10 @@ Load the package:
 ```{r, eval = FALSE}
 library(galaxias)
 ```
+
+## Functions
+
+`galaxias` supports you to:
+* Read and write relevant file types such as markdown (using `read_md()` and `write_md()`), or full archives (using `read_dwca()` or `write_dwca()`).
+* Use piped syntax to build an archive, starting a pipe with `gofish()` and adding elements with `add_` functions (particularly `add_occurrences()`, `add_metadata()`).
+* Pass these files to relevant APIs using `validate()` or `publish()`.

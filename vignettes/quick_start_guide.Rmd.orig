@@ -92,11 +92,11 @@ metadata <- read_md("test.rmd")
 ## Constructing an archive
 
 In `galaxias`, we construct Darwin Core Archives by adding data to a single 
-object, created using the `dwca()` function:
+object of class `darwin_core_archive`, created using the `gofish()` function:
 
 
 ```{r}
-archive <- dwca() |>
+archive <- gofish() |>
   add_occurrences(df) |>
   add_metadata(metadata)
 
@@ -113,7 +113,7 @@ of data. See the `Structure of DwCAs` vignette for details.
 `galaxias` provides two ways to check a DwCA; locally and online. We suggest
 using both, in sequence, to avoid any surprises. 
 
-To check a `dwca` object locally, use `check()`:
+To check a `darwin_core_archive` object locally, use `check()`:
 ```{r}
 # archive |> check()
 ```

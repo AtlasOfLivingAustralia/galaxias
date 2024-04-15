@@ -36,7 +36,7 @@ check_local <- function(.dwca,
   
   # check occurrences data via {pointblank}
   if(any(names(.dwca) == "occurrences")){ # not sure of terminology or structure here yet
-    report$occurrences <- check_occurrences(.dwca$occurrences) 
+    report$occurrences <- check_occurrences(.dwca$occurrences) # outsource to `tawnydragon`
   }
   
   # metadata checking via `xml_validate()`
