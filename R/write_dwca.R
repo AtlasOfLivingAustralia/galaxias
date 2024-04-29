@@ -1,11 +1,16 @@
-#' Build a Darwin Core Archive from a `dwca` object
+#' Read or write `dwca` objects
+#' 
+#' `write_dwca()` and `read_dwca()` are antinyms. `write_dwca()` and `build()` 
+#' are synonyms, with the former mirroring `readr` syntax and the latter 
+#' `devtools` syntax (see also `check.dwca()`).
 #' @rdname read_dwca
 #' @param .dwca A `dwca` object
 #' @param path (Optional) Name of the zip file. Defaults to `NULL`, indicating
 #' that the file in question should be saved to a temporary directory.
-#' @return Returns an object of class `dwca`, with an added `path` slot showing
-#' the location of the zip file. However, this function is primarily called for 
-#' the side-effect of building a 'Darwin Core Archive' (i.e. a zip file).
+#' @return Both `read_dwca()` and `write.dwca()` return an object of class 
+#' `dwca`, with an added `path` slot showing the location of the zip file in the 
+#' case of `write_dwca()`. `write_dwca()` is primarily called for the 
+#' side-effect of building a 'Darwin Core Archive' (i.e. a zip file).
 #' @importFrom glue glue
 #' @importFrom readr write_csv
 #' @importFrom rlang inform

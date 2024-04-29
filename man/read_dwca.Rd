@@ -3,11 +3,14 @@
 \name{read_dwca}
 \alias{read_dwca}
 \alias{write_dwca}
-\title{Function to read an existing Darwin Core Archive}
+\alias{build}
+\title{Read or write \code{dwca} objects}
 \usage{
 read_dwca(file)
 
 write_dwca(.dwca, file = NULL)
+
+build(.dwca, file = NULL)
 }
 \arguments{
 \item{.dwca}{A \code{dwca} object}
@@ -16,10 +19,13 @@ write_dwca(.dwca, file = NULL)
 that the file in question should be saved to a temporary directory.}
 }
 \value{
-Returns an object of class \code{dwca}, with an added \code{path} slot showing
-the location of the zip file. However, this function is primarily called for
-the side-effect of building a 'Darwin Core Archive' (i.e. a zip file).
+Both \code{read_dwca()} and \code{write.dwca()} return an object of class
+\code{dwca}, with an added \code{path} slot showing the location of the zip file in the
+case of \code{write_dwca()}. \code{write_dwca()} is primarily called for the
+side-effect of building a 'Darwin Core Archive' (i.e. a zip file).
 }
 \description{
-Early stages
+\code{write_dwca()} and \code{read_dwca()} are antinyms. \code{write_dwca()} and \code{build()}
+are synonyms, with the former mirroring \code{readr} syntax and the latter
+\code{devtools} syntax (see also \code{check.dwca()}).
 }
