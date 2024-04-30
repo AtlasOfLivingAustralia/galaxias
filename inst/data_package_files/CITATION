@@ -1,0 +1,11 @@
+year <- format(Sys.Date(), "%Y")
+version <- packageDescription("`PKGNAME`")$Version
+note <- paste("Biodiversity data package version", version, sep = " ")
+
+citHeader("To cite `PKGNAME` in publications use:")
+
+bibentry(bibtype = "Manual",
+         title = "`PKGNAME`",
+         author = c(person("Firstname", "Lastname")),
+         year = year,
+         note = note)

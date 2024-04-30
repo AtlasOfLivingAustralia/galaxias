@@ -6,13 +6,15 @@
 \alias{galaxias-package}
 \title{Building Darwin Core Archives for the Atlas of Living Australia}
 \description{
-The Darwin Core Archive (DwCA) is a transferable unit of
-biodiversity data and associated metadata that allows facilities
+The Darwin Core Archive (DwCA) is a object for storing and transferring
+biodiversity data and associated metadata, which allows facilities
 like the Atlas of Living Australia (ALA) to efficiently integrate and share
-openly with the community. Creating DwCAs by hand is a notoriously fiddly,
+openly with the community. Creating DwCAs by hand is a notoriously fiddly
 task. 'galaxias' enables users to efficiently reformat their data to Darwin
 Core Standards and generate production-ready DwCA in a reproducible and
 transparent workflow.
+
+Can we hijack the package concept to build DwCAs? How would that be different?
 
 \code{galaxias} is named for a genus of Australian freshwater fish.
 }
@@ -34,6 +36,7 @@ All can be created using the \code{galaxias()} function
 \itemize{
 \item \code{\link[=dwca]{dwca()}} create pipable \code{dwca} objects
 \item \code{\link[=add_occurrences]{add_occurrences()}}, \code{\link[=add_events]{add_events()}}, \code{\link[=add_multimedia]{add_multimedia()}}, \code{\link[=add_metadata]{add_metadata()}} to add data to \code{dwca} objects
+\item \code{\link[=read_dwca]{read_dwca()}}, \code{\link[=write_dwca]{write_dwca()}}
 }
 
 \strong{Data handling}
@@ -46,7 +49,8 @@ All can be created using the \code{galaxias()} function
 \strong{Checking and publication}
 \itemize{
 \item \code{\link[=build]{build()}} build a \code{dwca} into a zip file
-\item \code{\link[=check]{check()}} check a \code{dwca} object locally or via API
+\item \code{\link[=test]{test()}} run local tests on an archive
+\item \code{\link[=check]{check()}} check a \code{dwca} conforms to archive-level standards
 \item \code{\link[=publish]{publish()}} send your data to the ALA for publication
 }
 }

@@ -38,6 +38,7 @@ Imports:
   stringdist,
   stringr,
   tibble,
+  usethis,
   uuid,
   xml2,
   zip

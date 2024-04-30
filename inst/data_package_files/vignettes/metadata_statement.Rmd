@@ -1,3 +1,14 @@
+---
+title: "Metadata Statement"
+author: ""
+date: '`r Sys.Date()`'
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Metadata Statement}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 # ALA Dataset Metadata
 
 For further information about data sharing with ALA visit this [page](https://support.ala.org.au/support/solutions/articles/6000261427-sharing-a-dataset-with-the-ala

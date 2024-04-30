@@ -3,14 +3,11 @@
 \name{read_dwca}
 \alias{read_dwca}
 \alias{write_dwca}
-\alias{build}
 \title{Read or write \code{dwca} objects}
 \usage{
 read_dwca(file)
 
 write_dwca(.dwca, file = NULL)
-
-build(.dwca, file = NULL)
 }
 \arguments{
 \item{.dwca}{A \code{dwca} object}
