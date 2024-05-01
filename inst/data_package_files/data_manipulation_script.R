@@ -16,12 +16,13 @@ library(dplyr)
 library(galaxias)
 library(readr)
 library(tibble)
+library(usethis)
+
 
 # Step 2: Import
 # When adding your own data, use something like:
 # `df <- readr::read_csv("occurrences_raw.csv")`
 # for now, we'll use an example dataset:
-
 df <- tibble(
   latitude = c(-35.310, -35.273),
   longitude = c(149.125, 149.133),
@@ -37,8 +38,11 @@ df <- tibble(
 # 
 # You can find more information on the Darwin Core standard ...
 # 
-# Below we use a piped syntax based on `dplyr` verbs:
-dwc_df <- df |>
+# Below we use a piped syntax based on `dplyr` verbs. Note that it is critical 
+# to assign the resulting object a valid Darwin Core name; in this case
+# `occurrences` (`events` or `media` are other valid examples). This is 
+# important for correct building of the Darwin Core Archive.
+occurrences <- df |>
   
   # rename columns to Darwin Core names
   rename(decimalLatitude = latitude,
@@ -65,23 +69,25 @@ dwc_df <- df |>
 
 # Step 4: Export
 # once complete, processed data should be saved to `/data`, using a file name
-# that describes the data it contains. Examples include:
-#  - occurrences.csv
-#  - events.csv
-#  - media.csv
-readr::write_csv(df, "./data/occurrences.csv")
+# that describes the data it contains.
+#
+# This saves the data in a compressed format with a `.rda` suffix.
+usethis::use_data(occurrences)
 
 
-# The remaining steps are only required if you want your package to be 
-# compatible with the Darwin Core Standard
+# Step 5: Document your dataset (optional)
+# This is a standard step for an R package, but not for a Darwin Core Archive.
+# It consists of writing a roxygen2 file outlining its' contents.
+# see https://r-pkgs.org/data.html#sec-documenting-data for details.
+#
+# In the case of the above example, we would create a file named `occurrences.R`
+# in the `R` folder, and write our documentation there. We would then build the 
+# documentation using `devtools::document()`.
 
-# Step 5: Update your 'schema'
+
+# Step 6: Update your 'schema'
 # This function looks up what data is present in the `data` folder,
-# and uses it to update `vignettes/schema.md`
+# and uses it to update `vignettes/schema.md`.
+# This is required if you want your package to be compatible with the Darwin 
+# Core Standard.
 galaxias::update_schema()
-
-# Step 6: Update your test
-# This function looks for fields in `data`, and adds a set of tests relevant
-# to those fields. It never overwrites existing tests, meaning you can modify
-# these files safely (i.e. without them being overwritten)
-galaxias::update_tests()

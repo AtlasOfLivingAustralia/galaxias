@@ -4,11 +4,7 @@
 \alias{create_data_package}
 \title{Function to create a new RStudio Project}
 \usage{
-create_data_package(
-  path,
-  copyright_holder = NULL,
-  open = rlang::is_interactive()
-)
+create_data_package(path, copyright_holder = NULL)
 }
 \arguments{
 \item{path}{A path to the directory to create}

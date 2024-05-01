@@ -1,15 +1,17 @@
-#' Building Darwin Core Archives for the Atlas of Living Australia
+#' Tools for building and sharing Biodiversity Data Packages
 #' 
 #' @description
-#' The Darwin Core Archive (DwCA) is a object for storing and transferring
-#' biodiversity data and associated metadata, which allows facilities 
-#' like the Atlas of Living Australia (ALA) to efficiently integrate and share 
-#' openly with the community. Creating DwCAs by hand is a notoriously fiddly
-#' task. 'galaxias' enables users to efficiently reformat their data to Darwin
-#' Core Standards and generate production-ready DwCA in a reproducible and
-#' transparent workflow.
+#' `galaxias` provides tools to build Biodiversity Data Packages, which are R 
+#' packages designed to store, document, and share biodiversity information. 
+#' Biodiversity Data Packages are fully compatible with other elements of the R 
+#' package workflow, including `devtools` for building, `usethis` for adding 
+#' package elements, `pkgdown` for converting package contents into webpages.
 #' 
-#' Can we hijack the package concept to build DwCAs? How would that be different?
+#' Once a package is built, `galaxias` also provides tools to assess 
+#' compatibility of the data with the 'Darwin Core' standard, convert the 
+#' package into a valid 'Darwin Core Archive', and publish that archive to a 
+#' data infrastructure (though currently only the Atlas of Living Australia is 
+#' formally supported).
 #' 
 #' `galaxias` is named for a genus of Australian freshwater fish.
 #' 
@@ -17,6 +19,20 @@
 #' @docType package
 #' @references If you have any questions, comments or suggestions, please email
 #' [support@ala.org.au](mailto:support@ala.org.au).
+#'
+#' @section `usethis` extensions:
+#' 
+#' These functions can be identified as being structurally similar to `usethis`
+#' functions, but with an added `_data_` infix.
+#'
+#'   * [create_data_package()] to create a new Biodiversity Data Package
+#'   * [use_data_citation()] to give advice on citing your package
+#'   * [use_data_description()] update the description to standard for this package type
+#'   * [use_data_examples()] build `data-raw` and `data` folders, with example code
+#'   * [use_data_metadata()] add a metadata statement to `vignettes` folder
+#'   * [use_data_readme()] replace the standard README.Rmd with a type-specific version
+#'   * [use_data_schema()] not implemented yet
+#'   * [use_data_tests()] add tests for conformance with Darwin Core standards
 #'
 #' @section Object classes:
 #' `galaxias` supports the following object classes:
@@ -31,7 +47,7 @@
 #' @section Functions:
 #' **Setting up an archive**
 #'
-#'   * [dwca()] create pipable `dwca` objects
+#'   * [dwca()] create pipeable `dwca` objects
 #'   * [add_occurrences()], [add_events()], [add_multimedia()], [add_metadata()] to add data to `dwca` objects
 #'   * [read_dwca()], [write_dwca()] 
 #'   

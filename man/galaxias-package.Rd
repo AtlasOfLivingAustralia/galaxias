@@ -4,20 +4,39 @@
 \name{galaxias-package}
 \alias{galaxias}
 \alias{galaxias-package}
-\title{Building Darwin Core Archives for the Atlas of Living Australia}
+\title{Tools for building and sharing Biodiversity Data Packages}
 \description{
-The Darwin Core Archive (DwCA) is a object for storing and transferring
-biodiversity data and associated metadata, which allows facilities
-like the Atlas of Living Australia (ALA) to efficiently integrate and share
-openly with the community. Creating DwCAs by hand is a notoriously fiddly
-task. 'galaxias' enables users to efficiently reformat their data to Darwin
-Core Standards and generate production-ready DwCA in a reproducible and
-transparent workflow.
+\code{galaxias} provides tools to build Biodiversity Data Packages, which are R
+packages designed to store, document, and share biodiversity information.
+Biodiversity Data Packages are fully compatible with other elements of the R
+package workflow, including \code{devtools} for building, \code{usethis} for adding
+package elements, \code{pkgdown} for converting package contents into webpages.
 
-Can we hijack the package concept to build DwCAs? How would that be different?
+Once a package is built, \code{galaxias} also provides tools to assess
+compatibility of the data with the 'Darwin Core' standard, convert the
+package into a valid 'Darwin Core Archive', and publish that archive to a
+data infrastructure (though currently only the Atlas of Living Australia is
+formally supported).
 
 \code{galaxias} is named for a genus of Australian freshwater fish.
 }
+\section{\code{usethis} extensions}{
+
+
+These functions can be identified as being structurally similar to \code{usethis}
+functions, but with an added \verb{_data_} infix.
+\itemize{
+\item \code{\link[=create_data_package]{create_data_package()}} to create a new Biodiversity Data Package
+\item \code{\link[=use_data_citation]{use_data_citation()}} to give advice on citing your package
+\item \code{\link[=use_data_description]{use_data_description()}} update the description to standard for this package type
+\item \code{\link[=use_data_examples]{use_data_examples()}} build \code{data-raw} and \code{data} folders, with example code
+\item \code{\link[=use_data_metadata]{use_data_metadata()}} add a metadata statement to \code{vignettes} folder
+\item \code{\link[=use_data_readme]{use_data_readme()}} replace the standard README.Rmd with a type-specific version
+\item \code{\link[=use_data_schema]{use_data_schema()}} not implemented yet
+\item \code{\link[=use_data_tests]{use_data_tests()}} add tests for conformance with Darwin Core standards
+}
+}
+
 \section{Object classes}{
 
 \code{galaxias} supports the following object classes:
@@ -34,7 +53,7 @@ All can be created using the \code{galaxias()} function
 
 \strong{Setting up an archive}
 \itemize{
-\item \code{\link[=dwca]{dwca()}} create pipable \code{dwca} objects
+\item \code{\link[=dwca]{dwca()}} create pipeable \code{dwca} objects
 \item \code{\link[=add_occurrences]{add_occurrences()}}, \code{\link[=add_events]{add_events()}}, \code{\link[=add_multimedia]{add_multimedia()}}, \code{\link[=add_metadata]{add_metadata()}} to add data to \code{dwca} objects
 \item \code{\link[=read_dwca]{read_dwca()}}, \code{\link[=write_dwca]{write_dwca()}}
 }
