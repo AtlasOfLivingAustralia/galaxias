@@ -15,9 +15,9 @@ knitr::opts_chunk$set(
 
 # `PKGNAME`
 
-The goal of `PKGNAME` is to share biodiversity data as openly as possible. It is
-both an *R package* that you can install in your R session, and a 
-*Biodiversity data package* that can be converted to a **Darwin Core Archive** 
+The goal of `PKGNAME` is to share biodiversity data as openly as 
+possible. It is both an *R package* that you can install in your R session, and 
+a *Biodiversity data package* that can be converted to a **Darwin Core Archive** 
 for wider sharing or publishing.
 
 For advice on developing R packages, we recommend the 

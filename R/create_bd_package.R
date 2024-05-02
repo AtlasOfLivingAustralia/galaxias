@@ -4,31 +4,27 @@
 #' storing biodiversity data, ideally according to the Darwin Core Standard. 
 #' Based heavily on usethis::create_tidy_package
 #' @param path A path to the directory to create
-#' @importFrom rlang is_interactive
-#' @importFrom usethis create_package
+#' @importFrom usethis create_project
 #' @importFrom usethis local_project
 #' @importFrom usethis proj_activate
 #' @importFrom usethis proj_get
-#' @importFrom usethis use_mit_license
-#' @importFrom usethis use_testthat
-#' @importFrom usethis use_tidy_description
 #' @export
-create_bd_package <- function(path,
-                              copyright_holder = NULL
+create_bd_package <- function(path
                               # open = rlang::is_interactive() # not used yet
                               ){
-  create_package(path, 
+  create_project(path, 
                  rstudio = TRUE, # argument needs to be controllable by user
                  open = FALSE)
-  local_project(path)
-  use_mit_license(copyright_holder)
-  use_bd_readme(package = path) # ideally should detect package name without args
+  local_project(path, force = TRUE)
   use_bd_description()
-  use_bd_citation(package = path) # ideally should detect package name without args
+  use_bd_readme()
   use_bd_testthat() # `/tests`
   use_bd_data_raw() # `/data-raw`
-  # note: no `use_bd_data()` as this is synonymous with `usethis::use_data()`
   use_bd_metadata() # `/vignettes`
+  ## not called here:
+  # use_bd_citation() # optional
+  # use_schema() # requires user to add data before this does anything useful
+  # use_bd_data() # not written, as synonymous with `usethis::use_data()`
   proj_activate(proj_get()) # launch
 }
 

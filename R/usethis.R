@@ -1,6 +1,7 @@
 #' Add CITATION file to a Biodiversity Data Package
+#' @importFrom pkgload pkg_name
 #' @export
-use_bd_citation <- function(package){
+use_bd_citation <- function(){
   # add `inst` with citation file
   if(!file.exists("inst")){
     dir.create("inst") 
@@ -8,7 +9,7 @@ use_bd_citation <- function(package){
   system.file("./inst/data_package_files/CITATION", 
               package = "galaxias") |>
     readLines() |>
-    gsub("`PKGNAME`", package, x = _) |>
+    gsub("`PKGNAME`", pkg_name(), x = _) |>
     writeLines(con = "inst/CITATION")
 }
 
@@ -59,12 +60,13 @@ use_bd_metadata <- function(){
 #' This function adds `galaxias`-specific `README.Rmd` instead of the `usethis` 
 #' default. This requires replacing placeholder text with the supplied package 
 #' name (`package`).
+#' @importFrom pkgload pkg_name
 #' @export
-use_bd_readme <- function(package){
+use_bd_readme <- function(){
   system.file("./inst/data_package_files/README.Rmd", 
               package = "galaxias") |>
     readLines() |>
-    gsub("`PKGNAME`", package, x = _) |>
+    gsub("`PKGNAME`", pkg_name(), x = _) |>
     writeLines(con = "README.Rmd")
 }
 

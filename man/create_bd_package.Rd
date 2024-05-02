@@ -4,7 +4,7 @@
 \alias{create_bd_package}
 \title{Create a new Biodiversity Data Package}
 \usage{
-create_bd_package(path, copyright_holder = NULL)
+create_bd_package(path)
 }
 \arguments{
 \item{path}{A path to the directory to create}

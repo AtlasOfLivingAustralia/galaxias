@@ -4,7 +4,7 @@
 \alias{use_bd_citation}
 \title{Add CITATION file to a Biodiversity Data Package}
 \usage{
-use_bd_citation(package)
+use_bd_citation()
 }
 \description{
 Add CITATION file to a Biodiversity Data Package

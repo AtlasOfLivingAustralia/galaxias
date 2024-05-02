@@ -4,7 +4,7 @@
 \alias{use_bd_readme}
 \title{Add README.Rmd to a Biodiversity Data Package}
 \usage{
-use_bd_readme(package)
+use_bd_readme()
 }
 \description{
 This function adds \code{galaxias}-specific \code{README.Rmd} instead of the \code{usethis}
