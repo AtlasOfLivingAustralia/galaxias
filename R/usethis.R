@@ -16,22 +16,13 @@ use_bd_citation <- function(package){
 #' 
 #' add `usethis` to SUGGESTS (not DEPENDS, because code is only in data-raw)
 #' add any packages mentioned in `data_manipulation_script.R` to SUGGESTS
-#' @importFrom usethis use_tidy_description
+#' @importFrom usethis use_description
 #' @export
 use_bd_description <- function(){
-  use_tidy_description()
-  description <- readLines("DESCRIPTION")
-  suggests_row <- which(grepl("^Suggests:", description))
-  c(
-    description[seq_len(suggests_row)],
-    "    dplyr,",
-    "    galaxias,",
-    "    readr,",
-    "    tibble,",
-    "    usethis,",
-    description[seq(suggests_row + 1, length(description))]
-  ) |>
-    writeLines(con = "DESCRIPTION")
+  use_description(fields = list(
+    "Title" = "Title of this Data Package (One Line, Title Case)",
+    "Description" = "Description of this data package (one paragraph).",
+    "Suggests" = "dplyr,galaxias,readr,tibble,usethis"))
 }
 
 #' Add data folders to a Biodiversity Data Package
