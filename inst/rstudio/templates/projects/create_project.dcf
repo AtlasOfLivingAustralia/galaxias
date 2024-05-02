@@ -1,3 +1,3 @@
-Binding: create_data_package
+Binding: create_bd_package
 Title: Create Biodiversity Data Package with galaxias
 OpenFiles: data-raw/data_manipulation_script.R
