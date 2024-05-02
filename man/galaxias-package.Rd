@@ -9,8 +9,9 @@
 \code{galaxias} provides tools to build Biodiversity Data Packages, which are R
 packages designed to store, document, and share biodiversity information.
 Biodiversity Data Packages are fully compatible with other elements of the R
-package workflow, including \code{devtools} for building, \code{usethis} for adding
-package elements, \code{pkgdown} for converting package contents into webpages.
+package workflow, including \code{devtools} for handling your package-buidling
+workflow, \code{usethis} for adding package elements, \code{pkgdown} for displaying
+package contents as webpages.
 
 Once a package is built, \code{galaxias} also provides tools to assess
 compatibility of the data with the 'Darwin Core' standard, convert the
@@ -20,57 +21,59 @@ formally supported).
 
 \code{galaxias} is named for a genus of Australian freshwater fish.
 }
-\section{\code{usethis} extensions}{
-
-
-These functions can be identified as being structurally similar to \code{usethis}
-functions, but with an added \verb{_data_} infix.
-\itemize{
-\item \code{\link[=create_data_package]{create_data_package()}} to create a new Biodiversity Data Package
-\item \code{\link[=use_data_citation]{use_data_citation()}} to give advice on citing your package
-\item \code{\link[=use_data_description]{use_data_description()}} update the description to standard for this package type
-\item \code{\link[=use_data_examples]{use_data_examples()}} build \code{data-raw} and \code{data} folders, with example code
-\item \code{\link[=use_data_metadata]{use_data_metadata()}} add a metadata statement to \code{vignettes} folder
-\item \code{\link[=use_data_readme]{use_data_readme()}} replace the standard README.Rmd with a type-specific version
-\item \code{\link[=use_data_schema]{use_data_schema()}} not implemented yet
-\item \code{\link[=use_data_tests]{use_data_tests()}} add tests for conformance with Darwin Core standards
-}
-}
-
-\section{Object classes}{
-
-\code{galaxias} supports the following object classes:
-\itemize{
-\item \code{dwc_a} Darwin Core Archive objects
-\item \code{dwc_df} data frames to be checked against the Darwin Core standard
-\item \code{dwc_xml} xml objects to be checked against the Darwin Core standard
-}
-
-All can be created using the \code{galaxias()} function
-}
-
 \section{Functions}{
 
-\strong{Setting up an archive}
+\strong{Directory & file type manipulation}
 \itemize{
-\item \code{\link[=dwca]{dwca()}} create pipeable \code{dwca} objects
-\item \code{\link[=add_occurrences]{add_occurrences()}}, \code{\link[=add_events]{add_events()}}, \code{\link[=add_multimedia]{add_multimedia()}}, \code{\link[=add_metadata]{add_metadata()}} to add data to \code{dwca} objects
-\item \code{\link[=read_dwca]{read_dwca()}}, \code{\link[=write_dwca]{write_dwca()}}
+\item \code{\link[=create_bd_package]{create_bd_package()}} to create a new Biodiversity Data Package
+\item \code{\link[=build_dwca]{build_dwca()}} convert a Biodiversity Data package to a Darwin Core Archive (DwCA) - NOT IMPLEMENTED YET
+\item \code{\link[=build_bd_package]{build_bd_package()}} convert a DwCA to a Biodiversity Data Package
+\item \code{\link[=read_md]{read_md()}} read a markdown file into R as xml
+\item \code{\link[=write_md]{write_md()}} convert an xml document in the workspace to a markdown file
 }
 
-\strong{Data handling}
+\strong{Add content to Biodiversity Data Packages}
+
+These functions are structurally similar to \code{usethis} functions, but with an
+added \verb{_bd_} infix (where \code{bd} stands for \verb{biodiversity data}).
 \itemize{
-\item \code{\link[=build_random_identifier]{build_random_identifier()}}, \code{\link[=build_composite_identifier]{build_composite_identifier()}} uuids
-\item \code{\link[=get_metadata_template]{get_metadata_template()}}, \code{\link[=get_metadata_example]{get_metadata_example()}} get example metadata in xml
-\item \code{\link[=read_md]{read_md()}}, \code{\link[=write_md]{write_md()}} to convert between markdown and xml
+\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your package
+\item \code{\link[=use_bd_description]{use_bd_description()}} update the description to standard for this package type
+\item \code{\link[=use_bd_examples]{use_bd_examples()}} build \code{data-raw} folder, with example code
+\item \code{\link[=use_bd_metadata]{use_bd_metadata()}} add a metadata statement to \code{vignettes} folder
+\item \code{\link[=use_bd_readme]{use_bd_readme()}} replace the standard README.Rmd with a type-specific version
+\item \code{\link[=use_bd_schema]{use_bd_schema()}} INCOMPLETE
+\item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
+}
+
+\strong{Add Darwin Core fields to an existing data.frame}
+
+These functions assist with populating specific Darwin Core fields.
+Q: should these have \code{use_} prefix? \code{add_}?
+\itemize{
+\item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
+\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
+\item use_eventDate
+\item use_decimalLatitude()
+\item use_decimalLongtiude()
+\item etc.
+\item \code{\link[=dwc_fields]{dwc_fields()}} NOT IMPLEMENTED YET, but would be useful e.g. \code{df |> select(any_of(dwc_fields()))}
+}
+
+\strong{testthat integration}
+
+Again, syntax and utility not locked down yet. Example code in \code{testthat.R}
+\itemize{
+\item \code{\link[=test_metadata]{test_metadata()}} check xml metadata is valid using GBIF (or just call in \code{vignettes}?)
+\item \code{\link[=skip_dwc]{skip_dwc()}} report only on DwC objects and fields that are actually present
 }
 
 \strong{Checking and publication}
+
+NOTE: these APIs do not function (yet). JWT access required.
 \itemize{
-\item \code{\link[=build]{build()}} build a \code{dwca} into a zip file
-\item \code{\link[=test]{test()}} run local tests on an archive
-\item \code{\link[=check]{check()}} check a \code{dwca} conforms to archive-level standards
-\item \code{\link[=publish]{publish()}} send your data to the ALA for publication
+\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API
+\item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication
 }
 }
 
@@ -84,9 +87,7 @@ If you have any questions, comments or suggestions, please email
 Authors:
 \itemize{
   \item Shandiya Balasubramanium \email{shandiya.balasubramanium@csiro.au}
-  \item Fonti Kar \email{fonti.kar@csiro.au}
   \item Dax Kellie \email{dax.kellie@csiro.au}
-  \item Andrew Schwenke \email{andrew.schwenke@csiro.au}
 }
 
 }

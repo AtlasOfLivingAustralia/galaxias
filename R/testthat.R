@@ -1,10 +1,21 @@
+# NOTE: This code is useful, but not yet well-integrated with the rest of the
+# package. To be truly useful it should probably be called within `testthat`
+# code, somehow. Perhaps add `testthat` functions here and call them within 
+# the users' BDP?
+
+# add function to skip non-required checks, e.g.
+# if relevant object not present (e.g. events, occurrences)
+# if object present, but field is not (e.g. basisOfRecord)
+# if test requires to be online, but you aren't (e.g. check_metadata, below)
+## skip_dwc <- function(){}
+
 #' Check that a supplied metadata statement is valid according to GBIF schema
 #' @param metadata xml object representing metadata
 #' @return A tibble showing parsed errors
 #' @importFrom xml2 read_xml
 #' @noRd
 #' @keywords Internal
-check_metadata <- function(metadata) {
+test_metadata <- function(metadata) {
   
   # 1. validate against "./data-raw/eml-gbif-profile.xsd" with xml2::xml_validate()
   validator <- xml_validate(

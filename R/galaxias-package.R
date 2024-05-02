@@ -4,8 +4,9 @@
 #' `galaxias` provides tools to build Biodiversity Data Packages, which are R 
 #' packages designed to store, document, and share biodiversity information. 
 #' Biodiversity Data Packages are fully compatible with other elements of the R 
-#' package workflow, including `devtools` for building, `usethis` for adding 
-#' package elements, `pkgdown` for converting package contents into webpages.
+#' package workflow, including `devtools` for handling your package-buidling
+#' workflow, `usethis` for adding package elements, `pkgdown` for displaying 
+#' package contents as webpages.
 #' 
 #' Once a package is built, `galaxias` also provides tools to assess 
 #' compatibility of the data with the 'Darwin Core' standard, convert the 
@@ -20,47 +21,54 @@
 #' @references If you have any questions, comments or suggestions, please email
 #' [support@ala.org.au](mailto:support@ala.org.au).
 #'
-#' @section `usethis` extensions:
-#' 
-#' These functions can be identified as being structurally similar to `usethis`
-#' functions, but with an added `_data_` infix.
-#'
-#'   * [create_data_package()] to create a new Biodiversity Data Package
-#'   * [use_data_citation()] to give advice on citing your package
-#'   * [use_data_description()] update the description to standard for this package type
-#'   * [use_data_examples()] build `data-raw` and `data` folders, with example code
-#'   * [use_data_metadata()] add a metadata statement to `vignettes` folder
-#'   * [use_data_readme()] replace the standard README.Rmd with a type-specific version
-#'   * [use_data_schema()] not implemented yet
-#'   * [use_data_tests()] add tests for conformance with Darwin Core standards
-#'
-#' @section Object classes:
-#' `galaxias` supports the following object classes:
-#' 
-#'   * `dwc_a` Darwin Core Archive objects
-#'   * `dwc_df` data frames to be checked against the Darwin Core standard
-#'   * `dwc_xml` xml objects to be checked against the Darwin Core standard
-#'   
-#' All can be created using the `galaxias()` function
-#' 
-#' @keywords internal
 #' @section Functions:
-#' **Setting up an archive**
+#' **Directory & file type manipulation**
 #'
-#'   * [dwca()] create pipeable `dwca` objects
-#'   * [add_occurrences()], [add_events()], [add_multimedia()], [add_metadata()] to add data to `dwca` objects
-#'   * [read_dwca()], [write_dwca()] 
-#'   
-#' **Data handling**
-#'  
-#'   * [build_random_identifier()], [build_composite_identifier()] uuids
-#'   * [get_metadata_template()], [get_metadata_example()] get example metadata in xml
-#'   * [read_md()], [write_md()] to convert between markdown and xml
+#'    * [create_bd_package()] to create a new Biodiversity Data Package
+#'    * [build_dwca()] convert a Biodiversity Data package to a Darwin Core Archive (DwCA) - NOT IMPLEMENTED YET
+#'    * [build_bd_package()] convert a DwCA to a Biodiversity Data Package
+#'    * [read_md()] read a markdown file into R as xml
+#'    * [write_md()] convert an xml document in the workspace to a markdown file
 #'    
-#'  **Checking and publication**
-#'    * [build()] build a `dwca` into a zip file
-#'    * [test()] run local tests on an archive
-#'    * [check()] check a `dwca` conforms to archive-level standards
-#'    * [publish()] send your data to the ALA for publication
+#' **Add content to Biodiversity Data Packages**
 #' 
+#' These functions are structurally similar to `usethis` functions, but with an
+#' added `_bd_` infix (where `bd` stands for `biodiversity data`).
+#'
+#'   * [use_bd_citation()] to give advice on citing your package
+#'   * [use_bd_description()] update the description to standard for this package type
+#'   * [use_bd_examples()] build `data-raw` folder, with example code
+#'   * [use_bd_metadata()] add a metadata statement to `vignettes` folder
+#'   * [use_bd_readme()] replace the standard README.Rmd with a type-specific version
+#'   * [use_bd_schema()] INCOMPLETE
+#'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
+#'   
+#' **Add Darwin Core fields to an existing data.frame**
+#'  
+#'  These functions assist with populating specific Darwin Core fields.
+#'  Q: should these have `use_` prefix? `add_`?
+#'  
+#'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
+#'   * [use_basisOfRecord()] add a basisOfRecord field
+#'   * use_eventDate
+#'   * use_decimalLatitude()
+#'   * use_decimalLongtiude()
+#'   * etc.
+#'   * [dwc_fields()] NOT IMPLEMENTED YET, but would be useful e.g. `df |> select(any_of(dwc_fields()))`
+#'  
+#'  **testthat integration**
+#'  
+#'  Again, syntax and utility not locked down yet. Example code in `testthat.R`
+#'  
+#'   * [test_metadata()] check xml metadata is valid using GBIF (or just call in `vignettes`?)
+#'   * [skip_dwc()] report only on DwC objects and fields that are actually present
+#'   
+#'  **Checking and publication**
+#'  
+#'  NOTE: these APIs do not function (yet). JWT access required.
+#'  
+#'   * [validate_dwca()] check your archive via the ALA validate API
+#'   * [publish_dwca()] send your data to the ALA for publication
+#'   
+#' @keywords internal
 "_PACKAGE"

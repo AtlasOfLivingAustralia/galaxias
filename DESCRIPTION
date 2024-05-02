@@ -11,35 +11,26 @@ Authors@R:
              family = "Balasubramanium",
              email = "shandiya.balasubramanium@csiro.au",
              role = c("aut")),
-      person(given = "Fonti",
-             family = "Kar",
-             email = "fonti.kar@csiro.au",
-             role = c("aut")),
       person(given = "Dax",
              family = "Kellie",
              email = "dax.kellie@csiro.au",
-             role = c("aut")),
-      person(given = "Andrew",
-             family = "Schwenke",
-             email = "andrew.schwenke@csiro.au",
              role = c("aut")))
 Description: Simple tools for converting data into DwC format.
 Depends: 
   R (>= 4.1.0)
 Imports:
   cli,
+  devtools,
   dplyr,
   glue,
   httr2,
-  pointblank,
+  pkgload,
   readr,
   rlang,
   snakecase,
-  stringdist,
   stringr,
   tibble,
   usethis,
-  uuid,
   xml2,
   zip
 Suggests:

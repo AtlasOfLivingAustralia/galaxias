@@ -1,6 +1,6 @@
 #' Add CITATION file to a Biodiversity Data Package
 #' @export
-use_data_citation <- function(package){
+use_bd_citation <- function(package){
   # add `inst` with citation file
   if(!file.exists("inst")){
     dir.create("inst") 
@@ -18,7 +18,7 @@ use_data_citation <- function(package){
 #' add any packages mentioned in `data_manipulation_script.R` to SUGGESTS
 #' @importFrom usethis use_tidy_description
 #' @export
-use_data_description <- function(){
+use_bd_description <- function(){
   use_tidy_description()
   description <- readLines("DESCRIPTION")
   suggests_row <- which(grepl("^Suggests:", description))
@@ -39,12 +39,9 @@ use_data_description <- function(){
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields, then save data out to `data` folder 
 #' @export
-use_data_examples <- function(){
+use_bd_data_raw <- function(){
   if(!file.exists("data-raw")){
     dir.create("data-raw") 
-  }
-  if(!file.exists("data")){
-    dir.create("data") # populated by the user; but is where scripts point to from data-raw
   }
   system.file("./inst/data_package_files/data_manipulation_script.R", 
               package = "galaxias") |>
@@ -53,8 +50,10 @@ use_data_examples <- function(){
 }
 
 #' Add a metadata statement to a Biodiversity Data Package
+#' 
+#' Example metadata statements can be browsed at https://collections.ala.org.au
 #' @export
-use_data_metadata <- function(){
+use_bd_metadata <- function(){
   if(!file.exists("vignettes")){
     dir.create("vignettes") 
   }
@@ -70,7 +69,7 @@ use_data_metadata <- function(){
 #' default. This requires replacing placeholder text with the supplied package 
 #' name (`package`).
 #' @export
-use_data_readme <- function(package){
+use_bd_readme <- function(package){
   system.file("./inst/data_package_files/README.Rmd", 
               package = "galaxias") |>
     readLines() |>
@@ -80,7 +79,7 @@ use_data_readme <- function(package){
 
 #' Add a schema file to a Biodiversity Data Package
 #' @export
-use_data_schema <- function(){
+use_bd_schema <- function(){
   # this is tricky, as it needs to find stored data, load it, and map it
   # ergo it can't be run in `create_data_package()`,
   # but should be easy otherwise
@@ -90,7 +89,7 @@ use_data_schema <- function(){
 #' Add Darwin Core tests to a Biodiversity Data Package
 #' @importFrom usethis use_testthat
 #' @export
-use_data_tests <- function(){
+use_bd_testthat <- function(){
   use_testthat()
   system.file("./inst/data_package_files/tests",
               package = "galaxias") |>

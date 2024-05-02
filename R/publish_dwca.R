@@ -1,15 +1,16 @@
 #' Publish a DwCA to the ALA
 #' 
 #' Submitted via API
-publish <- function(.dwca = NULL, 
+publish_dwca <- function(path = NULL, 
                     file = NULL){
   # checking
-  if(is.null(.dwca) & is.null(file)){
-    abort("One of `.dwca` or `file` must be supplied")
+  if(is.null(path) & is.null(file)){
+    abort("One of `path` or `file` must be supplied")
   }else{
-    if(!is.null(.dwca)){
-      .dwca <- build(.dwca)
-      post_publish(file = .dwca$path)
+    if(!is.null(path)){
+      # create temporary directory
+      build_dwca(path, out = tempdir)
+      post_publish(file = tempdir)
     }else{
       post_publish(file = file)
     }

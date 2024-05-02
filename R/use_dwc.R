@@ -1,8 +1,27 @@
-#' Create a random identifier column
-#' @name build_identifiers
+#' Use common Darwin Core fields
+#' 
+#' Shortcut methods for adding standard Darwin Core terms
+#' In development, here for example purposes
+#' @name use_dwc
 #' @order 1
+#' @export
+use_occurrenceID <- function(.df,
+                             ...){
+  dots <- list(...)
+  if(length(dots) > 0){
+    .df |>
+      mutate(occurrenceID = build_composite_identifier(.df, dots))
+  }else{
+    .df |>
+      mutate(occurrenceID = build_random_identifier())
+  }
+}
+
+#' Create a random identifier column
 #' @param data A tibble
 #' @param random_seed Integer: seed value (optional)
+#' @keywords Internal
+#' @noRd
 build_random_identifier <- function(data,
                                     random_seed = NULL) {
   # For now just a simple sequential ID for proof of concept
@@ -18,8 +37,8 @@ build_random_identifier <- function(data,
 #' Should be globally unique - it may be necessary to still add a random number?
 #' Depends on what columns are used to build it.
 #' @param cols character vector of columns to use
-#' @rdname build_identifiers
-#' @order 2
+#' @keywords Internal
+#' @noRd
 build_composite_identifier <- function(data,
                                        cols = NULL) {
   # TODO: check if the columns specified are contained / found in the data
@@ -31,4 +50,15 @@ build_composite_identifier <- function(data,
   # TODO: For now just adding a sequential numeric value
   data$occurrenceID <- paste0(concatenated_values, ":", 1:nrow(data))
   return(invisible(data))
+}
+
+
+#' @rdname use_dwc 
+#' @order 2
+use_basisOfRecord <- function(.df,
+                              value = c("humanObservation", 
+                                        "machineObservation")){
+  value <- match.arg(value)
+  .df |>
+    mutate(basisOfRecord = value)
 }
