@@ -13,7 +13,7 @@
 #' @importFrom usethis use_testthat
 #' @importFrom usethis use_tidy_description
 #' @export
-create_bd_package <- function(path, 
+create_bd_package <- function(path,
                               copyright_holder = NULL
                               # open = rlang::is_interactive() # not used yet
                               ){
