@@ -3,7 +3,6 @@
 #' @importFrom usethis use_directory
 #' @export
 use_bd_citation <- function(){
-  # add `inst` with citation file
   use_directory("inst")
   use_template(template = "CITATION",
                save_as = "inst/CITATION",
@@ -15,6 +14,7 @@ use_bd_citation <- function(){
 #' 
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields, then save data out to `data` folder
+#' @importFrom usethis use_description
 #' @importFrom usethis use_directory 
 #' @importFrom usethis use_template
 #' @export
@@ -24,7 +24,8 @@ use_bd_data_raw <- function(){
                save_as = "data-raw/data_manipulation_script.R",
                package = "galaxias")
   # update DESCRIPTION
-  # "Suggests" = "dplyr,galaxias,readr,tibble,usethis"
+  # BUT this overwrites rather than updates the file. Unclear if this is a useful approach
+  # use_description(fields = list("Suggests" = "dplyr,galaxias,readr,tibble,usethis"))
 }
 
 #' Add DESCRIPTION to a Biodiversity Data Package
@@ -60,12 +61,23 @@ use_bd_readme <- function(){
 #' boilerplate tests suitable for checking data. These tests all assume that 
 #' data has been added to the `data` folder following the steps outlined in 
 #' `data_manipulation_script.R` (created using `use_bd_data_raw()`).
+#' @importFrom fs path_package
 #' @importFrom usethis use_testthat
 #' @export
 use_bd_testthat <- function(){
   use_testthat()
-  system.file("./inst/data_package_files/tests",
-              package = "galaxias") |>
-  file.copy(to = "./tests/testthat",
-            recursive = TRUE)
+  # copy whole directory
+  file.copy(from = path_package("galaxias", "inst/templates/testthat"),
+            to = "tests",
+            recursive = TRUE) |>
+    invisible()
+  ## alternative iterative approach
+  # path <- path_package("galaxias", "inst/templates/testthat")
+  # files <- list.files(path)
+  # lapply(files, 
+  #        function(x){use_template(template = glue("tests/{x}"),
+  #                                 save_as = glue("tests/testthat/{x}"),
+  #                                 package = "galaxias")     
+  # }) |>
+  #   invisible()
 }
