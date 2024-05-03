@@ -2,19 +2,23 @@
 % Please edit documentation in R/build_dwca.R
 \name{build_dwca}
 \alias{build_dwca}
-\title{Build a Darwin Core Archive from a \code{dwca} object}
+\title{Build a Darwin Core Archive from a Biodiversity Data Package}
 \usage{
-build_dwca(.dwca, file = "dwca.zip")
+build_dwca(pkg = ".", path = NULL)
 }
 \arguments{
-\item{.dwca}{A \code{dwca} object}
+\item{pkg}{A directory containing a Biodiversity Data Package. Defaults to
+current working directory.}
 
-\item{path}{Name of the zip file}
+\item{path}{(Optional) Path to the resulting zip file. Defaults to \code{NULL},
+indicating that the file should be saved to the current parent directory.}
 }
 \value{
-No object is returned; this function is called for the side-effect
-of building a 'Darwin Core Archive' (i.e. a zip file)
+Called exclusively for the side-effect of building a 'Darwin Core
+Archive' (i.e. a zip file); doesn't return anything to the workspace.
 }
 \description{
-Build a Darwin Core Archive from a \code{dwca} object
+\code{write_dwca()} and \code{read_dwca()} are antinyms. \code{write_dwca()} and \code{build()}
+are synonyms, with the former mirroring \code{readr} syntax and the latter
+\code{devtools} syntax (see also \code{check.dwca()}).
 }

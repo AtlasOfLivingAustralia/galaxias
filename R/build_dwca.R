@@ -1,52 +1,58 @@
-#' Build a Darwin Core Archive from a `dwca` object
-#' @param .dwca A `dwca` object
-#' @param path Name of the zip file
-#' @return No object is returned; this function is called for the side-effect
-#' of building a 'Darwin Core Archive' (i.e. a zip file)
+#' Build a Darwin Core Archive from a Biodiversity Data Package
+#' 
+#' `write_dwca()` and `read_dwca()` are antinyms. `write_dwca()` and `build()` 
+#' are synonyms, with the former mirroring `readr` syntax and the latter 
+#' `devtools` syntax (see also `check.dwca()`).
+#' @param pkg A directory containing a Biodiversity Data Package. Defaults to
+#' current working directory.
+#' @param path (Optional) Path to the resulting zip file. Defaults to `NULL`, 
+#' indicating that the file should be saved to the current parent directory.
+#' @return Called exclusively for the side-effect of building a 'Darwin Core 
+#' Archive' (i.e. a zip file); doesn't return anything to the workspace.
 #' @importFrom glue glue
+#' @importFrom pkgload pkg_name
 #' @importFrom readr write_csv
-#' @importFrom rlang inform
 #' @importFrom xml2 write_xml
 #' @importFrom zip zip
 #' @export
-build_dwca <- function(.dwca,
-                       file = "dwca.zip") {
-  # convert `metadata` slot to be named `eml`
-  nmz <- names(.dwca)
-  if(any(nmz == "metadata")){
-    nmz[nmz == "metadata"] <- "eml"
+build_dwca <- function(pkg = ".",
+                       path = NULL) {
+  # setup
+  check_bd_package_contents()
+  temp_loc <- tempdir() # create file structure in temporary directory
+  package_name <- pkg_name()
+  working_file <- dir.create(glue("{temp_loc}/{package_name}"))
+  # work from within the specified package
+  local_project(pkg) # check only within this package
+  
+  # read information in `data` & export to csv
+  data_files <- list.files("data", pattern = ".rda$")
+  file_prefix <- sub(".rda$", "", data_files)
+  lapply(file_prefix, function(x){
+    df <- readRDS(glue("{x}.rda"))
+    write_csv(df, file = glue("{working_file}/{x}.csv"))
+  }) |>
+    invisible()
+  
+  # read in metadata & and export to eml.xml
+  read_md("./vignettes/metadata.Rmd") |>
+    write_xml(file = glue("{working_file}/eml.xml"))
+  
+  # read in or create schema and export to metadata.xml
+  if(!file.exists("./vignettes/schema.Rmd")){
+    use_bd_schema()
   }
-  names(.dwca) <- nmz
+  read_md("./vignettes/schema.Rmd") |>
+    write_xml(file = glue("{working_file}/metadata.xml"))
   
-  # add `schema`
-  .dwca$meta <- build_schema(.dwca)
-  
-  # create a temporary directory to store objects
-  temp_dir <- tempdir()
-  temp_loc <- Sys.time() |> 
-    as.character() |>
-    gsub("\\s", "-", x = _)
-  store_dir <- glue("{temp_dir}/galaxias-{temp_loc}")
-  dir.create(store_dir)
-  
-  # loop across objects, saving the correct type to the correct name
-  object_names <- names(.dwca)
-  for(i in seq_along(object_names)){
-    obj <- .dwca[[i]]
-    file_name <- object_names[i]
-    if(inherits(obj, "data.frame")){
-      write_csv(obj, file = glue("{store_dir}/{file_name}.csv"))
-    }else{
-      write_xml(obj, file = glue("{store_dir}/{file_name}.xml"))
-    }
+  # save as zip file in requested location
+  if(is.null(path)){
+    path <- getwd() |>
+      sub("/[[:alpha:]]+$", "", x = _)    
   }
-  all_files <- list.files(store_dir)
-  
-  # build zip file
-  inform(glue("Building {file}"))
-  zip::zip(zipfile = file, 
-           files = glue("{store_dir}/{all_files}"),
+  target_file <- glue("{path}/{package_name}.zip")
+  zip::zip(zipfile = target_file, 
+           files = list.files(working_file),
            mode = "cherry-pick")
-  inform("Cleaning temporary directory")
-  unlink(store_dir)
+  unlink(working_file)
 }

@@ -1,0 +1,11 @@
+year <- format(Sys.Date(), "%Y")
+version <- packageDescription("{{{ Project }}}")$Version
+note <- paste("Biodiversity data package version", version, sep = " ")
+
+citHeader("To cite {{{ Project }}} in publications use:")
+
+bibentry(bibtype = "Manual",
+         title = {{{ Project }}},
+         author = c(person("Firstname", "Lastname")),
+         year = year,
+         note = note)

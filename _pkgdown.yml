@@ -6,3 +6,51 @@ template:
     bootswatch: cerulean
 development:
   mode: auto
+navbar:
+  structure:
+    left:
+    - home
+    - quickstart
+    - articles
+    - reference
+    right:
+    - news
+    - github
+  components:
+    quickstart:
+      text: Quick start guide
+      href: articles/quick_start_guide.html
+    articles:
+      text: Articles
+      menu:
+      - text: Mapping to Darwin Core
+        href: articles/Mapping_to_Darwin_Core.html
+      - text: Structure of DwCA
+        href: articles/Structure_of_DwCAs.html
+      - text: Spatial
+        href: articles/spatial.html
+    news:
+      text: News
+      href: news/index.html
+reference:
+- title: Directory & file type manipulation
+  contents: 
+  - create_bd_package
+  - build_dwca
+  - read_md
+  - write_md
+- title: Add content to Biodiversity Data Packages
+  contents:
+  - use_bd_citation
+  - use_bd_data_raw
+  - use_bd_description
+  - use_bd_readme
+  - use_bd_testthat
+- title: Add Darwin Core fields to an existing data.frame
+  contents:
+  - use_occurrenceID
+  - use_basisOfRecord
+- title: Checking and publication
+  contents:
+  - validate_dwca
+  - publish_dwca

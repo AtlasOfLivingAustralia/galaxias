@@ -15,12 +15,7 @@ This vignette discusses some common ways to do this.
 
 ## Darwin Core terms
 Before we start making changes, it would be useful to know what the valid 
-Darwin Core terms are. We can find this out using `tawnydragon::show_terms()` 
-to get the results as a `tibble`, or `galaxias::view_terms()` to see them
-in a Shiny app.
-
-[Add screenshot from `view_terms()` here]
-
+Darwin Core terms are. We can find this out using `dwc_terms()`.
 
 ## Converting a dataset to DwC-compliance
 The most reliable and reproducible way to manipulate data into a Darwin
@@ -116,25 +111,3 @@ This has the added benefit of showing how the atlas in question will
 interpret your provided taxonomic information. This can be useful for 
 taxonomically ambiguous groups where more care may be required to ensure 
 correct interpretation.
-
-## Mapping tools
-`galaxias` provides a set of tools to help you map columns to Darwin Core if 
-you'd like. These are:
-
-- `map_fields_tibble()`: Supply a lookup table to rename columns
-- `map_fields_console()`: Use the console to get recommendations for renaming columns
-- `map_fields_shiny()`: Use a browser to map to Darwin Core terms
-
-See `?map_fields` for more information
-
-
-## Building an archive
-Once you have finished manipulating your dataset, you can pipe it into a 
-`dwca` object using `add_data()`:
-
-```{r}
-archive <- dwca() |>
-  add_data(dwc_df)
-```
-
-Finally, you can add metadata and use `build()`, `check()` or `copy_to()`.
