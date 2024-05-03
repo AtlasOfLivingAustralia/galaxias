@@ -7,6 +7,7 @@
 use_bd_description()
 }
 \description{
-add \code{usethis} to SUGGESTS (not DEPENDS, because code is only in data-raw)
-add any packages mentioned in \code{data_manipulation_script.R} to SUGGESTS
+In a Biodiversity Data Package, the DESCRIPTION file is used to add
+authorship and licencing information, which is then used by \code{build_dwca()}
+to create a metadata statement (in conjunction with README.Rmd)
 }

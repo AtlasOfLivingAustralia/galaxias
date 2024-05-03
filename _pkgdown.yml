@@ -33,17 +33,24 @@ navbar:
       text: News
       href: news/index.html
 reference:
-- title: Setting up an archive
+- title: Directory & file type manipulation
   contents: 
-  - dwca
-  - add_
-- title: Data handling
-  contents:
-  - build_random_identifier
-  - get_metadata_template
+  - create_bd_package
+  - build_dwca
   - read_md
+  - write_md
+- title: Add content to Biodiversity Data Packages
+  contents:
+  - use_bd_citation
+  - use_bd_data_raw
+  - use_bd_description
+  - use_bd_readme
+  - use_bd_testthat
+- title: Add Darwin Core fields to an existing data.frame
+  contents:
+  - use_occurrenceID
+  - use_basisOfRecord
 - title: Checking and publication
   contents:
-  - build
-  - check
-  - publish
+  - validate_dwca
+  - publish_dwca

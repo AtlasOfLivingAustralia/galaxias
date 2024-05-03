@@ -7,5 +7,8 @@
 use_bd_testthat()
 }
 \description{
-Add Darwin Core tests to a Biodiversity Data Package
+This optional first initiates the \code{tests/testthat} folder, then adds a set of
+boilerplate tests suitable for checking data. These tests all assume that
+data has been added to the \code{data} folder following the steps outlined in
+\code{data_manipulation_script.R} (created using \code{use_bd_data_raw()}).
 }

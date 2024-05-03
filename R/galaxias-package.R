@@ -36,11 +36,9 @@
 #' added `_bd_` infix (where `bd` stands for `biodiversity data`).
 #'
 #'   * [use_bd_citation()] to give advice on citing your package
+#'   * [use_bd_data_raw()] build `data-raw` folder, with example code
 #'   * [use_bd_description()] update the description to standard for this package type
-#'   * [use_bd_examples()] build `data-raw` folder, with example code
-#'   * [use_bd_metadata()] add a metadata statement to `vignettes` folder
 #'   * [use_bd_readme()] replace the standard README.Rmd with a type-specific version
-#'   * [use_bd_schema()] INCOMPLETE
 #'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
 #'   
 #' **Add Darwin Core fields to an existing data.frame**
