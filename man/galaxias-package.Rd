@@ -36,11 +36,18 @@ formally supported).
 
 These functions are structurally similar to \code{usethis} functions, but with an
 added \verb{_bd_} infix (where \code{bd} stands for \verb{biodiversity data}).
+
+The following functions are called internally by \code{create_bd_package()}, in
+this order:
 \itemize{
-\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your package
-\item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
 \item \code{\link[=use_bd_description]{use_bd_description()}} update the description to standard for this package type
 \item \code{\link[=use_bd_readme]{use_bd_readme()}} replace the standard README.Rmd with a type-specific version
+\item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
+}
+
+The following functions are optional:
+\itemize{
+\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your package
 \item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
 }
 

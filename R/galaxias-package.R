@@ -35,16 +35,23 @@
 #' These functions are structurally similar to `usethis` functions, but with an
 #' added `_bd_` infix (where `bd` stands for `biodiversity data`).
 #'
-#'   * [use_bd_citation()] to give advice on citing your package
-#'   * [use_bd_data_raw()] build `data-raw` folder, with example code
+#' The following functions are called internally by `create_bd_package()`, in 
+#' this order:
+#'   
 #'   * [use_bd_description()] update the description to standard for this package type
 #'   * [use_bd_readme()] replace the standard README.Rmd with a type-specific version
+#'   * [use_bd_data_raw()] build `data-raw` folder, with example code
+#'   
+#' The following functions are optional:
+#' 
+#'   * [use_bd_citation()] to give advice on citing your package
 #'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
 #'   
 #' **Add Darwin Core fields to an existing data.frame**
 #'  
 #'  These functions assist with populating specific Darwin Core fields.
 #'  Q: should these have `use_` prefix? `add_`?
+#'  NOTE: should integrate properly with `mutate()` and friends.
 #'  
 #'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
 #'   * [use_basisOfRecord()] add a basisOfRecord field
