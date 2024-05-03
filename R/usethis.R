@@ -66,18 +66,19 @@ use_bd_readme <- function(){
 #' @export
 use_bd_testthat <- function(){
   use_testthat()
-  # copy whole directory
-  file.copy(from = path_package("galaxias", "inst/templates/testthat"),
-            to = "tests",
-            recursive = TRUE) |>
-    invisible()
-  ## alternative iterative approach
-  # path <- path_package("galaxias", "inst/templates/testthat")
-  # files <- list.files(path)
-  # lapply(files, 
-  #        function(x){use_template(template = glue("tests/{x}"),
-  #                                 save_as = glue("tests/testthat/{x}"),
-  #                                 package = "galaxias")     
-  # }) |>
+  # # copy whole directory
+  # file.copy(from = path_package("galaxias", "inst/templates/testthat"),
+  #           to = "tests",
+  #           recursive = TRUE) |>
   #   invisible()
+  ## above fails to find requisite files
+  ## iterative approach
+  path <- path_package("galaxias", "inst/templates/testthat")
+  files <- list.files(path)
+  lapply(files,
+         function(x){use_template(template = glue("testthat/{x}"),
+                                  save_as = glue("tests/testthat/{x}"),
+                                  package = "galaxias")
+  }) |>
+    invisible()
 }
