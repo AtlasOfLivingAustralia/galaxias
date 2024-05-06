@@ -66,12 +66,7 @@ use_bd_readme <- function(){
 #' @export
 use_bd_testthat <- function(){
   use_testthat()
-  files <- list.files(path_package("galaxias", "inst/templates"), 
-                      pattern = "^test-")
-  lapply(files,
-         function(x){use_template(template = x,
-                                  save_as = glue("tests/testthat/{x}"),
-                                  package = "galaxias")
-  }) |>
-    invisible()
+  use_template(template = "test-decimalLatitude_decimalLongitude.R",
+               save_as = "tests/testthat/test-decimalLatitude_decimalLongitude.R",
+               package = "galaxias")
 }
