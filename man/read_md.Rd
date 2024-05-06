@@ -7,7 +7,7 @@
 \usage{
 read_md(file)
 
-write_md(xml, file, title = "Example DwC metadata")
+write_md(xml, file, title = "Title goes here")
 }
 \arguments{
 \item{file}{(string) file name to save text, typically to \code{.md} or \code{.Rmd}}

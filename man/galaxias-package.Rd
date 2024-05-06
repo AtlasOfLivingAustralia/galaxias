@@ -23,38 +23,38 @@ formally supported).
 }
 \section{Functions}{
 
-\strong{Directory & file type manipulation}
-\itemize{
-\item \code{\link[=create_bd_package]{create_bd_package()}} to create a new Biodiversity Data Package
-\item \code{\link[=build_dwca]{build_dwca()}} convert a Biodiversity Data package to a Darwin Core Archive (DwCA) - NOT IMPLEMENTED YET
-\item \code{\link[=build_bd_package]{build_bd_package()}} convert a DwCA to a Biodiversity Data Package
-\item \code{\link[=read_md]{read_md()}} read a markdown file into R as xml
-\item \code{\link[=write_md]{write_md()}} convert an xml document in the workspace to a markdown file
-}
+\strong{Building your project}
 
-\strong{Add content to Biodiversity Data Packages}
-
-These functions are structurally similar to \code{usethis} functions, but with an
-added \verb{_bd_} infix (where \code{bd} stands for \verb{biodiversity data}).
-
-The following functions are called internally by \code{create_bd_package()}, in
-this order:
+The easiest way to get started is to use \code{\link[=create_bd_package]{create_bd_package()}} to create a
+new project with all the required files and folders. Internally,
+\code{\link[=create_bd_package]{create_bd_package()}} calls the following functions:
 \itemize{
 \item \code{\link[=use_bd_description]{use_bd_description()}} update the description to standard for this package type
-\item \code{\link[=use_bd_readme]{use_bd_readme()}} replace the standard README.Rmd with a type-specific version
+\item \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a README.Rmd file with advice for this type of package
 \item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
 }
 
-The following functions are optional:
+Note the syntax here is based on\code{ usethis}. The next step is to add data
+to the \code{data-raw} folder and process it. Once that is complete, the following
+functions are required:
+\itemize{
+\item \code{\link[=use_bd_data]{use_bd_data()}} to create the requisite 'processed' data files
+\item \code{\link[=use_bd_metadata]{use_bd_metadata()}} to create a metadata statement using \code{DESCRIPTION} as a basis
+\item \code{\link[=use_bd_schema]{use_bd_schema()}} to create a schema based on objects in the \code{data} folder
+}
+
+Finally, the following functions are optional:
 \itemize{
 \item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your package
 \item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
+\item \code{\link[=use_bd_vignette]{use_bd_vignette()}} add a vignette that reports on basic stats of your package
 }
 
-\strong{Add Darwin Core fields to an existing data.frame}
+\strong{Data manipulation functions}
 
 These functions assist with populating specific Darwin Core fields.
 Q: should these have \code{use_} prefix? \code{add_}?
+NOTE: should integrate properly with \code{mutate()} and friends.
 \itemize{
 \item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
@@ -74,11 +74,16 @@ Again, syntax and utility not locked down yet. Example code in \code{testthat.R}
 }
 
 \strong{Checking and publication}
-
-NOTE: these APIs do not function (yet). JWT access required.
 \itemize{
-\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API
-\item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication
+\item \code{\link[=build_dwca]{build_dwca()}} convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
+\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API (NOT FUNCTIONAL)
+\item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication (NOT FUNCTIONAL)
+}
+
+\strong{Internal Functions}
+\itemize{
+\item \code{\link[=read_md]{read_md()}} read a markdown file into R as xml
+\item \code{\link[=write_md]{write_md()}} convert an xml document in the workspace to a markdown file
 }
 }
 

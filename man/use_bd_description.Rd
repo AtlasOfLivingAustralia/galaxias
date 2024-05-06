@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_description}
 \alias{use_bd_description}
-\title{Add DESCRIPTION to a Biodiversity Data Package}
+\title{Add \code{DESCRIPTION} to a Biodiversity Data Package}
 \usage{
 use_bd_description()
 }

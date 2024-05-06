@@ -10,7 +10,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-`galaxias` is an R package to help users build 'Darwin Core Archives', which
+`galaxias` is an R package to help users build 'Biodiversity Data Packages', 
+which are RStudio projects that store data in a standardised way. These
+packages 
+which
 are the datasets used to populate major biodiversity infrastructures such as 
 the [Atlas of Living Australia (ALA)](https://www.ala.org.au) and the 
 [Global Biodiversity Information Facility (GBIF)](https://gbif.org).

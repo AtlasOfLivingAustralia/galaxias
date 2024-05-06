@@ -2,10 +2,10 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_citation}
 \alias{use_bd_citation}
-\title{Add CITATION file to a Biodiversity Data Package}
+\title{Add \code{CITATION} file to a Biodiversity Data Package}
 \usage{
 use_bd_citation()
 }
 \description{
-Add CITATION file to a Biodiversity Data Package
+Add \code{CITATION} file to a Biodiversity Data Package
 }

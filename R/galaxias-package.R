@@ -22,32 +22,31 @@
 #' [support@ala.org.au](mailto:support@ala.org.au).
 #'
 #' @section Functions:
-#' **Directory & file type manipulation**
+#' **Building your project**
 #'
-#'    * [create_bd_package()] to create a new Biodiversity Data Package
-#'    * [build_dwca()] convert a Biodiversity Data package to a Darwin Core Archive (DwCA) - NOT IMPLEMENTED YET
-#'    * [build_bd_package()] convert a DwCA to a Biodiversity Data Package
-#'    * [read_md()] read a markdown file into R as xml
-#'    * [write_md()] convert an xml document in the workspace to a markdown file
-#'    
-#' **Add content to Biodiversity Data Packages**
-#' 
-#' These functions are structurally similar to `usethis` functions, but with an
-#' added `_bd_` infix (where `bd` stands for `biodiversity data`).
-#'
-#' The following functions are called internally by `create_bd_package()`, in 
-#' this order:
+#' The easiest way to get started is to use [create_bd_package()] to create a  
+#' new project with all the required files and folders. Internally, 
+#' [create_bd_package()] calls the following functions:
 #'   
 #'   * [use_bd_description()] update the description to standard for this package type
-#'   * [use_bd_readme()] replace the standard README.Rmd with a type-specific version
+#'   * [use_bd_readme_rmd()] Add a README.Rmd file with advice for this type of package
 #'   * [use_bd_data_raw()] build `data-raw` folder, with example code
 #'   
-#' The following functions are optional:
+#' Note the syntax here is based on` usethis`. The next step is to add data 
+#' to the `data-raw` folder and process it. Once that is complete, the following 
+#' functions are required:
+
+#'   * [use_bd_data()] to create the requisite 'processed' data files
+#'   * [use_bd_metadata()] to create a metadata statement using `DESCRIPTION` as a basis
+#'   * [use_bd_schema()] to create a schema based on objects in the `data` folder
+#'   
+#' Finally, the following functions are optional:
 #' 
 #'   * [use_bd_citation()] to give advice on citing your package
 #'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
+#'   * [use_bd_vignette()] add a vignette that reports on basic stats of your package
 #'   
-#' **Add Darwin Core fields to an existing data.frame**
+#' **Data manipulation functions**
 #'  
 #'  These functions assist with populating specific Darwin Core fields.
 #'  Q: should these have `use_` prefix? `add_`?
@@ -70,10 +69,13 @@
 #'   
 #'  **Checking and publication**
 #'  
-#'  NOTE: these APIs do not function (yet). JWT access required.
-#'  
-#'   * [validate_dwca()] check your archive via the ALA validate API
-#'   * [publish_dwca()] send your data to the ALA for publication
+#'   * [build_dwca()] convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
+#'   * [validate_dwca()] check your archive via the ALA validate API (NOT FUNCTIONAL)
+#'   * [publish_dwca()] send your data to the ALA for publication (NOT FUNCTIONAL)
 #'   
+#' **Internal Functions**
+#'   * [read_md()] read a markdown file into R as xml
+#'   * [write_md()] convert an xml document in the workspace to a markdown file 
+#'  
 #' @keywords internal
 "_PACKAGE"
