@@ -4,13 +4,22 @@
 \alias{create_bd_package}
 \title{Create a new Biodiversity Data Package}
 \usage{
-create_bd_package(path)
+create_bd_package(
+  path,
+  rstudio = rstudioapi::isAvailable(),
+  open = rlang::is_interactive()
+)
 }
 \arguments{
 \item{path}{A path to the directory to create}
+
+\item{rstudio}{(logical) should we create an RStudio project?}
+
+\item{open}{(logical) should the resulting project be opened?}
 }
 \description{
 Sets up a 'Biodiversity Data Package', which is a modified R package for
 storing biodiversity data, ideally according to the Darwin Core Standard.
-Based heavily on usethis::create_tidy_package
+In practice, this is a modified version of \code{usethis::create_project()},
+and calls that function internally.
 }

@@ -33,24 +33,28 @@ navbar:
       text: News
       href: news/index.html
 reference:
-- title: Directory & file type manipulation
+- title: Building your project
   contents: 
   - create_bd_package
-  - build_dwca
-  - read_md
-  - write_md
-- title: Add content to Biodiversity Data Packages
-  contents:
   - use_bd_citation
+  - use_bd_data
   - use_bd_data_raw
   - use_bd_description
-  - use_bd_readme
+  - use_bd_metadata
+  - use_bd_readme_rmd
+  - use_bd_schema
   - use_bd_testthat
+  - use_bd_vignette
 - title: Add Darwin Core fields to an existing data.frame
   contents:
   - use_occurrenceID
   - use_basisOfRecord
 - title: Checking and publication
   contents:
+  - build_dwca
   - validate_dwca
   - publish_dwca
+- title: Internal functions
+  contents:
+  - read_md
+  - write_md

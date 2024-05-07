@@ -3,6 +3,18 @@
 # code, somehow. Perhaps add `testthat` functions here and call them within 
 # the users' BDP?
 
+#' testthat functions
+#' 
+#' These extend `testthat` for use in `galaxias`. Experimental
+#' @param path (string) path to a file to test for existence
+#' @name testthat
+#' @export
+expect_exists <- function(path){
+  path |>
+    file.exists() |>
+    expect_true()
+}
+
 # add function to skip non-required checks, e.g.
 # if relevant object not present (e.g. events, occurrences)
 # if object present, but field is not (e.g. basisOfRecord)

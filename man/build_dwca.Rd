@@ -18,7 +18,17 @@ Called exclusively for the side-effect of building a 'Darwin Core
 Archive' (i.e. a zip file); doesn't return anything to the workspace.
 }
 \description{
-\code{write_dwca()} and \code{read_dwca()} are antinyms. \code{write_dwca()} and \code{build()}
-are synonyms, with the former mirroring \code{readr} syntax and the latter
-\code{devtools} syntax (see also \code{check.dwca()}).
+Similar to \code{devtools::build()}, but to construct a Darwin Core Archive
+rather than an R package.
+}
+\details{
+This function looks for specific objects in specific places, namely:
+\itemize{
+\item Named objects in the \code{data} folder
+\item Schema and metadata in the \code{inst} folder
+}
+
+If no data are present, or \code{inst/metadata.md} is missing, the function will
+terminate with an error. This does not happen if \code{inst/schema.md} is missing,
+because this can be built automatically using \code{use_bd_schema()}.
 }

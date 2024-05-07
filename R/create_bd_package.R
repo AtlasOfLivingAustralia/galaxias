@@ -2,31 +2,37 @@
 #' 
 #' Sets up a 'Biodiversity Data Package', which is a modified R package for
 #' storing biodiversity data, ideally according to the Darwin Core Standard. 
-#' Based heavily on usethis::create_tidy_package
+#' In practice, this is a modified version of `usethis::create_project()`, 
+#' and calls that function internally.
 #' @param path A path to the directory to create
+#' @param rstudio (logical) should we create an RStudio project?
+#' @param open (logical) should the resulting project be opened?
+#' @importFrom rlang is_interactive
+#' @importFrom rstudioapi isAvailable
 #' @importFrom usethis create_project
 #' @importFrom usethis local_project
 #' @importFrom usethis proj_activate
 #' @importFrom usethis proj_get
 #' @importFrom usethis use_directory
+#' @importFrom withr deferred_clear
 #' @export
-create_bd_package <- function(path
-                              # open = rlang::is_interactive() # not used yet
+create_bd_package <- function(path,
+                              rstudio = rstudioapi::isAvailable(),
+                              open = rlang::is_interactive()
                               ){
   create_project(path, 
-                 rstudio = TRUE, # argument needs to be controllable by user
-                 open = FALSE)
+                 rstudio = rstudio,
+                 open = FALSE) # opening should happen later (if at all)
   local_project(path, force = TRUE)
-  unlink("R", recursive = TRUE) # not strictly necessary, but hightlights that this repo is for data
+  unlink("R", recursive = TRUE)
   use_bd_description()
-  use_bd_readme()
+  use_bd_readme_rmd()
   use_bd_data_raw() # `/data-raw`
   use_directory("data")
-
-  ## useful, but not added for brevity reasons:
-  # use_bd_citation() # optional
-  # use_bd_testthat() # `/tests`
-  # use_bd_metadata() # `/vignettes`
-  
-  proj_activate(proj_get()) # launch
+  if (open) {
+    if (proj_activate(proj_get())) {
+      withr::deferred_clear()
+    }
+  }
+  invisible(proj_get())
 }

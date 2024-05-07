@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_data_raw}
 \alias{use_bd_data_raw}
-\title{Add data-raw folder to a Biodiversity Data Package}
+\title{Add \code{data-raw} folder to a Biodiversity Data Package}
 \usage{
 use_bd_data_raw()
 }

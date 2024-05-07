@@ -4,7 +4,7 @@
 #' `galaxias` provides tools to build Biodiversity Data Packages, which are R 
 #' packages designed to store, document, and share biodiversity information. 
 #' Biodiversity Data Packages are fully compatible with other elements of the R 
-#' package workflow, including `devtools` for handling your package-buidling
+#' package workflow, including `devtools` for handling your package-building
 #' workflow, `usethis` for adding package elements, `pkgdown` for displaying 
 #' package contents as webpages.
 #' 

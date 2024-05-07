@@ -1,8 +1,16 @@
 #' Build a Darwin Core Archive from a Biodiversity Data Package
 #' 
-#' `write_dwca()` and `read_dwca()` are antinyms. `write_dwca()` and `build()` 
-#' are synonyms, with the former mirroring `readr` syntax and the latter 
-#' `devtools` syntax (see also `check.dwca()`).
+#' Similar to `devtools::build()`, but to construct a Darwin Core Archive
+#' rather than an R package.
+#' @details
+#' This function looks for specific objects in specific places, namely:
+#' 
+#'  * Named objects in the `data` folder
+#'  * Schema and metadata in the `inst` folder
+#' 
+#' If no data are present, or `inst/metadata.md` is missing, the function will
+#' terminate with an error. This does not happen if `inst/schema.md` is missing,
+#' because this can be built automatically using `use_bd_schema()`.
 #' @param pkg A directory containing a Biodiversity Data Package. Defaults to
 #' current working directory.
 #' @param path (Optional) Path to the resulting zip file. Defaults to `NULL`, 

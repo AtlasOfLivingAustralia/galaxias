@@ -1,4 +1,6 @@
 #' Check package directories are correctly specified
+#' 
+#' Called by `build_dwca()`
 #' @importFrom devtools is.package
 #' @importFrom rlang abort
 #' @importFrom usethis local_project

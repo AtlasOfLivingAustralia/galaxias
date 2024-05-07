@@ -27,7 +27,7 @@ use_bd_data <- function(..., overwrite = FALSE){
            overwrite = overwrite)
 }
 
-#' Add data-raw folder to a Biodiversity Data Package
+#' Add `data-raw` folder to a Biodiversity Data Package
 #' 
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields.
@@ -78,7 +78,7 @@ use_bd_metadata <- function(){
 #' @importFrom usethis use_template
 #' @export
 use_bd_readme_rmd <- function(){
-  use_template(template = "package-README",
+  use_template(template = "pkg-README",
                save_as = "README.Rmd",
                data = list("Project" = pkg_name()),
                package = "galaxias")
