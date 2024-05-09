@@ -11,7 +11,7 @@ use_bd_citation <- function(){
                package = "galaxias")
 }
 
-#' Add `data` folder to a Biodiversity Data repository
+#' Add `data` folder to a biodiversity data repository
 #' 
 #' This function is largely synonymous with `usethis::use_data()`, but is 
 #' included here for completeness, and to enforce some defaults that affect 
@@ -27,7 +27,7 @@ use_bd_data <- function(..., overwrite = FALSE){
            overwrite = overwrite)
 }
 
-#' Add `data-raw` folder to a Biodiversity Data repository
+#' Add `data-raw` folder to a biodiversity data repository
 #' 
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields.
@@ -44,7 +44,7 @@ use_bd_data_raw <- function(){
   # Unclear if this is needed
 }
 
-#' Add `DESCRIPTION` to a Biodiversity Data repository
+#' Add `DESCRIPTION` to a biodiversity data repository
 #' 
 #' In a biodiversity data repository, the DESCRIPTION file is used to add 
 #' authorship and licencing information, which is then used by `build_dwca()` 

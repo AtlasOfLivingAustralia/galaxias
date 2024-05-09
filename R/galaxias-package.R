@@ -10,7 +10,7 @@
 #' 'Darwin Core Archive', and publish that archive to a data infrastructure 
 #' (though currently only the Atlas of Living Australia is formally supported).
 #' 
-#' `galaxias` is named for a genus of Australian freshwater fish.
+#' `galaxias` is named for a genus of freshwater fish.
 #' 
 #' @name galaxias-package
 #' @docType package
@@ -48,6 +48,7 @@
 #'  
 #'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
 #'   * [use_basisOfRecord()] add a basisOfRecord field
+#'   * [use_countryCode()]
 #'   * use_eventDate
 #'   * use_decimalLatitude()
 #'   * use_decimalLongtiude()

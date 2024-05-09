@@ -15,7 +15,7 @@ also provides tools to assess compatibility of the data with the
 'Darwin Core Archive', and publish that archive to a data infrastructure
 (though currently only the Atlas of Living Australia is formally supported).
 
-\code{galaxias} is named for a genus of Australian freshwater fish.
+\code{galaxias} is named for a genus of freshwater fish.
 }
 \section{Functions}{
 

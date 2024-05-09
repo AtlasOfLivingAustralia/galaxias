@@ -1,9 +1,12 @@
-#' Use common Darwin Core fields
+#' Add an `occurrenceID` field to a `tibble`
 #' 
-#' Shortcut methods for adding standard Darwin Core terms
-#' In development, here for example purposes
-#' @name use_dwc
-#' @order 1
+#' Every occurrence should have an occurrenceID entry. Ideally these should be 
+#' persistent to avoid being lost in future updates. They should also be 
+#' unique, both within the dataset, and (ideally) across all other datasets.
+#' @param df a `data.frame` or `tibble` that the column should be appended to.
+#' @param ... Optional fields to use as a unique identifier. If multiple are
+#' provided, will be concatenated into a single unique identifier.
+#' @returns A `tibble` with an attached `basisOfRecord` field
 #' @export
 use_occurrenceID <- function(.df,
                              ...){
@@ -50,15 +53,4 @@ build_composite_identifier <- function(data,
   # TODO: For now just adding a sequential numeric value
   data$occurrenceID <- paste0(concatenated_values, ":", 1:nrow(data))
   return(invisible(data))
-}
-
-
-#' @rdname use_dwc 
-#' @order 2
-use_basisOfRecord <- function(.df,
-                              value = c("humanObservation", 
-                                        "machineObservation")){
-  value <- match.arg(value)
-  .df |>
-    mutate(basisOfRecord = value)
 }

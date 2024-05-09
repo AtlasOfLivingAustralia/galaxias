@@ -50,6 +50,7 @@ reference:
   contents:
   - use_occurrenceID
   - use_basisOfRecord
+  - use_countryCode
 - title: Checking and publication
   contents:
   - testthat
