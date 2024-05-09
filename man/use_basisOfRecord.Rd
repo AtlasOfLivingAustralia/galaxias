@@ -9,8 +9,10 @@ use_basisOfRecord(df, value = NULL)
 \arguments{
 \item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 
-\item{value}{what value should this field take? Only accepts camelCase, for
-consistency with field names.}
+\item{value}{what value should this field take? Should be one of
+\code{"humanObservation"}, \code{"machineObservation"}, \code{"livingSpecimen"},
+\code{"preservedSpecimen"}, \code{"fossilSpecimen"} or \code{"materialCitation"}. Only accepts
+camelCase, for consistency with field names.}
 }
 \value{
 A tibble with an attached \code{basisOfRecord} field

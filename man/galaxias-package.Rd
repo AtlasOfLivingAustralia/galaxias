@@ -51,6 +51,7 @@ NOTE: should integrate properly with \code{mutate()} and friends.
 \itemize{
 \item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
+\item \code{\link[=use_countryCode]{use_countryCode()}}
 \item use_eventDate
 \item use_decimalLatitude()
 \item use_decimalLongtiude()
