@@ -1,6 +1,6 @@
 Package: galaxias
 Type: Package
-Title: Create Darwin Core Archives
+Title: Standardise, Document and Share Biodiversity Data
 Version: 0.1.0.9999
 Authors@R:
     c(person(given = "Martin",

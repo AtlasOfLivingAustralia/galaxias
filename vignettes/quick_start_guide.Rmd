@@ -31,6 +31,7 @@ To start a new data project in RStudio, simply click:
 and reopen RStudio for this menu item to appear)
 
 Alternatively, you can use the following function in the console:
+
 ```{r, eval=FALSE}
 library(galaxias)
 create_bd_project("myprojectname")
