@@ -35,6 +35,7 @@ navbar:
 reference:
 - title: Building your project
   contents: 
+  - create_bd_project
   - create_bd_package
   - use_bd_citation
   - use_bd_data

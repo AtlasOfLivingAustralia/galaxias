@@ -4,20 +4,16 @@
 \name{galaxias-package}
 \alias{galaxias}
 \alias{galaxias-package}
-\title{Tools for building and sharing Biodiversity Data Packages}
+\title{Build repositories to share biodiversity data}
 \description{
-\code{galaxias} provides tools to build Biodiversity Data Packages, which are R
-packages designed to store, document, and share biodiversity information.
-Biodiversity Data Packages are fully compatible with other elements of the R
-package workflow, including \code{devtools} for handling your package-building
-workflow, \code{usethis} for adding package elements, \code{pkgdown} for displaying
-package contents as webpages.
+\code{galaxias} provides tools to build repositories optimized to store, document,
+and share biodiversity information.
 
-Once a package is built, \code{galaxias} also provides tools to assess
-compatibility of the data with the 'Darwin Core' standard, convert the
-package into a valid 'Darwin Core Archive', and publish that archive to a
-data infrastructure (though currently only the Atlas of Living Australia is
-formally supported).
+Once the repository is built and populated with biodiversity data, \code{galaxias}
+also provides tools to assess compatibility of the data with the
+'Darwin Core' standard, convert the package into a valid
+'Darwin Core Archive', and publish that archive to a data infrastructure
+(though currently only the Atlas of Living Australia is formally supported).
 
 \code{galaxias} is named for a genus of Australian freshwater fish.
 }
@@ -25,30 +21,27 @@ formally supported).
 
 \strong{Building your project}
 
-The easiest way to get started is to use \code{\link[=create_bd_package]{create_bd_package()}} to create a
-new project with all the required files and folders. Internally,
-\code{\link[=create_bd_package]{create_bd_package()}} calls the following functions:
+There are two functions that you can use to create your workspace:
 \itemize{
-\item \code{\link[=use_bd_description]{use_bd_description()}} update the description to standard for this package type
-\item \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a README.Rmd file with advice for this type of package
-\item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
+\item \code{\link[=create_bd_project]{create_bd_project()}} to create an RStudio project (recommended)
+\item \code{\link[=create_bd_package]{create_bd_package()}} to create an R package (advanced)
 }
 
-Note the syntax here is based on\code{ usethis}. The next step is to add data
-to the \code{data-raw} folder and process it. Once that is complete, the following
-functions are required:
+Alternatively, you can call the following functions to add specific content
+to an existing directory:
 \itemize{
+\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your repository
 \item \code{\link[=use_bd_data]{use_bd_data()}} to create the requisite 'processed' data files
-\item \code{\link[=use_bd_metadata]{use_bd_metadata()}} to create a metadata statement using \code{DESCRIPTION} as a basis
+\item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
+\item \code{\link[=use_bd_description]{use_bd_description()}} add a \code{DESCIRPTION} file
+\item \code{\link[=use_bd_metadata]{use_bd_metadata()}} to create a metadata statement in the home directory
+\item \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a \code{README.Rmd} file with advice for biodiversity data
 \item \code{\link[=use_bd_schema]{use_bd_schema()}} to create a schema based on objects in the \code{data} folder
+\item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
+\item \code{\link[=use_bd_vignette]{use_bd_vignette()}} add a vignette that summarizes data in your repository
 }
 
-Finally, the following functions are optional:
-\itemize{
-\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your package
-\item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
-\item \code{\link[=use_bd_vignette]{use_bd_vignette()}} add a vignette that reports on basic stats of your package
-}
+Note the syntax here is based on\code{ usethis}.
 
 \strong{Data manipulation functions}
 

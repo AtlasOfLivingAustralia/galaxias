@@ -2,12 +2,12 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_description}
 \alias{use_bd_description}
-\title{Add \code{DESCRIPTION} to a Biodiversity Data Package}
+\title{Add \code{DESCRIPTION} to a Biodiversity Data repository}
 \usage{
 use_bd_description()
 }
 \description{
-In a Biodiversity Data Package, the DESCRIPTION file is used to add
+In a biodiversity data repository, the DESCRIPTION file is used to add
 authorship and licencing information, which is then used by \code{build_dwca()}
 to create a metadata statement (in conjunction with README.Rmd)
 }

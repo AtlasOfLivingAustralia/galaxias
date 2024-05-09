@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_data}
 \alias{use_bd_data}
-\title{Add \code{data} folder to a Biodiversity Data Package}
+\title{Add \code{data} folder to a Biodiversity Data repository}
 \usage{
 use_bd_data(..., overwrite = FALSE)
 }

@@ -58,8 +58,7 @@ occurrences <- df |>
          eventDate = glue("{date}T{time}:00Z"),
          taxonRank = "species",
          basisOfRecord = "humanObservation",
-         recordedBy = "Martin Westgate",
-  ) |>
+         recordedBy = "Martin Westgate") |>
   
   # Place columns in a sensible order
   select(occurrenceID, eventDate, decimalLatitude, decimalLongitude,

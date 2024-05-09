@@ -7,6 +7,9 @@
 \usage{
 expect_exists(path)
 }
+\arguments{
+\item{path}{(string) path to a file to test for existence}
+}
 \description{
 These extend \code{testthat} for use in \code{galaxias}. Experimental
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_readme_rmd}
 \alias{use_bd_readme_rmd}
-\title{Add \code{README.Rmd} to a Biodiversity Data Package}
+\title{Add \code{README.Rmd} to a biodiversity data repository}
 \usage{
 use_bd_readme_rmd()
 }

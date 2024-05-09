@@ -1,4 +1,4 @@
-#' Add `CITATION` file to a Biodiversity Data Package
+#' Add `CITATION` file to a biodiversity data repository
 #' @importFrom pkgload pkg_name
 #' @importFrom usethis use_directory
 #' @importFrom usethis use_template
@@ -11,7 +11,7 @@ use_bd_citation <- function(){
                package = "galaxias")
 }
 
-#' Add `data` folder to a Biodiversity Data Package
+#' Add `data` folder to a Biodiversity Data repository
 #' 
 #' This function is largely synonymous with `usethis::use_data()`, but is 
 #' included here for completeness, and to enforce some defaults that affect 
@@ -27,7 +27,7 @@ use_bd_data <- function(..., overwrite = FALSE){
            overwrite = overwrite)
 }
 
-#' Add `data-raw` folder to a Biodiversity Data Package
+#' Add `data-raw` folder to a Biodiversity Data repository
 #' 
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields.
@@ -44,9 +44,9 @@ use_bd_data_raw <- function(){
   # Unclear if this is needed
 }
 
-#' Add `DESCRIPTION` to a Biodiversity Data Package
+#' Add `DESCRIPTION` to a Biodiversity Data repository
 #' 
-#' In a Biodiversity Data Package, the DESCRIPTION file is used to add 
+#' In a biodiversity data repository, the DESCRIPTION file is used to add 
 #' authorship and licencing information, which is then used by `build_dwca()` 
 #' to create a metadata statement (in conjunction with README.Rmd)
 #' @importFrom usethis use_description
@@ -58,7 +58,7 @@ use_bd_description <- function(){
     "Licence" = "`use_ccby_licence()` (recommended), `use_cc0_licence()` or friends to pick a licence appropriate for a data package"))
 }
 
-#' Add a metadata statement to a Biodiversity Data Package
+#' Add a metadata statement to a biodiversity data repository
 #' 
 #' Builds a file called `metadata.md` in the `inst` folder; this folder is 
 #' created if not already present. Partially populated using `DESCRIPTION`.
@@ -69,7 +69,7 @@ use_bd_metadata <- function(){
   build_metadata()
 }
 
-#' Add `README.Rmd` to a Biodiversity Data Package
+#' Add `README.Rmd` to a biodiversity data repository
 #' 
 #' This function adds `galaxias`-specific `README.Rmd` instead of the `usethis` 
 #' default.
@@ -84,7 +84,7 @@ use_bd_readme_rmd <- function(){
                package = "galaxias")
 }
 
-#' Add `schema.md` to a Biodiversity Data Package
+#' Add `schema.md` to a biodiversity data repository
 #' 
 #' Builds a file called `schema.md` in the `inst` folder; this folder is 
 #' created if not already present. The schema is a standard part of Darwin Core 
@@ -96,7 +96,7 @@ use_bd_schema <- function(){
            file = "inst/schema.md")
 }
 
-#' Add Darwin Core tests to a Biodiversity Data Package
+#' Add Darwin Core tests to a biodiversity data repository
 #' 
 #' This optional first initiates the `tests/testthat` folder, then adds a set of 
 #' boilerplate tests suitable for checking data. These tests all assume that 
@@ -113,7 +113,7 @@ use_bd_testthat <- function(){
                package = "galaxias")
 }
 
-#' Add a vignette to report on contents of a Biodiversity Data Package
+#' Add a vignette to report on contents of a biodiversity data repository
 #' 
 #' Still in test, this function builds a report-style vignette so you (and your
 #' users) can see what kind of data is in your package.

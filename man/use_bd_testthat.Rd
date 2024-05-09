@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_testthat}
 \alias{use_bd_testthat}
-\title{Add Darwin Core tests to a Biodiversity Data Package}
+\title{Add Darwin Core tests to a biodiversity data repository}
 \usage{
 use_bd_testthat()
 }

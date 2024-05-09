@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_vignette}
 \alias{use_bd_vignette}
-\title{Add a vignette to report on contents of a Biodiversity Data Package}
+\title{Add a vignette to report on contents of a biodiversity data repository}
 \usage{
 use_bd_vignette()
 }

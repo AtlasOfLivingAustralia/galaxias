@@ -1,18 +1,14 @@
-#' Tools for building and sharing Biodiversity Data Packages
+#' Build repositories to share biodiversity data
 #' 
 #' @description
-#' `galaxias` provides tools to build Biodiversity Data Packages, which are R 
-#' packages designed to store, document, and share biodiversity information. 
-#' Biodiversity Data Packages are fully compatible with other elements of the R 
-#' package workflow, including `devtools` for handling your package-building
-#' workflow, `usethis` for adding package elements, `pkgdown` for displaying 
-#' package contents as webpages.
-#' 
-#' Once a package is built, `galaxias` also provides tools to assess 
-#' compatibility of the data with the 'Darwin Core' standard, convert the 
-#' package into a valid 'Darwin Core Archive', and publish that archive to a 
-#' data infrastructure (though currently only the Atlas of Living Australia is 
-#' formally supported).
+#' `galaxias` provides tools to build repositories optimized to store, document, 
+#' and share biodiversity information. 
+#'  
+#' Once the repository is built and populated with biodiversity data, `galaxias` 
+#' also provides tools to assess compatibility of the data with the 
+#' 'Darwin Core' standard, convert the package into a valid 
+#' 'Darwin Core Archive', and publish that archive to a data infrastructure 
+#' (though currently only the Atlas of Living Australia is formally supported).
 #' 
 #' `galaxias` is named for a genus of Australian freshwater fish.
 #' 
@@ -23,28 +19,26 @@
 #'
 #' @section Functions:
 #' **Building your project**
-#'
-#' The easiest way to get started is to use [create_bd_package()] to create a  
-#' new project with all the required files and folders. Internally, 
-#' [create_bd_package()] calls the following functions:
-#'   
-#'   * [use_bd_description()] update the description to standard for this package type
-#'   * [use_bd_readme_rmd()] Add a README.Rmd file with advice for this type of package
-#'   * [use_bd_data_raw()] build `data-raw` folder, with example code
-#'   
-#' Note the syntax here is based on` usethis`. The next step is to add data 
-#' to the `data-raw` folder and process it. Once that is complete, the following 
-#' functions are required:
-
-#'   * [use_bd_data()] to create the requisite 'processed' data files
-#'   * [use_bd_metadata()] to create a metadata statement using `DESCRIPTION` as a basis
-#'   * [use_bd_schema()] to create a schema based on objects in the `data` folder
-#'   
-#' Finally, the following functions are optional:
 #' 
-#'   * [use_bd_citation()] to give advice on citing your package
+#' There are two functions that you can use to create your workspace:
+#' 
+#'   * [create_bd_project()] to create an RStudio project (recommended)
+#'   * [create_bd_package()] to create an R package (advanced)
+#' 
+#' Alternatively, you can call the following functions to add specific content
+#' to an existing directory:
+#'   
+#'   * [use_bd_citation()] to give advice on citing your repository
+#'   * [use_bd_data()] to create the requisite 'processed' data files
+#'   * [use_bd_data_raw()] build `data-raw` folder, with example code
+#'   * [use_bd_description()] add a `DESCIRPTION` file
+#'   * [use_bd_metadata()] to create a metadata statement in the home directory
+#'   * [use_bd_readme_rmd()] Add a `README.Rmd` file with advice for biodiversity data
+#'   * [use_bd_schema()] to create a schema based on objects in the `data` folder
 #'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
-#'   * [use_bd_vignette()] add a vignette that reports on basic stats of your package
+#'   * [use_bd_vignette()] add a vignette that summarizes data in your repository
+#'   
+#' Note the syntax here is based on` usethis`.
 #'   
 #' **Data manipulation functions**
 #'  

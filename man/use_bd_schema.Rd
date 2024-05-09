@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_schema}
 \alias{use_bd_schema}
-\title{Add \code{schema.md} to a Biodiversity Data Package}
+\title{Add \code{schema.md} to a biodiversity data repository}
 \usage{
 use_bd_schema()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_metadata}
 \alias{use_bd_metadata}
-\title{Add a metadata statement to a Biodiversity Data Package}
+\title{Add a metadata statement to a biodiversity data repository}
 \usage{
 use_bd_metadata()
 }
