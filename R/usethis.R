@@ -69,12 +69,24 @@ use_bd_metadata <- function(){
   build_metadata()
 }
 
-#' Add `README.Rmd` to a biodiversity data repository
+#' Add `README` to a biodiversity data repository
 #' 
-#' This function adds `galaxias`-specific `README.Rmd` instead of the `usethis` 
-#' default.
-#' 
-#' FIXME: add function use_bd_readme_md
+#' This function adds `galaxias`-specific `README` instead of the `usethis` 
+#' default. Note that the two functions deliver quite different content. 
+#' `README.md` is intended as a metadata statement, for *projects* (i.e. same
+#' as `use_bd_metadata()` for packages, but in a different location). 
+#' `README.Rmd` is for describing *packages* and does not have a metadata-like
+#' flavour.
+#' @name use_bd_readme
+#' @importFrom usethis use_template
+#' @export
+use_bd_readme_md <- function(){
+  use_template(template = "project-README",
+               save_as = "README.md",
+               package = "galaxias")
+}
+
+#' @rdname use_bd_readme
 #' @importFrom usethis use_template
 #' @export
 use_bd_readme_rmd <- function(){

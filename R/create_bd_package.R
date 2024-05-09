@@ -34,6 +34,7 @@ create_bd_package <- function(path,
   use_build_ignore("metadata.md")
   use_directory("data")
   use_directory("R")
+  use_bd_testthat()
   if (open) {
     if (proj_activate(proj_get())) {
       withr::deferred_clear()

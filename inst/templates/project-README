@@ -9,7 +9,6 @@ output: github_document
 ## Data Resource
 
 ### Title
-{{{ Title }}}
 
 ### Globally Unique Identifier (GUID)
 
@@ -20,7 +19,6 @@ output: github_document
 ## Description
 
 ### Public Short Description
-{{{ Description }}}
 
 ### Public Description 
 
@@ -46,7 +44,6 @@ output: github_document
 ### Creator
 
 ### License
-{{{ Licence }}}
 
 
 ## Record consumers 

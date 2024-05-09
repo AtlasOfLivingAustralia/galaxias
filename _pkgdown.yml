@@ -23,12 +23,12 @@ navbar:
     articles:
       text: Articles
       menu:
-      - text: Mapping to Darwin Core
-        href: articles/Mapping_to_Darwin_Core.html
-      - text: Structure of DwCA
+      - text: Darwin Core fields
+        href: articles/DwC_fields.html
+      - text: Darwin Core Archives
         href: articles/Structure_of_DwCAs.html
-      - text: Spatial
-        href: articles/spatial.html
+      - text: Biodiversity Data Packages
+        href: articles/packages.html
     news:
       text: News
       href: news/index.html
@@ -52,6 +52,7 @@ reference:
   - use_basisOfRecord
 - title: Checking and publication
   contents:
+  - testthat
   - build_dwca
   - validate_dwca
   - publish_dwca
