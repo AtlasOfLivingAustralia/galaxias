@@ -1,7 +1,7 @@
 ---
 title: "Quick start guide"
 author: "Martin Westgate"
-date: '2024-01-18'
+date: '2024-05-10'
 output:
   rmarkdown::html_vignette
 vignette: >
@@ -38,12 +38,15 @@ create_bd_project("myprojectname")
 ```
 
 If you are using RStudio, both options should launch a new RStudio instance for
-that project, containing the following files:
+that project, which will have the following structure:
 
-  * `.Rproj` file 
-  * `README.md` to supply metadata statement about your project
-  * `data-raw` folder to store raw data, containing a boilerplate `.R` file
-  * an empty `data` folder to place 'processed' data
+```
+├── README.md                        : Darwin Core Metadata statement in .md format
+├── projectname.Rproj                : RStudio project file
+├── data-raw                         : Folder to store source data
+│   └── data_manipulation_script.R   : Script with example code
+└── data                             : Folder to store processed data
+```
 
 It is a good idea to write some basic information in your `README.Rmd` file
 first, as this provides guidance to your users as to what your package contains,

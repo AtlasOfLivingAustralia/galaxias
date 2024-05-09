@@ -52,11 +52,28 @@ create_bd_package("mypackagename")
 If you are using RStudio, both options should launch a new RStudio instance for
 that package, containing the following files:
 
-  * `.Rproj` file 
-  * `README.Rmd`
-  * `.gitignore` and `.RBuildIgnore` files
-  * `DESCRIPTION` and `NAMESPACE` files
-  * `data-raw`, `data`, `R` and `tests/testthat` folders
+```
+├── DESCRIPTION
+├── NAMESPACE
+├── README.md                        : Darwin Core Metadata statement in .md format
+├── projectname.Rproj                : RStudio project file
+├── .gitignore
+├── .RBuildIgnore
+|
+├── licence.md
+├── metadata.md
+|
+├── data-raw                         : Folder to store source data
+│   └── data_manipulation_script.R   : Script with example code
+|
+├── data                             : Folder to store processed data
+├── R
+|
+└── tests
+    ├── testthat.R
+    └── testthat
+        └── test-spatial.R
+```
 
 It is a good idea to write some basic information in your `DESCRIPTION` file
 first, as this provides guidance to your users as to what your package contains,
