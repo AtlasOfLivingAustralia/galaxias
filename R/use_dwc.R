@@ -29,5 +29,5 @@ as_tibble.dwc_df <- function(x, ...){
 print.dwc_df <- function(x, ...){
   as_tibble(x) |>
     print()
-  # add messages here if needed
+  # add messages here on DwC status if needed
 }

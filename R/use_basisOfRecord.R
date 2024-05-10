@@ -27,3 +27,39 @@ use_basisOfRecord <- function(df,
   check_basisOfRecord(result, level = "abort")
   result
 }
+
+
+#' Check basisOfRecord field is valid
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 4
+#' @export
+check_basisOfRecord <- function(df, 
+                                level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(df) == "basisOfRecord")){
+    x <- df$basisOfRecord
+    accepted_values <- c("humanObservation", 
+                         "machineObservation",
+                         "livingSpecimen",
+                         "preservedSpecimen",
+                         "fossilSpecimen",
+                         "materialCitation")
+    x_small <- unique(x) 
+    x_lookup <- x_small %in% accepted_values
+    if(any(!x_lookup)){
+      unexpected_values <- x_small[!x_lookup]
+      unexpected_string <- glue_collapse(glue("`{unexpected_values}`"),
+                                         sep = ", ",
+                                         last = " & ")     
+      accepted_string <- glue_collapse(glue("`{accepted_values}`"),
+                                       sep = ", ",
+                                       last = " or ")
+      bullets <- c(glue("Unexpected value(s) provided for `basisOfRecord`: {unexpected_string}"),
+                   i = glue("Accepted values for `basisOfRecord` are {accepted_string}"))
+      do.call(level, list(message = bullets))
+    }
+  }
+}

@@ -48,10 +48,10 @@ Note the syntax here is based on\code{ usethis}.
 These functions assist with populating specific Darwin Core fields.
 \itemize{
 \item \code{\link[=use_dwc]{use_dwc()}} to give real-time feedback on modifications to your data
-\item \link{mutate.dwc_df} dwc-specific version of \code{dplyr::mutate}
-\item \link{rename.dwc_df} dwc-specific version of \code{dplyr::rename}
-\item \link{rename_with.dwc_df} dwc-specific version of \code{dplyr::rename_with}
-\item \link{select.dwc_df} dwc-specific version of \code{dplyr::select}
+\item \link{mutate.dwc_df}
+\item \link{rename.dwc_df}
+\item \link{rename_with.dwc_df}
+\item \link{select.dwc_df}
 }
 
 The following micro-functions add single DwC fields. They all call their
@@ -61,11 +61,8 @@ functions above, which use \code{level = "inform"}.
 \itemize{
 \item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
-\item \code{\link[=use_countryCode]{use_countryCode()}}
+\item \code{\link[=use_countryCode]{use_countryCode()}} add a countryCode
 \item use_eventDate
-\item use_decimalLatitude()
-\item use_decimalLongtiude()
-\item etc.
 }
 
 Related:
@@ -79,8 +76,15 @@ The wrapper function for checking tibbles for Darwin Core complicance is
 \code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
 \itemize{
 \item \link{check_fields} Checks whether non-DwC fields are present
-\item \link{check_basisOfRecord} Checks whether \code{basisOfRecord} contains valid values
+\item \link{check_occurrenceID}
+\item \link{check_basisOfRecord}
+\item \link{check_decimalLatitude}
+\item \link{check_decimalLongitude}
 }
+
+Note that there are more \code{check_} functions than \code{use_} functions, because
+we expect that users will call e.g. \code{decimalLatitude} via \code{mutate()} or
+\code{rename()} rather than create it from scratch.
 
 \strong{Checking and publication}
 \itemize{

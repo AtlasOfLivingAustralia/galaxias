@@ -54,3 +54,20 @@ build_composite_identifier <- function(data,
   data$occurrenceID <- paste0(concatenated_values, ":", 1:nrow(data))
   return(invisible(data))
 }
+
+#' @rdname check_dwc
+#' @order 3
+#' @export
+check_occurrenceID <- function(df, 
+                               level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(df) == "occurrenceID")){
+    x <- df$occurrenceID
+    unique_check <- length(unique(x)) == length(x)
+    if(!unique_check){
+      bullets <- c(i = "`occurrenceID` field does not contain a unique value in each cell")
+      do.call(level, list(message = bullets))
+    }
+  }
+}

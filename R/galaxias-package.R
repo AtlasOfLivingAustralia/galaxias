@@ -45,10 +45,10 @@
 #'  These functions assist with populating specific Darwin Core fields.
 #'  
 #'   * [use_dwc()] to give real-time feedback on modifications to your data
-#'   * [mutate.dwc_df] dwc-specific version of `dplyr::mutate`
-#'   * [rename.dwc_df] dwc-specific version of `dplyr::rename`
-#'   * [rename_with.dwc_df] dwc-specific version of `dplyr::rename_with`
-#'   * [select.dwc_df] dwc-specific version of `dplyr::select`
+#'   * [mutate.dwc_df]
+#'   * [rename.dwc_df]
+#'   * [rename_with.dwc_df]
+#'   * [select.dwc_df]
 #'   
 #'  The following micro-functions add single DwC fields. They all call their 
 #'  correspondingly named `check_` function internally, but with 
@@ -57,11 +57,8 @@
 #'  
 #'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
 #'   * [use_basisOfRecord()] add a basisOfRecord field
-#'   * [use_countryCode()]
+#'   * [use_countryCode()] add a countryCode
 #'   * use_eventDate
-#'   * use_decimalLatitude()
-#'   * use_decimalLongtiude()
-#'   * etc.
 #'   
 #'  Related:
 #'   
@@ -73,7 +70,15 @@
 #'  [check_dwc()]. It calls the following microfunctions:
 #'  
 #'   * [check_fields] Checks whether non-DwC fields are present
-#'   * [check_basisOfRecord] Checks whether `basisOfRecord` contains valid values
+#'   * [check_occurrenceID]
+#'   * [check_basisOfRecord]
+#'   * [check_decimalLatitude]
+#'   * [check_decimalLongitude]
+#'   
+#'   
+#'  Note that there are more `check_` functions than `use_` functions, because
+#'  we expect that users will call e.g. `decimalLatitude` via `mutate()` or 
+#'  `rename()` rather than create it from scratch.
 #'   
 #'  **Checking and publication**
 #'  

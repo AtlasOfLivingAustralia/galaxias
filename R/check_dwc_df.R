@@ -4,12 +4,16 @@
 #' NOTE: Option to use `bdc` for checks, and/or `pointblank` for running them
 #' @param df A tibble against which checks should be run
 #' @importFrom rlang inform
+#' @param df a tibble containing data
+#' @order 1
 #' @export
 check_dwc <- function(df){
   # dwc_terms
   fields <- colnames(df)
-  available_checks <- c("basisOfRecord",
-                        "decimalLatitude")
+  available_checks <- c("occurrenceID",
+                        "basisOfRecord",
+                        "decimalLatitude",
+                        "decimalLongitude")
   checkable_fields <- fields[fields %in% available_checks]
   check_functions <- c("check_fields",
                        glue("check_{checkable_fields}"))
@@ -25,6 +29,7 @@ check_dwc <- function(df){
 #' @importFrom glue glue_collapse
 #' @importFrom rlang warn
 #' @rdname check_dwc
+#' @order 2
 #' @export
 check_fields <- function(df){
   x <- colnames(df)
@@ -41,52 +46,38 @@ check_fields <- function(df){
   }
 }
 
-#' Check basisOfRecord field is valid
 #' @rdname check_dwc
-#' @param df a tibble containing data
-#' @param level what action should the function take for non-conformance? 
-#' Defaults to `"inform"`.
+#' @order 5
 #' @export
-check_basisOfRecord <- function(df, 
-                                level = c("inform", "warn", "abort")
-                                ){
+check_decimalLatitude <- function(df, 
+                                  level = c("inform", "warn", "abort")
+){
   level <- match.arg(level)
-  if(any(colnames(df) == "basisOfRecord")){
-    x <- df$basisOfRecord
-    accepted_values <- c("humanObservation", 
-                         "machineObservation",
-                         "livingSpecimen",
-                         "preservedSpecimen",
-                         "fossilSpecimen",
-                         "materialCitation")
-    x_small <- unique(x) 
-    x_lookup <- x_small %in% accepted_values
-    if(any(!x_lookup)){
-      unexpected_values <- x_small[!x_lookup]
-      unexpected_string <- glue_collapse(glue("`{unexpected_values}`"),
-                                         sep = ", ",
-                                         last = " & ")     
-      accepted_string <- glue_collapse(glue("`{accepted_values}`"),
-                                       sep = ", ",
-                                       last = " or ")
-      bullets <- c(glue("Unexpected value(s) provided for `basisOfRecord`: {unexpected_string}"),
-                   i = glue("Accepted values for `basisOfRecord` are {accepted_string}"))
-      do.call(level, list(message = bullets))
-    }
-  }
-}
-
-#' check for decimalLatitude
-#' @importFrom rlang warn
-#' @export
-check_decimalLatitude <- function(df){
-  inform("Checking decimalLatitude")
   x <- df$decimalLatitude
   if(!inherits(x, "numeric")){
     inform(c(i = "`decimalLatitude` column is not numeric"))
   }else{
     if(!all(x >= -90 & x <= 90)){
-      inform(c(i = "`decimalLatitude` column contains values outside the range `-90 <= x <= 90`"))
+      bullets <- c(i = "`decimalLatitude` column contains values outside the range `-90 <= x <= 90`")
+      do.call(level, list(message = bullets))
+    }
+  }
+}
+
+#' @rdname check_dwc
+#' @order 6
+#' @export
+check_decimalLongitude <- function(df, 
+                                   level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  x <- df$check_decimalLongitude
+  if(!inherits(x, "numeric")){
+    inform(c(i = "`decimalLongitude` column is not numeric"))
+  }else{
+    if(!all(x >= -180 & x <= 180)){
+      bullets <- c(i = "`decimalLongitude` column contains values outside the range `-180 <= x <= 180`")
+      do.call(level, list(message = bullets))
     }
   }
 }
