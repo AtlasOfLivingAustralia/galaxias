@@ -12,7 +12,8 @@ test_that("use_dwc() changes class, but doesn't affect tibble printing", {
     # use_basisOfRecord("humanObservation") # ok
     use_dwc() |>
     rename(decimalLatitude = latitude) |>
-    mutate(basisOfRecord = "something") # should use `inform`; but not added yet
+    mutate(basisOfRecord = "something", 
+           anewvariable = latitude) # should use `inform`; but not added yet
     # check_dwc() # no errors, as all fields are correctly specified
   # x # prints as a tibble
   expect_s3_class(x, "dwc")

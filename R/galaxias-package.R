@@ -45,11 +45,15 @@
 #'  These functions assist with populating specific Darwin Core fields.
 #'  
 #'   * [use_dwc()] to give real-time feedback on modifications to your data
-#'   * [rename.dwc_df] galaxias-specific version of dplyr::rename
+#'   * [mutate.dwc_df] dwc-specific version of `dplyr::mutate`
+#'   * [rename.dwc_df] dwc-specific version of `dplyr::rename`
+#'   * [rename_with.dwc_df] dwc-specific version of `dplyr::rename_with`
+#'   * [select.dwc_df] dwc-specific version of `dplyr::select`
 #'   
 #'  The following micro-functions add single DwC fields. They all call their 
 #'  correspondingly named `check_` function internally, but with 
-#'  `level = "abort"` set to ensure conformance.
+#'  `level = "abort"` set to ensure conformance. This differs from the `dplyr`
+#'  functions above, which use `level = "inform"`.
 #'  
 #'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
 #'   * [use_basisOfRecord()] add a basisOfRecord field

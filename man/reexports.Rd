@@ -3,8 +3,12 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
+\alias{mutate}
 \alias{rename}
+\alias{rename_with}
+\alias{select}
 \alias{as_tibble}
+\alias{everything}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,8 +16,10 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{rename}}}
+  \item{dplyr}{\code{\link[dplyr]{mutate}}, \code{\link[dplyr]{rename}}, \code{\link[dplyr:rename]{rename_with}}, \code{\link[dplyr]{select}}}
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
+
+  \item{tidyselect}{\code{\link[tidyselect]{everything}}}
 }}
 

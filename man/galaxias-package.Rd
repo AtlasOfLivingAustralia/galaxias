@@ -48,10 +48,16 @@ Note the syntax here is based on\code{ usethis}.
 These functions assist with populating specific Darwin Core fields.
 \itemize{
 \item \code{\link[=use_dwc]{use_dwc()}} to give real-time feedback on modifications to your data
-\item \link{rename.dwc_df} galaxias-specific version of dplyr::rename
+\item \link{mutate.dwc_df} dwc-specific version of \code{dplyr::mutate}
+\item \link{rename.dwc_df} dwc-specific version of \code{dplyr::rename}
+\item \link{rename_with.dwc_df} dwc-specific version of \code{dplyr::rename_with}
+\item \link{select.dwc_df} dwc-specific version of \code{dplyr::select}
 }
 
-The following microfunctions add single fields:
+The following micro-functions add single DwC fields. They all call their
+correspondingly named \code{check_} function internally, but with
+\code{level = "abort"} set to ensure conformance. This differs from the \code{dplyr}
+functions above, which use \code{level = "inform"}.
 \itemize{
 \item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
