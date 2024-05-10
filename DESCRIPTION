@@ -32,6 +32,7 @@ Imports:
   stringr,
   testthat,
   tibble,
+  tidyselect,
   usethis,
   withr,
   xml2,
