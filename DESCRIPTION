@@ -30,7 +30,6 @@ Imports:
   rlang,
   snakecase,
   stringr,
-  testthat,
   tibble,
   tidyselect,
   usethis,

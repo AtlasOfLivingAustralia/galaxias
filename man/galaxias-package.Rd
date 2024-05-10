@@ -46,8 +46,12 @@ Note the syntax here is based on\code{ usethis}.
 \strong{Data manipulation functions}
 
 These functions assist with populating specific Darwin Core fields.
-Q: should these have \code{use_} prefix? \code{add_}?
-NOTE: should integrate properly with \code{mutate()} and friends.
+\itemize{
+\item \code{\link[=use_dwc]{use_dwc()}} to give real-time feedback on modifications to your data
+\item \link{rename.dwc_df} galaxias-specific version of dplyr::rename
+}
+
+The following microfunctions add single fields:
 \itemize{
 \item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
@@ -56,20 +60,26 @@ NOTE: should integrate properly with \code{mutate()} and friends.
 \item use_decimalLatitude()
 \item use_decimalLongtiude()
 \item etc.
+}
+
+Related:
+\itemize{
 \item \code{\link[=dwc_fields]{dwc_fields()}} NOT IMPLEMENTED YET, but would be useful e.g. \code{df |> select(any_of(dwc_fields()))}
 }
 
-\strong{testthat integration}
+\strong{Checking data for DwC compliance}
 
-Again, syntax and utility not locked down yet. Example code in \code{testthat.R}
+The wrapper function for checking tibbles for Darwin Core complicance is
+\code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
 \itemize{
-\item \code{\link[=test_metadata]{test_metadata()}} check xml metadata is valid using GBIF (or just call in \code{vignettes}?)
-\item \code{\link[=skip_dwc]{skip_dwc()}} report only on DwC objects and fields that are actually present
+\item \link{check_fields} Checks whether non-DwC fields are present
+\item \link{check_basisOfRecord} Checks whether \code{basisOfRecord} contains valid values
 }
 
 \strong{Checking and publication}
 \itemize{
 \item \code{\link[=build_dwca]{build_dwca()}} convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
+\item \code{\link[=check_dwca]{check_dwca()}} Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
 \item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API (NOT FUNCTIONAL)
 \item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication (NOT FUNCTIONAL)
 }

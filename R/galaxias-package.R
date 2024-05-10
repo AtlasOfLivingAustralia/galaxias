@@ -43,8 +43,13 @@
 #' **Data manipulation functions**
 #'  
 #'  These functions assist with populating specific Darwin Core fields.
-#'  Q: should these have `use_` prefix? `add_`?
-#'  NOTE: should integrate properly with `mutate()` and friends.
+#'  
+#'   * [use_dwc()] to give real-time feedback on modifications to your data
+#'   * [rename.dwc_df] galaxias-specific version of dplyr::rename
+#'   
+#'  The following micro-functions add single DwC fields. They all call their 
+#'  correspondingly named `check_` function internally, but with 
+#'  `level = "abort"` set to ensure conformance.
 #'  
 #'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
 #'   * [use_basisOfRecord()] add a basisOfRecord field
@@ -53,18 +58,23 @@
 #'   * use_decimalLatitude()
 #'   * use_decimalLongtiude()
 #'   * etc.
+#'   
+#'  Related:
+#'   
 #'   * [dwc_fields()] NOT IMPLEMENTED YET, but would be useful e.g. `df |> select(any_of(dwc_fields()))`
 #'  
-#'  **testthat integration**
+#'  **Checking data for DwC compliance**
 #'  
-#'  Again, syntax and utility not locked down yet. Example code in `testthat.R`
+#'  The wrapper function for checking tibbles for Darwin Core complicance is
+#'  [check_dwc()]. It calls the following microfunctions:
 #'  
-#'   * [test_metadata()] check xml metadata is valid using GBIF (or just call in `vignettes`?)
-#'   * [skip_dwc()] report only on DwC objects and fields that are actually present
+#'   * [check_fields] Checks whether non-DwC fields are present
+#'   * [check_basisOfRecord] Checks whether `basisOfRecord` contains valid values
 #'   
 #'  **Checking and publication**
 #'  
 #'   * [build_dwca()] convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
+#'   * [check_dwca()] Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
 #'   * [validate_dwca()] check your archive via the ALA validate API (NOT FUNCTIONAL)
 #'   * [publish_dwca()] send your data to the ALA for publication (NOT FUNCTIONAL)
 #'   

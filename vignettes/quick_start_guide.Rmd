@@ -75,12 +75,26 @@ df <- tibble(
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-Next, there are a few steps you could follow:
+Next there are a few tricks you can use:
+
+ - `check_dwc()` runs a check on your tibble at any time
+ - `use_dwc()` amends later queries to give you feedback
+ - `use_basisOfRecord()`, `use_eventDate()` et al. give shortcuts to building new fields
+
+You can get some quick advice on this using `check_dwc()`
+
+```{r}
+check_dwc(df)
+```
+
+You can also set `use_dwc()` to get advice *as you build your pipe*, i.e. to 
+perform checks on those objects you amend using e.g. `rename()`:
 
 ```{r, eval=FALSE}
 library(glue)
 
 df <- df |>
+  use_dwc() |> # request notes on your progress
   # Rename columns to Darwin Core names
   rename(decimalLatitude = latitude,
          decimalLongitude = longitude,

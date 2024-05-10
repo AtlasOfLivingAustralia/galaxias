@@ -10,10 +10,13 @@ check_dwc(df)
 
 check_fields(df)
 
-check_basisOfRecord(df)
+check_basisOfRecord(df, level = c("inform", "warn", "abort"))
 }
 \arguments{
-\item{df}{A tibble against which checks should be run}
+\item{df}{a tibble containing data}
+
+\item{level}{what action should the function take for non-conformance?
+Defaults to \code{"inform"}.}
 }
 \description{
 Function to check whether a data.frame or tibble conforms to DwC standards
