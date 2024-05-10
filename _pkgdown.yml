@@ -48,12 +48,24 @@ reference:
   - use_bd_vignette
 - title: Add Darwin Core fields to an existing data.frame
   contents:
+  - use_dwc
+  - mutate.dwc_df
+  - rename.dwc_df
+  - rename_with.dwc_df
+  - select.dwc_df
   - use_occurrenceID
   - use_basisOfRecord
   - use_countryCode
+- title: Check data for DwC compliance
+  contents:
+  - check_dwc
+  - check_fields
+  - check_occurrenceID
+  - check_basisOfRecord
+  - check_decimalLatitude
+  - check_decimalLongitude
 - title: Checking and publication
   contents:
-  - testthat
   - build_dwca
   - validate_dwca
   - publish_dwca
