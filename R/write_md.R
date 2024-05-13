@@ -3,17 +3,14 @@
 #' @param xml A xml object, either imported using `xml2`, or the url or a valid
 #' xml page.
 #' @param file (string) file name to save text, typically to `.md` or `.Rmd`
-#' @importFrom glue glue
-#' @importFrom purrr pluck
 #' @importFrom xml2 as_list
 #' @export
-write_md <- function(xml, file, title = "Example DwC metadata"){
+write_md <- function(xml, file, title = "Title goes here"){
   # add a boilerplate `rmd` header to support rendering
   # note: possible instead to populate header with dataset title, date
   cat(switch_headers(file, title), 
       file = file)
-  md_recurse(x = pluck(as_list(xml), "eml"), 
-             file = file)
+  md_recurse(as_list(xml), file = file)
 }
 
 #' @noRd
@@ -63,9 +60,6 @@ format:
 #' @noRd
 #' @keywords Internal
 md_recurse <- function(x, level = 1, file){
-  if(!inherits(x, "list")){
-    abort("")
-  }
   if(missing(file)){
     abort("`file` is missing, with no default")
   }
@@ -105,5 +99,5 @@ md_recurse <- function(x, level = 1, file){
 # # test with real XML
 # library(xml2)
 # x <- read_xml("https://collections.ala.org.au/ws/eml/dr368")
-# write_md(x, "test.rmd")
+# write_md(pluck(as_list(xml), "eml"), "test.rmd")
 # y <- read_md("test.rmd)

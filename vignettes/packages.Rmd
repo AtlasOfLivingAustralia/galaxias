@@ -1,0 +1,162 @@
+---
+title: "Biodiversity data packages"
+author: "Martin Westgate"
+date: '2024-01-18'
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Biodiversity data packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+library(galaxias)
+```
+
+`galaxias` supports the opportunity to build R *packages* for your data, rather
+than R *projects*. While the differences between projects and packages are
+fairly minor, and you can convert one to the other at any time, packages can be 
+somewhat more involved to build and maintain. Some features that are better 
+aligned to a package workflow include:
+
+  * Ability to load data into your R workspace from GitHub via `{remotes}`
+  * Option for custom functions to support interpreting or visualizing data (in `/R` folder)
+  * Use vignettes to show facets of your data via `usethis::use_vignette()`
+  * Build package websites easily with `{pkgdown}`
+  * Better integration with `{testthat}`
+  
+There is a final advantage to building an R package; you can submit it to CRAN.
+CRAN have a separate set of requirements that, while entirely possible to meet 
+with a biodiversity data package, are not the focus of this tutorial. We suggest 
+you read the 
+[CRAN Repository Policy](https://cran.r-project.org/web/packages/policies.html) 
+if you require further information.
+
+
+## Start a new data package
+
+To start a repository in RStudio, simply click:
+
+`File` > `New Project` > `New Directory` > `Biodiversity Data Package using galaxias` 
+
+(Note: if this is your first time installing `galaxias`, you will need to close 
+and reopen RStudio for this menu item to appear)
+
+Alternatively, you can use the following function in the console:
+```{r, eval=FALSE}
+library(galaxias)
+create_bd_package("mypackagename")
+```
+
+If you are using RStudio, both options should launch a new RStudio instance for
+that package, containing the following files:
+
+```
+├── DESCRIPTION
+├── NAMESPACE
+├── README.md                        : Darwin Core Metadata statement in .md format
+├── projectname.Rproj                : RStudio project file
+├── .gitignore
+├── .RBuildIgnore
+|
+├── licence.md
+├── metadata.md
+|
+├── data-raw                         : Folder to store source data
+│   └── data_manipulation_script.R   : Script with example code
+|
+├── data                             : Folder to store processed data
+├── R
+|
+└── tests
+    ├── testthat.R
+    └── testthat
+        └── test-spatial.R
+```
+
+It is a good idea to write some basic information in your `DESCRIPTION` file
+first, as this provides guidance to your users as to what your package contains,
+as well as what they are allowed to use it for. Adding authors to your 
+`DESCRIPTION` file also affects the `citation` file if you use 
+`use_bd_citation()`.
+
+By default, packages created using `galaxias` are given a CC-BY licence (via 
+`usethis::usethis::use_ccby_license()`); you can overwrite this manually, or 
+using alternative licences provided by `usethis`, such as 
+`usethis::use_cc0_license()`. See https://choosealicense.com for more details 
+and other options.
+
+
+Questions: 
+ * custom import functions for .csv files for e.g. 'occurrences' in packages? Or too brittle?
+ * add RBuildIgnore to remove `metadata.md`? Or should it be placed differently in a package?
+ 
+
+## Adding data to your package
+
+The basic approach to building a data package is the same as for a project; add 
+the 'raw' data to `data-raw`, then use a script within that folder to manipulate 
+it to a suitable interchange format (such as Darwin Core). However, we then 
+recommend you use `use_bd_data()` to store the data, rather than 
+`readr::write_csv()`. This has the following advantages:
+
+  * enforces Darwin Core object names (occurrences, events etc.)
+  * adds data in `.rda` format as per `usethis::add_data()`
+  * adds a description of those files in `roxygen2` format to `R` folder, as recommended in R packages ['Documenting datasets'](https://r-pkgs.org/data.html#sec-documenting-data).
+
+
+
+## Adding package metadata
+
+```{r, eval=FALSE}
+use_bd_metadata()
+```
+
+If you have populated your `DESCRIPTION` file first, then some information will
+be populated from that.
+
+
+## Check your data
+
+Darwin Core may be an unfamiliar format, so it can be useful to 'check' your
+data for common issues. `galaxias` supports two methods for delivering this,
+starting with using `testthat`:
+
+```{r, eval=FALSE}
+use_bd_testthat()
+```
+
+This adds all the infrastructure needed to run `testthat` tests on your data,
+including some populated tests. To run them, simply call:
+
+```{r, eval=FALSE}
+library(devtools)
+test()
+```
+
+Alternatively, you can build a 'report' on your data using 'vignettes'. This 
+approach is more commonly used to show how to use software (you're reading one
+right now!), but here is used to build a report:
+
+```{r, eval=FALSE}
+use_bd_vignette() # add to repo
+devtools::build_vignettes() # render
+utils::vignette("report", package = "mypackagename") # view
+```
+
+Finally, you can use the ALA 'validate' API to check your data (not functional!)
+
+```{r, eval=FALSE}
+validate_dwca()
+```
+
+
+## Sharing your data
+
+build_dwca() # convert to a DwCA
+
+devtools::build() # R package
+
+When making a release of your repo on Github, we suggest you attach both an 
+R package _and_ a Darwin Core Archive.

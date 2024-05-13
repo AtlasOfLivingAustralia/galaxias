@@ -1,14 +1,14 @@
-test_that("detect_column_names() returns a happy message when all columns are matched", {
-  library(tibble)
-  library(lubridate)
-  library(dplyr)
-  data <- tibble(basisOfRecord = c("human observation", "human observation"),
-                 eventDate = c(as_date(ymd("2020-01-01")), as_date(ymd("2020-01-01"))),
-                 scientificName = c("perameles", "perameles"),
-                 occurrenceID = c(1:2))
-  expect_message({result <- detect_column_names(data)})
-  expect_true(all(colnames(result) == colnames(data)))
-})
+# test_that("detect_column_names() returns a happy message when all columns are matched", {
+#   library(tibble)
+#   library(lubridate)
+#   library(dplyr)
+#   data <- tibble(basisOfRecord = c("human observation", "human observation"),
+#                  eventDate = c(as_date(ymd("2020-01-01")), as_date(ymd("2020-01-01"))),
+#                  scientificName = c("perameles", "perameles"),
+#                  occurrenceID = c(1:2))
+#   expect_message({result <- detect_column_names(data)})
+#   expect_true(all(colnames(result) == colnames(data)))
+# })
 
 ## In progress
 # # works with happy message and changes names

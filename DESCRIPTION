@@ -1,6 +1,6 @@
 Package: galaxias
 Type: Package
-Title: Create Darwin Core Archives
+Title: Standardise, Document and Share Biodiversity Data
 Version: 0.1.0.9999
 Authors@R:
     c(person(given = "Martin",
@@ -11,35 +11,29 @@ Authors@R:
              family = "Balasubramanium",
              email = "shandiya.balasubramanium@csiro.au",
              role = c("aut")),
-      person(given = "Fonti",
-             family = "Kar",
-             email = "fonti.kar@csiro.au",
-             role = c("aut")),
       person(given = "Dax",
              family = "Kellie",
              email = "dax.kellie@csiro.au",
-             role = c("aut")),
-      person(given = "Andrew",
-             family = "Schwenke",
-             email = "andrew.schwenke@csiro.au",
              role = c("aut")))
 Description: Simple tools for converting data into DwC format.
 Depends: 
   R (>= 4.1.0)
 Imports:
   cli,
+  devtools,
   dplyr,
+  fs,
   glue,
   httr2,
-  pointblank,
+  pkgload,
   readr,
   rlang,
   snakecase,
-  stringdist,
   stringr,
-  tawnydragon,
   tibble,
-  uuid,
+  tidyselect,
+  usethis,
+  withr,
   xml2,
   zip
 Suggests:
@@ -48,5 +42,5 @@ License: GNU
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Config/testthat/edition: 3

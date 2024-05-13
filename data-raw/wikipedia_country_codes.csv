@@ -1,0 +1,250 @@
+﻿code,country_name,year
+AD,Andorra,1974
+AE,United Arab Emirates,1974
+AF,Afghanistan,1974
+AG,Antigua and Barbuda,1974
+AI,Anguilla,1985
+AL,Albania,1974
+AM,Armenia,1992
+AO,Angola,1974
+AQ,Antarctica,1974
+AR,Argentina,1974
+AS,American Samoa,1974
+AT,Austria,1974
+AU,Australia,1974
+AW,Aruba,1986
+AX,Åland Islands,2004
+AZ,Azerbaijan,1992
+BA,Bosnia and Herzegovina,1992
+BB,Barbados,1974
+BD,Bangladesh,1974
+BE,Belgium,1974
+BF,Burkina Faso,1984
+BG,Bulgaria,1974
+BH,Bahrain,1974
+BI,Burundi,1974
+BJ,Benin,1977
+BL,Saint Barthélemy,2007
+BM,Bermuda,1974
+BN,Brunei Darussalam,1974
+BO,"Bolivia, Plurinational State of",1974
+BQ,"Bonaire, Sint Eustatius and Saba",2010
+BR,Brazil,1974
+BS,Bahamas,1974
+BT,Bhutan,1974
+BV,Bouvet Island,1974
+BW,Botswana,1974
+BY,Belarus,1974
+BZ,Belize,1974
+CA,Canada,1974
+CC,Cocos (Keeling) Islands,1974
+CD,"Congo, Democratic Republic of the",1997
+CF,Central African Republic,1974
+CG,Congo,1974
+CH,Switzerland,1974
+CI,Côte d'Ivoire,1974
+CK,Cook Islands,1974
+CL,Chile,1974
+CM,Cameroon,1974
+CN,China,1974
+CO,Colombia,1974
+CR,Costa Rica,1974
+CU,Cuba,1974
+CV,Cabo Verde,1974
+CW,Curaçao,2010
+CX,Christmas Island,1974
+CY,Cyprus,1974
+CZ,Czechia,1993
+DE,Germany,1974
+DJ,Djibouti,1977
+DK,Denmark,1974
+DM,Dominica,1974
+DO,Dominican Republic,1974
+DZ,Algeria,1974
+EC,Ecuador,1974
+EE,Estonia,1992
+EG,Egypt,1974
+EH,Western Sahara,1974
+ER,Eritrea,1993
+ES,Spain,1974
+ET,Ethiopia,1974
+FI,Finland,1974
+FJ,Fiji,1974
+FK,Falkland Islands (Malvinas),1974
+FM,"Micronesia, Federated States of",1986
+FO,Faroe Islands,1974
+FR,France,1974
+GA,Gabon,1974
+GB,United Kingdom of Great Britain and Northern Ireland,1974
+GD,Grenada,1974
+GE,Georgia,1992
+GF,French Guiana,1974
+GG,Guernsey,2006
+GH,Ghana,1974
+GI,Gibraltar,1974
+GL,Greenland,1974
+GM,Gambia,1974
+GN,Guinea,1974
+GP,Guadeloupe,1974
+GQ,Equatorial Guinea,1974
+GR,Greece,1974
+GS,South Georgia and the South Sandwich Islands,1993
+GT,Guatemala,1974
+GU,Guam,1974
+GW,Guinea-Bissau,1974
+GY,Guyana,1974
+HK,Hong Kong,1974
+HM,Heard Island and McDonald Islands,1974
+HN,Honduras,1974
+HR,Croatia,1992
+HT,Haiti,1974
+HU,Hungary,1974
+ID,Indonesia,1974
+IE,Ireland,1974
+IL,Israel,1974
+IM,Isle of Man,2006
+IN,India,1974
+IO,British Indian Ocean Territory,1974
+IQ,Iraq,1974
+IR,"Iran, Islamic Republic of",1974
+IS,Iceland,1974
+IT,Italy,1974
+JE,Jersey,2006
+JM,Jamaica,1974
+JO,Jordan,1974
+JP,Japan,1974
+KE,Kenya,1974
+KG,Kyrgyzstan,1992
+KH,Cambodia,1974
+KI,Kiribati,1979
+KM,Comoros,1974
+KN,Saint Kitts and Nevis,1974
+KP,"Korea, Democratic People's Republic of",1974
+KR,"Korea, Republic of",1974
+KW,Kuwait,1974
+KY,Cayman Islands,1974
+KZ,Kazakhstan,1992
+LA,Lao People's Democratic Republic,1974
+LB,Lebanon,1974
+LC,Saint Lucia,1974
+LI,Liechtenstein,1974
+LK,Sri Lanka,1974
+LR,Liberia,1974
+LS,Lesotho,1974
+LT,Lithuania,1992
+LU,Luxembourg,1974
+LV,Latvia,1992
+LY,Libya,1974
+MA,Morocco,1974
+MC,Monaco,1974
+MD,"Moldova, Republic of",1992
+ME,Montenegro,2006
+MF,Saint Martin (French part),2007
+MG,Madagascar,1974
+MH,Marshall Islands,1986
+MK,North Macedonia,1993
+ML,Mali,1974
+MM,Myanmar,1989
+MN,Mongolia,1974
+MO,Macao,1974
+MP,Northern Mariana Islands,1986
+MQ,Martinique,1974
+MR,Mauritania,1974
+MS,Montserrat,1974
+MT,Malta,1974
+MU,Mauritius,1974
+MV,Maldives,1974
+MW,Malawi,1974
+MX,Mexico,1974
+MY,Malaysia,1974
+MZ,Mozambique,1974
+NA,Namibia,1974
+NC,New Caledonia,1974
+NE,Niger,1974
+NF,Norfolk Island,1974
+NG,Nigeria,1974
+NI,Nicaragua,1974
+NL,"Netherlands, Kingdom of the",1974
+NO,Norway,1974
+NP,Nepal,1974
+NR,Nauru,1974
+NU,Niue,1974
+NZ,New Zealand,1974
+OM,Oman,1974
+PA,Panama,1974
+PE,Peru,1974
+PF,French Polynesia,1974
+PG,Papua New Guinea,1974
+PH,Philippines,1974
+PK,Pakistan,1974
+PL,Poland,1974
+PM,Saint Pierre and Miquelon,1974
+PN,Pitcairn,1974
+PR,Puerto Rico,1974
+PS,"Palestine, State of",1999
+PT,Portugal,1974
+PW,Palau,1986
+PY,Paraguay,1974
+QA,Qatar,1974
+RE,Réunion,1974
+RO,Romania,1974
+RS,Serbia,2006
+RU,Russian Federation,1992
+RW,Rwanda,1974
+SA,Saudi Arabia,1974
+SB,Solomon Islands,1974
+SC,Seychelles,1974
+SD,Sudan,1974
+SE,Sweden,1974
+SG,Singapore,1974
+SH,"Saint Helena, Ascension and Tristan da Cunha",1974
+SI,Slovenia,1992
+SJ,Svalbard and Jan Mayen,1974
+SK,Slovakia,1993
+SL,Sierra Leone,1974
+SM,San Marino,1974
+SN,Senegal,1974
+SO,Somalia,1974
+SR,Suriname,1974
+SS,South Sudan,2011
+ST,Sao Tome and Principe,1974
+SV,El Salvador,1974
+SX,Sint Maarten (Dutch part),2010
+SY,Syrian Arab Republic,1974
+SZ,Eswatini,1974
+TC,Turks and Caicos Islands,1974
+TD,Chad,1974
+TF,French Southern Territories,1979
+TG,Togo,1974
+TH,Thailand,1974
+TJ,Tajikistan,1992
+TK,Tokelau,1974
+TL,Timor-Leste,2002
+TM,Turkmenistan,1992
+TN,Tunisia,1974
+TO,Tonga,1974
+TR,Türkiye,1974
+TT,Trinidad and Tobago,1974
+TV,Tuvalu,1977
+TW,"Taiwan, Province of China",1974
+TZ,"Tanzania, United Republic of",1974
+UA,Ukraine,1974
+UG,Uganda,1974
+UM,United States Minor Outlying Islands,1986
+US,United States of America,1974
+UY,Uruguay,1974
+UZ,Uzbekistan,1992
+VA,Holy See,1974
+VC,Saint Vincent and the Grenadines,1974
+VE,"Venezuela, Bolivarian Republic of",1974
+VG,Virgin Islands (British),1974
+VI,Virgin Islands (U.S.),1974
+VN,Viet Nam,1974
+VU,Vanuatu,1980
+WF,Wallis and Futuna,1974
+WS,Samoa,1974
+YE,Yemen,1974
+YT,Mayotte,1993
+ZA,South Africa,1974
+ZM,Zambia,1974
+ZW,Zimbabwe,1980
