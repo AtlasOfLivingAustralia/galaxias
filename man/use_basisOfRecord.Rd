@@ -4,15 +4,17 @@
 \alias{use_basisOfRecord}
 \title{Add a \code{basisOfRecord} field to a \code{tibble}}
 \usage{
-use_basisOfRecord(df, value = NULL)
+use_basisOfRecord(
+  df,
+  value = c("humanObservation", "machineObservation", "livingSpecimen",
+    "preservedSpecimen", "fossilSpecimen", "materialCitation")
+)
 }
 \arguments{
 \item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 
-\item{value}{what value should this field take? Should be one of
-\code{"humanObservation"}, \code{"machineObservation"}, \code{"livingSpecimen"},
-\code{"preservedSpecimen"}, \code{"fossilSpecimen"} or \code{"materialCitation"}. Only accepts
-camelCase, for consistency with field names.}
+\item{value}{what value should this field take? Only accepts \code{camelCase}, for
+consistency with field names.}
 }
 \value{
 A tibble with an attached \code{basisOfRecord} field

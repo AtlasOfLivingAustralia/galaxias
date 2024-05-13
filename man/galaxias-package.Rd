@@ -43,26 +43,32 @@ to an existing directory:
 
 Note the syntax here is based on\code{ usethis}.
 
-\strong{Data manipulation functions}
+\strong{Report on DwC compliance within \code{dplyr} pipes}
 
 These functions assist with populating specific Darwin Core fields.
 \itemize{
 \item \code{\link[=use_dwc]{use_dwc()}} to give real-time feedback on modifications to your data
-\item \link{mutate.dwc_df}
-\item \link{rename.dwc_df}
-\item \link{rename_with.dwc_df}
-\item \link{select.dwc_df}
+\item \code{\link[=mutate.dwc_df]{mutate.dwc_df()}}
+\item \code{\link[=rename.dwc_df]{rename.dwc_df()}}
+\item \code{\link[=rename_with.dwc_df]{rename_with.dwc_df()}}
+\item \code{\link[=select.dwc_df]{select.dwc_df()}}
 }
 
-The following micro-functions add single DwC fields. They all call their
-correspondingly named \code{check_} function internally, but with
-\code{level = "abort"} set to ensure conformance. This differs from the \code{dplyr}
-functions above, which use \code{level = "inform"}.
+. These functions are masked from \code{dplyr}.
+
+\strong{Add specific Darwin Core Terms}
+
+The following micro-functions add single DwC fields, or collections of
+related fields. They are all powered by \code{mutate()} under the hood, and run
+checks as if running \code{use_dwc() |> mutate()} (albeit with
+\code{level = "abort"}); but are included here as a primer for those new to
+Darwin Core who may want some guidance.
 \itemize{
-\item \code{\link[=use_occurrenceID]{use_occurrenceID()}} add a unique identifier, either using random numbers or a composite of existing columns
-\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} add a basisOfRecord field
-\item \code{\link[=use_countryCode]{use_countryCode()}} add a countryCode
-\item use_eventDate
+\item \code{\link[=use_occurrenceID]{use_occurrenceID()}}
+\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}}
+\item \code{\link[=use_coordinates]{use_coordinates()}} for spatial data
+\item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
+\item \code{\link[=use_eventDate]{use_eventDate()}} for temporal data
 }
 
 Related:
@@ -75,11 +81,13 @@ Related:
 The wrapper function for checking tibbles for Darwin Core complicance is
 \code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
 \itemize{
-\item \link{check_fields} Checks whether non-DwC fields are present
-\item \link{check_occurrenceID}
-\item \link{check_basisOfRecord}
-\item \link{check_decimalLatitude}
-\item \link{check_decimalLongitude}
+\item \code{\link[=check_dwc]{check_dwc()}} to run all applicable \code{check_} functions
+\item \code{\link[=check_fields]{check_fields()}} Checks whether non-DwC fields are present
+\item \code{\link[=check_occurrenceID]{check_occurrenceID()}}
+\item \code{\link[=check_basisOfRecord]{check_basisOfRecord()}}
+\item \code{\link[=check_countryCode]{check_countryCode()}}
+\item \code{\link[=check_decimalLatitude]{check_decimalLatitude()}}
+\item \code{\link[=check_decimalLongitude]{check_decimalLongitude()}}
 }
 
 Note that there are more \code{check_} functions than \code{use_} functions, because

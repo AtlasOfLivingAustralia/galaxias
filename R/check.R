@@ -46,3 +46,36 @@ check_bd_package_contents <- function(pkg){
     abort(bullets)
   }
 }
+
+
+#' check a vector consists only of values in a second vector
+#' Intended to be called by other `check_` functions
+#' @importFrom rlang abort
+#' @noRd
+#' @keywords Internal
+check_contains <- function(x, y, level){
+  x_lookup <- x %in% y
+  if(any(!x_lookup)){
+    unexpected_values <- x[!x_lookup]
+    unexpected_string <- glue_collapse(glue("`{unexpected_values}`"),
+                                       sep = ", ",
+                                       last = " & ")     
+    accepted_string <- glue_collapse(glue("`{y}`"),
+                                     sep = ", ",
+                                     last = " or ")
+    bullets <- c(glue("Unexpected value(s) provided: {unexpected_string}"),
+                 i = glue("Accepted values are {accepted_string}"))
+    do.call(level, list(message = bullets))
+  }
+}
+
+#' check a vector is a string
+#' Intended to be called by other `check_` functions
+#' @importFrom rlang abort
+#' @noRd
+#' @keywords Internal
+check_is_string <- function(x){
+  if(!inherits(x, "character")){
+    abort("Supplied value is not a string")
+  }
+}

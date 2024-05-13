@@ -45,39 +45,3 @@ check_fields <- function(df){
     }
   }
 }
-
-#' @rdname check_dwc
-#' @order 5
-#' @export
-check_decimalLatitude <- function(df, 
-                                  level = c("inform", "warn", "abort")
-){
-  level <- match.arg(level)
-  x <- df$decimalLatitude
-  if(!inherits(x, "numeric")){
-    inform(c(i = "`decimalLatitude` column is not numeric"))
-  }else{
-    if(!all(x >= -90 & x <= 90)){
-      bullets <- c(i = "`decimalLatitude` column contains values outside the range `-90 <= x <= 90`")
-      do.call(level, list(message = bullets))
-    }
-  }
-}
-
-#' @rdname check_dwc
-#' @order 6
-#' @export
-check_decimalLongitude <- function(df, 
-                                   level = c("inform", "warn", "abort")
-){
-  level <- match.arg(level)
-  x <- df$check_decimalLongitude
-  if(!inherits(x, "numeric")){
-    inform(c(i = "`decimalLongitude` column is not numeric"))
-  }else{
-    if(!all(x >= -180 & x <= 180)){
-      bullets <- c(i = "`decimalLongitude` column contains values outside the range `-180 <= x <= 180`")
-      do.call(level, list(message = bullets))
-    }
-  }
-}

@@ -40,25 +40,31 @@
 #'   
 #' Note the syntax here is based on` usethis`.
 #'   
-#' **Data manipulation functions**
+#' **Report on DwC compliance within `dplyr` pipes**
 #'  
 #'  These functions assist with populating specific Darwin Core fields.
 #'  
 #'   * [use_dwc()] to give real-time feedback on modifications to your data
-#'   * [mutate.dwc_df]
-#'   * [rename.dwc_df]
-#'   * [rename_with.dwc_df]
-#'   * [select.dwc_df]
+#'   * [mutate.dwc_df()]
+#'   * [rename.dwc_df()]
+#'   * [rename_with.dwc_df()]
+#'   * [select.dwc_df()]
 #'   
-#'  The following micro-functions add single DwC fields. They all call their 
-#'  correspondingly named `check_` function internally, but with 
-#'  `level = "abort"` set to ensure conformance. This differs from the `dplyr`
-#'  functions above, which use `level = "inform"`.
+#'. These functions are masked from `dplyr`.
+#'   
+#' **Add Darwin Core Terms**   
+#'
+#'  The following micro-functions add single DwC fields, or collections of 
+#'  related fields. They are all powered by `mutate()` under the hood, and run
+#'  checks as if running `use_dwc() |> mutate()` (albeit with 
+#'  `level = "abort"`); but are included here as a primer for those new to 
+#'  Darwin Core who may want some guidance.
 #'  
-#'   * [use_occurrenceID()] add a unique identifier, either using random numbers or a composite of existing columns
-#'   * [use_basisOfRecord()] add a basisOfRecord field
-#'   * [use_countryCode()] add a countryCode
-#'   * use_eventDate
+#'   * [use_occurrenceID()] # unique identifiers for each row
+#'   * [use_basisOfRecord()] # a description of the 'type' of data
+#'   * [use_coordinates()] for spatial data
+#'   * [use_eventDate()] for temporal data
+#'   * [use_locality()] for spatial descriptions
 #'   
 #'  Related:
 #'   
@@ -68,12 +74,16 @@
 #'  
 #'  The wrapper function for checking tibbles for Darwin Core complicance is
 #'  [check_dwc()]. It calls the following microfunctions:
-#'  
-#'   * [check_fields] Checks whether non-DwC fields are present
-#'   * [check_occurrenceID]
-#'   * [check_basisOfRecord]
-#'   * [check_decimalLatitude]
-#'   * [check_decimalLongitude]
+#'   
+#'   * [check_dwc()] to run all applicable `check_` functions
+#'   * [check_fields()] Checks whether non-DwC fields are present
+#'   * [check_occurrenceID()]
+#'   * [check_basisOfRecord()]
+#'   * [check_continent()]
+#'   * [check_country()]
+#'   * [check_countryCode()]
+#'   * [check_decimalLatitude()]
+#'   * [check_decimalLongitude()]
 #'   
 #'   
 #'  Note that there are more `check_` functions than `use_` functions, because

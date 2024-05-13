@@ -46,22 +46,29 @@ reference:
   - use_bd_schema
   - use_bd_testthat
   - use_bd_vignette
-- title: Add Darwin Core fields to an existing data.frame
+- title: Report on DwC compliance within `dplyr` pipes
   contents:
   - use_dwc
   - mutate.dwc_df
   - rename.dwc_df
   - rename_with.dwc_df
   - select.dwc_df
+- title: Add Darwin Core Terms
+  contents:
   - use_occurrenceID
   - use_basisOfRecord
-  - use_countryCode
+  - use_coordinates
+  - use_eventDate
+  - use_locality
 - title: Check data for DwC compliance
   contents:
   - check_dwc
   - check_fields
   - check_occurrenceID
   - check_basisOfRecord
+  - check_continent
+  - check_country
+  - check_countryCode
   - check_decimalLatitude
   - check_decimalLongitude
 - title: Checking and publication
