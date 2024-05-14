@@ -45,6 +45,16 @@ library(galaxias)
 ```
 
 
+## Features
+
+`galaxias` contains tools to:
+
+ - Establish a new RStudio project with a standardised structure (`create_bd_project()`)
+ - Support translating biodiversity data into the Darwin Core standard (`use_dwc()`)
+ - Translate between markdown and xml formats for easy metadata editing (`read_md()`)
+ - Build, validate and publish a repository as a Darwin Core Archive (`build_dwca()`)
+
+
 ## Citing galaxias
 To generate a citation for the package version you are using, you can run:
 
