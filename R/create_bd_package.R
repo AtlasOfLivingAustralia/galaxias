@@ -28,6 +28,7 @@ create_bd_package <- function(path,
   use_bd_description()
   use_namespace()
   use_bd_readme_rmd()
+  use_bd_metadata()
   use_bd_data_raw() # `/data-raw`
   use_ccby_license()
   use_bd_metadata()

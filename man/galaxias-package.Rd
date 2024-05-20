@@ -56,7 +56,7 @@ These functions assist with populating specific Darwin Core fields.
 
 . These functions are masked from \code{dplyr}.
 
-\strong{Add specific Darwin Core Terms}
+\strong{Add Darwin Core Terms}
 
 The following micro-functions add single DwC fields, or collections of
 related fields. They are all powered by \code{mutate()} under the hood, and run
@@ -64,11 +64,11 @@ checks as if running \code{use_dwc() |> mutate()} (albeit with
 \code{level = "abort"}); but are included here as a primer for those new to
 Darwin Core who may want some guidance.
 \itemize{
-\item \code{\link[=use_occurrenceID]{use_occurrenceID()}}
-\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}}
+\item \code{\link[=use_occurrenceID]{use_occurrenceID()}} # unique identifiers for each row
+\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} # a description of the 'type' of data
 \item \code{\link[=use_coordinates]{use_coordinates()}} for spatial data
-\item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
 \item \code{\link[=use_eventDate]{use_eventDate()}} for temporal data
+\item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
 }
 
 Related:
@@ -85,6 +85,8 @@ The wrapper function for checking tibbles for Darwin Core complicance is
 \item \code{\link[=check_fields]{check_fields()}} Checks whether non-DwC fields are present
 \item \code{\link[=check_occurrenceID]{check_occurrenceID()}}
 \item \code{\link[=check_basisOfRecord]{check_basisOfRecord()}}
+\item \code{\link[=check_continent]{check_continent()}}
+\item \code{\link[=check_country]{check_country()}}
 \item \code{\link[=check_countryCode]{check_countryCode()}}
 \item \code{\link[=check_decimalLatitude]{check_decimalLatitude()}}
 \item \code{\link[=check_decimalLongitude]{check_decimalLongitude()}}

@@ -1,19 +1,11 @@
 #' Check package directories are correctly specified
 #' 
 #' Called by `build_dwca()`
-#' @importFrom devtools is.package
 #' @importFrom rlang abort
 #' @importFrom usethis local_project
 #' @noRd
 #' @keywords Internal
 check_bd_package_contents <- function(pkg){
-  
-  # check that object is a package
-  if(!is.package(pkg)){
-    bullets <- c("Specified directory is not a package",
-                 i = "use `create_bd_package()` to set up a package")
-    abort(bullets)
-  }
   
   local_project(pkg) # check only within this package
   

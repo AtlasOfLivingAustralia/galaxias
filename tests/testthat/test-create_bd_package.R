@@ -1,6 +1,7 @@
-test_that("`usethis` functions generate correct inputs", {
+test_that("`usethis` functions generate a package", {
   testdir <- tempdir() # this is per-session; do not `unlink()`
   pkg <- paste0(testdir, "/testpackage") # this is the test package
+  galaxias_repo <- getwd()
   
   # test default files are added correctly
   create_bd_package(pkg, open = FALSE)
@@ -13,8 +14,11 @@ test_that("`usethis` functions generate correct inputs", {
                     "data-raw",
                     "DESCRIPTION",
                     "README.Rmd",
+                    "metadata.md",
                     "testpackage.Rproj"))
-  glue("{pkg}/data-raw/data_manipulation_script.R") |> expect_exists()
+  glue("{pkg}/data-raw/data_manipulation_script.R") |> 
+    file.exists() |>
+    expect_true()
   ## option to add tests to ensure relevant content is populated here
   ## e.g. to DESCRIPTION and README
   
@@ -25,23 +29,27 @@ test_that("`usethis` functions generate correct inputs", {
                                 decimalLatitude = 0.1,
                                 decimalLongitude = 5,
                                 scientificName = "Something something")
-  use_bd_data(occurrences)
-  glue("{pkg}/data/occurrences.rda") |> expect_exists()
+  usethis::use_data(occurrences, internal = FALSE)
+  glue("{pkg}/data/occurrences.rda") |> 
+    file.exists() |>
+    expect_true()
   
   ## add schema
-  
-  ## add metadata
   
   
   # test optional usethis functions
   ## add tests
   use_bd_testthat()
-  glue("{pkg}/tests") |> expect_exists()
-  glue("{pkg}/tests/testthat.R") |> expect_exists()
-  glue("{pkg}/tests/testthat") |> expect_exists()
-  glue("{pkg}/tests/testthat/test-decimalLatitude_decimalLongitude.R") |> expect_exists()
-  ## add report
+  file_list <- c(
+    glue("{pkg}/tests"),
+    glue("{pkg}/tests/testthat.R"),
+    glue("{pkg}/tests/testthat"),
+    glue("{pkg}/tests/testthat/test-decimalLatitude_decimalLongitude.R"))
+  file.exists(file_list) |>
+    all() |>
+    expect_true()
   
   # tidy up
   unlink(pkg, recursive = TRUE)
+  setwd(galaxias_repo)
 })

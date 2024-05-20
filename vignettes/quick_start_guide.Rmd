@@ -42,6 +42,7 @@ that project, which will have the following structure:
 
 ```
 ├── README.md                        : Darwin Core Metadata statement in .md format
+├── metadata.md                      : Metadata statement for data in this project
 ├── projectname.Rproj                : RStudio project file
 ├── data-raw                         : Folder to store source data
 │   └── data_manipulation_script.R   : Script with example code

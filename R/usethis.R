@@ -65,8 +65,9 @@ use_bd_description <- function(){
 #' @importFrom usethis use_directory
 #' @export
 use_bd_metadata <- function(){
-  use_directory("inst")
-  build_metadata()
+  use_template(template = "pkg-metadata",
+               save_as = "metadata.md",
+               package = "galaxias")
 }
 
 #' Add `README` to a biodiversity data repository
