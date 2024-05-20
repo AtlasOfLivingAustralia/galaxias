@@ -1,48 +1,17 @@
-#' Check package directories are correctly specified
-#' 
-#' Called by `build_dwca()`
-#' @importFrom rlang abort
-#' @importFrom usethis local_project
+#' Internal function to report at the requested severity level
+#' @importFrom rlang inform
+#' @importFrom rlang warn
+#' @importFrom rlang abort 
 #' @noRd
 #' @keywords Internal
-check_bd_package_contents <- function(pkg){
-  
-  local_project(pkg) # check only within this package
-  
-  # check whether data is present
-  if(!file.exists("data")){
-    bullets <- c("`data` directory is required, but missing",
-                 i = "use `usethis::use_data()` to add data to your package")
-    abort()
-  }
-  
-  # run checks to determine whether usable data is present
-  if(!file.exists("./data/occurrences.rda")){
-    bullets <- c("`occurrences.rda` is required, but missing from `data`",
-                 i = "use `add_bd_data_raw()` for examples of how to add raw data to your package",
-                 i =  "use `usethis::use_data()` to add data to your package")
-    abort(bullets)
-  }    
-  
-  # run checks to determine whether metadata is present
-  if(!file.exists("./vignettes/metadata.Rmd")){
-    bullets <- c("`metadata.Rmd` is required, but missing from `vignettes`",
-                 i = "use `use_bd_metadata()` to create a boilerplate metadata statement")
-    abort(bullets)
-  }
-  
-  # run checks to determine whether metadata is present
-  if(!file.exists("./vignettes/schema.Rmd")){
-    bullets <- c("`metadata.Rmd` is required, but missing from `vignettes`",
-                 i = "use `use_bd_metadata()` to create a boilerplate metadata statement")
-    abort(bullets)
-  }
+switch_check <- function(level, bullets){
+  switch(level, 
+         "inform" = inform(bullets),
+         "warn" = warn(bullets),
+         "abort" = abort(bullets))
 }
 
-
 #' check a vector consists only of values in a second vector
-#' Intended to be called by other `check_` functions
-#' @importFrom rlang abort
 #' @noRd
 #' @keywords Internal
 check_contains <- function(x, y, level){
@@ -57,17 +26,47 @@ check_contains <- function(x, y, level){
                                      last = " or ")
     bullets <- c(glue("Unexpected value(s) provided: {unexpected_string}"),
                  i = glue("Accepted values are {accepted_string}"))
-    do.call(level, list(message = bullets))
+    switch_check(level, bullets)
+  }
+}
+
+#' check a vector is numeric
+#' @noRd
+#' @keywords Internal
+check_is_numeric <- function(x, level){
+  if(!inherits(x, "numeric")){
+    bullets <- c(i = "Supplied value is not numeric")
+    switch_check(level, bullets)
   }
 }
 
 #' check a vector is a string
-#' Intended to be called by other `check_` functions
-#' @importFrom rlang abort
 #' @noRd
 #' @keywords Internal
-check_is_string <- function(x){
+check_is_string <- function(x, level){
   if(!inherits(x, "character")){
-    abort("Supplied value is not a string")
+    bullets <- c(i = "Supplied value is not a string")
+    switch_check(level, bullets)
+  }
+}
+
+#' check a vector has one row per value
+#' @noRd
+#' @keywords Internal
+check_unique <- function(x, level){
+  unique_check <- length(unique(x)) == length(x)
+  if(!unique_check){
+    bullets <- c(i = "Supplied field does not contain a unique value in each cell")
+    switch_check(level, bullets)
+  }
+}
+
+#' check a vector is within a specified range
+#' @noRd
+#' @keywords Internal
+check_within_range <- function(x, level, lower, upper){
+  if(!all(x >= lower & x <= upper)){
+    bullets <- c(i = "Supplied value is not within requested range")
+    swich_check(level, bullets)
   }
 }

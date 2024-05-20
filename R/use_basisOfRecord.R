@@ -51,6 +51,8 @@ check_basisOfRecord <- function(df,
                          "preservedSpecimen",
                          "fossilSpecimen",
                          "materialCitation")
-    check_contains(unique(x), accepted_values)
+    check_contains(unique(x), 
+                   accepted_values, 
+                   level = level)
   }
 }

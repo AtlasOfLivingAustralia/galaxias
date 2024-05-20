@@ -71,7 +71,9 @@ check_continent <- function(df,
                          "North America",
                          "Oceania",
                          "South America")
-    check_contains(unique(x), accepted_values)
+    check_contains(unique(x), 
+                   accepted_values, 
+                   level = level)
   }
 }
 
@@ -86,7 +88,8 @@ check_country <- function(df,
   if(any(colnames(df) == "country")){
     check_is_string(df$country)
     check_contains(unique(df$country), 
-                   country_codes$country_name)
+                   country_codes$country_name, 
+                   level = level)
   }
 }
 
@@ -100,7 +103,8 @@ check_countryCode <- function(df,
   level <- match.arg(level)
   if(any(colnames(df) == "countryCode")){
     x <- df$countryCode
-    check_is_string(x)
+    check_is_string(x, 
+                    level = level)
     
     accepted_values <- country_codes$code
     if(!(value %in% accepted_values)){

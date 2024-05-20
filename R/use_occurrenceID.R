@@ -18,6 +18,7 @@ use_occurrenceID <- function(.df,
     .df |>
       mutate(occurrenceID = build_random_identifier())
   }
+  check_occurrenceID(df, level = "abort")
 }
 
 #' Create a random identifier column
@@ -64,10 +65,6 @@ check_occurrenceID <- function(df,
   level <- match.arg(level)
   if(any(colnames(df) == "occurrenceID")){
     x <- df$occurrenceID
-    unique_check <- length(unique(x)) == length(x)
-    if(!unique_check){
-      bullets <- c(i = "`occurrenceID` field does not contain a unique value in each cell")
-      do.call(level, list(message = bullets))
-    }
+    check_unique(x, level)
   }
 }

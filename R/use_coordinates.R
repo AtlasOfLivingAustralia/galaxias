@@ -62,14 +62,12 @@ check_decimalLatitude <- function(df,
 ){
   level <- match.arg(level)
   x <- df$decimalLatitude
-  if(!inherits(x, "numeric")){
-    inform(c(i = "`decimalLatitude` column is not numeric"))
-  }else{
-    if(!all(x >= -90 & x <= 90)){
-      bullets <- c(i = "`decimalLatitude` column contains values outside the range `-90 <= x <= 90`")
-      do.call(level, list(message = bullets))
-    }
-  }
+  check_is_numeric(x, 
+                   level = level)
+  check_within_range(x, 
+                     level = level, 
+                     lower = -90, 
+                     upper = 90)
 }
 
 #' @rdname check_dwc
@@ -80,12 +78,10 @@ check_decimalLongitude <- function(df,
 ){
   level <- match.arg(level)
   x <- df$check_decimalLongitude
-  if(!inherits(x, "numeric")){
-    inform(c(i = "`decimalLongitude` column is not numeric"))
-  }else{
-    if(!all(x >= -180 & x <= 180)){
-      bullets <- c(i = "`decimalLongitude` column contains values outside the range `-180 <= x <= 180`")
-      do.call(level, list(message = bullets))
-    }
-  }
+  check_is_numeric(x, 
+                   level = level)
+  check_within_range(x, 
+                     level = level, 
+                     lower = -180, 
+                     upper = 180)
 }
