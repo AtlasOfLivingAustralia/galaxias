@@ -57,31 +57,33 @@ use_coordinates <- function(
 #' @rdname check_dwc
 #' @order 6
 #' @export
-check_decimalLatitude <- function(df, 
+check_decimalLatitude <- function(.df, 
                                   level = c("inform", "warn", "abort")
 ){
   level <- match.arg(level)
-  x <- df$decimalLatitude
-  check_is_numeric(x, 
-                   level = level)
-  check_within_range(x, 
-                     level = level, 
-                     lower = -90, 
-                     upper = 90)
+  if(any(colnames(.df) == "decimalLatitude")){
+    .df |>
+      select("decimalLatitude") |>
+      check_is_numeric(level = level) |>
+      check_within_range(level = level, 
+                         lower = -90, 
+                         upper = 90)
+  } 
 }
 
 #' @rdname check_dwc
 #' @order 7
 #' @export
-check_decimalLongitude <- function(df, 
+check_decimalLongitude <- function(.df, 
                                    level = c("inform", "warn", "abort")
 ){
   level <- match.arg(level)
-  x <- df$check_decimalLongitude
-  check_is_numeric(x, 
-                   level = level)
-  check_within_range(x, 
-                     level = level, 
-                     lower = -180, 
-                     upper = 180)
+  if(any(colnames(.df) == "decimalLongitude")){
+    .df |>
+      select("decimalLongitude") |>
+      check_is_numeric(level = level) |>
+      check_within_range(level = level, 
+                         lower = -180, 
+                         upper = 180)
+  }
 }

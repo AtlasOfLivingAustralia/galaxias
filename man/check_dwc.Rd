@@ -13,13 +13,13 @@
 \alias{check_decimalLongitude}
 \title{Check for Darwin Core field conformance}
 \usage{
-check_dwc(df)
+check_dwc(.df)
 
-check_fields(df)
+check_fields(.df, level = c("inform", "warn", "abort"))
 
-check_occurrenceID(df, level = c("inform", "warn", "abort"))
+check_occurrenceID(.df, level = c("inform", "warn", "abort"))
 
-check_basisOfRecord(df, level = c("inform", "warn", "abort"))
+check_basisOfRecord(.df, level = c("inform", "warn", "abort"))
 
 check_continent(df, level = c("inform", "warn", "abort"))
 
@@ -27,15 +27,15 @@ check_country(df, level = c("inform", "warn", "abort"))
 
 check_countryCode(df, level = c("inform", "warn", "abort"))
 
-check_decimalLatitude(df, level = c("inform", "warn", "abort"))
+check_decimalLatitude(.df, level = c("inform", "warn", "abort"))
 
-check_decimalLongitude(df, level = c("inform", "warn", "abort"))
+check_decimalLongitude(.df, level = c("inform", "warn", "abort"))
 }
 \arguments{
-\item{df}{a tibble containing data}
-
 \item{level}{what action should the function take for non-conformance?
 Defaults to \code{"inform"}.}
+
+\item{df}{a tibble containing data}
 }
 \description{
 Function to check whether a data.frame or tibble conforms to DwC standards

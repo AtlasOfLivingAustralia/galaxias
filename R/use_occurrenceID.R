@@ -58,13 +58,15 @@ build_composite_identifier <- function(data,
 
 #' @rdname check_dwc
 #' @order 3
+#' @importFrom dplyr select
 #' @export
-check_occurrenceID <- function(df, 
+check_occurrenceID <- function(.df, 
                                level = c("inform", "warn", "abort")
 ){
   level <- match.arg(level)
-  if(any(colnames(df) == "occurrenceID")){
-    x <- df$occurrenceID
-    check_unique(x, level)
+  if(any(colnames(.df) == "occurrenceID")){
+    .df |>
+      select("occurrenceID") |>
+      check_unique(level = level)
   }
 }

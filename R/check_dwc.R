@@ -7,9 +7,9 @@
 #' @param df a tibble containing data
 #' @order 1
 #' @export
-check_dwc <- function(df){
+check_dwc <- function(.df){
   # dwc_terms
-  fields <- colnames(df)
+  fields <- colnames(.df)
   available_checks <- c("occurrenceID",
                         "basisOfRecord",
                         "decimalLatitude",
@@ -20,7 +20,7 @@ check_dwc <- function(df){
   inform("Checking DwC fields")
   # run each function on df
   lapply(check_functions, 
-         function(x){do.call(x, args = list(df = df))}) |>
+         function(x){do.call(x, args = list(.df = .df))}) |>
     invisible()
 }
 
@@ -32,19 +32,13 @@ check_dwc <- function(df){
 #' @rdname check_dwc
 #' @order 2
 #' @export
-check_fields <- function(df){
-  x <- colnames(df)
-  if(!all(x %in% dwc_terms)){
-    non_dwc <- x[!(x %in% dwc_terms)]
-    if(length(non_dwc) > 1){
-      dwc_string <- glue_collapse(glue("`{non_dwc}`"),
-                                  sep = ", ", 
-                                  last = " & ")
-      inform(c(i = glue("{dwc_string} are not DwC fields")))
-    }else{
-      inform(c(i = glue("{non_dwc} is not a valid DwC field")))
-    }
-  }
+check_fields <- function(.df, 
+                         level = c("inform", "warn", "abort")){
+  level <- match.arg(level)
+  result <- tibble(dwc_terms = colnames(.df)) |>
+    check_contains(y = dwc_terms,
+                   level = level)
+  .df
 }
 
 #' Check package directories are correctly specified
