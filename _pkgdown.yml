@@ -46,13 +46,6 @@ reference:
   - use_bd_schema
   - use_bd_testthat
   - use_bd_vignette
-- title: Report on DwC compliance within `dplyr` pipes
-  contents:
-  - use_dwc
-  - mutate.dwc_df
-  - rename.dwc_df
-  - rename_with.dwc_df
-  - select.dwc_df
 - title: Add Darwin Core Terms
   contents:
   - use_occurrenceID
@@ -60,7 +53,7 @@ reference:
   - use_coordinates
   - use_eventDate
   - use_locality
-- title: Check data for DwC compliance
+- title: Check data for Darwin Core compliance
   contents:
   - check_dwc
   - check_fields

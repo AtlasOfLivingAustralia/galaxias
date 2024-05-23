@@ -6,16 +6,14 @@
 \alias{galaxias-package}
 \title{Build repositories to share biodiversity data}
 \description{
-\code{galaxias} provides tools to build repositories optimized to store, document,
-and share biodiversity information.
-
-Once the repository is built and populated with biodiversity data, \code{galaxias}
-also provides tools to assess compatibility of the data with the
-'Darwin Core' standard, convert the package into a valid
-'Darwin Core Archive', and publish that archive to a data infrastructure
+\code{{galaxias}} is a \code{{usethis}} extension for building 'Darwin Core Archives'; a
+global data standard to store, document, and share biodiversity information.
+The package provides tools build data repositories, manipulate data to
+conform with the standard, check validity against established norms, and
+publish the archive to a data infrastructure of your choice
 (though currently only the Atlas of Living Australia is formally supported).
 
-\code{galaxias} is named for a genus of freshwater fish.
+The package is named for a genus of freshwater fish.
 }
 \section{Functions}{
 
@@ -41,28 +39,10 @@ to an existing directory:
 \item \code{\link[=use_bd_vignette]{use_bd_vignette()}} add a vignette that summarizes data in your repository
 }
 
-Note the syntax here is based on\code{ usethis}.
-
-\strong{Report on DwC compliance within \code{dplyr} pipes}
-
-These functions assist with populating specific Darwin Core fields.
-\itemize{
-\item \code{\link[=use_dwc]{use_dwc()}} to give real-time feedback on modifications to your data
-\item \code{\link[=mutate.dwc_df]{mutate.dwc_df()}}
-\item \code{\link[=rename.dwc_df]{rename.dwc_df()}}
-\item \code{\link[=rename_with.dwc_df]{rename_with.dwc_df()}}
-\item \code{\link[=select.dwc_df]{select.dwc_df()}}
-}
-
-. These functions are masked from \code{dplyr}.
-
 \strong{Add Darwin Core Terms}
 
-The following micro-functions add single DwC fields, or collections of
-related fields. They are all powered by \code{mutate()} under the hood, and run
-checks as if running \code{use_dwc() |> mutate()} (albeit with
-\code{level = "abort"}); but are included here as a primer for those new to
-Darwin Core who may want some guidance.
+The following functions add single DwC fields, or collections of related
+fields, to an existing \code{tibble}.
 \itemize{
 \item \code{\link[=use_occurrenceID]{use_occurrenceID()}} # unique identifiers for each row
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} # a description of the 'type' of data
@@ -76,7 +56,7 @@ Related:
 \item \code{\link[=dwc_fields]{dwc_fields()}} NOT IMPLEMENTED YET, but would be useful e.g. \code{df |> select(any_of(dwc_fields()))}
 }
 
-\strong{Checking data for DwC compliance}
+\strong{Checking data for Darwin Core compliance}
 
 The wrapper function for checking tibbles for Darwin Core complicance is
 \code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
@@ -93,8 +73,7 @@ The wrapper function for checking tibbles for Darwin Core complicance is
 }
 
 Note that there are more \code{check_} functions than \code{use_} functions, because
-we expect that users will call e.g. \code{decimalLatitude} via \code{mutate()} or
-\code{rename()} rather than create it from scratch.
+some \code{use_} functions affect multiple fields.
 
 \strong{Checking and publication}
 \itemize{

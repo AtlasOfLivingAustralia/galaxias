@@ -1,16 +1,14 @@
 #' Build repositories to share biodiversity data
 #' 
 #' @description
-#' `galaxias` provides tools to build repositories optimized to store, document, 
-#' and share biodiversity information. 
-#'  
-#' Once the repository is built and populated with biodiversity data, `galaxias` 
-#' also provides tools to assess compatibility of the data with the 
-#' 'Darwin Core' standard, convert the package into a valid 
-#' 'Darwin Core Archive', and publish that archive to a data infrastructure 
+#' `{galaxias}` is a `{usethis}` extension for building 'Darwin Core Archives'; a
+#' global data standard to store, document, and share biodiversity information.
+#' The package provides tools build data repositories, manipulate data to 
+#' conform with the standard, check validity against established norms, and
+#' publish the archive to a data infrastructure of your choice
 #' (though currently only the Atlas of Living Australia is formally supported).
 #' 
-#' `galaxias` is named for a genus of freshwater fish.
+#' The package is named for a genus of freshwater fish.
 #' 
 #' @name galaxias-package
 #' @docType package
@@ -38,27 +36,10 @@
 #'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
 #'   * [use_bd_vignette()] add a vignette that summarizes data in your repository
 #'   
-#' Note the syntax here is based on` usethis`.
-#'   
-#' **Report on DwC compliance within `dplyr` pipes**
-#'  
-#'  These functions assist with populating specific Darwin Core fields.
-#'  
-#'   * [use_dwc()] to give real-time feedback on modifications to your data
-#'   * [mutate.dwc_df()]
-#'   * [rename.dwc_df()]
-#'   * [rename_with.dwc_df()]
-#'   * [select.dwc_df()]
-#'   
-#'. These functions are masked from `dplyr`.
-#'   
 #' **Add Darwin Core Terms**   
 #'
-#'  The following micro-functions add single DwC fields, or collections of 
-#'  related fields. They are all powered by `mutate()` under the hood, and run
-#'  checks as if running `use_dwc() |> mutate()` (albeit with 
-#'  `level = "abort"`); but are included here as a primer for those new to 
-#'  Darwin Core who may want some guidance.
+#'  The following functions add single DwC fields, or collections of related 
+#'  fields, to an existing `tibble`.
 #'  
 #'   * [use_occurrenceID()] # unique identifiers for each row
 #'   * [use_basisOfRecord()] # a description of the 'type' of data
@@ -70,7 +51,7 @@
 #'   
 #'   * [dwc_fields()] NOT IMPLEMENTED YET, but would be useful e.g. `df |> select(any_of(dwc_fields()))`
 #'  
-#'  **Checking data for DwC compliance**
+#'  **Checking data for Darwin Core compliance**
 #'  
 #'  The wrapper function for checking tibbles for Darwin Core complicance is
 #'  [check_dwc()]. It calls the following microfunctions:
@@ -87,8 +68,7 @@
 #'   
 #'   
 #'  Note that there are more `check_` functions than `use_` functions, because
-#'  we expect that users will call e.g. `decimalLatitude` via `mutate()` or 
-#'  `rename()` rather than create it from scratch.
+#'  some `use_` functions affect multiple fields.
 #'   
 #'  **Checking and publication**
 #'  
