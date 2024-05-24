@@ -62,6 +62,8 @@ check_contains <- function(.df,
     sort()
   name_lookup <- user_column_names %in% y
   if(any(!name_lookup)){
+    
+    # Darwin Core term matching
     matched_values <- user_column_names[name_lookup]
     unmatched_values <- user_column_names[!name_lookup]
     matched_string <- ansi_collapse(glue("{matched_values}"),
@@ -94,6 +96,7 @@ check_contains <- function(.df,
     
     # browser()
     
+    # Function matching for suggested workflow
     dwc_function_main <- tibble::tribble(
       ~"dwc_term", ~"use_function",
       "basisOfRecord",   "use_basisOfRecord()",
@@ -140,14 +143,14 @@ check_contains <- function(.df,
       
       # DwC matches
       cli::cli_div()
-      cli::cli_h1("DwC term matches")
+      cli::cli_h1("DwC terms")
       cli::cli_bullets(bullets)
       cli::cli_end()
       
       # Suggested workflow
       cli::cli_h1("Suggested workflow")
       cli::cli_par()
-      cli::cli_text("To make your data DarwinCore compliant, use the following workflow.")
+      cli::cli_text("To make your data Darwin Core compliant, use the following workflow.")
       cli::cli_end()
       cli::cli_text("df |>")
       cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
@@ -155,7 +158,7 @@ check_contains <- function(.df,
       cli::cli_par()
       cli::cli_end()
       cli::cli_div()
-      cli::cli_text("Additional workflow functions: {.fn {other_texts}}")
+      cli::cli_text(cli::col_grey("Additional suggested workflow functions: {.fn {other_texts}}"))
       cli::cli_end()
       cli::cli_par()
     }
