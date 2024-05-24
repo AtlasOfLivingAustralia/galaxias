@@ -3,15 +3,18 @@
 #' @importFrom rlang warn
 #' @importFrom rlang abort
 #' @importFrom rlang caller_env
+#' @importFrom cli cli_inform
+#' @importFrom cli cli_warn
+#' @importFrom cli cli_abort
 #' @noRd
 #' @keywords Internal
 switch_check <- function(level = "inform", 
                          bullets = "", 
                          call = caller_env()){
   switch(level, 
-         "inform" = inform(bullets, call = call),
-         "warn" = warn(bullets, call = call),
-         "abort" = abort(bullets, call = call))
+         "inform" = cli_inform(bullets, call = call),
+         "warn" = cli_warn(bullets, call = call),
+         "abort" = cli_abort(bullets, call = call))
 }
 
 #' Internal function used to catch errors in low-level `check_` functions
@@ -38,6 +41,12 @@ check_data_frame <- function(.df,
 #' @param y vector against which x should be compared
 #' @importFrom dplyr pull
 #' @importFrom glue glue
+#' @importFrom cli cli_alert_success
+#' @importFrom cli cli_alert_warning
+#' @importFrom cli cli_alert_danger
+#' @importFrom cli cli_text
+#' @importFrom cli cli_bullets
+#' @importFrom cli ansi_collapse
 #' @noRd
 #' @keywords Internal
 check_contains <- function(.df, 
@@ -47,24 +56,123 @@ check_contains <- function(.df,
                            ){
   check_data_frame(.df)
   field_name <- colnames(.df)[[1]]
-  x <- .df |> 
+  user_column_names <- .df |> 
     pull(field_name) |>
     unique() |>
     sort()
-  x_lookup <- x %in% y
-  if(any(!x_lookup)){
-    unexpected_values <- x[!x_lookup]
-    unexpected_string <- glue_collapse(glue("{unexpected_values}"),
+  name_lookup <- user_column_names %in% y
+  if(any(!name_lookup)){
+    matched_values <- user_column_names[name_lookup]
+    unmatched_values <- user_column_names[!name_lookup]
+    matched_string <- ansi_collapse(glue("{matched_values}"),
+                                    sep = ", ",
+                                    last = " & ")
+    unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
                                        sep = ", ",
                                        last = " & ")     
-    accepted_string <- glue_collapse(glue("{y}"),
-                                     sep = ", ",
-                                     last = " or ")
-    bullets <- c(glue("`{field_name}` contains unexpected value(s): {unexpected_string}"),
-                 i = glue("Accepted values are {accepted_string}"))
-    switch_check(level, 
-                 bullets,
-                 call = call)
+    
+    if(length(matched_values) > 0) {
+      matches_message <- c(
+        "v" = "Matched {length(matched_values)} field name{?s}: {.field {matched_string}}"
+      )
+    } else {
+      matches_message <- NULL
+    }
+    
+    if(length(unmatched_values) > 0) {
+      unmatch_message <- c(
+        "x" = "No matches for {length(unmatched_values)} field name{?s}: {.field {unmatched_string}}"
+      )
+    } else {
+      unmatch_message <- NULL
+    }
+    
+    bullets <- c(
+      matches_message,
+      unmatch_message
+      )
+    
+    # browser()
+    
+    dwc_function_main <- tibble::tribble(
+      ~"dwc_term", ~"use_function",
+      "basisOfRecord",   "use_basisOfRecord()",
+      "occurrenceID",   "use_occurrenceID()",
+      "decimalLatitude",   "use_coordinates()",
+      "decimalLongitude",   "use_coordinates()",
+      "eventDate",   "use_datetime()"
+    )
+    
+    dwc_function_optional <- tibble::tribble(
+      ~"dwc_term", ~"use_function",
+      "continent",   "use_locality",
+      "country",   "use_locality",
+      "countryCode",   "use_locality",
+      "stateProvince",   "use_locality",
+      "locality",   "use_locality"
+    )
+    
+    # browser()
+    suggested_functions <- dwc_function_main |>
+      dplyr::filter(!dwc_term %in% matched_values) |>
+      dplyr::distinct(use_function) |>
+      pull(use_function)
+    
+    optional_functions <- dwc_function_optional |>
+      dplyr::filter(!dwc_term %in% matched_values) |>
+      dplyr::distinct(use_function) |>
+      pull(use_function)
+    
+    if(length(suggested_functions) > 1) {
+      suggested_functions_piped <- c(paste0(head(suggested_functions, -1), " |> "), tail(suggested_functions, 1))
+    } else {
+        suggested_functions_piped <- suggested_functions
+      }
+
+    
+    if(length(optional_functions) >= 1) {
+      optional_functions <- ansi_collapse(glue("{optional_functions}"),
+                                          sep = ", ",
+                                          last = ", ")
+    }
+    
+    custom_alert <- function(texts, other_texts, .envir = parent.frame()) {
+      
+      # DwC matches
+      cli::cli_div()
+      cli::cli_h1("DwC term matches")
+      cli::cli_bullets(bullets)
+      cli::cli_end()
+      
+      # Suggested workflow
+      cli::cli_h1("Suggested workflow")
+      cli::cli_par()
+      cli::cli_text("To make your data DarwinCore compliant, use the following workflow.")
+      cli::cli_end()
+      cli::cli_text("df |>")
+      cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(texts, cli::cli_alert, .envir = .envir)
+      cli::cli_par()
+      cli::cli_end()
+      cli::cli_div()
+      cli::cli_text("Additional workflow functions: {.fn {other_texts}}")
+      cli::cli_end()
+      cli::cli_par()
+    }
+    
+    # withr::with_options(
+    #   list(cli.width = 80),
+    #   custom_alert(suggested_functions_piped, optional_functions)
+    # )
+    
+    custom_alert(suggested_functions_piped, optional_functions)
+    
+    # cli_inform(fun(), call = call)
+    
+    
+    # switch_check(level, 
+    #              bullets,
+    #              call = call)
   }
   .df
 }
