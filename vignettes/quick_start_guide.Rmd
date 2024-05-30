@@ -76,19 +76,58 @@ df <- tibble(
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-We recommend that you use `dplyr` for all your data manipulation needs. If 
-you would like, you can add `use_dwc()` to your pipe to provide DwC-specific
-information about conformance with the standard, e.g.
+Just as we used `usethis` syntax when building our directory, `galaxias`
+provides a set of helper functions for adding or manipulating columns to 
+conform to the Darwin Core standard. Each function starts with a `use_`
+prefix. 
 
-```{r,eval=FALSE}
-df |>
-  use_dwc() |>
-  rename(decimalLatitude = latitude)
+
+NOTE TO SELF - this list is for own use - not a good way to arrange in QSG
+The most commonly used functions are:
+
+Survey Events
+ - `use_eventID()` unique identifier for the observation event [eventID, parentEventID]
+ - `use_occurrenceID()` unique identifier for each row
+ - `use_eventDate()` to specify a date in the correct format
+ 
+Location
+ - `use_coordinates()` for numeric spatial data
+ - `use_locality()` for spatial descriptions
+ 
+Taxon
+ - `use_scientificName()` record the highest level of taxonomic specificity in the dataset
+ - `use_taxonomy()` to specify higher taxonomic columns
+
+Details of individual observations
+ - `use_individuals()` attributes of individuals measured [lifeStage sex vitality reproductiveCondition]
+ - `use_abundance()` to state how many animals were seen during the observation
+ 
+Observer
+ - `use_observer()` to specify who made the observation
+ - `use_basisOfRecord()` to specify the observation method
+
+
+
+
+To give an example of what we mean, here is an example workflow:
+
+```{r}
+dwc_df <- df |>
+  use_coordinates(decimalLatitude = latitude,
+                  decimalLongitude = longitude)
 ```
 
-In this case, `decimalLatitude` is recorded as a string, not a number. 
-`use_dwc()` only informs on columns that you are editting. A more complete
-pipeline could look like this:
+In this case, `decimalLatitude` is recorded as a string, not a number; we can
+correct as follows:
+ 
+
+```{r}
+dwc_df <- df |>
+  use_coordinates(decimalLatitude = as.numeric(latitude),
+                  decimalLongitude = longitude)
+```
+
+BELOW OLD
 
 ```{r,eval=FALSE}
 df |>
