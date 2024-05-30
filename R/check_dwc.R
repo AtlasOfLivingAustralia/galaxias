@@ -4,6 +4,7 @@
 #' NOTE: Option to use `bdc` for checks, and/or `pointblank` for running them
 #' @param df A tibble against which checks should be run
 #' @importFrom rlang inform
+#' @importFrom cli cli_bullets
 #' @param df a tibble containing data
 #' @order 1
 #' @export
@@ -17,7 +18,7 @@ check_dwc <- function(.df){
   checkable_fields <- fields[fields %in% available_checks]
   check_functions <- c("check_fields",
                        glue("check_{checkable_fields}"))
-  inform("Checking DwC fields")
+  cli_bullets(c(">" = "Checking DwC fields."))
   # run each function on df
   lapply(check_functions, 
          function(x){do.call(x, args = list(.df = .df))}) |>
