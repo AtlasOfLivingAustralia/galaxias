@@ -115,7 +115,6 @@ check_contains <- function(.df,
       "locality",   "use_locality"
     )
     
-    # browser()
     suggested_functions <- dwc_function_main |>
       dplyr::filter(!dwc_term %in% matched_values) |>
       dplyr::distinct(use_function) |>
@@ -139,6 +138,7 @@ check_contains <- function(.df,
                                           last = ", ")
     }
     
+    # Format message
     custom_alert <- function(texts, other_texts, .envir = parent.frame()) {
       
       # DwC matches
@@ -191,8 +191,17 @@ check_is_numeric <- function(.df,
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
   if(!inherits(x, c("numeric", "integer"))){
-    bullets <- c(i = glue("`{field_name}` is not numeric"))
-    switch_check(level, 
+    bullets <- c(
+      "{.field {field_name}} is not numeric."
+      ) |>
+      cli::cli_bullets() |>
+      cli::cli_fmt()
+    
+    #TODO: Note that the above formats bullets and capture cli output so that switch_check() works
+    
+    # cli::cli_alert_info(bullets)
+    
+    switch_check(level,
                  bullets,
                  call = call)
   }
@@ -245,11 +254,11 @@ check_within_range <- function(.df,
                                level = "inform", 
                                lower,
                                upper,
-                               call = caller_env()
+                               error_call = caller_env()
 ){
   .df |> 
     check_data_frame() |>
-    check_is_numeric(level = level)
+    check_is_numeric(level = level, call = caller_env())
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
   range_check <- (x >= lower & x <= upper)
@@ -257,7 +266,37 @@ check_within_range <- function(.df,
     bullets <- c(i = glue("`{field_name}` contains values ouside of {lower} <= x <= {upper}"))
     switch_check(level,
                  bullets,
-                 call = call)
+                 call = error_call)
+  }
+  .df
+}
+
+#' check a vector has one row per value
+#' @noRd
+#' @keywords Internal
+check_is_date <- function(.df,
+                         level = "warn",
+                         call = caller_env()
+){
+  check_data_frame(.df)
+  field_name <- colnames(.df)[[1]]
+  x <- .df |> pull(field_name)
+  if(!inherits(x, c("Date", "POSIXt"))){
+    bullets <- c(
+      "{.field {field_name}} is not of class {.code Date}.",
+      i = "Use {.pkg lubridate} to work with date/time data.",
+      i = "Specify the format of your date using functions like {.code ymd()}, {.code mdy()}, or {.code dmy()}."
+      )
+    
+    cli::cli_abort(bullets, call = call)
+    
+    # if(inherits(x, "POSIXt")) {
+    #   x <- x |> date() # convert POSIXt to date with UTC timezone
+    # }
+    
+    # switch_check(level,
+    #              bullets,
+    #              call = call)
   }
   .df
 }
