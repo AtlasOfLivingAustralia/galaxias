@@ -44,11 +44,23 @@ to an existing directory:
 The following functions add single DwC fields, or collections of related
 fields, to an existing \code{tibble}.
 \itemize{
-\item \code{\link[=use_occurrenceID]{use_occurrenceID()}} # unique identifiers for each row
+\item \code{\link[=use_occurrenceID]{use_occurrenceID()}} # unique identifiers for each row (include \code{recordID}?)
 \item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} # a description of the 'type' of data
 \item \code{\link[=use_coordinates]{use_coordinates()}} for spatial data
 \item \code{\link[=use_eventDate]{use_eventDate()}} for temporal data
 \item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
+}
+
+Proposed:
+\itemize{
+\item \code{\link[=use_eventID]{use_eventID()}} unique identifier for the observation event (eventID, parentEventID)
+\item \code{\link[=use_scientificName]{use_scientificName()}} record the highest level of taxonomic specificity in the dataset (scientificName, scientificNameRank, scientificNameAuthorship)
+\item \code{\link[=use_taxonomy]{use_taxonomy()}} to specify higher taxonomic columns (kingdom, phylum, class, order, family, genus, species, specificEpithet, vernacularName)
+\item \code{\link[=use_individuals]{use_individuals()}} attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
+\item \code{\link[=use_abundance]{use_abundance()}} to state how many animals were seen during the observation (individualCount, organismQuantity, organismQuantityType, occurrenceStatus)
+\item \code{\link[=use_observer]{use_observer()}} to specify who made the observation (recordedByID, recordedBy)
+\item \code{\link[=use_collection]{use_collection()}} to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
+\item \code{\link[=use_measurement]{use_measurement()}} for 'Measurement or Fact' data (optional rn)
 }
 
 Related:
@@ -58,7 +70,7 @@ Related:
 
 \strong{Checking data for Darwin Core compliance}
 
-The wrapper function for checking tibbles for Darwin Core complicance is
+The wrapper function for checking tibbles for Darwin Core compliance is
 \code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
 \itemize{
 \item \code{\link[=check_dwc]{check_dwc()}} to run all applicable \code{check_} functions
@@ -81,12 +93,6 @@ some \code{use_} functions affect multiple fields.
 \item \code{\link[=check_dwca]{check_dwca()}} Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
 \item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API (NOT FUNCTIONAL)
 \item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication (NOT FUNCTIONAL)
-}
-
-\strong{Internal Functions}
-\itemize{
-\item \code{\link[=read_md]{read_md()}} read a markdown file into R as xml
-\item \code{\link[=write_md]{write_md()}} convert an xml document in the workspace to a markdown file
 }
 }
 

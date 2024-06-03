@@ -41,11 +41,22 @@
 #'  The following functions add single DwC fields, or collections of related 
 #'  fields, to an existing `tibble`.
 #'  
-#'   * [use_occurrenceID()] # unique identifiers for each row
+#'   * [use_occurrenceID()] # unique identifiers for each row (include `recordID`?)
 #'   * [use_basisOfRecord()] # a description of the 'type' of data
 #'   * [use_coordinates()] for spatial data
 #'   * [use_eventDate()] for temporal data
 #'   * [use_locality()] for spatial descriptions
+#'   
+#'   Proposed:
+#'   
+#'   * [use_eventID()] unique identifier for the observation event (eventID, parentEventID)
+#'   * [use_scientificName()] record the highest level of taxonomic specificity in the dataset (scientificName, scientificNameRank, scientificNameAuthorship)
+#'   * [use_taxonomy()] to specify higher taxonomic columns (kingdom, phylum, class, order, family, genus, species, specificEpithet, vernacularName)
+#'   * [use_individuals()] attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
+#'   * [use_abundance()] to state how many animals were seen during the observation (individualCount, organismQuantity, organismQuantityType, occurrenceStatus)
+#'   * [use_observer()] to specify who made the observation (recordedByID, recordedBy)
+#'   * [use_collection()] to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
+#'   * [use_measurement()] for 'Measurement or Fact' data (optional rn)
 #'   
 #'  Related:
 #'   
@@ -53,7 +64,7 @@
 #'  
 #'  **Checking data for Darwin Core compliance**
 #'  
-#'  The wrapper function for checking tibbles for Darwin Core complicance is
+#'  The wrapper function for checking tibbles for Darwin Core compliance is
 #'  [check_dwc()]. It calls the following microfunctions:
 #'   
 #'   * [check_dwc()] to run all applicable `check_` functions
@@ -76,10 +87,6 @@
 #'   * [check_dwca()] Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
 #'   * [validate_dwca()] check your archive via the ALA validate API (NOT FUNCTIONAL)
 #'   * [publish_dwca()] send your data to the ALA for publication (NOT FUNCTIONAL)
-#'   
-#' **Internal Functions**
-#'   * [read_md()] read a markdown file into R as xml
-#'   * [write_md()] convert an xml document in the workspace to a markdown file 
 #'  
 #' @keywords internal
 "_PACKAGE"

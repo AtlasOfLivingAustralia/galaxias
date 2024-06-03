@@ -1,10 +1,10 @@
-
 #' @rdname read_md
 #' @param xml A xml object, either imported using `xml2`, or the url or a valid
 #' xml page.
 #' @param file (string) file name to save text, typically to `.md` or `.Rmd`
 #' @importFrom xml2 as_list
-#' @export
+#' @noRd
+#' @keywords Internal
 write_md <- function(xml, file, title = "Title goes here"){
   # add a boilerplate `rmd` header to support rendering
   # note: possible instead to populate header with dataset title, date

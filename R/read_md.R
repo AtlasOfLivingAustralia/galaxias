@@ -7,7 +7,8 @@
 #' @importFrom tibble tibble
 #' @importFrom xml2 as_xml_document
 #' @name read_md
-#' @export
+#' @noRd
+#' @keywords Internal
 read_md <- function(file){
   # read file, detect headings
   x <- readLines(file)

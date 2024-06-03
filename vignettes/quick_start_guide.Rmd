@@ -88,7 +88,7 @@ The most commonly used functions are:
 Survey Events
  - `use_eventID()` unique identifier for the observation event [eventID, parentEventID]
  - `use_occurrenceID()` unique identifier for each row
- - `use_eventDate()` to specify a date in the correct format
+ - `use_datetime()` to specify a date in the correct format
  
 Location
  - `use_coordinates()` for numeric spatial data

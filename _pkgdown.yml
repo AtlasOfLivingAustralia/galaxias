@@ -69,7 +69,3 @@ reference:
   - build_dwca
   - validate_dwca
   - publish_dwca
-- title: Internal functions
-  contents:
-  - read_md
-  - write_md
