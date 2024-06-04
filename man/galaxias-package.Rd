@@ -44,8 +44,6 @@ to an existing directory:
 The following functions add single DwC fields, or collections of related
 fields, to an existing \code{tibble}.
 \itemize{
-\item \code{\link[=use_occurrenceID]{use_occurrenceID()}} # unique identifiers for each row (include \code{recordID}?)
-\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}} # a description of the 'type' of data
 \item \code{\link[=use_coordinates]{use_coordinates()}} for spatial data
 \item \code{\link[=use_eventDate]{use_eventDate()}} for temporal data
 \item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
@@ -53,14 +51,20 @@ fields, to an existing \code{tibble}.
 
 Proposed:
 \itemize{
-\item \code{\link[=use_eventID]{use_eventID()}} unique identifier for the observation event (eventID, parentEventID)
+\item \code{\link[=use_occurrences]{use_occurrences()}} basic information on observations (occurrenceID, basisOfrecord, recordID (?))
+\item \code{\link[=use_events]{use_events()}} basic information on observation events (eventID, parentEventID)
 \item \code{\link[=use_scientificName]{use_scientificName()}} record the highest level of taxonomic specificity in the dataset (scientificName, scientificNameRank, scientificNameAuthorship)
 \item \code{\link[=use_taxonomy]{use_taxonomy()}} to specify higher taxonomic columns (kingdom, phylum, class, order, family, genus, species, specificEpithet, vernacularName)
-\item \code{\link[=use_individuals]{use_individuals()}} attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
 \item \code{\link[=use_abundance]{use_abundance()}} to state how many animals were seen during the observation (individualCount, organismQuantity, organismQuantityType, occurrenceStatus)
+}
+
+Possible functions for added functionality:
+\itemize{
+\item \code{\link[=use_individuals]{use_individuals()}} attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
 \item \code{\link[=use_observer]{use_observer()}} to specify who made the observation (recordedByID, recordedBy)
 \item \code{\link[=use_collection]{use_collection()}} to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
 \item \code{\link[=use_measurement]{use_measurement()}} for 'Measurement or Fact' data (optional rn)
+\item \code{\link[=use_media]{use_media()}} good idea, but unclear how users would supply said media; should be urls, but to where?
 }
 
 Related:

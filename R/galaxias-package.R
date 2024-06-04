@@ -41,22 +41,23 @@
 #'  The following functions add single DwC fields, or collections of related 
 #'  fields, to an existing `tibble`.
 #'  
-#'   * [use_occurrenceID()] # unique identifiers for each row (include `recordID`?)
-#'   * [use_basisOfRecord()] # a description of the 'type' of data
 #'   * [use_coordinates()] for spatial data
 #'   * [use_eventDate()] for temporal data
 #'   * [use_locality()] for spatial descriptions
 #'   
 #'   Proposed:
-#'   
-#'   * [use_eventID()] unique identifier for the observation event (eventID, parentEventID)
+#'   * [use_occurrences()] basic information on observations (occurrenceID, basisOfrecord, recordID (?))
+#'   * [use_events()] basic information on observation events (eventID, parentEventID)   
 #'   * [use_scientificName()] record the highest level of taxonomic specificity in the dataset (scientificName, scientificNameRank, scientificNameAuthorship)
 #'   * [use_taxonomy()] to specify higher taxonomic columns (kingdom, phylum, class, order, family, genus, species, specificEpithet, vernacularName)
-#'   * [use_individuals()] attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
 #'   * [use_abundance()] to state how many animals were seen during the observation (individualCount, organismQuantity, organismQuantityType, occurrenceStatus)
+#'
+#'   Possible functions for added functionality:
+#'   * [use_individuals()] attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
 #'   * [use_observer()] to specify who made the observation (recordedByID, recordedBy)
 #'   * [use_collection()] to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
 #'   * [use_measurement()] for 'Measurement or Fact' data (optional rn)
+#'   * [use_media()] good idea, but unclear how users would supply said media; should be urls, but to where?
 #'   
 #'  Related:
 #'   
