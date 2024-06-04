@@ -76,9 +76,9 @@ use_datetime <- function(
            .keep = .keep)
   
   check_eventDate(result, level = "abort")
-  check_eventTime(df, level = "abort")
+  check_eventTime(result, level = "abort")
   check_year(result, level = "abort")
-  # check_month(df, level = "abort")
+  check_month(result, level = "abort")
   # check_day(df, level = "abort")
 
   # check_DatePrecision(df, level = "abort")
@@ -116,6 +116,22 @@ check_eventDate <- function(.df,
 #' @importFrom lubridate year
 #' @importFrom lubridate today
 #' @export
+check_eventTime <- function(.df, 
+                            level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "eventTime")){
+    .df |>
+      select("eventTime") |>
+      check_time(level = level)
+  } 
+}
+
+#' @rdname check_dwc
+#' @order 6
+#' @importFrom lubridate year
+#' @importFrom lubridate today
+#' @export
 check_year <- function(.df, 
                        level = c("inform", "warn", "abort")
 ){
@@ -135,13 +151,39 @@ check_year <- function(.df,
 #' @importFrom lubridate year
 #' @importFrom lubridate today
 #' @export
-check_eventTime <- function(.df, 
+check_month <- function(.df, 
                        level = c("inform", "warn", "abort")
 ){
   level <- match.arg(level)
-  if(any(colnames(.df) == "eventTime")){
-    .df |>
-      select("eventTime") |>
-      check_time(level = level)
+  if(any(colnames(.df) == "month")){
+    
+    month <- .df |>
+      select("month")
+    
+    if(inherits(.df$month, "numeric")) {
+      month |>
+      check_within_range(lower = 1,
+                         upper = 12,
+                         level = level
+      )
+    } else {
+      if(inherits(.df$month, "character")) {
+        # browser()
+        # Detect and handle month abbreviations
+        if(any(match(.df$month,month.abb))) {
+          if(any(is.na(match(.df$month, month.abb)))) {
+            cli::cli_abort("Some month abbreviations did not match.")
+          }
+          } else {
+            # Detect and handle month names
+            if(any(match(.df$month, month.name))) {
+              if(any(is.na(match(.df$month, month.name)))) {
+                cli::cli_abort("Some month names did not match.")
+              }
+              }
+          } 
+        }
+      
+    }
   } 
 }

@@ -346,8 +346,6 @@ check_time <- function(.df,
                  call = call)
   }
   
-  
-  # browser()
   # Is there a time?
   if(any(lubridate::is.POSIXt(x))) {
     
@@ -364,10 +362,6 @@ check_time <- function(.df,
       cli::cli_abort("Only accepts hours minutes or hours minutes seconds.")
     }
   }
-  
-  
-  
-  
 
   .df
 }
