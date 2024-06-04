@@ -149,8 +149,8 @@ check_contains <- function(.df,
       
       # Suggested workflow
       cli::cli_h1("Suggested workflow")
+      cli::cli_text("To make your data Darwin Core compliant, use the following workflow:")
       cli::cli_par()
-      cli::cli_text("To make your data Darwin Core compliant, use the following workflow.")
       cli::cli_end()
       cli::cli_text("df |>")
       cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
@@ -158,7 +158,7 @@ check_contains <- function(.df,
       cli::cli_par()
       cli::cli_end()
       cli::cli_div()
-      cli::cli_text(cli::col_grey("Additional suggested workflow functions: {.fn {other_texts}}"))
+      cli::cli_text(cli::col_grey("Additional functions: {.fn {other_texts}}"))
       cli::cli_end()
       cli::cli_par()
     }
