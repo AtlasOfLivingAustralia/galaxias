@@ -13,6 +13,7 @@
 \alias{check_decimalLatitude}
 \alias{check_eventDate}
 \alias{check_year}
+\alias{check_eventTime}
 \alias{check_decimalLongitude}
 \title{Check for Darwin Core field conformance}
 \usage{
@@ -34,11 +35,9 @@ check_decimalLatitude(.df, level = c("inform", "warn", "abort"))
 
 check_eventDate(.df, level = c("inform", "warn", "abort"))
 
-check_year(
-  .df,
-  level = c("inform", "warn", "abort"),
-  error_call = caller_env()
-)
+check_year(.df, level = c("inform", "warn", "abort"))
+
+check_eventTime(.df, level = c("inform", "warn", "abort"))
 
 check_decimalLongitude(.df, level = c("inform", "warn", "abort"))
 }

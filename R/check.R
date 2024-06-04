@@ -191,15 +191,11 @@ check_is_numeric <- function(.df,
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
   if(!inherits(x, c("numeric", "integer"))){
-    bullets <- c(
+    
+    bullets <- cli::cli_bullets(c(
       "{.field {field_name}} is not numeric."
-      ) |>
-      cli::cli_bullets() |>
+      )) |>
       cli::cli_fmt()
-    
-    #TODO: Note that the above formats bullets and capture cli output so that switch_check() works
-    
-    # cli::cli_alert_info(bullets)
     
     switch_check(level,
                  bullets,
@@ -273,30 +269,105 @@ check_within_range <- function(.df,
 
 #' check a vector has one row per value
 #' @noRd
+#' @importFrom lubridate is.timepoint
+#' @importFrom lubridate is.POSIXt
+#' @importFrom cli cli_fmt
+#' @importFrom cli cli_bullets
 #' @keywords Internal
-check_is_date <- function(.df,
-                         level = "warn",
-                         call = caller_env()
+check_date <- function(.df,
+                       level = "warn",
+                       call = caller_env()
+                       ){
+  check_data_frame(.df)
+  field_name <- colnames(.df)[[1]]
+  x <- .df |> pull(field_name)
+  
+  # Is it a date?
+  if(!lubridate::is.timepoint(x)){
+    bullets <- cli::cli_bullets(c(
+      "Invalid {.field eventDate} class.",
+      i = "Use {.pkg lubridate} to work with date/time data.",
+      i = "Specify date format with e.g. {.code ymd()}, {.code mdy()}, or {.code dmy()}.",
+      x = "{.field eventDate} must be a Date vector, not a {class(x)}."
+      )) |>
+      cli::cli_fmt()
+    
+    switch_check(level,
+                 bullets,
+                 call = call)
+  }
+  
+  # browser()
+  # Is there also a time?
+  if(any(lubridate::is.POSIXt(x))) {
+    
+    # Is the time formatted as ymd_hms, ymd_hm or ymd_h?
+    if(any(is.na(lubridate::ymd_hms(x, quiet = TRUE))) |
+       any(is.na(lubridate::ymd_hm(x, quiet = TRUE))) |
+       any(is.na(lubridate::ymd_h(x, quiet = TRUE)))
+       ) {
+      bullets <- cli::cli_bullets(c(
+        "{.field {field_name}} contains invalid datetime format."
+      ))
+      }
+    }
+
+  .df
+
+}
+
+#' check a vector has one row per value
+#' @noRd
+#' @importFrom lubridate is.timepoint
+#' @importFrom lubridate is.POSIXt
+#' @importFrom cli cli_fmt
+#' @importFrom cli cli_bullets
+#' @keywords Internal
+check_time <- function(.df,
+                       level = "warn",
+                       call = caller_env()
 ){
   check_data_frame(.df)
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
-  if(!inherits(x, c("Date", "POSIXt"))){
-    bullets <- c(
-      "{.field {field_name}} is not of class {.code Date}.",
+  
+  # Is it a date?
+  if(!lubridate::is.timepoint(x)){
+    bullets <- cli::cli_bullets(c(
+      "Invalid {.field eventDate} class.",
       i = "Use {.pkg lubridate} to work with date/time data.",
-      i = "Specify the format of your date using functions like {.code ymd()}, {.code mdy()}, or {.code dmy()}."
-      )
+      i = "Specify date format with e.g. {.code ymd()}, {.code mdy()}, or {.code dmy()}.",
+      x = "{.field eventDate} must be a Date vector, not a {class(x)}."
+    )) |>
+      cli::cli_fmt()
     
-    cli::cli_abort(bullets, call = call)
-    
-    # if(inherits(x, "POSIXt")) {
-    #   x <- x |> date() # convert POSIXt to date with UTC timezone
-    # }
-    
-    # switch_check(level,
-    #              bullets,
-    #              call = call)
+    switch_check(level,
+                 bullets,
+                 call = call)
   }
+  
+  
+  # browser()
+  # Is there a time?
+  if(any(lubridate::is.POSIXt(x))) {
+    
+    # what format is the time?
+    if(!any(is.na(as.POSIXct(x, format = "%H:%M:%S"))) |
+       !any(is.na(as.POSIXct(x, format = "%H:%M")))) { 
+
+      if(any(is.na(as.POSIXct(x, format = "%H:%M")))) { 
+        .df[1] <- hms::parse_hms(.df[1], format = "%H:%M") # hours minutes seconds
+    } else {
+      .df[1] <- hms::parse_hm(.df[1]) # hours minutes
+    }
+    } else {
+      cli::cli_abort("Only accepts hours minutes or hours minutes seconds.")
+    }
+  }
+  
+  
+  
+  
+
   .df
 }

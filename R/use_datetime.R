@@ -43,30 +43,53 @@ use_datetime <- function(
   if(missing(df)){
     abort("df is missing, with no default.")
   }
-  # browser()
+  
+  # Handle eventDate
+  
+  ## TODO: Allow df |> use_datetime(eventDate = c(date, time))
+  
+  # error if more than 2 columns supplied
+  # if(length(eventDate) > 2) {
+  #   cli::cli_abort("Too many inputs supplied to {.field eventDate}.")
+  # } else {
+  # 
+  #   # 
+  #   if(length(eventDate) == 2) {
+  #     
+  #     temp_df <- df |>
+  #       dplyr::select({{eventDate}}[1], {{eventDate}}[[2]])
+  #     
+  #     check_eventDate(temp_df[1], level = "abort")
+  #     check_eventTime(temp_df[2], level = "abort")
+  #     
+  #     eventDate <- lubridate::date(glue::glue("{temp_df$date} {temp_df$time}"))
+  #   } 
+  # }
+  
   result <- df |>
-    dplyr::mutate(eventDate = {{eventDate}},
-                  year = {{year}},
-           day = {{day}},
-           month = {{month}},
+    mutate(eventDate = {{eventDate}},
            eventTime = {{eventTime}},
+           year = {{year}},
+           month = {{month}},
+           day = {{day}},
            eventDatePrecision = {{eventDatePrecision}},
            .keep = .keep)
   
   check_eventDate(result, level = "abort")
+  check_eventTime(df, level = "abort")
   check_year(result, level = "abort")
-  # check_day(df, level = "abort")
   # check_month(df, level = "abort")
-  # check_eventTime(df, level = "abort")
+  # check_day(df, level = "abort")
+
   # check_DatePrecision(df, level = "abort")
-  
+    
   # other tests likely to be needed here
   result
 }
 
 #' @rdname check_dwc
 #' @order 6
-#' @importFrom lubridate::parse_date_time
+#' @importFrom lubridate parse_date_time
 #' @export
 check_eventDate <- function(.df, 
                             level = c("inform", "warn", "abort")
@@ -75,8 +98,16 @@ check_eventDate <- function(.df,
   if(any(colnames(.df) == "eventDate")){
     .df |>
       select("eventDate") |>
-      check_is_date(level = level) |>
+      check_date(level = level) |>
       mutate(eventDate = lubridate::parse_date_time(eventDate, orders = "ymd"))
+    
+    bullets <- c(
+      "!" = "{.field eventDate} defaults to UTC standard.",
+      i = "To specify a different timezone, use {.code {.pkg lubridate}::ymd_hms(x, tz = \"timezone\")}"
+    ) 
+    
+    cli::cli_warn(bullets)
+    
   } 
 }
 
@@ -92,10 +123,25 @@ check_year <- function(.df,
   if(any(colnames(.df) == "year")){
     .df |>
       select("year") |>
-      check_within_range(lower = 1000,
+      check_within_range(lower = 0,
                          upper = as.numeric(lubridate::year(lubridate::today())),
                          level = level
                          )
-      # mutate(eventDate = lubridate::parse_date_time(eventDate, orders = "ymd"))
+  } 
+}
+
+#' @rdname check_dwc
+#' @order 6
+#' @importFrom lubridate year
+#' @importFrom lubridate today
+#' @export
+check_eventTime <- function(.df, 
+                       level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "eventTime")){
+    .df |>
+      select("eventTime") |>
+      check_time(level = level)
   } 
 }
