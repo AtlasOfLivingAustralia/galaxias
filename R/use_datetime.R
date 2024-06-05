@@ -7,13 +7,11 @@
 #' informative errors, and serves as a useful lookup for how spatial fields are
 #' represented in the Darwin Core Standard.
 #' @param df a `data.frame` or `tibble` that the column should be appended to.
-#' @param eventDate The date and/or time that the observation/event occurred. 
+#' @param eventDate The date or date + time that the observation/event occurred. 
 #' @param year The year of the observation/event.
 #' @param month The month of the observation/event.
 #' @param day The day of the observation/event. 
-#' that contains the whole location, given any possible measurement error.
-#' @param eventTime The time of the observation/event.
-#' @param datePrecision Precision of the `eventDate`.
+#' @param time The time of the observation/event.
 #' @param .keep Control which columns from .data are retained in the output. 
 #' Note that unlike `dplyr::mutate`, which defaults to `"all"` this defaults to 
 #' `"unused"`; i.e. only keeps Darwin Core fields, and not those fields used to 
@@ -21,11 +19,10 @@
 #' @returns A tibble with the requested fields added.
 #' @details
 #' Example values are:
-#' * `geodeticDatum` should be a valid EPSG code
-#' * `coordinatePrecision` should be no less than 0.00001 if data were collected
-#' using GPS
-#' * `coordinateUncertaintyInMeters` will typically be around `30` (metres) if
-#' recorded with a GPS after 2000, or `100` before that year. 
+#' * `eventDate` should be class `Date` or `POSITct`. We suggest using the 
+#' lubridate package to define define your date format using functions like 
+#' `ymd()`, `mdy`, `dmy()`, or if including date + time, `ymd_hms()`, 
+#' `ymd_hm()`, or `ymd_h()`.
 #' @importFrom dplyr mutate
 #' @importFrom rlang abort
 #' @export
@@ -35,8 +32,7 @@ use_datetime <- function(
     year = NULL,
     month = NULL,
     day = NULL,
-    eventTime = NULL,
-    eventDatePrecision = NULL,
+    time = NULL,
     .keep = "unused"
 ){
   
@@ -44,44 +40,19 @@ use_datetime <- function(
     abort("df is missing, with no default.")
   }
   
-  # Handle eventDate
-  
-  ## TODO: Allow df |> use_datetime(eventDate = c(date, time))
-  
-  # error if more than 2 columns supplied
-  # if(length(eventDate) > 2) {
-  #   cli::cli_abort("Too many inputs supplied to {.field eventDate}.")
-  # } else {
-  # 
-  #   # 
-  #   if(length(eventDate) == 2) {
-  #     
-  #     temp_df <- df |>
-  #       dplyr::select({{eventDate}}[1], {{eventDate}}[[2]])
-  #     
-  #     check_eventDate(temp_df[1], level = "abort")
-  #     check_eventTime(temp_df[2], level = "abort")
-  #     
-  #     eventDate <- lubridate::date(glue::glue("{temp_df$date} {temp_df$time}"))
-  #   } 
-  # }
-  
   result <- df |>
     mutate(eventDate = {{eventDate}},
-           eventTime = {{eventTime}},
            year = {{year}},
            month = {{month}},
            day = {{day}},
-           eventDatePrecision = {{eventDatePrecision}},
+           time = {{time}},
            .keep = .keep)
   
   check_eventDate(result, level = "abort")
-  check_eventTime(result, level = "abort")
   check_year(result, level = "abort")
   check_month(result, level = "abort")
-  # check_day(df, level = "abort")
-
-  # check_DatePrecision(df, level = "abort")
+  check_day(result, level = "abort")
+  check_time(result, level = "abort")
     
   # other tests likely to be needed here
   result
@@ -99,7 +70,8 @@ check_eventDate <- function(.df,
     .df |>
       select("eventDate") |>
       check_date(level = level) |>
-      mutate(eventDate = lubridate::parse_date_time(eventDate, orders = "ymd"))
+      check_time(level = level)
+      # mutate(eventDate = lubridate::parse_date_time(eventDate, orders = "ymd"))
     
     bullets <- c(
       "!" = "{.field eventDate} defaults to UTC standard.",
@@ -116,8 +88,8 @@ check_eventDate <- function(.df,
 #' @importFrom lubridate year
 #' @importFrom lubridate today
 #' @export
-check_eventTime <- function(.df, 
-                            level = c("inform", "warn", "abort")
+check_time <- function(.df, 
+                       level = c("inform", "warn", "abort")
 ){
   level <- match.arg(level)
   if(any(colnames(.df) == "eventTime")){
@@ -168,21 +140,55 @@ check_month <- function(.df,
       )
     } else {
       if(inherits(.df$month, "character")) {
-        # browser()
+        
         # Detect and handle month abbreviations
         if(any(match(.df$month,month.abb))) {
           if(any(is.na(match(.df$month, month.abb)))) {
-            cli::cli_abort("Some month abbreviations did not match.")
+            cli::cli_warn("Some month abbreviations did not match.")
           }
           } else {
             # Detect and handle month names
             if(any(match(.df$month, month.name))) {
               if(any(is.na(match(.df$month, month.name)))) {
-                cli::cli_abort("Some month names did not match.")
+                cli::cli_warn("Some month names did not match.")
               }
               }
           } 
         }
+      
+    }
+  } 
+}
+
+#' @rdname check_dwc
+#' @order 6
+#' @importFrom lubridate year
+#' @importFrom lubridate today
+#' @export
+check_day <- function(.df, 
+                        level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "day")){
+    
+    day <- .df |>
+      select("day")
+    
+    if(inherits(.df$day, "numeric")) {
+      day |>
+        check_within_range(lower = 1,
+                           upper = 31,
+                           level = level
+        )
+    } else {
+      bullets <- cli::cli_bullets(c(
+        "Invalid {.field day} class.",
+        i = "See {.code ?lubridate::mday()} to see how to convert a date to day of month.",
+        x = "{.field day} must be numeric, not {class(.df$day)}." 
+      ))|>
+        cli::cli_fmt()
+      
+      cli::cli_abort(bullets)
       
     }
   } 

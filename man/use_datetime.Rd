@@ -10,8 +10,7 @@ use_datetime(
   year = NULL,
   month = NULL,
   day = NULL,
-  eventTime = NULL,
-  eventDatePrecision = NULL,
+  time = NULL,
   .keep = "unused"
 )
 }
@@ -27,12 +26,12 @@ use_datetime(
 \item{day}{The day of the observation/event.
 that contains the whole location, given any possible measurement error.}
 
-\item{eventTime}{The time of the observation/event.}
-
 \item{.keep}{Control which columns from .data are retained in the output.
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{eventTime}{The time of the observation/event.}
 
 \item{datePrecision}{Precision of the \code{eventDate}.}
 }

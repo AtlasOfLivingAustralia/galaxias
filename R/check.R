@@ -297,23 +297,53 @@ check_date <- function(.df,
                  call = call)
   }
   
+  if(any(lubridate::is.POSIXt(x))) {
+    check_date_time(x,level)
+    }
+
+  .df
+
+}
+
+#' check a vector has one row per value
+#' @noRd
+#' @importFrom lubridate is.POSIXt
+#' @importFrom lubridate ymd_hms
+#' @importFrom lubridate ymd_hm
+#' @importFrom lubridate ymd_h
+#' @importFrom cli cli_fmt
+#' @importFrom cli cli_bullets
+#' @keywords Internal
+check_date_time <- function(x,
+                            level = "warn",
+                            call = caller_env()
+){
+
+  
   # browser()
   # Is there also a time?
   if(any(lubridate::is.POSIXt(x))) {
     
     # Is the time formatted as ymd_hms, ymd_hm or ymd_h?
-    if(any(is.na(lubridate::ymd_hms(x, quiet = TRUE))) |
-       any(is.na(lubridate::ymd_hm(x, quiet = TRUE))) |
-       any(is.na(lubridate::ymd_h(x, quiet = TRUE)))
-       ) {
+    if(!any(is.na(lubridate::ymd_hms(x, quiet = TRUE))) |
+       !any(is.na(lubridate::ymd_hm(x, quiet = TRUE))) |
+       !any(is.na(lubridate::ymd_h(x, quiet = TRUE)))
+    ) {
+      x <- x
+    } else {
       bullets <- cli::cli_bullets(c(
-        "{.field {field_name}} contains invalid datetime format."
-      ))
-      }
+        "{.field eventDate} contains invalid date time format.",
+        i = "Use {.pkg lubridate} to work with date/time data.",
+        i = "Specify date/time format with e.g. {.code ymd_hms()}, {.code ymd_hm()}, or {.code ymd_h()}."
+      )) |>
+        cli::cli_fmt()
+      
+      cli::cli_abort(bullets, call = call)
     }
-
-  .df
-
+  }
+  
+  x
+  
 }
 
 #' check a vector has one row per value
@@ -330,21 +360,6 @@ check_time <- function(.df,
   check_data_frame(.df)
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
-  
-  # Is it a date?
-  if(!lubridate::is.timepoint(x)){
-    bullets <- cli::cli_bullets(c(
-      "Invalid {.field eventDate} class.",
-      i = "Use {.pkg lubridate} to work with date/time data.",
-      i = "Specify date format with e.g. {.code ymd()}, {.code mdy()}, or {.code dmy()}.",
-      x = "{.field eventDate} must be a Date vector, not a {class(x)}."
-    )) |>
-      cli::cli_fmt()
-    
-    switch_check(level,
-                 bullets,
-                 call = call)
-  }
   
   # Is there a time?
   if(any(lubridate::is.POSIXt(x))) {
