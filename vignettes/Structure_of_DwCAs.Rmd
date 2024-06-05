@@ -28,3 +28,4 @@ A DwC-A can contain a range of different files, but there are three main files t
   Metadata Language (EML) format
 - `meta.xml`: A metadata file describing the structure and relationships of
 files within the archive
+

@@ -2,18 +2,20 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_data}
 \alias{use_bd_data}
-\title{Add \code{data} folder to a biodiversity data repository}
+\title{Add \code{data} folder to a biodiversity data project}
 \usage{
 use_bd_data(..., overwrite = FALSE)
 }
 \arguments{
-\item{...}{Unquoted names of existing objects to save.}
+\item{...}{Unquoted names of an object to save.}
 
 \item{overwrite}{(logical) Should existing objects be overwritten? Defaults
 to FALSE.}
 }
 \description{
-This function places specified objects in the \code{data} folder as csv files.
-Note that this is very different from \code{usethis::use_data} which uses \code{.rda}
-format (and then only when \code{internal = FALSE}).
+This function places specified objects in the \code{data} folder as \code{.csv} files.
+Note that this is very different from \code{usethis::use_data()} which uses \code{.rda}
+format (and then only when \code{internal = FALSE}). This is provided for
+consistency with \code{usethis}, but a more flexible approach is simply to use
+\code{readr::write_csv()}.
 }

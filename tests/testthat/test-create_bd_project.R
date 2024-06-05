@@ -1,4 +1,4 @@
-test_that("`usethis` functions generate a project", {
+test_that("`create_bd_project()` correctly generates a project", {
   testdir <- tempdir() # this is per-session; do not `unlink()`
   proj_name <- paste0(testdir, "/testproject") # this is the test package
   
@@ -13,9 +13,6 @@ test_that("`usethis` functions generate a project", {
                     "README.md",
                     "metadata.md",
                     "testproject.Rproj"))
-  
-  ## add schema
-  
   # tidy up
   unlink(proj_name, recursive = TRUE)
 })

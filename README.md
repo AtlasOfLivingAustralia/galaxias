@@ -8,10 +8,10 @@
 `galaxias` is an R package that helps users standardize, document and
 share biodiversity information using the [‘Darwin
 Core’](https://dwc.tdwg.org) data standard. It supports users to set up
-repositories in a standardised way; provides tools and examples for how
-to use the Darwin Core standard; and allows remote validation and
-publication of said data via API. `galaxias` was built, and is
-maintained, by the [Science & Decision Support
+data sharing projects in a standardised way; provides tools and examples
+for how to use standard data and object types; and allows validation of
+the resulting archive against the Darwin Core Standard. `galaxias` was
+built, and is maintained, by the [Science & Decision Support
 Team](https://labs.ala.org.au) at the [Atlas of Living
 Australia](https://www.ala.org.au) (ALA).
 

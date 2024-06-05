@@ -14,6 +14,9 @@ services. Currently only \code{"GBIF"} is supported.}
 
 \item{path}{path to a nominated Biodiversity Data Package}
 }
+\value{
+A report on the supplied archive.
+}
 \description{
 Validate a Darwin Core Archive via API
 }

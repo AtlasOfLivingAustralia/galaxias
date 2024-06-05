@@ -13,6 +13,7 @@ write_md <- function(xml, file, title = "Title goes here"){
   md_recurse(as_list(xml), file = file)
 }
 
+#' This assumes user can call different object types
 #' @noRd
 #' @keywords Internal
 #' @importFrom stringr str_extract
@@ -20,9 +21,20 @@ switch_headers <- function(filename, title){
   file_extension <- basename(filename) |>
     str_extract("\\.[:alpha:]+$")
   switch(file_extension, 
+         ".md" = build_md_header(title),
          ".rmd" = build_rmd_header(title),
          ".qmd" = build_qmd_header(title),
          "") # GitHub Markdown doesn't require YAML
+}
+
+#' @noRd
+#' @keywords Internal
+#' @importFrom glue glue
+build_md_header <- function(title){
+  glue("---
+title: {title}
+output: github_document
+---")
 }
 
 #' @noRd
@@ -99,5 +111,5 @@ md_recurse <- function(x, level = 1, file){
 # # test with real XML
 # library(xml2)
 # x <- read_xml("https://collections.ala.org.au/ws/eml/dr368")
-# write_md(pluck(as_list(xml), "eml"), "test.rmd")
+# write_md(x, "test.md")
 # y <- read_md("test.rmd)

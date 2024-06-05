@@ -1,19 +1,37 @@
-#' Add `data` folder to a biodiversity data repository
+#' Add `data` folder to a biodiversity data project
 #' 
-#' This function places specified objects in the `data` folder as csv files.
-#' Note that this is very different from `usethis::use_data` which uses `.rda`
-#' format (and then only when `internal = FALSE`).
-#' @param ... Unquoted names of existing objects to save.
+#' This function places specified objects in the `data` folder as `.csv` files.
+#' Note that this is very different from `usethis::use_data()` which uses `.rda`
+#' format (and then only when `internal = FALSE`). This is provided for 
+#' consistency with `usethis`, but a more flexible approach is simply to use
+#' `readr::write_csv()`.
+#' @param ... Unquoted names of an object to save.
 #' @param overwrite (logical) Should existing objects be overwritten? Defaults
 #' to FALSE.
-#' @importFrom usethis use_data
+#' @importFrom glue glue
+#' @importFrom rlang as_label
+#' @importFrom rlang enquos
 #' @export
 use_bd_data <- function(..., overwrite = FALSE){
   use_directory("data")
-  write_csv(...) # pseudocode: won't work yet
+  dots <- enquos(...)[[1]]
+  path <- glue("data/{as_label(dots)}.csv")
+  if(file.exists(path)){
+    if(overwrite){
+      inform(glue("overwriting existing file: {path}"))
+      write_csv(x = eval_tidy(dots), file = path)
+    }else{
+      bullets <- c(glue("file already exists at {path}"),
+                   i = "to replace, set `overwrite = TRUE`")
+      inform(bullets)
+    }
+  }else{
+    inform(glue("saving to {path}"))
+    write_csv(x = eval_tidy(dots), file = path)  
+  }
 }
 
-#' Add `data-raw` folder to a biodiversity data repository
+#' Add `data-raw` folder to a biodiversity data project
 #' 
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields.
@@ -27,11 +45,11 @@ use_bd_data_raw <- function(){
                package = "galaxias")
 }
 
-#' Add `DESCRIPTION` to a biodiversity data repository
+#' Add `DESCRIPTION` to a biodiversity data project
 #' 
-#' In a biodiversity data repository, the DESCRIPTION file is used to add 
-#' authorship and licencing information, which is then used by `build_dwca()` 
-#' to create a metadata statement (in conjunction with README.Rmd)
+#' In a biodiversity data project, it is possible to use a DESCRIPTION file to 
+#' add authorship and licencing information. This can be useful, for example,
+#' if you require the data and repository to have different licences.
 #' @importFrom usethis use_description
 #' @export
 use_bd_description <- function(){
@@ -41,10 +59,11 @@ use_bd_description <- function(){
     "Licence" = "`use_ccby_licence()` (recommended), `use_cc0_licence()` or friends to pick a licence appropriate for a data package"))
 }
 
-#' Add a metadata statement to a biodiversity data repository
+#' Add a metadata statement to a biodiversity data project
 #' 
-#' Builds a file called `metadata.md` in the `inst` folder; this folder is 
-#' created if not already present. Partially populated using `DESCRIPTION`.
+#' Builds a file called `metadata.md`, for storing information on your dataset.
+#' This provides a convenient document structure to describe what your data is, 
+#' who collected it, and what licence it is released under.
 #' @importFrom usethis use_directory
 #' @export
 use_bd_metadata <- function(){
@@ -53,14 +72,10 @@ use_bd_metadata <- function(){
                package = "galaxias")
 }
 
-#' Add `README` to a biodiversity data repository
+#' Add `README` to a biodiversity data project
 #' 
 #' This function adds `galaxias`-specific `README` instead of the `usethis` 
-#' default. Note that the two functions deliver quite different content. 
-#' `README.md` is intended as a metadata statement, for *projects* (i.e. same
-#' as `use_bd_metadata()` for packages, but in a different location). 
-#' `README.Rmd` is for describing *packages* and does not have a metadata-like
-#' flavour.
+#' default.
 #' @name use_bd_readme
 #' @importFrom usethis use_template
 #' @export

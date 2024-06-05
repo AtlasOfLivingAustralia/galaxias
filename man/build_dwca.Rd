@@ -4,11 +4,11 @@
 \alias{build_dwca}
 \title{Build a Darwin Core Archive from a Biodiversity Data Package}
 \usage{
-build_dwca(pkg = ".", path = NULL)
+build_dwca(project = ".", path = NULL)
 }
 \arguments{
-\item{pkg}{A directory containing a Biodiversity Data Package. Defaults to
-current working directory.}
+\item{project}{A directory containing a Biodiversity Data Project. Defaults
+to current working directory.}
 
 \item{path}{(Optional) Path to the resulting zip file. Defaults to \code{NULL},
 indicating that the file should be saved to the current parent directory.}
@@ -25,10 +25,12 @@ rather than an R package.
 This function looks for specific objects in specific places, namely:
 \itemize{
 \item Named objects in the \code{data} folder
-\item Schema and metadata in the \code{inst} folder
+\item \code{metadata.md} in base folder (or \code{inst} folder as a backup)
 }
 
-If no data are present, or \code{inst/metadata.md} is missing, the function will
-terminate with an error. This does not happen if \code{inst/schema.md} is missing,
-because this can be built automatically using \code{use_bd_schema()}.
+If either data or metadata are missing missing, the function will
+terminate with an error.
+
+Note that Darwin Core Archives also require a 'schema' file. This is
+buily internally using \code{build_schema()}.
 }

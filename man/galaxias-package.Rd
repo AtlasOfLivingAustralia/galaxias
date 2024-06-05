@@ -8,10 +8,8 @@
 \description{
 \code{{galaxias}} is a \code{{usethis}} extension for building 'Darwin Core Archives'; a
 global data standard to store, document, and share biodiversity information.
-The package provides tools build data repositories, manipulate data to
-conform with the standard, check validity against established norms, and
-publish the archive to a data infrastructure of your choice
-(though currently only the Atlas of Living Australia is formally supported).
+The package provides tools build data projects, manipulate data to
+conform with the standard, and check validity against established norms.
 
 The package is named for a genus of freshwater fish.
 }
@@ -81,9 +79,8 @@ some \code{use_} functions affect multiple fields.
 \strong{Checking and publication}
 \itemize{
 \item \code{\link[=build_dwca]{build_dwca()}} convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
-\item \code{\link[=check_dwca]{check_dwca()}} Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
-\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API (NOT FUNCTIONAL)
-\item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication (NOT FUNCTIONAL)
+\item \code{\link[=check_dwca]{check_dwca()}} Function to check whole repository for conformance with DwC
+\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API
 }
 }
 
