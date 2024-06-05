@@ -3,10 +3,8 @@
 #' @description
 #' `{galaxias}` is a `{usethis}` extension for building 'Darwin Core Archives'; a
 #' global data standard to store, document, and share biodiversity information.
-#' The package provides tools build data repositories, manipulate data to 
-#' conform with the standard, check validity against established norms, and
-#' publish the archive to a data infrastructure of your choice
-#' (though currently only the Atlas of Living Australia is formally supported).
+#' The package provides tools build data projects, manipulate data to 
+#' conform with the standard, and check validity against established norms.
 #' 
 #' The package is named for a genus of freshwater fish.
 #' 
@@ -67,16 +65,14 @@
 #'   * [check_decimalLatitude()]
 #'   * [check_decimalLongitude()]
 #'   
-#'   
 #'  Note that there are more `check_` functions than `use_` functions, because
 #'  some `use_` functions affect multiple fields.
 #'   
 #'  **Checking and publication**
 #'  
 #'   * [build_dwca()] convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
-#'   * [check_dwca()] Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
-#'   * [validate_dwca()] check your archive via the ALA validate API (NOT FUNCTIONAL)
-#'   * [publish_dwca()] send your data to the ALA for publication (NOT FUNCTIONAL)
+#'   * [check_dwca()] Function to check whole repository for conformance with DwC
+#'   * [validate_dwca()] check your archive via the ALA validate API
 #'  
 #' @keywords internal
 "_PACKAGE"
