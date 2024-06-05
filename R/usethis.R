@@ -1,30 +1,16 @@
-#' Add `CITATION` file to a biodiversity data repository
-#' @importFrom pkgload pkg_name
-#' @importFrom usethis use_directory
-#' @importFrom usethis use_template
-#' @export
-use_bd_citation <- function(){
-  use_directory("inst")
-  use_template(template = "CITATION",
-               save_as = "inst/CITATION",
-               data = list("Project" = pkg_name()),
-               package = "galaxias")
-}
-
 #' Add `data` folder to a biodiversity data repository
 #' 
-#' This function is largely synonymous with `usethis::use_data()`, but is 
-#' included here for completeness, and to enforce some defaults that affect 
-#' where and how data is stored.
+#' This function places specified objects in the `data` folder as csv files.
+#' Note that this is very different from `usethis::use_data` which uses `.rda`
+#' format (and then only when `internal = FALSE`).
 #' @param ... Unquoted names of existing objects to save.
 #' @param overwrite (logical) Should existing objects be overwritten? Defaults
 #' to FALSE.
 #' @importFrom usethis use_data
 #' @export
 use_bd_data <- function(..., overwrite = FALSE){
-  use_data(..., 
-           internal = FALSE,
-           overwrite = overwrite)
+  use_directory("data")
+  write_csv(...) # pseudocode: won't work yet
 }
 
 #' Add `data-raw` folder to a biodiversity data repository
@@ -39,9 +25,6 @@ use_bd_data_raw <- function(){
   use_template(template = "data_manipulation_script.R",
                save_as = "data-raw/data_manipulation_script.R",
                package = "galaxias")
-  # update DESCRIPTION
-  ## use_package("galaxias", type = "Suggests")
-  # Unclear if this is needed
 }
 
 #' Add `DESCRIPTION` to a biodiversity data repository
@@ -94,46 +77,5 @@ use_bd_readme_rmd <- function(){
   use_template(template = "pkg-README",
                save_as = "README.Rmd",
                data = list("Project" = pkg_name()),
-               package = "galaxias")
-}
-
-#' Add `schema.md` to a biodiversity data repository
-#' 
-#' Builds a file called `schema.md` in the `inst` folder; this folder is 
-#' created if not already present. The schema is a standard part of Darwin Core 
-#' Archives and requires data to be present in the `data` folder to do anything 
-#' useful.
-#' @export
-use_bd_schema <- function(){
-  write_md(build_schema(),
-           file = "inst/schema.md")
-}
-
-#' Add Darwin Core tests to a biodiversity data repository
-#' 
-#' This optional first initiates the `tests/testthat` folder, then adds a set of 
-#' boilerplate tests suitable for checking data. These tests all assume that 
-#' data has been added to the `data` folder following the steps outlined in 
-#' `data_manipulation_script.R` (created using `use_bd_data_raw()`).
-#' @importFrom fs path_package
-#' @importFrom usethis use_testthat
-#' @export
-use_bd_testthat <- function(){
-  use_testthat()
-  # add tests here, one at a time
-  use_template(template = "test-decimalLatitude_decimalLongitude.R",
-               save_as = "tests/testthat/test-decimalLatitude_decimalLongitude.R",
-               package = "galaxias")
-}
-
-#' Add a vignette to report on contents of a biodiversity data repository
-#' 
-#' Still in test, this function builds a report-style vignette so you (and your
-#' users) can see what kind of data is in your package.
-#' @export
-use_bd_vignette <- function(){
-  use_directory("vignettes")
-  use_template(template = "pkg-report.Rmd",
-               save_as = "vignettes/pkg_report.Rmd",
                package = "galaxias")
 }

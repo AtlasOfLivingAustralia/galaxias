@@ -13,7 +13,7 @@ use_bd_data(..., overwrite = FALSE)
 to FALSE.}
 }
 \description{
-This function is largely synonymous with \code{usethis::use_data()}, but is
-included here for completeness, and to enforce some defaults that affect
-where and how data is stored.
+This function places specified objects in the \code{data} folder as csv files.
+Note that this is very different from \code{usethis::use_data} which uses \code{.rda}
+format (and then only when \code{internal = FALSE}).
 }

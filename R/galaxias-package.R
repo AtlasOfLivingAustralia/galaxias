@@ -18,23 +18,15 @@
 #' @section Functions:
 #' **Building your project**
 #' 
-#' There are two functions that you can use to create your workspace:
-#' 
-#'   * [create_bd_project()] to create an RStudio project (recommended)
-#'   * [create_bd_package()] to create an R package (advanced)
-#' 
+#' The default method to start your project is to call [create_bd_project()]. 
 #' Alternatively, you can call the following functions to add specific content
 #' to an existing directory:
 #'   
-#'   * [use_bd_citation()] to give advice on citing your repository
 #'   * [use_bd_data()] to create the requisite 'processed' data files
 #'   * [use_bd_data_raw()] build `data-raw` folder, with example code
 #'   * [use_bd_description()] add a `DESCIRPTION` file
 #'   * [use_bd_metadata()] to create a metadata statement in the home directory
-#'   * [use_bd_readme_rmd()] Add a `README.Rmd` file with advice for biodiversity data
-#'   * [use_bd_schema()] to create a schema based on objects in the `data` folder
-#'   * [use_bd_testthat()] add tests for conformance with Darwin Core standards
-#'   * [use_bd_vignette()] add a vignette that summarizes data in your repository
+#'   * [use_bd_readme_md()], [use_bd_readme_rmd()] Add a `README.Rmd` file with advice for biodiversity data
 #'   
 #' **Add Darwin Core Terms**   
 #'
@@ -53,15 +45,12 @@
 #'   * [use_abundance()] to state how many animals were seen during the observation (individualCount, organismQuantity, organismQuantityType, occurrenceStatus)
 #'
 #'   Possible functions for added functionality:
+#'   * [use_darwin_core()] to subset to only fields with DwC names (i.e. same as `df |> select(any_of(dwc_fields()))`)
 #'   * [use_individuals()] attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
 #'   * [use_observer()] to specify who made the observation (recordedByID, recordedBy)
 #'   * [use_collection()] to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
 #'   * [use_measurement()] for 'Measurement or Fact' data (optional rn)
 #'   * [use_media()] good idea, but unclear how users would supply said media; should be urls, but to where?
-#'   
-#'  Related:
-#'   
-#'   * [dwc_fields()] NOT IMPLEMENTED YET, but would be useful e.g. `df |> select(any_of(dwc_fields()))`
 #'  
 #'  **Checking data for Darwin Core compliance**
 #'  

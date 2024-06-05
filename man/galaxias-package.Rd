@@ -19,24 +19,15 @@ The package is named for a genus of freshwater fish.
 
 \strong{Building your project}
 
-There are two functions that you can use to create your workspace:
-\itemize{
-\item \code{\link[=create_bd_project]{create_bd_project()}} to create an RStudio project (recommended)
-\item \code{\link[=create_bd_package]{create_bd_package()}} to create an R package (advanced)
-}
-
+The default method to start your project is to call \code{\link[=create_bd_project]{create_bd_project()}}.
 Alternatively, you can call the following functions to add specific content
 to an existing directory:
 \itemize{
-\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your repository
 \item \code{\link[=use_bd_data]{use_bd_data()}} to create the requisite 'processed' data files
 \item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
 \item \code{\link[=use_bd_description]{use_bd_description()}} add a \code{DESCIRPTION} file
 \item \code{\link[=use_bd_metadata]{use_bd_metadata()}} to create a metadata statement in the home directory
-\item \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a \code{README.Rmd} file with advice for biodiversity data
-\item \code{\link[=use_bd_schema]{use_bd_schema()}} to create a schema based on objects in the \code{data} folder
-\item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
-\item \code{\link[=use_bd_vignette]{use_bd_vignette()}} add a vignette that summarizes data in your repository
+\item \code{\link[=use_bd_readme_md]{use_bd_readme_md()}}, \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a \code{README.Rmd} file with advice for biodiversity data
 }
 
 \strong{Add Darwin Core Terms}
@@ -60,16 +51,12 @@ Proposed:
 
 Possible functions for added functionality:
 \itemize{
+\item \code{\link[=use_darwin_core]{use_darwin_core()}} to subset to only fields with DwC names (i.e. same as \code{df |> select(any_of(dwc_fields()))})
 \item \code{\link[=use_individuals]{use_individuals()}} attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
 \item \code{\link[=use_observer]{use_observer()}} to specify who made the observation (recordedByID, recordedBy)
 \item \code{\link[=use_collection]{use_collection()}} to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
 \item \code{\link[=use_measurement]{use_measurement()}} for 'Measurement or Fact' data (optional rn)
 \item \code{\link[=use_media]{use_media()}} good idea, but unclear how users would supply said media; should be urls, but to where?
-}
-
-Related:
-\itemize{
-\item \code{\link[=dwc_fields]{dwc_fields()}} NOT IMPLEMENTED YET, but would be useful e.g. \code{df |> select(any_of(dwc_fields()))}
 }
 
 \strong{Checking data for Darwin Core compliance}
