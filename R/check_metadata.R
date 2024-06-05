@@ -1,33 +1,16 @@
 # NOTE: This code is useful, but not yet well-integrated with the rest of the
-# package. To be truly useful it should probably be called within `testthat`
-# code, somehow. Perhaps add `testthat` functions here and call them within 
-# the users' BDP?
-
-# testthat functions
-# 
-# These extend `testthat` for use in `galaxias`. Experimental
-# @param path (string) path to a file to test for existence
-# @name testthat
-# @export
-# expect_exists <- function(path){
-#   path |>
-#     file.exists() |>
-#     expect_true()
-# }
-
-# add function to skip non-required checks, e.g.
-# if relevant object not present (e.g. events, occurrences)
-# if object present, but field is not (e.g. basisOfRecord)
-# if test requires to be online, but you aren't (e.g. check_metadata, below)
-## skip_dwc <- function(){}
+# package. To be truly useful it should probably be called within `check_dwc()`
+# or similar.
 
 #' Check that a supplied metadata statement is valid according to GBIF schema
+#' 
+#' Note: this function requires the user to be online.
 #' @param metadata xml object representing metadata
 #' @return A tibble showing parsed errors
 #' @importFrom xml2 read_xml
 #' @noRd
 #' @keywords Internal
-test_metadata <- function(metadata) {
+check_metadata <- function(metadata) {
   
   # 1. validate against "./data-raw/eml-gbif-profile.xsd" with xml2::xml_validate()
   validator <- xml_validate(
