@@ -22,7 +22,7 @@ individual organisms represented in the Occurrence. Meant to accommodate
 resampling of the same individual or group for monitoring purposes. May
 be a global unique identifier or an identifier specific to a data set.}
 
-\item{lifeStage}{The age class or life stage of organism at the time of
+\item{lifeStage}{The age class or life stage of an organism at the time of
 occurrence.}
 
 \item{sex}{The sex of the biological individual.}
