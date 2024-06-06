@@ -12,7 +12,7 @@
 #' individual organisms represented in the Occurrence. Meant to accommodate 
 #' resampling of the same individual or group for monitoring purposes. May 
 #' be a global unique identifier or an identifier specific to a data set.
-#' @param lifeStage The age class or life stage of organism at the time of 
+#' @param lifeStage The age class or life stage of an organism at the time of 
 #' occurrence.
 #' @param sex The sex of the biological individual.
 #' @param vitality An indication of whether an organism was alive or dead at 
