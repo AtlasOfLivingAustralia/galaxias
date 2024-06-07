@@ -99,8 +99,8 @@ check_contains <- function(.df,
     # Function matching for suggested workflow
     dwc_function_main <- tibble::tribble(
       ~"dwc_term", ~"use_function",
-      "basisOfRecord",   "use_basisOfRecord()",
-      "occurrenceID",   "use_occurrenceID()",
+      "basisOfRecord",   "use_occurrences()",
+      "occurrenceID",   "use_occurrences()",
       "decimalLatitude",   "use_coordinates()",
       "decimalLongitude",   "use_coordinates()",
       "eventDate",   "use_datetime()"
