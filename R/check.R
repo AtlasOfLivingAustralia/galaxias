@@ -26,11 +26,11 @@ check_data_frame <- function(.df,
                              call = caller_env()
 ){
   if(!inherits(.df, "data.frame")){
-    abort("objects supplied to `check_` functions must be a `tibble` or `data.frame`.",
+    abort("Must supply a `tibble` or `data.frame` to `check_` functions.",
           call = call)
   }
   if(ncol(.df) > 1){
-    abort("`data.frame`s supplied to `check_` functions should only have one column.",
+    abort("Must supply `data.frame` with one column to `check_` functions.",
           call = call)
   }
   .df
@@ -47,6 +47,11 @@ check_data_frame <- function(.df,
 #' @importFrom cli cli_text
 #' @importFrom cli cli_bullets
 #' @importFrom cli ansi_collapse
+#' @importFrom cli cli_div
+#' @importFrom cli cli_par
+#' @importFrom cli cli_text
+#' @importFrom cli cli_end
+#' @importFrom cli cli_fmt
 #' @noRd
 #' @keywords Internal
 check_contains_terms <- function(.df, 
@@ -75,7 +80,7 @@ check_contains_terms <- function(.df,
     
     if(length(matched_values) > 0) {
       matches_message <- c(
-        "v" = "Matched {length(matched_values)} field name{?s}: {.field {matched_string}}"
+        "v" = "Matched {length(matched_values)} column name{?s} to DwC terms: {.field {matched_string}}"
       )
     } else {
       matches_message <- NULL
@@ -83,7 +88,7 @@ check_contains_terms <- function(.df,
     
     if(length(unmatched_values) > 0) {
       unmatch_message <- c(
-        "x" = "No matches for {length(unmatched_values)} field name{?s}: {.field {unmatched_string}}"
+        "x" = "No DwC terms matched {length(unmatched_values)} field name{?s}: {.field {unmatched_string}}"
       )
     } else {
       unmatch_message <- NULL
@@ -252,7 +257,7 @@ check_is_numeric <- function(.df,
   if(!inherits(x, c("numeric", "integer"))){
     
     bullets <- cli::cli_bullets(c(
-      "{.field {field_name}} is not numeric."
+      "{.field {field_name}} must be numeric vector, not {class(x)}."
       )) |>
       cli::cli_fmt()
     
@@ -318,7 +323,11 @@ check_within_range <- function(.df,
   x <- .df |> pull(field_name)
   range_check <- (x >= lower & x <= upper)
   if(!all(range_check)){
-    bullets <- c(i = glue("`{field_name}` contains values ouside of {lower} <= x <= {upper}"))
+    bullets <- cli::cli_bullets(c(
+      "Value outside of expected range.",
+      x = "`{field_name}` contains values ouside of {lower} <= x <= {upper}."
+               )) |> 
+        cli::cli_fmt()
     switch_check(level,
                  bullets,
                  call = error_call)
@@ -344,10 +353,8 @@ check_date <- function(.df,
   # Is it a date?
   if(!lubridate::is.timepoint(x)){
     bullets <- cli::cli_bullets(c(
-      "Invalid {.field eventDate} class.",
-      i = "Use {.pkg lubridate} to work with date/time data.",
-      i = "Specify date format with e.g. {.code ymd()}, {.code mdy()}, or {.code dmy()}.",
-      x = "{.field eventDate} must be a Date vector, not a {class(x)}."
+      "{.field eventDate} must be a Date vector, not a {class(x)}.",
+      i = "Specify date format with {.pkg lubridate} functions e.g. {.code ymd()}, {.code mdy()}, or {.code dmy()}."
       )) |>
       cli::cli_fmt()
     
@@ -391,9 +398,8 @@ check_date_time <- function(x,
       x <- x
     } else {
       bullets <- cli::cli_bullets(c(
-        "{.field eventDate} contains invalid date time format.",
-        i = "Use {.pkg lubridate} to work with date/time data.",
-        i = "Specify date/time format with e.g. {.code ymd_hms()}, {.code ymd_hm()}, or {.code ymd_h()}."
+        "{.field eventDate} contains invalid date/time format.",
+        i = "Specify date/time format with {.pkg lubridate} functions e.g. {.code ymd_hms()}, {.code ymd_hm()}, or {.code ymd_h()}."
       )) |>
         cli::cli_fmt()
       
@@ -433,7 +439,7 @@ check_time <- function(.df,
       .df[1] <- hms::parse_hm(.df[1]) # hours minutes
     }
     } else {
-      cli::cli_abort("Only accepts hours minutes or hours minutes seconds.")
+      cli::cli_abort("Must format {.field {field_name}} as hours:minutes or hours:minutes:seconds.")
     }
   }
 
