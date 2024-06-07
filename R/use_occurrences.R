@@ -49,6 +49,8 @@ use_occurrences <- function(
            # recordNumer = {{recordNumber}},
            .keep = .keep)
   
+  check_basisOfRecord(result, level = "abort")
+  
   result
 }
 
@@ -66,13 +68,13 @@ check_basisOfRecord <- function(.df,
     .df |>
       select("basisOfRecord") |>
       check_is_string(level = level) |>
-      check_contains(y = valid_basisOfRecord(), 
-                     level = level)
+      check_contains_values(y = valid_basisOfRecord(), 
+                            level = level)
   }
   .df
 }
 
-#' Accepted values for `BasisOfRecord`
+#' Accepted values for `basisOfRecord`
 #' @noRd
 #' @keywords Internal
 valid_basisOfRecord <- function(){

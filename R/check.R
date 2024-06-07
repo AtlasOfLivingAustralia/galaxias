@@ -49,7 +49,7 @@ check_data_frame <- function(.df,
 #' @importFrom cli ansi_collapse
 #' @noRd
 #' @keywords Internal
-check_contains <- function(.df, 
+check_contains_terms <- function(.df, 
                            y, 
                            level = "inform",
                            call = caller_env()
@@ -176,6 +176,65 @@ check_contains <- function(.df,
     # switch_check(level, 
     #              bullets,
     #              call = call)
+  }
+  .df
+}
+
+
+#' check a vector consists only of values in a second vector
+#' @param x vector of values
+#' @param y vector against which x should be compared
+#' @importFrom dplyr pull
+#' @importFrom glue glue
+#' @importFrom cli cli_alert_success
+#' @importFrom cli cli_alert_warning
+#' @importFrom cli cli_alert_danger
+#' @importFrom cli cli_text
+#' @importFrom cli cli_bullets
+#' @importFrom cli ansi_collapse
+#' @noRd
+#' @keywords Internal
+check_contains_values <- function(.df, 
+                                 y, 
+                                 level = "inform",
+                                 call = caller_env()
+){
+  check_data_frame(.df)
+  field_name <- colnames(.df)[[1]]
+  user_values <- .df |> 
+    pull(field_name) |>
+    unique() |>
+    sort()
+  name_lookup <- user_values %in% y
+  if(any(!name_lookup)){
+    unmatched_values <- user_values[!name_lookup]
+    unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
+                                      sep = ", ",
+                                      last = " & ")     
+    
+    if(length(unmatched_values) > 0) {
+      accepted_values <- ansi_collapse(glue("\"{y}\""),
+                                       sep = ", " ,
+                                       last = " & ")
+      unmatch_message <- c(
+        "Unexpected value in {.field {field_name}}.",
+        i = "Accepted values are {accepted_values}.",
+        "x" = "Unexpected value{?s}: \"{unmatched_string}\""
+      )
+      bullets <- cli::cli_bullets(c(
+        unmatch_message
+      )) |>
+        cli::cli_fmt()
+    }
+    
+    # withr::with_options(
+    #   list(cli.width = 80),
+    #   bullets
+    # )
+
+    switch_check(level,
+                bullets,
+                call = call)
   }
   .df
 }

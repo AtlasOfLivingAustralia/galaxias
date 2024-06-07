@@ -37,8 +37,8 @@ check_fields <- function(.df,
                          level = c("inform", "warn", "abort")){
   level <- match.arg(level)
   result <- tibble(dwc_terms = colnames(.df)) |>
-    check_contains(y = dwc_terms,
-                   level = level)
+    check_contains_terms(y = dwc_terms,
+                         level = level)
   .df
 }
 
