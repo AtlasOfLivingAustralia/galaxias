@@ -46,7 +46,7 @@ use_occurrences <- function(
   result <- df |>
     mutate(occurrenceID = {{occurrenceID}},
            basisOfRecord = {{basisOfRecord}},
-           recordID = {{recordID}},
+           # recordNumer = {{recordNumber}},
            .keep = .keep)
   
   result

@@ -78,7 +78,7 @@ check_eventDate <- function(.df,
       i = "To specify a different timezone, use {.code {.pkg lubridate}::ymd_hms(x, tz = \"timezone\")}"
     ) 
     
-    cli::cli_warn(bullets)
+    cli::cli_inform(bullets)
     
   } 
 }

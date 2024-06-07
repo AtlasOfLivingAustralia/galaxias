@@ -51,7 +51,7 @@ use_scientific_name <- function(
            scientificNameRank = {{scientificNameRank}},
            scientificNameAuthorship = {{scientificNameAuthorship}},
            .keep = .keep)
-  check_scientificname(result, level = "abort")
+  # check_scientificName(result, level = "abort")
   # check_scientificNameRank(result, level = "abort")
   # check_scientificNameAuthorship(result, level = "abort")
 
