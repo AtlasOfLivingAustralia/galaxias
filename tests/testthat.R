@@ -8,5 +8,6 @@
 
 library(testthat)
 library(galaxias)
+library(glue)
 
 test_check("galaxias")

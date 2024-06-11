@@ -1,33 +1,56 @@
-#' Create a `schema` for a `dwca` object
+#' Create a `schema` for a Darwin Core Archive
 #' 
 #' A schema is an xml document that maps the files and field names in a DwCA.
-#' This function is intended to be primarily internal; but can be called via
-#' `add_schema()` for debugging purposes
-#' @param .dwca An object of class `dwca`
-#' @importFrom glue glue_collapse
+#' This function is intended to be primarily internal, and is called by 
+#' `build_dwca()`, but is provided for debugging purposes. It works on csv files
+#' in a specified directory.
+#' @param project a directory containing Darwin Core data, preferrably built
+#' with `use_bd_project()`.
+#' @returns Does not retun an object to the workspace; called for the side
+#' effect of building a file named `meta.xml` in the specified directory.
 #' @importFrom purrr map
 #' @importFrom xml2 xml_add_child
-#' @noRd
-#' @keywords Internal
-build_schema <- function(.dwca) {
-  supported_types <- c("^occurrences", 
-                       "^events", 
-                       "^multimedia") # measurementOrFact could be good too
-  available_types <- list.files("./data",
-                                pattern = glue_collapse(supported_types, sep = "|"))
+#' @export
+build_schema <- function(project = ".") {
+  supported_types <- c("occurrences.csv", # Q: put these into a function? Might be more consistent across the package
+                       "events.csv",
+                       "multimedia.csv")
+                       # measurementOrFact could be good too
+  present_types <- supported_types |>
+    map(\(x) file.exists(x)) |> 
+    unlist()
+  available_types <- supported_types[present_types]
+  
+  # create object and add children
   result <- create_archive_xml()
   if(length(available_types) > 1){
-    nodes <- map(.x = seq_along(selected_types),
+    nodes <- map(.x = available_types,
                  .f = \(x){
-                   type <- selected_types[x]
-                   df <- .dwca[[type]]
-                   create_file_index(colnames(df), type, core = {x == 1})
+                   type <- sub(".csv$", "", x)
+                   field_names <- get_field_names(x)
+                   create_file_index(field_names, 
+                                     type, 
+                                     core = {x == 1})
                  })
-    for(i in seq_along(nodes)){
+    for(i in seq_along(nodes)){ 
       xml_add_child(result, nodes[[i]])
     }
   }
   result
+}
+
+#' simple function to get column names from a csv
+#' this could use readr::read_csv, but that seems overkill, so uses scan() instead
+#' @importFrom purrr pluck
+#' @noRd
+#' @keywords Internal
+get_field_names <- function(file){
+  scan(file, 
+       what = "character",
+       nlines = 1L,
+       quiet = TRUE) |>
+    strsplit(split = ",") |>
+    pluck(1)
 }
 
 #' Internal function to build root node for schema

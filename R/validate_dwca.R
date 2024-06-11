@@ -1,30 +1,19 @@
-#' Validate or Publish a DwCA using the Atlas of Living Australia API
+#' Validate a Darwin Core Archive via API
 #' 
-#' Typically, most testing is done using `devtools::test`; sensible tests for
-#' Darwin Core formats can be created using`add_bd_testthat()`. Prior to 
-#' publication, however, it is often useful to check suitability against the 
-#' host institutions criteria. This function uses the ALA to validate DwCAs.
-#' 
-#' Once validation has been passed, use `publish_dwca()`.
-#' @rdname api_calls
 #' @param path path to a nominated Biodiversity Data Package
 #' @param file optionally specify a pre-built DwCA instead of a directory
-#' @importFrom glue glue
+#' @param provider (string) the institution to be queried for validation 
+#' services. Currently only `"GBIF"` is supported.
+#' @returns A report on the supplied archive.
 #' @export
 validate_dwca <- function(pkg = ".", 
-                          file = NULL){
+                          file = NULL,
+                          provider = "GBIF"
+                          ){
   galaxias_API(pkg = pkg, 
                file = file, 
-               api = "validate")
-}
-
-#' @rdname api_calls
-#' @export
-publish_dwca <- function(pkg = ".", 
-                         file = NULL){
-  galaxias_API(pkg = pkg, 
-               file = file, 
-               api = "publish")
+               api = "validate",
+               provider = provider)
 }
 
 #' Internal function to construct a valid DwCA for shipping with API
@@ -46,16 +35,20 @@ galaxias_API <- function(pkg = ".",
 }
 
 #' Internal function to post content to the specified `validate` API
+#' @importFrom glue glue
 #' @importFrom httr2 request
 #' @importFrom httr2 req_body_file
 #' @importFrom httr2 req_perform
 #' @noRd
 #' @keywords Internal
 post_API <- function(file, 
-                     api = c("validate", "publish")){
+                     api = c("validate", "publish"),
+                     provider){
+  api_string <- glue("{provider}-{api}")
   api <- switch(match.arg(api),
-                "validate" = "https://publish-ws.dev.ala.org.au/validate",
-                "publish" = "https://publish-ws.dev.ala.org.au/publish")
+                "GBIF-validate" = "https://api.gbif.org/validation",
+                "ALA-validate" = "https://publish-ws.dev.ala.org.au/validate",
+                "ALA-publish" = "https://publish-ws.dev.ala.org.au/publish")
   request(api) |>
     # add JWT token here
     req_body_file(file) |>

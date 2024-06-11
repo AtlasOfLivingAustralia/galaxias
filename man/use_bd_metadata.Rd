@@ -2,11 +2,12 @@
 % Please edit documentation in R/usethis.R
 \name{use_bd_metadata}
 \alias{use_bd_metadata}
-\title{Add a metadata statement to a biodiversity data repository}
+\title{Add a metadata statement to a biodiversity data project}
 \usage{
 use_bd_metadata()
 }
 \description{
-Builds a file called \code{metadata.md} in the \code{inst} folder; this folder is
-created if not already present. Partially populated using \code{DESCRIPTION}.
+Builds a file called \code{metadata.md}, for storing information on your dataset.
+This provides a convenient document structure to describe what your data is,
+who collected it, and what licence it is released under.
 }
