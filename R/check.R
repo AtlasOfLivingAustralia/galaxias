@@ -65,18 +65,20 @@ check_contains_terms <- function(.df,
     pull(field_name) |>
     unique() |>
     sort()
-  name_lookup <- user_column_names %in% y
+  name_lookup <- user_column_names %in% y$term
   if(any(!name_lookup)){
-    
+    # browser()
     # Darwin Core term matching
     matched_values <- user_column_names[name_lookup]
     unmatched_values <- user_column_names[!name_lookup]
     matched_string <- ansi_collapse(glue("{matched_values}"),
                                     sep = ", ",
-                                    last = " & ")
+                                    last = ", ")
     unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
                                        sep = ", ",
-                                       last = " & ")     
+                                       last = ", ")
+    
+    
     
     if(length(matched_values) > 0) {
       matches_message <- c(
@@ -88,8 +90,9 @@ check_contains_terms <- function(.df,
     
     if(length(unmatched_values) > 0) {
       unmatch_message <- c(
-        "x" = "No DwC terms matched {length(unmatched_values)} field name{?s}: {.field {unmatched_string}}"
+        "x" = "Could not find matches for {length(unmatched_values)} column name{?s}: {.field {unmatched_string}}"
       )
+      
     } else {
       unmatch_message <- NULL
     }
@@ -101,6 +104,28 @@ check_contains_terms <- function(.df,
     
     # browser()
     
+    ## Minimum required terms
+    
+    req_terms <- check_required_terms(user_column_names)
+    
+    missing_string <- ansi_collapse(glue("{req_terms$missing}"),
+                                      sep = ", ",
+                                      last = ", ")
+    found_string <- ansi_collapse(glue("{req_terms$matched}"),
+                                      sep = ", ",
+                                      last = ", ")
+    
+    if(length(req_terms$missing) > 0) {
+      missing_message <- c(
+        "v" = "Found: {.field {found_string}}",
+        "x" = "Missing: {.field {missing_string}}"
+      )
+    } else {
+      missing_message <- c(
+        "v" = "All minimum required fields found."
+      )
+    }
+    
     # Function matching for suggested workflow
     dwc_function_main <- tibble::tribble(
       ~"dwc_term", ~"use_function",
@@ -108,6 +133,8 @@ check_contains_terms <- function(.df,
       "occurrenceID",   "use_occurrences()",
       "decimalLatitude",   "use_coordinates()",
       "decimalLongitude",   "use_coordinates()",
+      "geodeticDatum",   "use_coordinates()",
+      "coordinateUncertaintyInMeters",   "use_coordinates()",
       "eventDate",   "use_datetime()"
     )
     
@@ -146,10 +173,13 @@ check_contains_terms <- function(.df,
     # Format message
     custom_alert <- function(texts, other_texts, .envir = parent.frame()) {
       
-      # DwC matches
+      # DwC terms
       cli::cli_div()
       cli::cli_h1("DwC terms")
+      cli::cli_h2("Matching DwC terms to column names")
       cli::cli_bullets(bullets)
+      cli::cli_h2("Minimum required terms")
+      cli::cli_bullets(missing_message)
       cli::cli_end()
       
       # Suggested workflow
@@ -444,4 +474,91 @@ check_time <- function(.df,
   }
 
   .df
+}
+
+
+#' Minimum required terms for a Darwin Core compliant data archive
+#' @noRd
+#' @keywords Internal
+required_terms <- function() {
+  terms <- list(
+    identifier = c(
+        "occurrenceID",
+        "catalogNumber",
+        "recordNumber"
+      ),
+      basis = c(
+        "basisOfRecord"
+      ),
+      name = c(
+        "scientificName"
+      ),
+      location = c(
+        "decimalLatitude",
+        "decimalLongitude",
+        "geodeticDatum",
+        "coordinateUncertaintyInMeters"
+      ),
+      date = c(
+        "eventDate"
+      )
+  )
+}
+
+#' Return missing minimum required terms
+#' @noRd
+#' @keywords Internal
+check_required_terms <- function(user_column_names) {
+  
+  terms <- required_terms()
+  
+  if(!any(terms$identifier %in% user_column_names)) {
+    id_missing <- terms$identifier[!terms$identifier %in% user_column_names]
+    id_matched <- NULL
+  } else {
+    id_missing <- NULL
+    id_matched <- terms$identifier[terms$identifier %in% user_column_names]
+  }
+  
+  if(!any(terms$basis %in% user_column_names)) {
+    basis_missing <- terms$basis[!terms$basis %in% user_column_names]
+    basis_matched <- NULL
+  } else {
+    basis_missing <- NULL
+    basis_matched <- terms$basis[terms$basis %in% user_column_names]
+  }
+  
+  if(!any(terms$name %in% user_column_names)) {
+    name_missing <- terms$name[!terms$name %in% user_column_names]
+    name_matched <- NULL
+  } else {
+    name_missing <- NULL
+    name_matched <- terms$name[terms$name %in% user_column_names]
+  }
+  
+  if(!any(terms$location %in% user_column_names)) {
+    location_missing <- terms$location[!terms$location %in% user_column_names]
+    location_matched <- terms$location[terms$location %in% user_column_names]
+  } else {
+    location_missing <- terms$location[!terms$location %in% user_column_names]
+    location_matched <- terms$location[terms$location %in% user_column_names]
+  }
+  
+  if(!any(terms$date %in% user_column_names)) {
+    date_missing <- terms$date[!terms$date %in% user_column_names]
+    date_matched <- terms$date[terms$date %in% user_column_names]
+  } else {
+    date_missing <- terms$date[!terms$date %in% user_column_names]
+    date_matched <- terms$date[terms$date %in% user_column_names]
+  }
+  
+  matched <- c(id_matched, basis_matched, name_matched, location_matched, date_matched)
+  missing <- c(id_missing, basis_missing, name_missing, location_missing, date_missing)
+  
+  result <- list(
+    matched = matched, 
+    missing = missing
+    )
+  
+  return(result)
 }
