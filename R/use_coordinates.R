@@ -41,14 +41,14 @@ use_coordinates <- function(
     abort("df is missing, with no default")
   }
   result <- df |>
-    mutate(decimalLatitude = decimalLatitude,
-           decimalLongitude = decimalLongitude,
-           geodeticDatum = geodeticDatum,
-           coordinateUncertaintyInMeters = coordinateUncertaintyInMeters,
-           coordinatePrecision = coordinatePrecision,
+    mutate(decimalLatitude = {{decimalLatitude}},
+           decimalLongitude = {{decimalLongitude}},
+           geodeticDatum = {{geodeticDatum}},
+           coordinateUncertaintyInMeters = {{coordinateUncertaintyInMeters}},
+           coordinatePrecision = {{coordinatePrecision}},
            .keep = .keep)
-  check_decimalLatitude(df, level = "abort")
-  check_decimalLongitude(df, level = "abort")
+  check_decimalLatitude(result, level = "abort")
+  check_decimalLongitude(result, level = "abort")
   # other tests likely to be needed here
   result
 }

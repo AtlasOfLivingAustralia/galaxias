@@ -26,34 +26,34 @@ use_basisOfRecord <- function(.df,
 
 }
 
-#' Check basisOfRecord field is valid
-#' @rdname check_dwc
-#' @param level what action should the function take for non-conformance? 
-#' Defaults to `"inform"`.
-#' @order 4
-#' @export
-check_basisOfRecord <- function(.df, 
-                                level = c("inform", "warn", "abort")
-){
-  level <- match.arg(level)
-  if(any(colnames(.df) == "basisOfRecord")){
-    .df |>
-      select("basisOfRecord") |>
-      check_is_string(level = level) |>
-      check_contains(y = valid_basisOfRecord(), 
-                     level = level)
-  }
-  .df
-}
-
-#' Accepted values for `BasisOfRecord`
-#' @noRd
-#' @keywords Internal
-valid_basisOfRecord <- function(){
-  c("humanObservation", 
-    "machineObservation",
-    "livingSpecimen",
-    "preservedSpecimen",
-    "fossilSpecimen",
-    "materialCitation")
-}
+#' #' Check basisOfRecord field is valid
+#' #' @rdname check_dwc
+#' #' @param level what action should the function take for non-conformance? 
+#' #' Defaults to `"inform"`.
+#' #' @order 4
+#' #' @export
+#' check_basisOfRecord <- function(.df, 
+#'                                 level = c("inform", "warn", "abort")
+#' ){
+#'   level <- match.arg(level)
+#'   if(any(colnames(.df) == "basisOfRecord")){
+#'     .df |>
+#'       select("basisOfRecord") |>
+#'       check_is_string(level = level) |>
+#'       check_contains(y = valid_basisOfRecord(), 
+#'                      level = level)
+#'   }
+#'   .df
+#' }
+#' 
+#' #' Accepted values for `BasisOfRecord`
+#' #' @noRd
+#' #' @keywords Internal
+#' valid_basisOfRecord <- function(){
+#'   c("humanObservation", 
+#'     "machineObservation",
+#'     "livingSpecimen",
+#'     "preservedSpecimen",
+#'     "fossilSpecimen",
+#'     "materialCitation")
+#' }
