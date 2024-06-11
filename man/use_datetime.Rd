@@ -17,23 +17,20 @@ use_datetime(
 \arguments{
 \item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 
-\item{eventDate}{The date and/or time that the observation/event occurred.}
+\item{eventDate}{The date or date + time that the observation/event occurred.}
 
 \item{year}{The year of the observation/event.}
 
 \item{month}{The month of the observation/event.}
 
-\item{day}{The day of the observation/event.
-that contains the whole location, given any possible measurement error.}
+\item{day}{The day of the observation/event.}
+
+\item{time}{The time of the observation/event.}
 
 \item{.keep}{Control which columns from .data are retained in the output.
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
-
-\item{eventTime}{The time of the observation/event.}
-
-\item{datePrecision}{Precision of the \code{eventDate}.}
 }
 \value{
 A tibble with the requested fields added.
@@ -49,10 +46,9 @@ represented in the Darwin Core Standard.
 
 Example values are:
 \itemize{
-\item \code{geodeticDatum} should be a valid EPSG code
-\item \code{coordinatePrecision} should be no less than 0.00001 if data were collected
-using GPS
-\item \code{coordinateUncertaintyInMeters} will typically be around \code{30} (metres) if
-recorded with a GPS after 2000, or \code{100} before that year.
+\item \code{eventDate} should be class \code{Date} or \code{POSITct}. We suggest using the
+lubridate package to define define your date format using functions like
+\code{ymd()}, \code{mdy}, \code{dmy()}, or if including date + time, \code{ymd_hms()},
+\code{ymd_hm()}, or \code{ymd_h()}.
 }
 }
