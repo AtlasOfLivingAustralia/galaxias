@@ -61,7 +61,7 @@ script within that folder to manipulate it to a suitable interchange format
 (such as Darwin Core). Let's assume, for example, that your data is looks like 
 this:
 
-```{r}
+```{r, eval=FALSE}
 library(tibble)
 
 df <- tibble(
@@ -82,7 +82,7 @@ prefix.
 
 To give an example of what we mean, here is an example workflow:
 
-```{r}
+```{r, eval=FALSE}
 dwc_df <- df |>
   use_coordinates(decimalLatitude = latitude,
                   decimalLongitude = longitude)
@@ -92,7 +92,7 @@ In this case, `decimalLatitude` is recorded as a string, not a number; we can
 correct as follows:
  
 
-```{r}
+```{r, eval=FALSE}
 dwc_df <- df |>
   use_coordinates(decimalLatitude = as.numeric(latitude),
                   decimalLongitude = longitude)
@@ -100,7 +100,7 @@ dwc_df <- df |>
 
 A minimally complete set of individual observations would include:
 
-```{r}
+```{r, eval=FALSE}
 occurrences <- df |>
   # basic requirements of Darwin Core
   use_occurrenceID() |> 
@@ -137,7 +137,7 @@ can be detected at once, you can try:
 We have saved our tibble as an object with a Darwin Core-specific name, so we 
 can save it out with `use_bd_data()`:
 
-```{r}
+```{r, eval=FALSE}
 use_bd_data(occurrences)
 ```
 

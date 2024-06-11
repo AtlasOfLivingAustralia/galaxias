@@ -1,14 +1,16 @@
 #' Create a `schema` for a Darwin Core Archive
 #' 
 #' A schema is an xml document that maps the files and field names in a DwCA.
-#' This function is intended to be primarily internal. It works on csv files
-#' in a directory
+#' This function is intended to be primarily internal, and is called by 
+#' `build_dwca()`, but is provided for debugging purposes. It works on csv files
+#' in a specified directory.
 #' @param project a directory containing Darwin Core data, preferrably built
 #' with `use_bd_project()`.
+#' @returns Does not retun an object to the workspace; called for the side
+#' effect of building a file named `meta.xml` in the specified directory.
 #' @importFrom purrr map
 #' @importFrom xml2 xml_add_child
-#' @noRd
-#' @keywords Internal
+#' @export
 build_schema <- function(project = ".") {
   supported_types <- c("occurrences.csv", # Q: put these into a function? Might be more consistent across the package
                        "events.csv",
