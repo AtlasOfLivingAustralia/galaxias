@@ -1,7 +1,18 @@
+#' @importFrom purrr map
 #' @noRd
 #' @keywords Internal
-parse_tibble_to_md <- function(x){}
-# incomplete
+parse_tibble_to_md <- function(x){
+  rows <- nrow(x)
+  y <- split(x, seq_len(rows))
+  result <- map(.x = y,
+      .f = \(a){
+          c(format_md_header(a), 
+            format_md_text(a$text))
+      }) |>
+    unlist()
+  names(result) <- NULL
+  result
+}
 
 #' @noRd
 #' @keywords Internal
@@ -17,8 +28,35 @@ parse_tibble_to_xml <- function(x){
     as_xml_document()
 }
 
+#' Internal function called only by `parse_tibble_to_md()`
+#' @noRd
+#' @keywords Internal 
+format_md_header <- function(a){
+  if(is.na(a$attributes)){
+    hashes <- strrep("#", a$level)
+    glue("{hashes} {a$label}")
+  }else{
+    z <- a$attributes[[1]]
+    attributes <- paste(names(z), z, sep = "=") |>
+      paste(collapse = " ")
+    glue("<h{a$level} {attributes}>{a$label}</h{a$level}>")
+  }
+}
+
+#' Internal function called only by `parse_tibble_to_md()`
+#' @noRd
+#' @keywords Internal 
+format_md_text <- function(string){
+  if(is.na(string)){
+    ""
+  }else{
+    c("", string, "")
+  }
+}
+
 #' Internal function to power `parse_tibble_to_list()`
 #' necessary to prevent problems if user sets `level` arg
+#' @importFrom purrr map
 #' @noRd
 #' @keywords Internal
 xml_recurse <- function(x, level = 1){
@@ -31,6 +69,7 @@ xml_recurse <- function(x, level = 1){
       x_list <- x_list[-1]
     }
     names(x_list) <- x$name[this_level]
-    lapply(x_list, function(a){xml_recurse(a, level = level + 1)})    
+    map(.x = x_list, 
+        .f = \(a){xml_recurse(a, level = level + 1)})    
   }
 }

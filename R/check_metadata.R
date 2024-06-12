@@ -2,6 +2,9 @@
 # package. To be truly useful it should probably be called within `check_dwc()`
 # or similar.
 
+# Note also that, because `read_md()` now returns a tibble, this could be 
+# made somewhat more readable.
+
 #' Check that a supplied metadata statement is valid according to GBIF schema
 #' 
 #' Note: this function requires the user to be online.

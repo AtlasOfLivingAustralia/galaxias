@@ -2,15 +2,15 @@
 % Please edit documentation in R/write_md.R
 \name{write_md}
 \alias{write_md}
-\title{Write from various formats to Markdown}
+\title{Write a \code{tibble} to a markdown document}
 \usage{
-write_md(x, file, title = "Title goes here")
+write_md(df, file)
 }
 \arguments{
-\item{file}{(string) file name to save text, typically to \code{.md} or \code{.Rmd}}
+\item{df}{A tibble in same format as \code{read_md()}}
 
-\item{xml}{A xml object, either imported using \code{xml2}, or the url or a valid
-xml page.}
+\item{file}{either a character string naming a file, or a connection open for
+writing.}
 }
 \description{
 Export format is chosen based on the file suffix; GitHub

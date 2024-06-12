@@ -2,26 +2,29 @@
 % Please edit documentation in R/read_md.R
 \name{read_md}
 \alias{read_md}
-\title{Read markdown format to R}
+\title{Read markdown format to a \code{tibble}}
 \usage{
-read_md(file, format = c("tibble", "list", "xml"))
+read_md(file)
 }
 \arguments{
 \item{file}{A markdown file}
-
-\item{format}{(string) What format should the requested \code{file} be returned
-in? Defaults to \code{"tibble"}.}
 }
 \value{
-A \code{tibble} by default; optionally an object of class \code{list} or
-\code{xml_document}.
+An object of class \code{tbl_df}, \code{tbl} and \code{data.frame}, aka a \code{tibble},
+containing the following fields:
+\itemize{
+\item \code{level} header level
+\item \code{label} header label
+\item \code{attributes} any html node attributes
+\item \code{text} any text below that heading, noting empty headers are not retained.
+}
 }
 \description{
 Markdown documents can be parsed to xml if we assume that the header level
 (typically shown using '#') reflects the nestedness structure of the
-dataset. \code{read_md()} converts markdown to a tibble, list or xml, in that
-order. If html tags are used in the document (e.g. \verb{<h1>} etc.), their
-attributes are retained in the resulting outputs.
+dataset. \code{read_md()} converts markdown to a tibble. If html tags are used in
+the document (e.g. \verb{<h1>} etc.), their attributes are retained in the
+resulting outputs.
 }
 \details{
 Code blocks are not formally supported, so please use text only!

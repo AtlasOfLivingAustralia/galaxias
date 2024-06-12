@@ -1,20 +1,16 @@
-#' Write from various formats to Markdown
+#' Write a `tibble` to a markdown document
 #' 
 #' Export format is chosen based on the file suffix; GitHub 
 #' (.md), Rmarkdown (.Rmd) and Quarto (.qmd) are supported.
-#' @param xml A xml object, either imported using `xml2`, or the url or a valid
-#' xml page.
-#' @param file (string) file name to save text, typically to `.md` or `.Rmd`
-#' @importFrom xml2 as_list
+#' @param df A tibble in same format as `read_md()`
+#' @param file either a character string naming a file, or a connection open for 
+#' writing.
 #' @export
-write_md <- function(x, file, title = "Title goes here"){
-  if(inherits(x, "xml_document")){
-    x <- as_list(x)
-  }
-  # x <- xml2::as_list(xml2::read_xml("https://collections.ala.org.au/ws/eml/dr368"))
-  df <- parse_list_to_tibble(x)
-  # incomplete past here.
- 
+write_md <- function(df, file){
+  c(
+    switch_headers(df),
+    parse_tibble_to_md(df)) |>
+  writeLines(con = file)
 
 }
 

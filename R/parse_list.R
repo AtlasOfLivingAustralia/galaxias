@@ -1,9 +1,12 @@
 #' @noRd
 #' @keywords Internal
-parse_list_to_md <- function(x){}
-# incomplete
+parse_list_to_md <- function(x){
+  parse_list_to_tibble(x) |>
+    parse_tibble_to_md()
+}
 
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr select
 #' @importFrom purrr list_flatten
 #' @importFrom purrr pluck_depth
 #' @noRd
@@ -14,7 +17,8 @@ parse_list_to_tibble <- function(x){
     result <- list_flatten(result)
   }
   result <- bind_rows(result)
-  result[!duplicated(result), ]
+  result <- result[!duplicated(result), ]
+  select(result, "level", "label", "attributes", "text")
 }
 
 #' @importFrom xml2 as_xml_document
