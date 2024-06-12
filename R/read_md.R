@@ -27,3 +27,4 @@ read_md <- function(file, format = c("tibble", "list", "xml")){
 # attributes on `eml` level are lost (internally) before getting to `xml` object
 # attributes within source xml are not retained to rmd
 # need to add attributes support for markdown headings
+# issue where empty titles are not preserved in parse_list_to_tibble()

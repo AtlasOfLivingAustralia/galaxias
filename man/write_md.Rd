@@ -4,13 +4,13 @@
 \alias{write_md}
 \title{Write from various formats to Markdown}
 \usage{
-write_md(xml, file, title = "Title goes here")
+write_md(x, file, title = "Title goes here")
 }
 \arguments{
+\item{file}{(string) file name to save text, typically to \code{.md} or \code{.Rmd}}
+
 \item{xml}{A xml object, either imported using \code{xml2}, or the url or a valid
 xml page.}
-
-\item{file}{(string) file name to save text, typically to \code{.md} or \code{.Rmd}}
 }
 \description{
 Export format is chosen based on the file suffix; GitHub

@@ -84,7 +84,7 @@ some \code{use_} functions affect multiple fields.
 
 \strong{DwCA constructor functions}
 \itemize{
-\item \code{\link[=parse_md_to_tibble]{parse_md_to_tibble()}} and friends; conversion between md, tibble, list and xml.
+\item \code{\link[=parse_metadata]{parse_metadata()}} and friends; conversion between md, tibble, list and xml.
 \item \code{\link[=read_md]{read_md()}} and \code{\link[=write_md]{write_md()}} to convert between a markdown file and common R object types
 \item \code{\link[=build_schema]{build_schema()}} Identify DwC csvs in a directory and build a schema file (meta.xml)
 \item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (eml.xml)

@@ -72,7 +72,7 @@
 #'  some `use_` functions affect multiple fields.
 #'   
 #'  **DwCA constructor functions**
-#'   * [parse_md_to_tibble()] and friends; conversion between md, tibble, list and xml.
+#'   * [parse_metadata()] and friends; conversion between md, tibble, list and xml.
 #'   * [read_md()] and [write_md()] to convert between a markdown file and common R object types
 #'   * [build_schema()] Identify DwC csvs in a directory and build a schema file (meta.xml)
 #'   * [build_metadata()] Supply a metadata file in .md format, and convert to a metadata file (eml.xml)

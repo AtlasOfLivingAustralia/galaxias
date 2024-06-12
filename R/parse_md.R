@@ -1,26 +1,8 @@
-#' Parse between common object types
-#' 
-#' It is important in `galaxias` to be able to move between `tibble`s, `list`s, 
-#' and `xml` documents. Primarily called by `read_md()` and `write_md()`, these 
-#' functions are exported for clarity and debugging purposes.
-#'
-#' In practice, the sequence of transformations is fixed, being `string` >
-#' `tibble` > `list` > `xml`. Nonetheless, it can be useful sometimes to have 
-#' helper functions that handle this hierarchy 'under the hood'.
-#'
-#' Note that `parse_tibble_to_list()` is a recursive function, and is highly
-#' bespoke to tibbles of the type returned by `parse_md_to_tibble()`. 
-#' `parse_list_to_xml()` is synonymous with `xml2::as_xml_document()` and
-#' `parse_xml_to_list()` is synonymous with `xml2::as_list()`
-#' @param x For markdown parsers, a vector of class `character`, such as 
-#' imported using `base::readLines()`, containing text in markdown format. For
-#' other functions, an object of class `list` or `xml_document`.
-#' @name parse
-#' @order 1
 #' @importFrom dplyr arrange
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr select
-#' @export
+#' @noRd
+#' @keywords Internal
 parse_md_to_tibble <- function(x){
   
   # find titles, in either `<h1>` or `#` format
@@ -44,78 +26,19 @@ parse_md_to_tibble <- function(x){
     select("level", "label", "attributes", "text")
 }
 
-#' @rdname parse
-#' @order 2
-#' @export
+#' @noRd
+#' @keywords Internal
 parse_md_to_list <- function(x){
   parse_md_to_tibble(x) |>
-    tibble_to_list()
+    parse_tibble_to_list()
 }
 
-#' @rdname parse
-#' @order 3
 #' @importFrom xml2 as_xml_document
-#' @export
+#' @noRd
+#' @keywords Internal
 parse_md_to_xml <- function(x){
   parse_md_to_list(x) |>
     as_xml_document()
-}
-
-## remaining to code:
-# parse_tibble_to_md()
-# parse_list_to_md
-# parse_xml_to_md
-## These can probably be amended from code in `write_md.R`
-
-#' @rdname parse
-#' @order 7
-#' @param df A `tibble` built within `md_to_tibble()`
-#' @export
-parse_tibble_to_list <- function(df){
-  xml_recurse(df, level = 1)
-}
-
-#' Internal function to power `parse_tibble_to_list()`
-#' necessary to prevent problems if user sets `level` arg
-#' @noRd
-#' @keywords Internal
-xml_recurse <- function(x, level = 1){
-  if(nrow(x) == 1){
-    list(x$content)
-  }else{
-    this_level <- x$depth == level
-    x_list <- split(x, cumsum(this_level))
-    if(level > 1){
-      x_list <- x_list[-1]
-    }
-    names(x_list) <- x$name[this_level]
-    lapply(x_list, function(a){xml_recurse(a, level = level + 1)})    
-  }
-}
-
-#' @rdname parse
-#' @order 8
-#' @importFrom xml2 as_xml_document
-#' @export
-parse_tibble_to_xml <- function(df){
-  parse_tibble_to_list(df) |>
-    as_xml_document()
-}
-
-#' @rdname parse
-#' @order 9
-#' @importFrom xml2 as_xml_document
-#' @export
-parse_list_to_xml <- function(x){
-  as_xml_document(x)
-}
-
-#' @rdname parse
-#' @order 10
-#' @importFrom xml2 as_list
-#' @export
-parse_xml_to_list <- function(x){
-  as_list(x)
 }
 
 #' get header attributes when formatted as ##Header
@@ -154,7 +77,6 @@ get_header_label_html <- function(string, rows){
   }
 }
 
-
 #' Internal function to parse each section as xml
 #' @importFrom glue glue_collapse
 #' @importFrom stringr str_extract
@@ -189,7 +111,6 @@ extract_header_html <- function(i, rows, string){
     label = xml_text(result_xml),
     attributes = as.list(xml_attrs(result_xml)))
 }
-
 
 #' Internal function to find text rows and assign them correctly
 #' TODO: Support internal paragraph breaks
