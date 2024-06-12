@@ -61,14 +61,14 @@ format_md_text <- function(string){
 #' @keywords Internal
 xml_recurse <- function(x, level = 1){
   if(nrow(x) == 1){
-    list(x$content)
+    x$text
   }else{
-    this_level <- x$depth == level
+    this_level <- x$level == level
     x_list <- split(x, cumsum(this_level))
     if(level > 1){
       x_list <- x_list[-1]
     }
-    names(x_list) <- x$name[this_level]
+    names(x_list) <- x$label[this_level]
     map(.x = x_list, 
         .f = \(a){xml_recurse(a, level = level + 1)})    
   }

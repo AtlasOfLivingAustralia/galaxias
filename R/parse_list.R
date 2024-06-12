@@ -17,7 +17,7 @@ parse_list_to_tibble <- function(x){
     result <- list_flatten(result)
   }
   result <- bind_rows(result)
-  result <- result[!duplicated(result), ]
+  result <- result[!duplicated(result), ] # duplicated in any column
   select(result, "level", "label", "attributes", "text")
 }
 
@@ -40,26 +40,25 @@ md_recurse <- function(x,
                        level = 1, 
                        outcome = xml_tibble()){
   x_names <- names(x)
-  if(is.null(x_names)){
-    outcome$text[nrow(outcome)] <- x[[1]]
-    format_xml_tibble(outcome)
-  }else{
-    map(.x = seq_along(x),
-        .f = \(a){
-          result <- extract_list_to_tibble(a, x_names, x, level)
-          if(!is.null(result)){
-            if(nrow(result) > 0){
-              outcome <- bind_rows(outcome, result)
-            }
-          }
-          if(is.list(x[[a]])){
-            if(length(x[[a]]) > 0){
-              md_recurse(x[[a]], level = level + 1, outcome = outcome) 
-            }
+  map(.x = seq_along(x),
+      .f = \(a){
+        result <- extract_list_to_tibble(a, x_names, x, level)
+        if(!is.null(result)){
+          if(nrow(result) > 0){
+            outcome <- bind_rows(outcome, result)
           }
         }
-    )
-  }
+        if(is.list(x[[a]])){
+          # if(length(x[[a]]) > 0){
+            md_recurse(x[[a]], level = level + 1, outcome = outcome) 
+          # }else{
+          #   format_xml_tibble(outcome)
+          # }
+        }else{
+          format_xml_tibble(outcome)
+        }
+      }
+  )
 }
 
 #' Internal function to format a
@@ -94,12 +93,16 @@ xml_tibble <- function(level = NA,
 #' @keywords Internal
 extract_list_to_tibble <- function(index, list_names, list_data, level){
   if(list_names[index] != ""){
-    current_attr <- attributes(list_data[[index]])
+    current_contents <- list_data[[index]]
+    current_attr <- attributes(current_contents)
     current_title <- to_title_case(list_names[index])
     result <- xml_tibble(level = level,
                          label = current_title)
     if(length(current_attr) > 1){
       result$attributes[1] <- list(current_attr[names(current_attr) != "names"])
+    }
+    if(inherits(current_contents, "character")){
+      result$text <- current_contents
     }
     result
   }else{

@@ -1,6 +1,8 @@
 #' @importFrom dplyr arrange
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr mutate
 #' @importFrom dplyr select
+#' @importFrom snakecase to_lower_camel_case
 #' @noRd
 #' @keywords Internal
 parse_md_to_tibble <- function(x){

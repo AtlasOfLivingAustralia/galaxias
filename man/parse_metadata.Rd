@@ -8,7 +8,7 @@
 \alias{parse_as_xml}
 \title{Parse metadata between common object types}
 \usage{
-parse_metadata(x, to = c("tibble", "list", "xml", "vector"))
+parse_metadata(x, to = c("tibble", "list", "xml", "md"))
 
 parse_as_md(x)
 

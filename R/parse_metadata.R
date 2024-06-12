@@ -20,12 +20,12 @@
 #' @order 1
 #' @export
 parse_metadata <- function(x,
-                           to = c("tibble", "list", "xml", "vector")){
-  from <- detect_metadata_format(x)
-  to <- match.arg(to)
-  if(to == "vector"){to <- "md"}
-  function_name <- glue("parse_{from}_to_{to}")
-  do.call(function_name, args = list(x = x))
+                           to = c("tibble", "list", "xml", "md")){
+  switch(match.arg(to),
+         "md" = parse_as_md(x),
+         "tibble" = parse_as_tibble(x),
+         "list" = parse_as_list(x),
+         "xml" = parse_as_xml(x))
 }
 
 #' @rdname parse_metadata
@@ -74,9 +74,11 @@ parse_as_xml <- function(x){
 
 #' Microfunction to switch formats
 #' @importFrom rlang abort
+#' @importFrom rlang caller_env
 #' @noRd
 #' @keywords Internal
-detect_metadata_format <- function(x){
+detect_metadata_format <- function(x,
+                                   error_call = caller_env()){
   if(inherits(x, "character")){
     "md"
   }else if(inherits(x, "data.frame")){
@@ -86,6 +88,7 @@ detect_metadata_format <- function(x){
   }else if(inherits(x, "xml_document")){
     "xml"
   }else{
-    abort("unknown format")
+    abort("Unknown format requested",
+          call = error_call)
   }
 }
