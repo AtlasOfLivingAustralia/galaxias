@@ -46,10 +46,9 @@ library(galaxias)
   (`create_bd_project()`)
 - Support translating biodiversity data into the Darwin Core standard
   (`use_dwc()`)
-- Translate between markdown and xml formats for easy metadata editing
+- Import markdown to a range of formats for easy metadata editing
   (`read_md()`)
-- Build, validate and publish a repository as a Darwin Core Archive
-  (`build_dwca()`)
+- Build and validate Darwin Core Archives (`build_dwca()`)
 
 ## Citing galaxias
 
@@ -65,3 +64,13 @@ The current recommended citation is:
 > Westgate MJ, Balasubramaniam S & Kellie D (2024) galaxias:
 > Standardise, Document and Share Biodiversity Data. R Package version
 > 0.1.0.9999.
+
+## Contributors
+
+Developers who have contributed to `galaxias` are listed here (in
+alphabetical order by surname):
+
+Amanda Buyan ([@acbuyan](https://github.com/acbuyan)), Fonti Kar
+([@fontikar](https://github.com/fontikar)), Peggy Newman
+([@peggynewman](https://github.com/peggynewman)) & Andrew Schwenke
+([@andrew-1234](https://github.com/andrew-1234))
