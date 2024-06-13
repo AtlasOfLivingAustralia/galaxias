@@ -18,7 +18,8 @@ check_dwc <- function(.df){
   checkable_fields <- fields[fields %in% available_checks]
   check_functions <- c("check_fields",
                        glue("check_{checkable_fields}"))
-  cli_bullets(c(">" = "Checking DwC fields."))
+  dwc_spinny_message()
+  # cli_bullets(c(">" = "Checking DwC fields."))
   # run each function on df
   lapply(check_functions, 
          function(x){do.call(x, args = list(.df = .df))}) |>
@@ -40,4 +41,32 @@ check_fields <- function(.df,
     check_contains_terms(y = dwc_terms,
                          level = level)
   .df
+}
+
+#' Wait time
+#' @noRd
+#' @keywords Internal
+wait <- function(seconds = 1) {
+  Sys.sleep(seconds)
+}
+
+#' Theatrics
+#' @noRd
+#' @keywords Internal
+dwc_spinny_message <- function(which) {
+  
+  # define the spinner
+  spinny <- cli::make_spinner(
+    which = "dots2",
+    template = "{spin} Checking DwC fields."
+  )
+  
+  # update the spinner 100 times
+  for(i in 1:100) {
+    spinny$spin()
+    wait(.01)
+  }
+  
+  # clear the spinner from the status bar
+  spinny$finish()
 }

@@ -52,6 +52,13 @@ check_data_frame <- function(.df,
 #' @importFrom cli cli_text
 #' @importFrom cli cli_end
 #' @importFrom cli cli_fmt
+#' @importFrom cli col_blue
+#' @importFrom cli col_red
+#' @importFrom cli col_green
+#' @importFrom cli symbol
+#' @importFrom cli cat_line
+#' @importFrom tidyr replace_na
+#' @importFrom tidyr unnest
 #' @noRd
 #' @keywords Internal
 check_contains_terms <- function(.df, 
@@ -82,7 +89,7 @@ check_contains_terms <- function(.df,
     
     if(length(matched_values) > 0) {
       matches_message <- c(
-        "v" = "Matched {length(matched_values)} column name{?s} to DwC terms: {.field {matched_string}}"
+        "v" = "Matched {length(matched_values)} of {length(user_column_names)} column name{?s} to DwC terms: {.field {matched_string}}"
       )
     } else {
       matches_message <- NULL
@@ -90,7 +97,7 @@ check_contains_terms <- function(.df,
     
     if(length(unmatched_values) > 0) {
       unmatch_message <- c(
-        "x" = "Could not find matches for {length(unmatched_values)} column name{?s}: {.field {unmatched_string}}"
+        "x" = "Unmatched column name(s): {cli::col_red({unmatched_string})}"
       )
       
     } else {
@@ -108,23 +115,73 @@ check_contains_terms <- function(.df,
     
     req_terms <- check_required_terms(user_column_names)
     
-    missing_string <- ansi_collapse(glue("{req_terms$missing}"),
-                                      sep = ", ",
-                                      last = ", ")
-    found_string <- ansi_collapse(glue("{req_terms$matched}"),
-                                      sep = ", ",
-                                      last = ", ")
+    req_terms_message <- req_terms |>
+      tidyr::unnest(cols = c(missing, matched)) |>
+      group_by(term_group) |> 
+      mutate(
+        missing = cli::ansi_collapse(missing, sep = ", ", last = ", "),
+        matched = cli::ansi_collapse(matched, sep = ", ", last = ", ")
+      ) |>
+      unique() |>
+      tidyr::replace_na(list(missing = "                ",
+                             matched = "                "))
     
-    if(length(req_terms$missing) > 0) {
-      missing_message <- c(
-        "v" = "Found: {.field {found_string}}",
-        "x" = "Missing: {.field {missing_string}}"
+    found <- req_terms_message |>
+      filter(result == "pass")
+    
+    missing <- req_terms_message |>
+      filter(result == "fail")
+    
+    pass_group <- glue("{found$term_group}")
+    pass_matched <- glue("{found$matched}")
+    pass_missing <- glue("{found$missing}")
+    fail_group <- glue("{missing$term_group}")
+    fail_matched <- glue("{missing$matched}")
+    fail_missing <- glue("{missing$missing}")
+    
+    headers <- paste0(
+      "  ",
+      cli::ansi_align(cli::col_blue("Type"), max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
+      cli::ansi_align(cli::col_blue("Matched term(s)"), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
+      cli::ansi_align(cli::col_blue("Missing term(s)"), max(cli::ansi_nchar(c(pass_missing, fail_missing)))),"\n",
+      collapse = "\n"
+    )
+    
+    bullets_found <- paste0(
+      cli::col_green(cli::symbol$tick), " ", 
+      cli::ansi_align(pass_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
+      cli::ansi_align(cli::col_green(pass_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
+      cli::ansi_align(cli::col_red(pass_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
+      collapse = "\n"
+    )
+    
+    bullets_missing <- paste0(
+      cli::col_red(cli::symbol$cross), " ",
+      cli::ansi_align(fail_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
+      cli::ansi_align(cli::col_green(fail_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
+      cli::ansi_align(cli::col_red(fail_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
+      collapse = "\n"
+    )
+    
+    # browser()
+    
+    if(nrow(found) == 0) {
+      bullets_found <- NULL
+      }
+      
+    if(nrow(missing) == 0) {
+      bullets_missing <- NULL
+      }
+    
+    
+    req_full_message <- paste0(
+      headers, 
+      bullets_found, "\n",
+      bullets_missing, "\n"
       )
-    } else {
-      missing_message <- c(
-        "v" = "All minimum required fields found."
-      )
-    }
+    
+    
+    ## Suggested workflow
     
     # Function matching for suggested workflow
     dwc_function_main <- tibble::tribble(
@@ -176,15 +233,16 @@ check_contains_terms <- function(.df,
       # DwC terms
       cli::cli_div()
       cli::cli_h1("DwC terms")
-      cli::cli_h2("Matching DwC terms to column names")
+      cli::cli_h2("All terms")
       cli::cli_bullets(bullets)
       cli::cli_h2("Minimum required terms")
-      cli::cli_bullets(missing_message)
+      cli::cat_line(req_full_message)
       cli::cli_end()
       
       # Suggested workflow
       cli::cli_h1("Suggested workflow")
-      cli::cli_text("To make your data Darwin Core compliant, use the following workflow:")
+      cli::cat_line(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:"))
+      # cli::cli_text()
       cli::cli_par()
       cli::cli_end()
       cli::cli_text("df |>")
@@ -511,54 +569,57 @@ required_terms <- function() {
 check_required_terms <- function(user_column_names) {
   
   terms <- required_terms()
-  
-  if(!any(terms$identifier %in% user_column_names)) {
-    id_missing <- terms$identifier[!terms$identifier %in% user_column_names]
-    id_matched <- NULL
-  } else {
-    id_missing <- NULL
-    id_matched <- terms$identifier[terms$identifier %in% user_column_names]
-  }
-  
-  if(!any(terms$basis %in% user_column_names)) {
-    basis_missing <- terms$basis[!terms$basis %in% user_column_names]
-    basis_matched <- NULL
-  } else {
-    basis_missing <- NULL
-    basis_matched <- terms$basis[terms$basis %in% user_column_names]
-  }
-  
-  if(!any(terms$name %in% user_column_names)) {
-    name_missing <- terms$name[!terms$name %in% user_column_names]
-    name_matched <- NULL
-  } else {
-    name_missing <- NULL
-    name_matched <- terms$name[terms$name %in% user_column_names]
-  }
-  
-  if(!any(terms$location %in% user_column_names)) {
-    location_missing <- terms$location[!terms$location %in% user_column_names]
-    location_matched <- terms$location[terms$location %in% user_column_names]
-  } else {
-    location_missing <- terms$location[!terms$location %in% user_column_names]
-    location_matched <- terms$location[terms$location %in% user_column_names]
-  }
-  
-  if(!any(terms$date %in% user_column_names)) {
-    date_missing <- terms$date[!terms$date %in% user_column_names]
-    date_matched <- terms$date[terms$date %in% user_column_names]
-  } else {
-    date_missing <- terms$date[!terms$date %in% user_column_names]
-    date_matched <- terms$date[terms$date %in% user_column_names]
-  }
-  
-  matched <- c(id_matched, basis_matched, name_matched, location_matched, date_matched)
-  missing <- c(id_missing, basis_missing, name_missing, location_missing, date_missing)
-  
-  result <- list(
-    matched = matched, 
-    missing = missing
+  # browser()
+  id <- tibble(
+    term_group = "Identifier (at least one)",
+    missing = list(terms$identifier[!terms$identifier %in% user_column_names]),
+    matched = list(terms$identifier[terms$identifier %in% user_column_names])
+    ) |>
+    mutate(
+      result = ifelse(length(missing[[1]]) != 3, "pass", "fail")
     )
+  basis <- tibble(
+    term_group = "Record type",
+    missing = list(terms$basis[!terms$basis %in% user_column_names]),
+    matched = list(terms$basis[terms$basis %in% user_column_names])
+    ) |>
+    mutate(
+      result = ifelse(length(missing[[1]]) == 0, "pass", "fail")
+    )
+  name <- tibble(
+    term_group = "Scientific name",
+    missing = list(terms$name[!terms$name %in% user_column_names]),
+    matched = list(terms$name[terms$name %in% user_column_names])
+    ) |>
+    mutate(
+      result = ifelse(length(missing[[1]]) == 0, "pass", "fail")
+    )
+  location <- tibble(
+    term_group = "Location",
+    missing = list(terms$location[!terms$location %in% user_column_names]),
+    matched = list(terms$location[terms$location %in% user_column_names])
+    ) |>
+    mutate(
+      result = ifelse(length(missing[[1]]) == 0, "pass", "fail")
+    )
+  date <- tibble(
+    term_group= "Date/Time",
+    missing = list(terms$date[!terms$date %in% user_column_names]),
+    matched = list(terms$date[terms$date %in% user_column_names])
+    ) |>
+    mutate(
+      result = ifelse(length(missing[[1]]) == 0, "pass", "fail")
+    )
+  
+  # combine
+  all_terms <- bind_rows(id, basis, name, location, date)
+  
+  # convert empty row value to NULL
+  result <- all_terms |>
+    mutate(
+      missing = lapply(missing, function(x) if(identical(x, character(0))) NULL else x),
+      matched = lapply(matched, function(x) if(identical(x, character(0))) NULL else x)
+    ) 
   
   return(result)
 }
