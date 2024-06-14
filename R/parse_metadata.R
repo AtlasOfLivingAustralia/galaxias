@@ -47,7 +47,7 @@ parse_as_tibble <- function(x){
          "md" = parse_md_to_tibble(x),
          "tibble" = x,
          "list" = parse_list_to_tibble(x),
-         "xml" = parse_list_to_tibble(x))
+         "xml" = parse_xml_to_tibble(x))
 }
 
 #' @rdname parse_metadata

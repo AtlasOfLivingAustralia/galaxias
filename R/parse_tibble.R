@@ -17,14 +17,15 @@ parse_tibble_to_md <- function(x){
 #' @noRd
 #' @keywords Internal
 parse_tibble_to_list <- function(x){
-  xml_recurse(x, level = 1)
+  tibble_to_list_recurse(x, level = 1)
 }
 
 #' @importFrom xml2 as_xml_document
 #' @noRd
 #' @keywords Internal
 parse_tibble_to_xml <- function(x){
-  parse_tibble_to_list(x) |>
+  x |>
+    parse_tibble_to_list() |>
     as_xml_document()
 }
 
@@ -59,7 +60,7 @@ format_md_text <- function(string){
 #' @importFrom purrr map
 #' @noRd
 #' @keywords Internal
-xml_recurse <- function(x, level = 1){
+tibble_to_list_recurse <- function(x, level = 1){
   if(nrow(x) == 1){
     x$text
   }else{
@@ -70,6 +71,6 @@ xml_recurse <- function(x, level = 1){
     }
     names(x_list) <- x$label[this_level]
     map(.x = x_list, 
-        .f = \(a){xml_recurse(a, level = level + 1)})    
+        .f = \(a){tibble_to_list_recurse(a, level = level + 1)})    
   }
 }

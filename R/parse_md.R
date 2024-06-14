@@ -2,6 +2,7 @@
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr mutate
 #' @importFrom dplyr select
+#' @importFrom rlang .data
 #' @importFrom snakecase to_lower_camel_case
 #' @noRd
 #' @keywords Internal
@@ -22,8 +23,8 @@ parse_md_to_tibble <- function(x){
   
   # join and order
   bind_rows(tibble1, tibble2) |>
-    arrange(start_row) |>
-    mutate(label = to_lower_camel_case(label)) |>
+    arrange("start_row") |>
+    mutate(label = to_lower_camel_case(.data$label)) |>
     get_md_text(x) |>
     select("level", "label", "attributes", "text")
 }
@@ -31,16 +32,18 @@ parse_md_to_tibble <- function(x){
 #' @noRd
 #' @keywords Internal
 parse_md_to_list <- function(x){
-  parse_md_to_tibble(x) |>
+  x |>
+    parse_md_to_tibble() |>
     parse_tibble_to_list()
 }
 
-#' @importFrom xml2 as_xml_document
 #' @noRd
 #' @keywords Internal
 parse_md_to_xml <- function(x){
-  parse_md_to_list(x) |>
-    as_xml_document()
+  x |>
+    parse_md_to_tibble() |>
+    parse_tibble_to_list() |>
+    parse_list_to_xml()
 }
 
 #' get header attributes when formatted as ##Header

@@ -1,7 +1,8 @@
 #' @noRd
 #' @keywords Internal
 parse_list_to_md <- function(x){
-  parse_list_to_tibble(x) |>
+  x |>
+    parse_list_to_tibble() |>
     parse_tibble_to_md()
 }
 
@@ -12,7 +13,7 @@ parse_list_to_md <- function(x){
 #' @noRd
 #' @keywords Internal
 parse_list_to_tibble <- function(x){
-  result <- md_recurse(x)
+  result <- list_to_tibble_recurse(x)
   for(i in seq_len(pluck_depth(result))){
     result <- list_flatten(result)
   }
@@ -36,8 +37,8 @@ parse_list_to_xml <- function(x){
 #' @importFrom dplyr bind_rows
 #' @noRd
 #' @keywords Internal
-md_recurse <- function(x, 
-                       level = 1, 
+list_to_tibble_recurse <- function(x, 
+                       level = 1,
                        outcome = xml_tibble()){
   x_names <- names(x)
   map(.x = seq_along(x),
@@ -50,7 +51,7 @@ md_recurse <- function(x,
         }
         if(is.list(x[[a]])){
           # if(length(x[[a]]) > 0){
-            md_recurse(x[[a]], level = level + 1, outcome = outcome) 
+          list_to_tibble_recurse(x[[a]], level = level + 1, outcome = outcome) 
           # }else{
           #   format_xml_tibble(outcome)
           # }
@@ -61,7 +62,7 @@ md_recurse <- function(x,
   )
 }
 
-#' Internal function to format a
+#' Internal function to format a tibble from list
 #' @noRd
 #' @keywords Internal
 format_xml_tibble <- function(df){
@@ -92,6 +93,7 @@ xml_tibble <- function(level = NA,
 #' @noRd
 #' @keywords Internal
 extract_list_to_tibble <- function(index, list_names, list_data, level){
+  # if(length(list_names) < 1){browser()}
   if(list_names[index] != ""){
     current_contents <- list_data[[index]]
     current_attr <- attributes(current_contents)

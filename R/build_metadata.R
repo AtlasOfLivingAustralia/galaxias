@@ -21,21 +21,23 @@ build_metadata <- function(file, project = ".") {
   if(!file.exists(file)){
     abort("`file` doesn't exist in specified location.")
   }
-  x <- read_md(file, format = "list")
+  read_md(file) |>
+    parse_tibble_to_xml() |>
+    write_xml(file = glue("{project}/eml.xml"))
   
-  # convert to xml
-  object <- list(`eml:eml` = structure(
-    x,
-    `xmlns:d` = "eml://ecoinformatics.org/dataset-2.1.0",
-    `xmlns:eml` = "eml://ecoinformatics.org/eml-2.1.1",
-    `xmlns:xsi` = "http://www.w3.org/2001/XMLSchema-instance",
-    `xmlns:dc` = "http://purl.org/dc/terms/",
-    `xsi:schemaLocation` = "eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd",
-    # system = "ALA-Registry", # needed?
-    scope = "system",
-    `xml:lang` = "en"
-  ))
-  result <- as_xml_document(object)
-  write_xml(result, 
-            glue("{project}/eml.xml"))
+  # # convert to xml
+  # object <- list(`eml:eml` = structure(
+  #   parse_tibble_to_list(x),
+  #   `xmlns:d` = "eml://ecoinformatics.org/dataset-2.1.0",
+  #   `xmlns:eml` = "eml://ecoinformatics.org/eml-2.1.1",
+  #   `xmlns:xsi` = "http://www.w3.org/2001/XMLSchema-instance",
+  #   `xmlns:dc` = "http://purl.org/dc/terms/",
+  #   `xsi:schemaLocation` = "eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd",
+  #   # system = "ALA-Registry", # needed?
+  #   scope = "system",
+  #   `xml:lang` = "en"
+  # ))
+  # result <- as_xml_document(object)
+  # write_xml(result, 
+  #           glue("{project}/eml.xml"))
 }
