@@ -36,10 +36,12 @@ check_data_frame <- function(.df,
   .df
 }
 
-#' check a vector consists only of values in a second vector
-#' @param x vector of values
+#' Match DwC terms to column names
+#' @param .df vector of values
 #' @param y vector against which x should be compared
 #' @importFrom dplyr pull
+#' @importFrom dplyr group_by
+#' @importFrom dplyr filter
 #' @importFrom glue glue
 #' @importFrom cli cli_alert_success
 #' @importFrom cli cli_alert_warning
@@ -59,6 +61,7 @@ check_data_frame <- function(.df,
 #' @importFrom cli cat_line
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr unnest
+#' @importFrom stringr str_pad
 #' @noRd
 #' @keywords Internal
 check_contains_terms <- function(.df, 
@@ -73,112 +76,22 @@ check_contains_terms <- function(.df,
     unique() |>
     sort()
   name_lookup <- user_column_names %in% y$term
-  if(any(!name_lookup)){
-    # browser()
-    # Darwin Core term matching
+  # if(any(!name_lookup)){
+    
+    ## All terms
+    # matches
     matched_values <- user_column_names[name_lookup]
     unmatched_values <- user_column_names[!name_lookup]
-    matched_string <- ansi_collapse(glue("{matched_values}"),
-                                    sep = ", ",
-                                    last = ", ")
-    unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
-                                       sep = ", ",
-                                       last = ", ")
     
-    
-    
-    if(length(matched_values) > 0) {
-      matches_message <- c(
-        "v" = "Matched {length(matched_values)} of {length(user_column_names)} column name{?s} to DwC terms: {.field {matched_string}}"
-      )
-    } else {
-      matches_message <- NULL
-    }
-    
-    if(length(unmatched_values) > 0) {
-      unmatch_message <- c(
-        "x" = "Unmatched column name(s): {cli::col_red({unmatched_string})}"
-      )
-      
-    } else {
-      unmatch_message <- NULL
-    }
-    
-    bullets <- c(
-      matches_message,
-      unmatch_message
-      )
-    
-    # browser()
+    all_terms_message <- all_terms_message(user_column_names,
+                                           matched_values,
+                                           unmatched_values)
     
     ## Minimum required terms
     
-    req_terms <- check_required_terms(user_column_names)
+    req_terms_results <- check_required_terms(user_column_names)
     
-    req_terms_message <- req_terms |>
-      tidyr::unnest(cols = c(missing, matched)) |>
-      group_by(term_group) |> 
-      mutate(
-        missing = cli::ansi_collapse(missing, sep = ", ", last = ", "),
-        matched = cli::ansi_collapse(matched, sep = ", ", last = ", ")
-      ) |>
-      unique() |>
-      tidyr::replace_na(list(missing = "                ",
-                             matched = "                "))
-    
-    found <- req_terms_message |>
-      filter(result == "pass")
-    
-    missing <- req_terms_message |>
-      filter(result == "fail")
-    
-    pass_group <- glue("{found$term_group}")
-    pass_matched <- glue("{found$matched}")
-    pass_missing <- glue("{found$missing}")
-    fail_group <- glue("{missing$term_group}")
-    fail_matched <- glue("{missing$matched}")
-    fail_missing <- glue("{missing$missing}")
-    
-    headers <- paste0(
-      "  ",
-      cli::ansi_align(cli::col_blue("Type"), max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
-      cli::ansi_align(cli::col_blue("Matched term(s)"), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
-      cli::ansi_align(cli::col_blue("Missing term(s)"), max(cli::ansi_nchar(c(pass_missing, fail_missing)))),"\n",
-      collapse = "\n"
-    )
-    
-    bullets_found <- paste0(
-      cli::col_green(cli::symbol$tick), " ", 
-      cli::ansi_align(pass_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
-      cli::ansi_align(cli::col_green(pass_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
-      cli::ansi_align(cli::col_red(pass_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
-      collapse = "\n"
-    )
-    
-    bullets_missing <- paste0(
-      cli::col_red(cli::symbol$cross), " ",
-      cli::ansi_align(fail_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
-      cli::ansi_align(cli::col_green(fail_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
-      cli::ansi_align(cli::col_red(fail_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
-      collapse = "\n"
-    )
-    
-    # browser()
-    
-    if(nrow(found) == 0) {
-      bullets_found <- NULL
-      }
-      
-    if(nrow(missing) == 0) {
-      bullets_missing <- NULL
-      }
-    
-    
-    req_full_message <- paste0(
-      headers, 
-      bullets_found, "\n",
-      bullets_missing, "\n"
-      )
+    req_terms_message <- req_terms_message(req_terms_results)
     
     
     ## Suggested workflow
@@ -234,15 +147,14 @@ check_contains_terms <- function(.df,
       cli::cli_div()
       cli::cli_h1("DwC terms")
       cli::cli_h2("All terms")
-      cli::cli_bullets(bullets)
+      cli::cat_line(all_terms_message)
       cli::cli_h2("Minimum required terms")
-      cli::cat_line(req_full_message)
+      cli::cat_line(req_terms_message)
       cli::cli_end()
       
       # Suggested workflow
       cli::cli_h1("Suggested workflow")
       cli::cat_line(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:"))
-      # cli::cli_text()
       cli::cli_par()
       cli::cli_end()
       cli::cli_text("df |>")
@@ -269,10 +181,134 @@ check_contains_terms <- function(.df,
     # switch_check(level, 
     #              bullets,
     #              call = call)
-  }
+  # }
   .df
 }
 
+
+#' Build message about all matched DwC terms
+#' @importFrom cli ansi_collapse
+#' @importFrom cli cli_bullets
+#' @importFrom cli cli_fmt
+#' @noRd
+#' @keywords Internal
+all_terms_message <- function(user_column_names,
+                              matched_values,
+                              unmatched_values) {
+  
+  # concatenate matched/unmatched fields
+  matched_string <- ansi_collapse(glue("{matched_values}"),
+                                  sep = ", ",
+                                  last = ", ")
+  unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
+                                    sep = ", ",
+                                    last = ", ")
+  
+  if(length(matched_values) > 0) {
+    matches_message <- c(
+      "v" = "Matched {length(matched_values)} of {length(user_column_names)} column name{?s} to DwC terms: {.field {matched_string}}"
+    )
+  } else {
+    matches_message <- NULL
+  }
+  
+  if(length(unmatched_values) > 0) {
+    unmatch_message <- c(
+      "x" = "Unmatched column name(s): {cli::col_red({unmatched_string})}"
+    )
+    
+  } else {
+    # celebrate
+    unmatch_message <- paste0("\n", add_emoji(), " ", cli::col_green("All column names matched DwC terms!"))
+  }
+  
+  # build message
+  c(
+    matches_message,
+    unmatch_message,
+    "\n"
+  ) |> 
+    cli::cli_bullets() |> 
+    cli::cli_fmt() # save cli formatted message
+  
+}
+
+#' Build message about minimum required terms
+#' @noRd
+#' @keywords Internal
+req_terms_message <- function(req_terms) {
+  
+  # Unnest & concatenate terms by group
+  req_terms_message <- req_terms |>
+    tidyr::unnest(cols = c(missing, matched)) |>
+    dplyr::group_by(term_group) |> 
+    mutate(
+      missing = cli::ansi_collapse(missing, sep = ", ", last = ", "),
+      matched = cli::ansi_collapse(matched, sep = ", ", last = ", ")
+    ) |>
+    unique() |>
+    # add blank space for correct message formatting
+    tidyr::replace_na(list(missing = stringr::str_pad("-", width = 16, side = "right"),
+                           matched = stringr::str_pad("-", width = 16, side = "right")))
+    
+  browser()
+
+  # Group terms found vs missing
+  found <- req_terms_message |>
+    dplyr::filter(result == "pass")
+  
+  missing <- req_terms_message |>
+    dplyr::filter(result == "fail")
+  
+  pass_group <- glue("{found$term_group}")
+  pass_matched <- glue("{found$matched}")
+  pass_missing <- glue("{found$missing}")
+  fail_group <- glue("{missing$term_group}")
+  fail_matched <- glue("{missing$matched}")
+  fail_missing <- glue("{missing$missing}")
+  
+  headers <- paste0(
+    "  ",
+    cli::ansi_align(cli::col_blue("Type"), max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
+    cli::ansi_align(cli::col_blue("Matched term(s)"), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
+    cli::ansi_align(cli::col_blue("Missing term(s)"), max(cli::ansi_nchar(c(pass_missing, fail_missing)))),"\n",
+    collapse = "\n"
+  )
+  
+  bullets_found <- paste0(paste0(
+    cli::col_green(cli::symbol$tick), " ", 
+    cli::ansi_align(pass_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
+    cli::ansi_align(cli::col_green(pass_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
+    cli::ansi_align(cli::col_red(pass_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
+    collapse = "\n"
+  ), "\n")
+  
+  bullets_missing <- paste0(paste0(
+    cli::col_red(cli::symbol$cross), " ",
+    cli::ansi_align(fail_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
+    cli::ansi_align(cli::col_green(fail_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
+    cli::ansi_align(cli::col_red(fail_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
+    collapse = "\n"
+  ), "\n")
+  
+  
+  # Remove tick when all terms are matched or missing
+  if(nrow(found) == 0) {
+    bullets_found <- NULL
+  }
+  
+  if(nrow(missing) == 0) {
+    # celebrate
+    bullets_missing <- paste0("\n", add_emoji(), " ", cli::col_green("All minimum requirements met!"))
+  }
+  
+  # final message
+  paste0(
+    headers, 
+    bullets_found, 
+    bullets_missing
+  ) 
+}
 
 #' check a vector consists only of values in a second vector
 #' @param x vector of values
@@ -564,12 +600,13 @@ required_terms <- function() {
 }
 
 #' Return missing minimum required terms
+#' @improtFrom dplyr bind_rows
 #' @noRd
 #' @keywords Internal
 check_required_terms <- function(user_column_names) {
   
   terms <- required_terms()
-  # browser()
+  
   id <- tibble(
     term_group = "Identifier (at least one)",
     missing = list(terms$identifier[!terms$identifier %in% user_column_names]),
@@ -612,7 +649,7 @@ check_required_terms <- function(user_column_names) {
     )
   
   # combine
-  all_terms <- bind_rows(id, basis, name, location, date)
+  all_terms <- dplyr::bind_rows(id, basis, name, location, date)
   
   # convert empty row value to NULL
   result <- all_terms |>
@@ -622,4 +659,21 @@ check_required_terms <- function(user_column_names) {
     ) 
   
   return(result)
+}
+
+
+#' Add happy emoji
+#' @noRd
+#' @keywords Internal
+add_emoji <- function() {
+  emoji <- c(
+    "\U0001f600", # smile
+    "\U0001f973", # party face
+    "\U0001f638", # cat grin
+    "\U0001f308", # rainbow
+    "\U0001f947", # gold medal
+    "\U0001f389", # party popper
+    "\U0001f38a" # confetti ball
+  )
+  sample(emoji, 1)
 }
