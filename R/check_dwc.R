@@ -134,6 +134,8 @@ check_contains_terms <- function(.df,
       dplyr::distinct(use_function) |>
       pull(use_function)
     
+    ## TODO: If class of df is sf POINT, replace `use_coordinates()` with `use_coordinates_sf()`
+    
     if(length(suggested_functions) > 1) {
       suggested_functions_piped <- c(paste0(head(suggested_functions, -1), " |> "), tail(suggested_functions, 1))
     } else {
@@ -245,6 +247,8 @@ all_terms_message <- function(user_column_names,
 #' @keywords Internal
 req_terms_message <- function(req_terms) {
   
+  browser()
+  
   # Unnest & concatenate terms by group
   req_terms_message <- req_terms |>
     tidyr::unnest(cols = c(missing, matched)) |>
@@ -258,7 +262,9 @@ req_terms_message <- function(req_terms) {
     tidyr::replace_na(list(missing = stringr::str_pad("-", width = 16, side = "right"),
                            matched = stringr::str_pad("-", width = 16, side = "right")))
     
-  browser()
+  req_terms_message
+    
+  
 
   # Group terms found vs missing
   found <- req_terms_message |>
@@ -550,7 +556,7 @@ req_terms_message <- function(req_terms) {
   # Unnest & concatenate terms by group
   req_terms_message <- req_terms |>
     tidyr::unnest(cols = c(missing, matched)) |>
-    dplyr::group_by(term_group) |> 
+    dplyr::group_by(term_group) |>
     mutate(
       missing = cli::ansi_collapse(missing, sep = ", ", last = ", "),
       matched = cli::ansi_collapse(matched, sep = ", ", last = ", ")
@@ -560,7 +566,7 @@ req_terms_message <- function(req_terms) {
     tidyr::replace_na(list(missing = stringr::str_pad("-", width = 16, side = "right"),
                            matched = stringr::str_pad("-", width = 16, side = "right")))
   
-  browser()
+
   
   # Group terms found vs missing
   found <- req_terms_message |>
