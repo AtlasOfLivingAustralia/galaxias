@@ -20,14 +20,27 @@ parse_xml_to_tibble <- function(x){
 #' @noRd
 #' @keywords Internal
 parse_xml_to_list <- function(x){
-  x |>
-    as_list() |>
-    xml_to_list_recurse() 
+  # convert xml to list
+  x_list <- x |> as_list() 
+  
+  # 'clean' this list to be more R-like
+  result <- x_list |> xml_to_list_recurse()
+
+  # try using numeric indexes to set attributes
+  # NOTE: using addresses (i.e. `names(x_list)`) doesn't work, because names can be duplicated
+  index_list <- get_index(result)
+
+  # walk along the list and assign attributes back to `clean_result`
+  for(a in seq_along(index_list)){ # using purrr::walk here fails
+    b <- index_list[[a]]
+    z <- pluck(x_list, !!!b)
+    attributes(`[[`(result, b)) <- attributes(z) # do not replace with `pluck()<-`
+  }
+  # return
+  result
 }
 
-#' if we only use xml2::as_list, text is stored in a list underneath it's heading,
-#' rather than the heading being the name for that attribute. Hence we need a
-#' function to 'collapse' the last entry in a list an place it with its' heading.
+#' Drill into list constructed from xml to ensure terminal nodes are correct
 #' @importFrom purrr map
 #' @noRd
 #' @keywords Internal
@@ -49,4 +62,48 @@ xml_to_list_recurse <- function(x){
         }
       })
 }
-# TODO: doesn't retain attributes on nodes
+
+#' clean up the output from `index_recurse()`
+#' @importFrom purrr list_flatten
+#' @importFrom purrr map
+#' @importFrom purrr pluck_depth
+#' @noRd
+#' @keywords Internal
+get_index <- function(x){
+  address_list <- index_recurse(x)
+  # flatten lists
+  n <- pluck_depth(address_list) - 1
+  for(i in seq_len(n)){
+    address_list <- list_flatten(address_list)
+  }
+  # get all unique addresses
+  address_lengths <- lengths(address_list)
+  n_max <- max(address_lengths)
+  map(.x = seq_len(n_max), 
+      .f = \(a){
+        address_tmp <- address_list[address_lengths >= a]
+        result <- map(address_tmp, .f = \(b){b[seq_len(a)]})
+        result[!duplicated(result)]
+      }) |>
+    list_flatten()
+}
+
+#' drill into a list to get the 'index'; i.e. a numeric map of the list
+#' @importFrom purrr map
+#' @noRd
+#' @keywords Internal
+index_recurse <- function(x, 
+                          level = 1,
+                          index_accumulate = list()){
+  if(is.list(x)){
+    map(.x = seq_len(length(x)),
+        .f = \(a){
+          index_recurse(x[[a]], 
+                        level = level + 1,
+                        index_accumulate = unlist(c(index_accumulate, a))
+          )})    
+  }else{
+    index_accumulate
+  }
+}
+# note this isn't perfect yet. Some terminal nodes still parse to `list()`
