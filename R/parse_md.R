@@ -23,7 +23,7 @@ parse_md_to_tibble <- function(x){
   
   # join and order
   bind_rows(tibble1, tibble2) |>
-    arrange("start_row") |>
+    arrange(.data$start_row) |>
     mutate(label = to_lower_camel_case(.data$label)) |>
     get_md_text(x) |>
     select("level", "label", "attributes", "text")
