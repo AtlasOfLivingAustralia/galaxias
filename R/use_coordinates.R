@@ -49,6 +49,7 @@ use_coordinates <- function(
            .keep = .keep)
   check_decimalLatitude(result, level = "abort")
   check_decimalLongitude(result, level = "abort")
+  check_geodeticDatum(result, level = "abort")
   # other tests likely to be needed here
   result
 }
@@ -86,4 +87,41 @@ check_decimalLongitude <- function(.df,
                          lower = -180, 
                          upper = 180)
   }
+}
+
+#' @rdname check_dwc
+#' @order 7
+#' @export
+check_geodeticDatum <- function(.df, 
+                                level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "geodeticDatum")){
+    .df |>
+      select("geodeticDatum") |>
+      check_crs(level = level)
+  }
+}
+
+#' @rdname check_dwc
+#' @order 7
+#' @importFrom sf st_crs
+#' @importFrom rlang try_fetch
+#' @export
+check_crs <- function(.df, 
+                      level = "warn",
+                      call = caller_env()
+){
+  check_data_frame(.df)
+  field_name <- colnames(.df)[[1]]
+  x <- .df |> pull(field_name)
+  
+  rlang::try_fetch(
+    lapply(x, function(x) sf::st_crs(x)), 
+    error = function(cnd) {
+      bullets <- c(
+        "{.field {field_name}} contains invalid Coordinate Reference System."
+      )
+      cli::cli_abort(bullets, parent = cnd, call = call)
+      })
 }
