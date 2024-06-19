@@ -13,12 +13,15 @@
 \alias{check_decimalLatitude}
 \alias{check_coords}
 \alias{check_is_sf}
+\alias{col_sf_to_dwc}
 \alias{check_eventDate}
 \alias{check_time}
 \alias{check_year}
 \alias{check_month}
 \alias{check_day}
 \alias{check_decimalLongitude}
+\alias{check_geodeticDatum}
+\alias{check_crs}
 \title{Check for Darwin Core field conformance}
 \usage{
 check_dwc(.df)
@@ -39,7 +42,9 @@ check_decimalLatitude(.df, level = c("inform", "warn", "abort"))
 
 check_coords(.df, level = c("inform", "warn", "abort"))
 
-check_is_sf(.df, level = c("inform", "warn", "abort"))
+check_is_sf(.df, level = c("inform", "warn", "abort"), call = caller_env())
+
+col_sf_to_dwc(.df, level = c("inform", "warn", "abort"), call = caller_env())
 
 check_eventDate(.df, level = c("inform", "warn", "abort"))
 
@@ -52,6 +57,10 @@ check_month(.df, level = c("inform", "warn", "abort"))
 check_day(.df, level = c("inform", "warn", "abort"))
 
 check_decimalLongitude(.df, level = c("inform", "warn", "abort"))
+
+check_geodeticDatum(.df, level = c("inform", "warn", "abort"))
+
+check_crs(.df, level = "warn", call = caller_env())
 }
 \arguments{
 \item{level}{what action should the function take for non-conformance?
@@ -63,3 +72,4 @@ Defaults to \code{"inform"}.}
 Function to check whether a data.frame or tibble conforms to DwC standards
 NOTE: Option to use \code{bdc} for checks, and/or \code{pointblank} for running them
 }
+\keyword{Internal}

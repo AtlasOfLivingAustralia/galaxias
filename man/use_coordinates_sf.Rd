@@ -15,6 +15,8 @@ use_coordinates_sf(
 \arguments{
 \item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 
+\item{coords}{the latitude in decimal degrees as \code{sf} \code{POINT} class}
+
 \item{coordinateUncertaintyInMeters}{(numeric) radius of the smallest circle
 that contains the whole location, given any possible measurement error.}
 
@@ -25,8 +27,6 @@ that contains the whole location, given any possible measurement error.}
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
-
-\item{coords_sf}{the latitude in decimal degrees as \code{sf} \code{POINT} class}
 }
 \value{
 A tibble with the requested fields added.

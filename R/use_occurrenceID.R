@@ -10,30 +10,41 @@
 #' @export
 use_occurrenceID <- function(.df,
                              ...){
+  # mc <- match.call(expand.dots = FALSE)
+  # mc$...
+  
   dots <- list(...)
+  
+  browser()
   if(length(dots) > 0){
     .df |>
       mutate(occurrenceID = build_composite_identifier(.df, dots))
   }else{
     .df |>
-      mutate(occurrenceID = build_random_identifier())
+      mutate(occurrenceID = use_id_random(.df)) ##TODO: This doesn't work
   }
   check_occurrenceID(df, level = "abort")
 }
 
+
 #' Create a random identifier column
-#' @param data A tibble
-#' @param random_seed Integer: seed value (optional)
-#' @keywords Internal
-#' @noRd
-build_random_identifier <- function(data,
-                                    random_seed = NULL) {
-  # For now just a simple sequential ID for proof of concept
-  data$occurrenceID <- paste0("id", 1:nrow(data))
-  # this needs to change of course. 
-  # One option is uuid::UUIDgenerate(), but not sure of behaviour
-  message("Random identifier column `occurrenceID` has been added to the data.\n")
-  return(data)
+#' 
+#' @description
+#' Uses `uuid::UUIDgenerate()` to create a random UUID code without the possible 
+#' shortfalls of being influenced by R's internal random number generators 
+#' (i.e., set.seed). 
+#' 
+#' @param x A vector
+#' @importFrom uuid UUIDgenerate
+#' @importFrom dplyr n
+#' @export
+use_id_random <- function(x) {
+  if(missing(x)) {
+    uuid::UUIDgenerate(use.time = TRUE, dplyr::n())
+  } else {
+    cli::cli_abort("{.code use_id_random()} must be used in `use_occurrences()`.")
+    # vctrs::vec_rank(x, ties = "sequential", incomplete = "na")
+  }
 }
 
 #' Create a composite identifier from two or more columns, separated by a colon.
@@ -43,8 +54,8 @@ build_random_identifier <- function(data,
 #' @param cols character vector of columns to use
 #' @keywords Internal
 #' @noRd
-build_composite_identifier <- function(data,
-                                       cols = NULL) {
+use_id_composite <- function(data,
+                             cols = NULL) {
   # TODO: check if the columns specified are contained / found in the data
   # if not, warning and check for spelling etc.
   # This method assumes string values - unchecked with other column types
