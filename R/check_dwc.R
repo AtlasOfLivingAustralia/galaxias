@@ -549,38 +549,58 @@ all_terms_message <- function(user_column_names,
 }
 
 #' Build message about minimum required terms
+#' @importFrom tidyr unnest
+#' @importFrom dplyr case_when
+#' @importFrom tidyr replace_na 
 #' @noRd
 #' @keywords Internal
 req_terms_message <- function(req_terms) {
   
   # Unnest & concatenate terms by group
-  req_terms_message <- req_terms |>
-    tidyr::unnest(cols = c(missing, matched)) |>
+  missing_results <- req_terms |>
+    dplyr::select(-matched) |>
+    tidyr::unnest(cols = c(missing)) |>
     dplyr::group_by(term_group) |>
-    mutate(
-      missing = cli::ansi_collapse(missing, sep = ", ", last = ", "),
+    mutate( # glue names
+      missing = cli::ansi_collapse(missing, sep = ", ", last = ", ")
+    ) |>
+    unique()
+  
+  matched_results <- req_terms |>
+    dplyr::select(-missing) |>
+    tidyr::unnest(cols = c(matched)) |>
+    dplyr::group_by(term_group) |>
+    mutate( # glue names
       matched = cli::ansi_collapse(matched, sep = ", ", last = ", ")
     ) |>
-    unique() |>
+    unique()
+  
+  req_terms_message <- missing_results |>
+    dplyr::full_join(matched_results, 
+                     dplyr::join_by(term_group, result)) |>
+    # remove other Identifier terms if one or more are matched
+    mutate(
+      missing = dplyr::case_when(
+        term_group == "Identifier (at least one)" & !is.na(matched) ~ NA,
+        .default = missing
+        )) |>
     # add blank space for correct message formatting
     tidyr::replace_na(list(missing = stringr::str_pad("-", width = 16, side = "right"),
                            matched = stringr::str_pad("-", width = 16, side = "right")))
   
-
-  
   # Group terms found vs missing
-  found <- req_terms_message |>
+  pass <- req_terms_message |>
     dplyr::filter(result == "pass")
   
-  missing <- req_terms_message |>
+  failed <- req_terms_message |>
     dplyr::filter(result == "fail")
   
-  pass_group <- glue("{found$term_group}")
-  pass_matched <- glue("{found$matched}")
-  pass_missing <- glue("{found$missing}")
-  fail_group <- glue("{missing$term_group}")
-  fail_matched <- glue("{missing$matched}")
-  fail_missing <- glue("{missing$missing}")
+  pass_group <- glue("{pass$term_group}")
+  pass_matched <- glue("{pass$matched}")
+  pass_missing <- glue("{pass$missing}")
+  fail_group <- glue("{failed$term_group}")
+  fail_matched <- glue("{failed$matched}")
+  fail_missing <- glue("{failed$missing}")
   
   headers <- paste0(
     "  ",
@@ -608,11 +628,11 @@ req_terms_message <- function(req_terms) {
   
   
   # Remove tick when all terms are matched or missing
-  if(nrow(found) == 0) {
+  if(nrow(pass) == 0) {
     bullets_found <- NULL
   }
   
-  if(nrow(missing) == 0) {
+  if(nrow(failed) == 0) {
     # celebrate
     bullets_missing <- paste0("\n", add_emoji(), " ", cli::col_green("All minimum requirements met!"))
   }
