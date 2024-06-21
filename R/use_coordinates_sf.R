@@ -29,6 +29,7 @@
 #' @seealso [use_locality()] for provided text-based spatial information
 #' @importFrom dplyr mutate
 #' @importFrom rlang abort
+#' @importFrom sf st_drop_geometry
 #' @export
 use_coordinates_sf <- function(
     df,
@@ -76,6 +77,7 @@ check_coords <- function(.df,
 #' @rdname check_dwc
 #' @order 6
 #' @importFrom sf st_is
+#' @importFrom sf st_geometry
 #' @export
 check_is_sf <- function(.df, 
                         level = c("inform", "warn", "abort"),
