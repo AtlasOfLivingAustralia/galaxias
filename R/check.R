@@ -36,154 +36,6 @@ check_data_frame <- function(.df,
   .df
 }
 
-#' check a vector consists only of values in a second vector
-#' @param x vector of values
-#' @param y vector against which x should be compared
-#' @importFrom dplyr pull
-#' @importFrom glue glue
-#' @importFrom cli cli_alert_success
-#' @importFrom cli cli_alert_warning
-#' @importFrom cli cli_alert_danger
-#' @importFrom cli cli_text
-#' @importFrom cli cli_bullets
-#' @importFrom cli ansi_collapse
-#' @importFrom cli cli_div
-#' @importFrom cli cli_par
-#' @importFrom cli cli_text
-#' @importFrom cli cli_end
-#' @importFrom cli cli_fmt
-#' @noRd
-#' @keywords Internal
-check_contains_terms <- function(.df, 
-                           y, 
-                           level = "inform",
-                           call = caller_env()
-                           ){
-  check_data_frame(.df)
-  field_name <- colnames(.df)[[1]]
-  user_column_names <- .df |> 
-    pull(field_name) |>
-    unique() |>
-    sort()
-  name_lookup <- user_column_names %in% y
-  if(any(!name_lookup)){
-    
-    # Darwin Core term matching
-    matched_values <- user_column_names[name_lookup]
-    unmatched_values <- user_column_names[!name_lookup]
-    matched_string <- ansi_collapse(glue("{matched_values}"),
-                                    sep = ", ",
-                                    last = " & ")
-    unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
-                                       sep = ", ",
-                                       last = " & ")     
-    
-    if(length(matched_values) > 0) {
-      matches_message <- c(
-        "v" = "Matched {length(matched_values)} column name{?s} to DwC terms: {.field {matched_string}}"
-      )
-    } else {
-      matches_message <- NULL
-    }
-    
-    if(length(unmatched_values) > 0) {
-      unmatch_message <- c(
-        "x" = "No DwC terms matched {length(unmatched_values)} field name{?s}: {.field {unmatched_string}}"
-      )
-    } else {
-      unmatch_message <- NULL
-    }
-    
-    bullets <- c(
-      matches_message,
-      unmatch_message
-      )
-    
-    # browser()
-    
-    # Function matching for suggested workflow
-    dwc_function_main <- tibble::tribble(
-      ~"dwc_term", ~"use_function",
-      "basisOfRecord",   "use_occurrences()",
-      "occurrenceID",   "use_occurrences()",
-      "decimalLatitude",   "use_coordinates()",
-      "decimalLongitude",   "use_coordinates()",
-      "eventDate",   "use_datetime()"
-    )
-    
-    dwc_function_optional <- tibble::tribble(
-      ~"dwc_term", ~"use_function",
-      "continent",   "use_locality",
-      "country",   "use_locality",
-      "countryCode",   "use_locality",
-      "stateProvince",   "use_locality",
-      "locality",   "use_locality"
-    )
-    
-    suggested_functions <- dwc_function_main |>
-      dplyr::filter(!dwc_term %in% matched_values) |>
-      dplyr::distinct(use_function) |>
-      pull(use_function)
-    
-    optional_functions <- dwc_function_optional |>
-      dplyr::filter(!dwc_term %in% matched_values) |>
-      dplyr::distinct(use_function) |>
-      pull(use_function)
-    
-    if(length(suggested_functions) > 1) {
-      suggested_functions_piped <- c(paste0(head(suggested_functions, -1), " |> "), tail(suggested_functions, 1))
-    } else {
-        suggested_functions_piped <- suggested_functions
-      }
-
-    
-    if(length(optional_functions) >= 1) {
-      optional_functions <- ansi_collapse(glue("{optional_functions}"),
-                                          sep = ", ",
-                                          last = ", ")
-    }
-    
-    # Format message
-    custom_alert <- function(texts, other_texts, .envir = parent.frame()) {
-      
-      # DwC matches
-      cli::cli_div()
-      cli::cli_h1("DwC terms")
-      cli::cli_bullets(bullets)
-      cli::cli_end()
-      
-      # Suggested workflow
-      cli::cli_h1("Suggested workflow")
-      cli::cli_text("To make your data Darwin Core compliant, use the following workflow:")
-      cli::cli_par()
-      cli::cli_end()
-      cli::cli_text("df |>")
-      cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-      lapply(texts, cli::cli_alert, .envir = .envir)
-      cli::cli_par()
-      cli::cli_end()
-      cli::cli_div()
-      cli::cli_text(cli::col_grey("Additional functions: {.fn {other_texts}}"))
-      cli::cli_end()
-      cli::cli_par()
-    }
-    
-    # withr::with_options(
-    #   list(cli.width = 80),
-    #   custom_alert(suggested_functions_piped, optional_functions)
-    # )
-    
-    custom_alert(suggested_functions_piped, optional_functions)
-    
-    # cli_inform(fun(), call = call)
-    
-    
-    # switch_check(level, 
-    #              bullets,
-    #              call = call)
-  }
-  .df
-}
 
 
 #' check a vector consists only of values in a second vector
@@ -202,6 +54,7 @@ check_contains_terms <- function(.df,
 check_contains_values <- function(.df, 
                                  y, 
                                  level = "inform",
+                                 .accepted_message = TRUE,
                                  call = caller_env()
 ){
   check_data_frame(.df)
@@ -221,11 +74,21 @@ check_contains_values <- function(.df,
       accepted_values <- ansi_collapse(glue("\"{y}\""),
                                        sep = ", " ,
                                        last = " & ")
+      if(.accepted_message == TRUE) {
       unmatch_message <- c(
-        "Unexpected value in {.field {field_name}}.",
+        "{.field {field_name}} contains invalid values.",
         i = "Accepted values are {accepted_values}.",
-        "x" = "Unexpected value{?s}: \"{unmatched_string}\""
+        "x" = "Invalid value{?s}: \"{unmatched_string}\""
       )
+      } else {
+        if(.accepted_message == FALSE) {
+          unmatch_message <- c(
+            "{.field {field_name}} contains invalid values.",
+            "x" = "Invalid value{?s}: {unmatched_values}"
+          )
+        }
+      }
+      
       bullets <- cli::cli_bullets(c(
         unmatch_message
       )) |>
@@ -444,4 +307,25 @@ check_time <- function(.df,
   }
 
   .df
+}
+
+#' check whether all column args are missing in a function call
+#' @noRd
+#' @keywords Internal
+check_missing_args <- function(function_call,
+                               args,
+                               error_call = caller_env()
+                               ){
+  function_name <- function_call[1]
+  function_args <- args
+  user_args <- names(as.list(function_call)[-1])
+  
+  if (length(user_args) == 1 && user_args %in% "df") {
+    bullets <- c(
+      "No Darwin Core arguments supplied to {.code {function_name}()}.",
+      i = "See {.code ?{function_name}} for valid arguments."
+    )
+    cli::cli_abort(bullets, call = caller_env())
+  }
+  
 }

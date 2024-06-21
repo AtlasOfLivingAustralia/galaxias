@@ -40,6 +40,8 @@ use_datetime <- function(
     abort("df is missing, with no default.")
   }
   
+  check_missing_args(match.call(), ls())
+  
   result <- df |>
     mutate(eventDate = {{eventDate}},
            year = {{year}},
