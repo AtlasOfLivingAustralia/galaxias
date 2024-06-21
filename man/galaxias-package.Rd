@@ -59,13 +59,6 @@ Possible functions for added functionality:
 
 \strong{Checking data for Darwin Core compliance}
 
-There are three main functions:
-\itemize{
-\item \code{\link[=check_dwca]{check_dwca()}} Function to check whole repository for conformance with DwC
-\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API
-\item \code{\link[=check_dwc]{check_dwc()}} to run all applicable \code{check_} functions
-}
-
 The wrapper function for checking tibbles for Darwin Core compliance is
 \code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
 \itemize{
@@ -82,13 +75,12 @@ The wrapper function for checking tibbles for Darwin Core compliance is
 Note that there are more \code{check_} functions than \code{use_} functions, because
 some \code{use_} functions affect multiple fields.
 
-\strong{DwCA constructor functions}
+\strong{DwCA functions}
 \itemize{
-\item \code{\link[=parse_md_to_tibble]{parse_md_to_tibble()}} and friends; conversion between md, tibble, list and xml.
-\item \code{\link[=read_md]{read_md()}} and \code{\link[=write_md]{write_md()}} to convert between a markdown file and common R object types
-\item \code{\link[=build_schema]{build_schema()}} Identify DwC csvs in a directory and build a schema file (meta.xml)
-\item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (eml.xml)
+\item \code{\link[=build_schema]{build_schema()}} Identify DwC csvs in a directory and build a schema file (\code{meta.xml})
+\item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (\code{eml.xml})
 \item \code{\link[=build_dwca]{build_dwca()}} Convert a Biodiversity Data directory to a Darwin Core Archive (DwCA)
+\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API
 }
 }
 
