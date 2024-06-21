@@ -298,4 +298,23 @@ check_time <- function(.df,
   .df
 }
 
-
+#' check whether all column args are missing in a function call
+#' @noRd
+#' @keywords Internal
+check_missing_args <- function(function_call,
+                               args,
+                               error_call = caller_env()
+                               ){
+  function_name <- function_call[1]
+  function_args <- args
+  user_args <- names(as.list(function_call)[-1])
+  
+  if (length(user_args) == 1 && user_args %in% "df") {
+    bullets <- c(
+      "No arguments supplied to {.code {function_name}()}.",
+      i = "See {.code ?{function_name}} for valid arguments."
+    )
+    cli::cli_abort(bullets, call = caller_env())
+  }
+  
+}

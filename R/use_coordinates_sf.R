@@ -40,6 +40,9 @@ use_coordinates_sf <- function(
   if(missing(df)){
     abort("df is missing, with no default.")
   }
+  
+  check_missing_args(match.call(), ls())
+  
   result <- df |>
     mutate(coordinateUncertaintyInMeters = {{coordinateUncertaintyInMeters}},
            coordinatePrecision = {{coordinatePrecision}},

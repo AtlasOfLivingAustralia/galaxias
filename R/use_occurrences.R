@@ -47,14 +47,9 @@ use_occurrences <- function(
     abort("df is missing, with no default.")
   }
   
-  if(missing(occurrenceID) & missing(basisOfRecord)) {
-    bullets <- c(
-      "Nothing supplied to `use_occurrences()`.",
-      i = "See `?use_occurrences` for valid arguments."
-      )
-    cli::cli_abort(bullets, call = caller_env())
-  }
+  check_missing_args(match.call(), ls())
   
+  # if used, run `use_id_random()`
   mc <- match.call(expand.dots = FALSE)
   
   if(!is.null(mc$occurrenceID)) {
@@ -72,7 +67,6 @@ use_occurrences <- function(
   result <- df |>
     mutate(occurrenceID = {{occurrenceID}},
            basisOfRecord = {{basisOfRecord}},
-           # recordNumber = {{recordNumber}},
            .keep = .keep)
   
   check_basisOfRecord(result, level = "abort")
