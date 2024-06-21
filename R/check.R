@@ -54,6 +54,7 @@ check_data_frame <- function(.df,
 check_contains_values <- function(.df, 
                                  y, 
                                  level = "inform",
+                                 .accepted_message = TRUE,
                                  call = caller_env()
 ){
   check_data_frame(.df)
@@ -73,11 +74,21 @@ check_contains_values <- function(.df,
       accepted_values <- ansi_collapse(glue("\"{y}\""),
                                        sep = ", " ,
                                        last = " & ")
+      if(.accepted_message == TRUE) {
       unmatch_message <- c(
-        "Unexpected value in {.field {field_name}}.",
+        "{.field {field_name}} contains invalid values.",
         i = "Accepted values are {accepted_values}.",
-        "x" = "Unexpected value{?s}: \"{unmatched_string}\""
+        "x" = "Invalid value{?s}: \"{unmatched_string}\""
       )
+      } else {
+        if(.accepted_message == FALSE) {
+          unmatch_message <- c(
+            "{.field {field_name}} contains invalid values.",
+            "x" = "Invalid value{?s}: {unmatched_values}"
+          )
+        }
+      }
+      
       bullets <- cli::cli_bullets(c(
         unmatch_message
       )) |>
@@ -311,7 +322,7 @@ check_missing_args <- function(function_call,
   
   if (length(user_args) == 1 && user_args %in% "df") {
     bullets <- c(
-      "No arguments supplied to {.code {function_name}()}.",
+      "No Darwin Core arguments supplied to {.code {function_name}()}.",
       i = "See {.code ?{function_name}} for valid arguments."
     )
     cli::cli_abort(bullets, call = caller_env())
