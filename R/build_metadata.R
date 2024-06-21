@@ -9,9 +9,9 @@
 #' with `use_bd_project()`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom xml2 as_xml_document
-#' @importFrom xml2 xml_add_child
-#' @importFrom xml2 write_xml
+#' @importFrom elm read_md
+#' @importFrom elm as_xml
+#' @importFrom elm write_xml
 #' @export
 build_metadata <- function(file, project = ".") {
   
@@ -22,7 +22,7 @@ build_metadata <- function(file, project = ".") {
     abort("`file` doesn't exist in specified location.")
   }
   read_md(file) |>
-    parse_tibble_to_xml() |>
+    as_xml() |>
     write_xml(file = glue("{project}/eml.xml"))
   
   # # convert to xml

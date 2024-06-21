@@ -51,14 +51,10 @@
 #'   * [use_media()] good idea, but unclear how users would supply said media; should be urls, but to where?
 #'  
 #'  **Checking data for Darwin Core compliance**
-#'  
-#'  There are three main functions:
-#'   * [check_dwca()] Function to check whole repository for conformance with DwC
-#'   * [validate_dwca()] check your archive via the ALA validate API  
-#'   * [check_dwc()] to run all applicable `check_` functions
 #'   
 #'  The wrapper function for checking tibbles for Darwin Core compliance is
 #'  [check_dwc()]. It calls the following microfunctions:
+#'  
 #'   * [check_fields()] Checks whether non-DwC fields are presen
 #'   * [check_occurrenceID()]
 #'   * [check_basisOfRecord()]
@@ -71,12 +67,11 @@
 #'  Note that there are more `check_` functions than `use_` functions, because
 #'  some `use_` functions affect multiple fields.
 #'   
-#'  **DwCA constructor functions**
-#'   * [parse_metadata()] and friends; conversion between md, tibble, list and xml.
-#'   * [read_md()] and [write_md()] to convert between a markdown file and common R object types
-#'   * [build_schema()] Identify DwC csvs in a directory and build a schema file (meta.xml)
-#'   * [build_metadata()] Supply a metadata file in .md format, and convert to a metadata file (eml.xml)
+#'  **DwCA functions**
+#'   * [build_schema()] Identify DwC csvs in a directory and build a schema file (`meta.xml`)
+#'   * [build_metadata()] Supply a metadata file in .md format, and convert to a metadata file (`eml.xml`)
 #'   * [build_dwca()] Convert a Biodiversity Data directory to a Darwin Core Archive (DwCA)
-#'  
+#'   * [validate_dwca()] check your archive via the ALA validate API
+#'   
 #' @keywords internal
 "_PACKAGE"
