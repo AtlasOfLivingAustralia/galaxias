@@ -36,16 +36,19 @@ use_locality <- function(df,
   if(missing(df)){
     abort("df is missing, with no default")
   }
+  
+  check_missing_args(match.call(), ls())
+  
   result <- df |>
-    mutate(continent = continent,
-           country = country,
-           countryCode = countryCode,
-           stateProvince = stateProvince,
-           locality = locality,
+    mutate(continent = {{continent}},
+           country = {{country}},
+           countryCode = {{countryCode}},
+           stateProvince = {{stateProvince}},
+           locality = {{locality}},
            .keep = .keep)
-  check_continent(df, level = "abort")
-  check_country(df, level = "abort")
-  check_countryCode(df, level = "abort")
+  check_continent(result, level = "abort")
+  check_country(result, level = "abort")
+  check_countryCode(result, level = "abort")
   if(!is.null(stateProvince)){check_is_string(df$stateProvince)}
   if(!is.null(locality)){check_is_string(df$locality)}
   # other tests likely to be needed here
@@ -86,10 +89,12 @@ check_country <- function(df,
 ){
   level <- match.arg(level)
   if(any(colnames(df) == "country")){
-    check_is_string(df$country)
-    check_contains(unique(df$country), 
-                   country_codes$country_name, 
-                   level = level)
+    df |>
+      select("country") |>
+      check_is_string(level = level) |>
+      check_contains_values(country_codes$country_name, 
+                            level = level,
+                            .accepted_message = FALSE)
   }
 }
 
@@ -98,33 +103,40 @@ check_country <- function(df,
 #' @order 5
 #' @export
 check_countryCode <- function(df, 
-                              level = c("inform", "warn", "abort")
+                              level = c("inform", "warn", "abort"),
+                              call = caller_env()
 ){
   level <- match.arg(level)
   if(any(colnames(df) == "countryCode")){
-    x <- df$countryCode
-    check_is_string(x, 
-                    level = level)
+    df |> 
+      select("countryCode") |>
+      check_is_string(x, level = level)
     
+    #TODO: This is broken
+    # missing value argument
     accepted_values <- country_codes$code
     if(!(value %in% accepted_values)){
-      bullets <- c("Unexpected `value` received", 
+      bullets <- c("Unexpected value in {.field countryCode}.", 
                    i = "Please provide a two-digit country code in ISO 3166-1 Alpha 2",
-                   i = "see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2")
-      abort(bullets)
+                   i = "See {.url https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2} for country codes.",
+                   x = "Invalid value{?s}: {value}"
+                   )
+      cli::cli_abort(bullets, call = call)
     }
     
-    if(any(colnames(df) == "country")){
-      if(!(df$country[1] %in% country_codes$country_name)){
-        bullets <- c("supplied `df` has a `country` field that is not present in the reference dataset",
-                     i = "did you mean X?")
-        warn(bullets)
+    if(any(colnames(df) == "countryCode")){
+      if(!(df$countryCode[1] %in% country_codes$country_name)){
+        bullets <- c("Unrecognised {.field countryCode} value.",
+                     # i = "Did you mean X?",
+                     x = "Did not recognise: {df$countryCode}.")
+        cli::cli_warn(bullets)
       }
       lookup_country <- country_codes$country_name[country_codes$code == value]
-      if(lookup_country != df$country[1]){
-        bullets <- c("supplied `df` has a `country` field that does not correspond to the supplied country code",
-                     i = "did you mean X?")
-        warn(bullets)
+      if(lookup_country != df$countryCode[1]){
+        bullets <- c("Value supplied in {.field countryCode} does not correspond to supplied country code",
+                     i = "Did you mean X?"
+                     )
+        cli::cli_warn(bullets)
       }
     }
   }

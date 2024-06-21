@@ -20,11 +20,16 @@ in future updates. They should also be unique, both within the dataset, and
 (ideally) across all other datasets.}
 
 \item{basisOfRecord}{Record type. Only accepts \code{camelCase}, for
-consistency with field names. List of accepted values are in @details.}
+consistency with field names.
+Accepted \code{basisOfRecord} values are one of:
+\itemize{
+\item \code{"humanObservation"}, \code{"machineObservation"}, \code{"livingSpecimen"},
+\code{"preservedSpecimen"}, \code{"fossilSpecimen"}, \code{"materialCitation"}
+}}
 
 \item{.keep}{Control which columns from .data are retained in the output.
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
-\code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
+\code{"unused"}, which only keeps Darwin Core fields and not those fields used to
 generate them.}
 }
 \value{
