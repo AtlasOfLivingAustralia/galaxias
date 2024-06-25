@@ -74,24 +74,32 @@ check_contains_values <- function(.df,
       accepted_values <- ansi_collapse(glue("\"{y}\""),
                                        sep = ", " ,
                                        last = " & ")
-      if(.accepted_message == TRUE) {
-      unmatch_message <- c(
-        "{.field {field_name}} contains invalid values.",
-        i = "Accepted values are {accepted_values}.",
-        "x" = "Invalid value{?s}: \"{unmatched_string}\""
-      )
+      
+      first_line <- c("Unexpected value in {.field {field_name}}.")
+      error_line <- c("x" = "Invalid value{?s}: \"{unmatched_string}\"")
+      
+      if (.accepted_message == TRUE) {
+      info_lines <- c(
+        i = "Accepted values are {accepted_values}."
+        )
       } else {
-        if(.accepted_message == FALSE) {
-          unmatch_message <- c(
-            "{.field {field_name}} contains invalid values.",
-            "x" = "Invalid value{?s}: {unmatched_values}"
-          )
-        }
+          info_lines <- NULL
       }
       
-      bullets <- cli::cli_bullets(c(
-        unmatch_message
-      )) |>
+      # conditional info message for specific fields
+      if(field_name == "countryCode") {
+        info_lines <- c(
+          i = "{.field {field_name}} accepts two-digit country codes in ISO 3166-1 Alpha 2",
+          i = "See {.url https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2}"
+        )
+      }
+      
+      full_values_message <- c(
+        first_line,
+        info_lines,
+        error_line
+        ) |>
+        cli::cli_bullets() |>
         cli::cli_fmt()
     }
     
@@ -101,8 +109,8 @@ check_contains_values <- function(.df,
     # )
 
     switch_check(level,
-                bullets,
-                call = call)
+                 full_values_message,
+                 call = call)
   }
   .df
 }
@@ -312,7 +320,7 @@ check_time <- function(.df,
 #' check whether all column args are missing in a function call
 #' @noRd
 #' @keywords Internal
-check_missing_args <- function(function_call,
+check_missing_all_args <- function(function_call,
                                args,
                                error_call = caller_env()
                                ){
@@ -327,5 +335,37 @@ check_missing_args <- function(function_call,
     )
     cli::cli_abort(bullets, call = caller_env())
   }
+}
+
+
+#' check whether country code matches country name
+#' @noRd
+#' @keywords Internal
+check_mismatch_code_country <- function(.df, 
+                                        level = "inform",
+                                        call = caller_env()
+                                        ){
+  # browser()
+  check_data_frame(.df)
+  field_name <- colnames(.df)[[1]]
+  x <- .df |> pull(field_name)
   
+  # if(!(.df$countryCode[1] %in% country_codes$country_name)){
+  #   bullets <- c("Unrecognised {.field countryCode} value.",
+  #                # i = "Did you mean X?",
+  #                x = "Did not recognise: {df$countryCode}.")
+  #   cli::cli_warn(bullets)
+  # }
+  
+  
+  
+  lookup_country <- country_codes$country_name[country_codes$code %in% x]
+  correct_country <- country_codes$country_name
+  if(lookup_country != df$countryCode[1]){
+    bullets <- c("Country code in {.field {x}} does not correspond to country.",
+                 i = "Did you mean {lookup_country}?"
+    )
+    cli::cli_warn(bullets)
+  }
+  .df
 }
