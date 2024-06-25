@@ -30,7 +30,7 @@
 #' @importFrom purrr map
 #' @importFrom purrr pluck
 #' @export
-use_locality <- function(df, 
+use_locality <- function(.df, 
                          continent = NULL,
                          country = NULL,
                          countryCode = NULL,
@@ -38,20 +38,18 @@ use_locality <- function(df,
                          locality = NULL,
                          .keep = "unused"
 ){
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default")
   }
-
+  
   fn_args <- ls()
   check_missing_all_args(match.call(), fn_args) # FIXME: The below change makes this scenario very rare. Is this still the best solution?
   
   # capture arguments as a list of quosures
-  # NOTE: This stage is a bit manual rn, could generalise by capturing supplied
-  # argument names and removing `df` and `.keep`.
+  # NOTE: enquos() must be listed alphabetically
   fn_quos <- enquos(continent, country, countryCode, locality, stateProvince)
-  names(fn_quos) <- c("continent", "country", "countryCode", "locality", "stateProvince") 
-  # NOTE: this works as an alternative to above, but only if enquos() are listed alphabetically
-  # names(x) <- fn_args[!fn_args %in% "df"] 
+  names(fn_quos) <- fn_args
+  # names(fn_quos) <- c("continent", "country", "countryCode", "locality", "stateProvince") 
   
   # check for NULL arguments
   fn_quo_is_null <- fn_quos |> 
@@ -61,14 +59,14 @@ use_locality <- function(df,
   
   # find any arguments that are NULL, but exist already in `df`
   #   (if not handled here, these DwC columns would be deleted by `mutate()`)
-  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(df))
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
   
-  if(any(null_arg_nonnull_df)){
+  if(any(null_col_exists_in_df)){
     purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
   }
   
   # Update df
-  result <- df |> 
+  result <- .df |> 
     mutate(!!!fn_quos, 
            .keep = .keep)
   
