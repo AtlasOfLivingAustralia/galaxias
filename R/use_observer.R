@@ -28,9 +28,11 @@
 #' @importFrom purrr map
 #' @importFrom purrr pluck
 #' @importFrom rlang abort
-#' @importFrom rlang as_label
+#' @importFrom rlang quo_is_null
 #' @importFrom rlang enquos
 #' @importFrom rlang zap
+#' @importFrom purrr map
+#' @importFrom purrr pluck
 #' @export
 use_observer <- function(
     df,
@@ -41,23 +43,33 @@ use_observer <- function(
   if(missing(df)){
     abort("df is missing, with no default")
   }
+  fn_args <- ls()
+  check_missing_all_args(match.call(), fn_args)
+  
   # capture arguments as a list of quosures
   # NOTE: This stage is a bit manual rn, could generalise by capturing supplied
   # argument names and removing `df` and `.keep`.
-  x <- enquos(recordedBy, recordedByID)
-  names(x) <- c("recordedBy", "recordedByID") 
+  fn_quos <- enquos(continent, country, countryCode, locality, stateProvince)
+  names(fn_quos) <- c("continent", "country", "countryCode", "locality", "stateProvince") 
+  # NOTE: this works as an alternative to above, but only if enquos() are listed alphabetically
+  # names(x) <- fn_args[!fn_args %in% "df"] 
   
-  # check for NULLs
-  x_null <- map(x, \(a){as_label(a) == "NULL"}) |> unlist()
+  # check for NULL arguments
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+        rlang::quo_is_null(user_arg)) |> 
+    unlist()
   
-  # find any arguments that are supplied as `NULL`, but are already given in `df`
-  # if not handled here, these columns would be deleted by `mutate()`,
-  # which is undesirable as they already conform to DwC.
-  null_arg_nonnull_df <- x_null & (names(x) %in% colnames(df))
+  # find any arguments that are NULL, but exist already in `df`
+  #   (if not handled here, these DwC columns would be deleted by `mutate()`)
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(df))
+  
   if(any(null_arg_nonnull_df)){
-    pluck(x, names(which(null_arg_nonnull_df))) <- zap()
+    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
   }
   
-  # pass list to `mutate`
-  mutate(df, !!!x, .keep = .keep)
+  # Update df
+  result <- df |> 
+    mutate(!!!fn_quos, 
+           .keep = .keep)
 }
