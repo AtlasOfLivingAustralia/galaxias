@@ -28,6 +28,8 @@
 #' @importFrom purrr map
 #' @importFrom purrr pluck
 #' @importFrom rlang abort
+#' @importFrom rlang as_label
+#' @importFrom rlang enquos
 #' @importFrom rlang zap
 #' @export
 use_observer <- function(
@@ -39,19 +41,23 @@ use_observer <- function(
   if(missing(df)){
     abort("df is missing, with no default")
   }
-  # capture arguments as a list
-  x <- environment() |>
-    as.list.environment()
-  # interestingly, elements that start with a `.` are hidden, just like in 'real' folders
-  pluck(x, "df") <- zap() # remove df from list. Not needed if we use `.df` as the arg name
+  # capture arguments as a list of quosures
+  # NOTE: This stage is a bit manual rn, could generalise by capturing supplied
+  # argument names and removing `df` and `.keep`.
+  x <- enquos(recordedBy, recordedByID)
+  names(x) <- c("recordedBy", "recordedByID") 
+  
+  # check for NULLs
+  x_null <- map(x, \(a){as_label(a) == "NULL"}) |> unlist()
   
   # find any arguments that are supplied as `NULL`, but are already given in `df`
   # if not handled here, these columns would be deleted by `mutate()`,
-  # which is undesirable as they already conform to DwC
-  null_arg_nonnull_df <- unlist(map(x, is.null)) & (names(x) %in% colnames(df))
+  # which is undesirable as they already conform to DwC.
+  null_arg_nonnull_df <- x_null & (names(x) %in% colnames(df))
   if(any(null_arg_nonnull_df)){
     pluck(x, names(which(null_arg_nonnull_df))) <- zap()
   }
   
+  # pass list to `mutate`
   mutate(df, !!!x, .keep = .keep)
 }
