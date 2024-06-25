@@ -25,7 +25,10 @@
 #' * 	`c("https://orcid.org/0000-0002-1825-0097", "https://orcid.org/0000-0002-1825-0098")`
 #' 
 #' @importFrom dplyr mutate
+#' @importFrom purrr map
+#' @importFrom purrr pluck
 #' @importFrom rlang abort
+#' @importFrom rlang zap
 #' @export
 use_observer <- function(
     df,
@@ -36,12 +39,19 @@ use_observer <- function(
   if(missing(df)){
     abort("df is missing, with no default")
   }
-  result <- df |>
-    mutate(recordedBy = {{recordedBy}},
-           recordedByID = {{recordedByID}},
-           .keep = .keep)
-  # check_recordedBy(result, level = "abort")
-  # check_recordedByID(result, level = "abort")
+  # capture arguments as a list
+  x <- environment() |>
+    as.list.environment()
+  # interestingly, elements that start with a `.` are hidden, just like in 'real' folders
+  pluck(x, "df") <- zap() # remove df from list. Not needed if we use `.df` as the arg name
   
-  result
+  # find any arguments that are supplied as `NULL`, but are already given in `df`
+  # if not handled here, these columns would be deleted by `mutate()`,
+  # which is undesirable as they already conform to DwC
+  null_arg_nonnull_df <- unlist(map(x, is.null)) & (names(x) %in% colnames(df))
+  if(any(null_arg_nonnull_df)){
+    pluck(x, names(which(null_arg_nonnull_df))) <- zap()
+  }
+  
+  mutate(df, !!!x, .keep = .keep)
 }
