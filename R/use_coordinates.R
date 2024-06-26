@@ -29,7 +29,7 @@
 #' @importFrom rlang abort
 #' @export
 use_coordinates <- function(
-    df,
+    .df,
     decimalLatitude = NULL,
     decimalLongitude = NULL,
     geodeticDatum = NULL,
@@ -37,24 +37,41 @@ use_coordinates <- function(
     coordinatePrecision = NULL,
     .keep = "unused"
 ){
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default")
   }
   
-  check_missing_args(match.call(), ls())
+  fn_args <- ls()
+  check_missing_all_args(match.call(), fn_args)
   
-  result <- df |>
-    mutate(decimalLatitude = {{decimalLatitude}},
-           decimalLongitude = {{decimalLongitude}},
-           geodeticDatum = {{geodeticDatum}},
-           coordinateUncertaintyInMeters = {{coordinateUncertaintyInMeters}},
-           coordinatePrecision = {{coordinatePrecision}},
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  fn_quos <- enquos(coordinatePrecision, coordinateUncertaintyInMeters, decimalLatitude, decimalLongitude, geodeticDatum)
+  names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # otherwise, these DwC columns are deleted by `mutate()` later
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+               rlang::quo_is_null(user_arg)) |> 
+    unlist()
+  
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  
+  if(any(null_col_exists_in_df)){
+    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
+  }
+  
+  # Update df
+  result <- .df |> 
+    mutate(!!!fn_quos, 
            .keep = .keep)
+  
   check_decimalLatitude(result, level = "abort")
   check_decimalLongitude(result, level = "abort")
   check_geodeticDatum(result, level = "abort")
-  # other tests likely to be needed here
-  result
+  
+  return(result)
 }
 
 

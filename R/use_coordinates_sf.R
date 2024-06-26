@@ -32,26 +32,46 @@
 #' @importFrom sf st_drop_geometry
 #' @export
 use_coordinates_sf <- function(
-    df,
+    .df,
     coords = NULL,
     coordinateUncertaintyInMeters = NULL,
     coordinatePrecision = NULL,
     .keep = "unused"
 ){
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default.")
   }
   
-  check_missing_args(match.call(), ls())
+  fn_args <- ls()
+  check_missing_all_args(match.call(), fn_args)
   
-  result <- df |>
-    mutate(coordinateUncertaintyInMeters = {{coordinateUncertaintyInMeters}},
-           coordinatePrecision = {{coordinatePrecision}},
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  fn_quos <- enquos(coordinatePrecision, coordinateUncertaintyInMeters)
+  names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # otherwise, these DwC columns are deleted by `mutate()` later
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+               rlang::quo_is_null(user_arg)) |> 
+    unlist()
+  
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  
+  if(any(null_col_exists_in_df)){
+    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
+  }
+  
+  # Update df
+  result <- .df |> 
+    mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # Add sf coords if valid
   check_coords(result, level = "abort")
   
-  result <- col_sf_to_dwc(df, level = level) |>
+  result <- col_sf_to_dwc(.df, level = level) |>
     st_drop_geometry()
   
   cli::cli_warn("{.field geometry} dropped from data frame.")
@@ -107,9 +127,9 @@ check_is_sf <- function(.df,
 #' @importFrom sf st_drop_geometry
 #' @keywords Internal
 col_sf_to_dwc <- function(.df, 
-                              level = c("inform", "warn", "abort"),
-                              call = caller_env()
-){
+                          level = c("inform", "warn", "abort"),
+                          call = caller_env()
+                          ){
   # check_data_frame(.df)
   # field_name <- colnames(.df)[[1]]
   # x <- .df |> pull(field_name)

@@ -43,22 +43,20 @@ use_locality <- function(.df,
   }
   
   fn_args <- ls()
-  check_missing_all_args(match.call(), fn_args) # FIXME: The below change makes this scenario very rare. Is this still the best solution?
+  check_missing_all_args(match.call(), fn_args)
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
   fn_quos <- enquos(continent, country, countryCode, locality, stateProvince)
   names(fn_quos) <- fn_args
-  # names(fn_quos) <- c("continent", "country", "countryCode", "locality", "stateProvince") 
   
-  # check for NULL arguments
+  # find arguments that are NULL but exist already in `df`
+  # otherwise, these DwC columns are deleted by `mutate()` later
   fn_quo_is_null <- fn_quos |> 
     purrr::map(\(user_arg)
         rlang::quo_is_null(user_arg)) |> 
     unlist()
   
-  # find any arguments that are NULL, but exist already in `df`
-  #   (if not handled here, these DwC columns would be deleted by `mutate()`)
   null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
   
   if(any(null_col_exists_in_df)){

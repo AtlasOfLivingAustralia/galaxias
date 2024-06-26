@@ -27,7 +27,7 @@
 #' @importFrom rlang abort
 #' @export
 use_datetime <- function(
-    df,
+    .df,
     eventDate = NULL,
     year = NULL,
     month = NULL,
@@ -36,18 +36,34 @@ use_datetime <- function(
     .keep = "unused"
 ){
   
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default.")
   }
   
-  check_missing_args(match.call(), ls())
+  fn_args <- ls()
+  check_missing_all_args(match.call(), fn_args)
   
-  result <- df |>
-    mutate(eventDate = {{eventDate}},
-           year = {{year}},
-           month = {{month}},
-           day = {{day}},
-           time = {{time}},
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  fn_quos <- enquos(day, eventDate, month, time, year)
+  names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # otherwise, these DwC columns are deleted by `mutate()` later
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+               rlang::quo_is_null(user_arg)) |> 
+    unlist()
+  
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  
+  if(any(null_col_exists_in_df)){
+    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
+  }
+  
+  # Update df
+  result <- .df |> 
+    mutate(!!!fn_quos, 
            .keep = .keep)
   
   check_eventDate(result, level = "abort")

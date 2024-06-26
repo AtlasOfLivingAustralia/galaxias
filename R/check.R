@@ -328,7 +328,7 @@ check_missing_all_args <- function(function_call,
   function_args <- args
   user_args <- names(as.list(function_call)[-1])
   
-  if (length(user_args) == 1 && user_args %in% "df") {
+  if (length(user_args) == 1 && user_args %in% ".df") {
     bullets <- c(
       "No Darwin Core arguments supplied to {.code {function_name}()}.",
       i = "See {.code ?{function_name}} for valid arguments."

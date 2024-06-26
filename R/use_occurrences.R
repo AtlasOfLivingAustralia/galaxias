@@ -37,25 +37,45 @@
 #' @importFrom rlang abort
 #' @export
 use_occurrences <- function(
-    df,
+    .df,
     occurrenceID = NULL,
     basisOfRecord = NULL,
     # recordNumber = NULL, # keep?
     .keep = "unused"
 ){
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default.")
   }
   
-  check_missing_args(match.call(), ls())
+  fn_args <- ls()
+  check_missing_all_args(match.call(), fn_args)
   
-  # if used, run `use_id_random()`
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  fn_quos <- enquos(basisOfRecord, occurrenceID)
+  names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # otherwise, these DwC columns are deleted by `mutate()` later
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+               rlang::quo_is_null(user_arg)) |> 
+    unlist()
+  
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  
+  if(any(null_col_exists_in_df)){
+    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
+  }
+  
+  
+  # if used in occurrenceID, run `use_id_random()`
   mc <- match.call(expand.dots = FALSE)
   
   if(!is.null(mc$occurrenceID)) {
     if(mc$occurrenceID == "use_id_random()") {
       
-      check_uuid_exists(df)
+      check_uuid_exists(.df)
       
       result <- df |>
         mutate(
@@ -64,15 +84,15 @@ use_occurrences <- function(
     }
   }
   
-  result <- df |>
-    mutate(occurrenceID = {{occurrenceID}},
-           basisOfRecord = {{basisOfRecord}},
+  # Update df
+  result <- .df |> 
+    mutate(!!!fn_quos, 
            .keep = .keep)
   
   check_basisOfRecord(result, level = "abort")
   check_occurrenceID(result, level = "abort")
   
-  result
+  return(result)
 }
 
 #' Check whether a UUID column is already present in a dataset
