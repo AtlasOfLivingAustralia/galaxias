@@ -111,96 +111,140 @@ check_contains_terms <- function(.df,
     unique() |>
     sort()
   name_lookup <- user_column_names %in% y$term
-  # if(any(!name_lookup)){
   
-  ## All terms
+  ### All terms
+  
   # matches
   matched_values <- user_column_names[name_lookup]
   unmatched_values <- user_column_names[!name_lookup]
   
-  all_terms_message <- all_terms_message(user_column_names,
-                                         matched_values,
-                                         unmatched_values)
+  # concatenate matched & unmatched fields
+  matched_string <- ansi_collapse(glue("{matched_values}"), sep = ", ", last = ", ")
+  unmatched_string <- ansi_collapse(glue("{unmatched_values}"), sep = ", ", last = ", ")
   
-  ## Minimum required terms
+  # create message components
+  result_message <- "Matched {length(matched_values)} of {length(user_column_names)} column name{?s} to DwC terms:"
+  matches_message <- c("v" = "Matched: {.field {matched_string}}")
+  unmatch_message <- c("x" = "Unmatched: {cli::col_red({unmatched_string})}")
   
+  all_cols_match <- rlang::is_empty(unmatched_values)
+  
+  # build message
+  all_terms_message <- function(matches_message, unmatch_message, all_cols_match) {
+    cli::cli_h2("All DwC terms")
+    cli::cat_line(cli::cli_text(result_message))
+    cli::cli_bullets(matches_message)
+    cli::cli_bullets(unmatch_message)
+    cli::cli_par()
+    if(isTRUE(all_cols_match)) {
+      # celebrate
+      cli::cat_line(paste0("\n", add_emoji(), " ", cli::col_green("All column names matched DwC terms!"), "\n"))
+    }
+  }
+  
+  
+  ### Minimum required terms
+  
+  # retrieve column results
   req_terms_results <- check_required_terms(user_column_names)
   
-  req_terms_message <- req_terms_message(req_terms_results)
+  # create message components
+  req_terms_table <- build_req_terms_table(req_terms_results)
+  
+  all_req_terms_found <- all(req_terms_results$result == "pass")
+  
+  req_terms_message <- function(table, all_found) {
+    cli::cat_line(table)
+    if(isTRUE(all_found)) {
+      # celebrate
+      cli::cat_line(paste0("\n", add_emoji(), " ", cli::col_green("All minimum requirements met!"), "\n"))
+    }
+  }
   
   
   ## Suggested workflow
   
   # Function matching for suggested workflow
-  dwc_function_main <- tibble::tribble(
-    ~"dwc_term", ~"use_function",
-    "basisOfRecord",   "use_occurrences()",
-    "occurrenceID",   "use_occurrences()",
-    "decimalLatitude",   "use_coordinates()",
-    "decimalLongitude",   "use_coordinates()",
-    "geodeticDatum",   "use_coordinates()",
-    "coordinateUncertaintyInMeters",   "use_coordinates()",
-    "eventDate",   "use_datetime()"
-  )
+  main_functions <- fn_to_term_table()$main
+  other_functions <- fn_to_term_table()$optional
   
-  dwc_function_optional <- tibble::tribble(
-    ~"dwc_term", ~"use_function",
-    "continent",   "use_locality",
-    "country",   "use_locality",
-    "countryCode",   "use_locality",
-    "stateProvince",   "use_locality",
-    "locality",   "use_locality"
-  )
-  
-  suggested_functions <- dwc_function_main |>
+  suggested_functions <- main_functions |>
     dplyr::filter(!dwc_term %in% matched_values) |>
     dplyr::distinct(use_function) |>
     pull(use_function)
   
-  optional_functions <- dwc_function_optional |>
+  optional_functions <- other_functions |>
     dplyr::filter(!dwc_term %in% matched_values) |>
     dplyr::distinct(use_function) |>
     pull(use_function)
   
+  # add pipe when there are multiple suggested functions
   if(length(suggested_functions) > 1) {
     suggested_functions_piped <- c(paste0(head(suggested_functions, -1), " |> "), tail(suggested_functions, 1))
   } else {
-    suggested_functions_piped <- suggested_functions
+      suggested_functions_piped <- suggested_functions
   }
   
-  
+  # add list of optional functions
   if(length(optional_functions) >= 1) {
-    optional_functions <- ansi_collapse(glue("{optional_functions}"),
+    optional_functions_string <- ansi_collapse(glue("`{optional_functions}()`"),
                                         sep = ", ",
-                                        last = ", ")
+                                        last = ", ",
+                                        trunc = 3)
+    optional_functions_message <- cli_text(
+      cli::col_grey("Additional functions: {optional_functions_string}")
+      ) |> cli_fmt()
+  } else {
+    optional_functions_message <- ""
   }
   
-  # Format message
-  custom_alert <- function(texts, other_texts, .envir = parent.frame()) {
+  workflow_is_empty <- rlang::is_empty(suggested_functions_piped)
+  
+  # build message
+  suggest_message <- function(workflow_is_empty,
+                              suggested_functions_piped, 
+                              optional_functions_message, 
+                              .envir = parent.frame()) {
+    if(!any(workflow_is_empty)) {
+      cli::cat_line(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:", "\n"))
+      cli::cli_text("df |>")
+      cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(suggested_functions_piped, cli::cli_alert, .envir = .envir)
+      cli::cli_end()
+      cli::cat_line(paste0("\n", optional_functions_message, "\n"))
+    } else {
+      cli::cat_line(paste0("\n", add_emoji(), " ", cli::col_green("Your dataframe is Darwin Core compliant!"), "\n"))
+      cli::cat_line(paste0("Use your dataframe to build a Darwin Core Archive:\n"))
+      cli::cli_text("df |>")
+      cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(paste0("build_dwca()"), cli::cli_alert, .envir = .envir)
+      cli::cat_line()
+      cli::cli_end()
+    }
+  }
+  
+  
+  
+  ### Build final message
+  full_alert <- function() {
     
     # DwC terms
     cli::cli_div()
-    cli::cli_h1("DwC terms")
-    cli::cli_h2("All terms")
-    cli::cat_line(all_terms_message)
-    cli::cli_h2("Minimum required terms")
-    cli::cat_line(req_terms_message)
+    cli::cli_h1("Darwin Core terms")
+    all_terms_message(matches_message, 
+                      unmatch_message, 
+                      all_cols_match)
+    
+    cli::cli_h2("Minimum required DwC terms")
+    req_terms_message(req_terms_table, 
+                      all_req_terms_found)
     cli::cli_end()
     
     # Suggested workflow
     cli::cli_h1("Suggested workflow")
-    cli::cat_line(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:"))
-    cli::cli_par()
-    cli::cli_end()
-    cli::cli_text("df |>")
-    cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-    lapply(texts, cli::cli_alert, .envir = .envir)
-    cli::cli_par()
-    cli::cli_end()
-    cli::cli_div()
-    cli::cli_text(cli::col_grey("Additional functions: {.fn {other_texts}}"))
-    cli::cli_end()
-    cli::cli_par()
+    suggest_message(workflow_is_empty, 
+                    suggested_functions_piped, 
+                    optional_functions_message)
   }
   
   # withr::with_options(
@@ -208,73 +252,60 @@ check_contains_terms <- function(.df,
   #   custom_alert(suggested_functions_piped, optional_functions)
   # )
   
-  custom_alert(suggested_functions_piped, optional_functions)
+  full_alert()
   
-  # cli_inform(fun(), call = call)
-  
-  
-  # switch_check(level, 
-  #              bullets,
-  #              call = call)
-  # }
   .df
 }
 
-
-#' Build message about all matched DwC terms
-#' @importFrom cli ansi_collapse
-#' @importFrom cli cli_bullets
-#' @importFrom cli cli_fmt
+#' Build message about minimum required terms
 #' @noRd
 #' @keywords Internal
-all_terms_message <- function(user_column_names,
-                              matched_values,
-                              unmatched_values) {
+fn_to_term_table <- function() {
+
+  main <- tibble::tribble(
+    ~"use_function",      ~"dwc_term",
+    "use_occurrences()", "basisOfRecord",
+    "use_occurrences()", "occurrenceID",
+    "use_coordinates()", "decimalLatitude",
+    "use_coordinates()", "decimalLongitude",
+    "use_coordinates()", "geodeticDatum",
+    "use_coordinates()", "coordinateUncertaintyInMeters",
+    "use_datetime()", "eventDate"
+  )
   
-  # concatenate matched/unmatched fields
-  matched_string <- ansi_collapse(glue("{matched_values}"),
-                                  sep = ", ",
-                                  last = ", ")
-  unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
-                                    sep = ", ",
-                                    last = ", ")
+  optional <- tibble::tribble(
+    ~"use_function", ~"dwc_term",
+    "use_locality", "continent", 
+    "use_locality", "country",
+    "use_locality", "countryCode",
+    "use_locality", "stateProvince",
+    "use_locality", "locality",
+    "use_taxonomy", "kingdom",
+    "use_taxonomy", "phylum",
+    "use_taxonomy", "class",
+    "use_taxonomy", "order",
+    "use_taxonomy", "family",
+    "use_taxonomy", "genus",
+    "use_taxonomy", "species",
+    "use_taxonomy", "specificEpiphet",
+    "use_taxonomy", "vernacularName"
+  )
   
-  if(length(matched_values) > 0) {
-    matches_message <- c(
-      "v" = "Matched {length(matched_values)} of {length(user_column_names)} column name{?s} to DwC terms: {.field {matched_string}}"
-    )
-  } else {
-    matches_message <- NULL
-  }
+  table <- lst(main, optional) # named list
   
-  if(length(unmatched_values) > 0) {
-    unmatch_message <- c(
-      "x" = "Unmatched column name(s): {cli::col_red({unmatched_string})}"
-    )
-    
-  } else {
-    # celebrate
-    unmatch_message <- paste0("\n", add_emoji(), " ", cli::col_green("All column names matched DwC terms!"))
-  }
-  
-  # build message
-  c(
-    matches_message,
-    unmatch_message,
-    "\n"
-  ) |> 
-    cli::cli_bullets() |> 
-    cli::cli_fmt() # save cli formatted message
-  
+  return(table) 
 }
 
-#' Build message about minimum required terms
+
+
+
+#' Build table for messaging about minimum required terms
 #' @importFrom tidyr unnest
 #' @importFrom dplyr case_when
 #' @importFrom tidyr replace_na 
 #' @noRd
 #' @keywords Internal
-req_terms_message <- function(req_terms) {
+build_req_terms_table <- function(req_terms) {
   
   # Unnest & concatenate terms by group
   missing_results <- req_terms |>
@@ -354,7 +385,7 @@ req_terms_message <- function(req_terms) {
   
   if(nrow(failed) == 0) {
     # celebrate
-    bullets_missing <- paste0("\n", add_emoji(), " ", cli::col_green("All minimum requirements met!"))
+    bullets_missing <- NULL
   }
   
   # final message
