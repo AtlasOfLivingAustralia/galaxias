@@ -77,7 +77,7 @@ use_occurrences <- function(
       
       check_uuid_exists(.df)
       
-      result <- df |>
+      result <- .df |>
         mutate(
           occurrenceID = use_id_random()
         )
