@@ -37,8 +37,11 @@ check_dwc <- function(.df){
 check_fields <- function(.df, 
                          level = c("inform", "warn", "abort")){
   level <- match.arg(level)
+  has_sf_class <- inherits(.df, "sf")
+  
   result <- tibble(dwc_terms = colnames(.df)) |>
     check_contains_terms(y = dwc_terms,
+                         is_sf = has_sf_class,
                          level = level)
   .df
 }
@@ -101,6 +104,7 @@ dwc_spinny_message <- function(which) {
 #' @keywords Internal
 check_contains_terms <- function(.df, 
                                  y, 
+                                 is_sf,
                                  level = "inform",
                                  call = caller_env()
 ){
@@ -130,7 +134,9 @@ check_contains_terms <- function(.df,
   all_cols_match <- rlang::is_empty(unmatched_values)
   
   # build message
-  all_terms_message <- function(matches_message, unmatch_message, all_cols_match) {
+  all_terms_message <- function(matches_message, 
+                                unmatch_message, 
+                                all_cols_match) {
     cli::cli_h2("All DwC terms")
     cli::cat_line(cli::cli_text(result_message))
     cli::cli_bullets(matches_message)
@@ -153,7 +159,8 @@ check_contains_terms <- function(.df,
   
   all_req_terms_found <- all(req_terms_results$result == "pass")
   
-  req_terms_message <- function(table, all_found) {
+  req_terms_message <- function(table, 
+                                all_found) {
     cli::cat_line(table)
     if(isTRUE(all_found)) {
       # celebrate
@@ -177,6 +184,18 @@ check_contains_terms <- function(.df,
     dplyr::filter(!dwc_term %in% matched_values) |>
     dplyr::distinct(use_function) |>
     pull(use_function)
+  
+  # if POINT sf class, suggest `use_coordinates_sf()`
+  if(isTRUE(is_sf)) {
+    if(any(stringr::str_detect(suggested_functions, "use_coordinates()"))) {
+      # replace
+      suggested_functions <- suggested_functions |>
+        stringr::str_replace_all("use_coordinates", "use_coordinates_sf")
+    } else {
+      # add
+      suggested_functions <- c(suggested_functions, "use_coordinates_sf()")
+    }
+  }
   
   # add pipe when there are multiple suggested functions
   if(length(suggested_functions) > 1) {
