@@ -47,7 +47,7 @@ use_coordinates_sf <- function(
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
-  fn_quos <- enquos(coordinatePrecision, coordinateUncertaintyInMeters)
+  fn_quos <- enquos(coords, coordinatePrecision, coordinateUncertaintyInMeters)
   names(fn_quos) <- fn_args
   
   # find arguments that are NULL but exist already in `df`
