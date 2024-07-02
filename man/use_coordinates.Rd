@@ -5,7 +5,7 @@
 \title{Add spatial fields to a \code{tibble}}
 \usage{
 use_coordinates(
-  df,
+  .df,
   decimalLatitude = NULL,
   decimalLongitude = NULL,
   geodeticDatum = NULL,
@@ -15,8 +15,6 @@ use_coordinates(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{decimalLatitude}{the latitude in decimal degrees}
 
 \item{decimalLongitude}{the longitude in decimal degrees}
@@ -33,6 +31,8 @@ that contains the whole location, given any possible measurement error.}
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.

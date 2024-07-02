@@ -195,8 +195,8 @@ check_within_range <- function(.df,
   range_check <- (x >= lower & x <= upper)
   if(!all(range_check)){
     bullets <- cli::cli_bullets(c(
-      "Value outside of expected range.",
-      x = "`{field_name}` contains values ouside of {lower} <= x <= {upper}."
+      "Value is outside of expected range in {.field {field_name}}.",
+      i = "Column contains values ouside of {lower} <= x <= {upper}."
                )) |> 
         cli::cli_fmt()
     switch_check(level,
@@ -366,6 +366,40 @@ check_mismatch_code_country <- function(.df,
                  i = "Did you mean {lookup_country}?"
     )
     cli::cli_warn(bullets)
+  }
+  .df
+}
+
+#' check a vector is a specific length of words
+#' @noRd
+#' @keywords Internal
+check_word_number <- function(.df,
+                              max_n_word,
+                              level = "inform",
+                              call = caller_env()
+){
+  check_data_frame(.df)
+  field_name <- colnames(.df)[[1]]
+  x <- .df |> pull(field_name)
+  
+  n_words <- stringr::str_split(x, pattern = " ") |>
+    map(\(words)
+        length(words)) |>
+    unlist()
+  
+  n_words_too_high <- any(n_words > max_n_word)
+  
+  if(n_words_too_high){
+    bullets <- c(
+      "Too many words in each value of {.field {field_name}}.",
+      i = "String values must contain a maximum of {max_n_word} word{?s} each."
+    ) |>
+      cli_bullets() |>
+      cli_fmt()
+    
+    switch_check(level, 
+                 bullets,
+                 call = call)
   }
   .df
 }

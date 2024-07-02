@@ -5,7 +5,7 @@
 \title{Add \code{locality} data to a \code{tibble}}
 \usage{
 use_locality(
-  df,
+  .df,
   continent = NULL,
   country = NULL,
   countryCode = NULL,
@@ -15,8 +15,6 @@ use_locality(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{continent}{(string) Valid continent. See details.}
 
 \item{country}{Valid country name. See \code{country_codes}.}
@@ -31,6 +29,8 @@ use_locality(
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields.

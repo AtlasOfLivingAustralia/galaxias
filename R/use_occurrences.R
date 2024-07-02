@@ -1,5 +1,6 @@
 #' Add occurrence-specific information to a `tibble`
 #' 
+#' @description
 #' Format fields uniquely identify each occurrence record and specify the type 
 #' of record. `occurrenceID` and `basisOfRecord` are necessary fields of 
 #' information for occurrence records, and should be appended to a data set
@@ -74,9 +75,9 @@ use_occurrences <- function(
   
   if(!is.null(mc$occurrenceID)) {
     if(mc$occurrenceID == "use_id_random()") {
-      
+
       check_uuid_exists(.df)
-      
+
       result <- .df |>
         mutate(
           occurrenceID = use_id_random()
@@ -117,6 +118,7 @@ check_uuid_exists <- function(df,
     
     bullets <- c(
       "Column {.field {uuid_cols}} contains UUID values.",
+      i = "Existing unique ID values should be used if they have already been generated.",
       i = "Use `use_occurrences(occurrenceID = {.field {uuid_cols}})` instead."
     ) |>
       cli::cli_bullets() |>

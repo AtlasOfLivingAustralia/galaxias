@@ -5,7 +5,7 @@
 \title{Add scientific name and authorship to a \code{tibble}}
 \usage{
 use_scientific_name(
-  df,
+  .df,
   scientificName = NULL,
   scientificNameRank = NULL,
   scientificNameAuthorship = NULL,
@@ -13,8 +13,6 @@ use_scientific_name(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{scientificName}{The full scientific name in the lower level taxonomic
 rank that can be determined.}
 
@@ -26,6 +24,8 @@ rank that can be determined.}
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.

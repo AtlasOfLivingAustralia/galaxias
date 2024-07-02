@@ -5,7 +5,7 @@
 \title{Add date and time fields to a \code{tibble}}
 \usage{
 use_datetime(
-  df,
+  .df,
   eventDate = NULL,
   year = NULL,
   month = NULL,
@@ -15,8 +15,6 @@ use_datetime(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{eventDate}{The date or date + time that the observation/event occurred.}
 
 \item{year}{The year of the observation/event.}
@@ -31,6 +29,8 @@ use_datetime(
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.

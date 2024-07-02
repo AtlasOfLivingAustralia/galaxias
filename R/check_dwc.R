@@ -306,7 +306,7 @@ fn_to_term_table <- function() {
     "use_taxonomy", "family",
     "use_taxonomy", "genus",
     "use_taxonomy", "species",
-    "use_taxonomy", "specificEpiphet",
+    "use_taxonomy", "specificEpithet",
     "use_taxonomy", "vernacularName"
   )
   

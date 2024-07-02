@@ -5,15 +5,13 @@
 \title{Add occurrence-specific information to a \code{tibble}}
 \usage{
 use_occurrences(
-  df,
+  .df,
   occurrenceID = NULL,
   basisOfRecord = NULL,
   .keep = "unused"
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{occurrenceID}{A character string. Every occurrence should have an
 \code{occurrenceID} entry. Ideally IDs should be persistent to avoid being lost
 in future updates. They should also be unique, both within the dataset, and
@@ -31,6 +29,8 @@ Accepted \code{basisOfRecord} values are one of:
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}, which only keeps Darwin Core fields and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.
@@ -40,12 +40,12 @@ Format fields uniquely identify each occurrence record and specify the type
 of record. \code{occurrenceID} and \code{basisOfRecord} are necessary fields of
 information for occurrence records, and should be appended to a data set
 to conform to Darwin Core Standard prior to submission.
-}
-\details{
+
 In practice this is no different from using \code{mutate()}, but gives some
 informative errors, and serves as a useful lookup for fields in
 the Darwin Core Standard.
-
+}
+\details{
 Examples of \code{occurrenceID} values:
 \itemize{
 \item \verb{000866d2-c177-4648-a200-ead4007051b9}

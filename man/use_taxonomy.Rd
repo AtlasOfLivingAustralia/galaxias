@@ -5,7 +5,7 @@
 \title{Add taxonomic information to a \code{tibble}}
 \usage{
 use_taxonomy(
-  df,
+  .df,
   kingdom = NULL,
   phylum = NULL,
   class = NULL,
@@ -13,14 +13,12 @@ use_taxonomy(
   family = NULL,
   genus = NULL,
   species = NULL,
-  specificEpiphet = NULL,
+  specificEpithet = NULL,
   vernacularName = NULL,
   .keep = "unused"
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{kingdom}{The kingdom name of identified taxon.}
 
 \item{phylum}{The phylum name of identified taxon.}
@@ -35,7 +33,9 @@ use_taxonomy(
 
 \item{species}{The species name of the identified taxon.}
 
-\item{specificEpiphet}{The name of the first species or species epiphet of the \code{scientificName}.}
+\item{specificEpithet}{The name of the first species or species epithet of
+the \code{scientificName}.
+\href{https://dwc.tdwg.org/list/#dwc_specificEpithet}{See documentation}}
 
 \item{vernacularName}{The common or vernacular name of the identified taxon.}
 
@@ -43,6 +43,8 @@ use_taxonomy(
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.
@@ -57,10 +59,10 @@ practice this is no different from using \code{mutate()}, but gives some
 informative errors, and serves as a useful lookup for taxonomic names in
 the Darwin Core Standard.
 
-Examples of \code{specificEphiphet}:
+Examples of \code{specificEphithet}:
 \itemize{
-\item If \code{scientificName} is \verb{Abies concolor}, the \code{specificEpiphet} is \code{concolor}.
-\item If \code{scientificName} is \verb{Semisulcospira gottschei}, the \code{specificEpiphet} is \code{gottschei}.
+\item If \code{scientificName} is \verb{Abies concolor}, the \code{specificEpithet} is \code{concolor}.
+\item If \code{scientificName} is \verb{Semisulcospira gottschei}, the \code{specificEpithet} is \code{gottschei}.
 }
 }
 \seealso{
