@@ -1,12 +1,15 @@
 #' Add information of individual organisms to a `tibble`
 #' 
+#' @description
 #' Format fields that contain measurements or attributes of individual 
 #' organisms to a `tibble`. Fields include those that specify sex, life stage 
-#' or condition. Individuals are identified by an `individualID`.
+#' or condition. Individuals can be identified by an `individualID` if data 
+#' contains resampling.
 #' 
 #' In practice this is no different from using `mutate()`, but gives some 
 #' informative errors, and serves as a useful lookup for fields in 
 #' the Darwin Core Standard.
+#' 
 #' @param df a `data.frame` or `tibble` that the column should be appended to.
 #' @param individualID An identifier for an individual or named group of 
 #' individual organisms represented in the Occurrence. Meant to accommodate 
@@ -86,8 +89,89 @@ use_individual_traits <- function(
            .keep = .keep)
   
   check_individualID(result, level = "abort")
-  # check_lifeStage(result, level = "abort")
-  # check_sex(result, level = "abort")
+  check_lifeStage(result, level = "abort")
+  check_sex(result, level = "abort")
+  check_vitality(result, level = "abort")
   
   return(result)
+}
+
+
+#' Check individualID field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_individualID <- function(.df, 
+                                 level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "individualID")){
+    .df |>
+      select("individualID") |>
+      check_unique(level = level)
+  }
+  .df
+}
+
+
+#' Check lifeStage field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_lifeStage <- function(.df, 
+                            level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "lifeStage")){
+    .df |>
+      select("lifeStage") |>
+      check_is_string(level = level)
+  }
+  .df
+}
+
+
+#' Check sex field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_sex <- function(.df, 
+                      level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "sex")){
+    .df |>
+      select("sex") |>
+      check_is_string(level = level)
+  }
+  .df
+}
+
+
+#' Check vitality field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_vitality <- function(.df, 
+                           level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "vitality")){
+    .df |>
+      select("vitality") |>
+      check_is_string(level = level)
+  }
+  .df
 }
