@@ -71,9 +71,70 @@ use_scientific_name <- function(
   result <- .df |> 
     mutate(!!!fn_quos, 
            .keep = .keep)
-  # check_scientificName(result, level = "abort")
-  # check_scientificNameRank(result, level = "abort")
-  # check_scientificNameAuthorship(result, level = "abort")
+  
+  check_scientificName(result, level = "abort")
+  check_scientificNameRank(result, level = "abort")
+  check_scientificNameAuthorship(result, level = "abort")
 
   result
+}
+
+#' Check scientificName field is valid
+#' 
+#' TODO: Currently only checks whether input is a string
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_scientificName <- function(.df, 
+                                 level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "scientificName")){
+    .df |>
+      select("scientificName") |>
+      check_is_string(level = level)
+  }
+  .df
+}
+
+#' Check scientificNameRank field is valid
+#' 
+#' TODO: Currently only checks whether input is a string
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_scientificNameRank <- function(.df, 
+                                     level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "scientificNameRank")){
+    .df |>
+      select("scientificNameRank") |>
+      check_is_string(level = level)
+    # Should this check a list of valid values?
+  }
+  .df
+}
+
+#' Check scientificNameAuthorship field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_scientificNameAuthorship <- function(.df, 
+                                           level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "scientificNameAuthorship")){
+    .df |>
+      select("scientificNameAuthorship") |>
+      check_is_string(level = level)
+  }
+  .df
 }
