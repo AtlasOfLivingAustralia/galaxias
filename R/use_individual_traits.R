@@ -48,7 +48,7 @@
 #' @importFrom rlang abort
 #' @export
 use_individual_traits <- function(
-    df,
+    .df,
     individualID = NULL,
     lifeStage = NULL,
     sex = NULL,
@@ -56,19 +56,38 @@ use_individual_traits <- function(
     reproductiveCondition = NULL,
     .keep = "unused"
 ){
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default")
   }
-  result <- df |>
-    mutate(individualID = {{individualID}},
-           lifeStage = {{lifeStage}},
-           sex = {{sex}},
-           vitality = {{vitality}},
-           reproductiveCondition = {{reproductiveCondition}},
+  fn_args <- ls()
+  check_missing_all_args(match.call(), fn_args)
+  
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  fn_quos <- enquos(individualID, lifeStage, reproductiveCondition, sex, vitality)
+  names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # these DwC columns are otherwise deleted by `mutate()` later
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+               rlang::quo_is_null(user_arg)) |> 
+    unlist()
+  
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  
+  if(any(null_col_exists_in_df)){
+    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
+  }
+  
+  # Update df
+  result <- .df |> 
+    mutate(!!!fn_quos, 
            .keep = .keep)
+  
   check_individualID(result, level = "abort")
   # check_lifeStage(result, level = "abort")
   # check_sex(result, level = "abort")
   
-  result
+  return(result)
 }
