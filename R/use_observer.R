@@ -71,3 +71,42 @@ use_observer <- function(
   
   result
 }
+
+#' Check recordedBy field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_recordedBy <- function(.df, 
+                             level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "recordedBy")){
+    .df |>
+      select("recordedBy") |>
+      check_is_string(level = level)
+  }
+  .df
+}
+
+#' Check recordedByID field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 7
+#' @export
+check_recordedByID <- function(.df, 
+                             level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "recordedByID")){
+    .df |>
+      select("recordedByID") |>
+      check_is_string(level = level)
+    # could check if contains "orchid.org"?
+  }
+  .df
+}

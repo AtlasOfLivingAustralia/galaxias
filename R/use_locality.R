@@ -71,8 +71,8 @@ use_locality <- function(.df,
   check_continent(result, level = "abort")
   check_country(result, level = "abort")
   check_countryCode(result, level = "abort")
-  # if(!is.null(stateProvince)){check_is_string(df$stateProvince)}
-  # if(!is.null(locality)){check_is_string(df$locality)}
+  check_stateProvince(result, level = "abort")
+  check_locality(result, level = "abort")
   
   result
 }
@@ -147,4 +147,43 @@ check_countryCode <- function(df,
   #     select("countryCode", "country") |>
   #     check_mismatch_code_country(level = level)
   # }
+}
+
+
+#' Check stateProvince field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 5
+#' @export
+check_stateProvince <- function(.df, 
+                                 level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "stateProvince")){
+    .df |>
+      select("stateProvince") |>
+      check_is_string(level = level)
+  }
+  .df
+}
+
+#' Check locality field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 5
+#' @export
+check_locality <- function(.df, 
+                           level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "locality")){
+    .df |>
+      select("locality") |>
+      check_is_string(level = level)
+  }
+  .df
 }
