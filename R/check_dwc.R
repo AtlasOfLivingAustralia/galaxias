@@ -19,7 +19,7 @@ check_dwc <- function(.df){
   check_functions <- c("check_fields",
                        glue("check_{checkable_fields}"))
   dwc_spinny_message()
-  # cli_bullets(c(">" = "Checking DwC fields."))
+  
   # run each function on df
   lapply(check_functions, 
          function(x){do.call(x, args = list(.df = .df))}) |>
@@ -159,6 +159,7 @@ check_contains_terms <- function(.df,
   
   all_req_terms_found <- all(req_terms_results$result == "pass")
   
+  # build message
   req_terms_message <- function(table, 
                                 all_found) {
     cli::cat_line(table)
@@ -285,6 +286,7 @@ fn_to_term_table <- function() {
     ~"use_function",      ~"dwc_term",
     "use_occurrences()", "basisOfRecord",
     "use_occurrences()", "occurrenceID",
+    "use_scientific_name()", "scientificName",
     "use_coordinates()", "decimalLatitude",
     "use_coordinates()", "decimalLongitude",
     "use_coordinates()", "geodeticDatum",
