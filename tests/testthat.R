@@ -9,5 +9,6 @@
 library(testthat)
 library(galaxias)
 library(glue)
+library(tibble)
 
 test_check("galaxias")

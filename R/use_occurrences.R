@@ -45,11 +45,10 @@ use_occurrences <- function(
     .keep = "unused"
 ){
   if(missing(.df)){
-    abort("df is missing, with no default.")
+    abort(".df is missing, with no default.")
   }
   
   fn_args <- ls()
-  check_missing_all_args(match.call(), fn_args)
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
@@ -69,6 +68,7 @@ use_occurrences <- function(
     purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
   }
   
+  check_missing_all_args(names(fn_quos), fn_args)
   
   # if used in occurrenceID, run `use_id_random()`
   mc <- match.call(expand.dots = FALSE)
