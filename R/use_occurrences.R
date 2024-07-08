@@ -101,6 +101,8 @@ use_occurrences <- function(
 #' @param df Data frame or tibble passed by user
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
+#' @importFrom uuid as.UUID
+#' @importFrom purrr map
 #' @keywords Internal
 #' @noRd
 check_uuid_exists <- function(df, 
@@ -108,7 +110,7 @@ check_uuid_exists <- function(df,
                               call = caller_env()
 ){
   # get first sample of df values, test whether any are UUIDs
-  df_test_uuid <- sapply(head(df, 10L), uuid::as.UUID) |> as_tibble()
+  df_test_uuid <- purrr::map(head(df, 10L), uuid::as.UUID) |> bind_rows()
   
   
   if(any(!is.na(df_test_uuid))) {
@@ -143,7 +145,7 @@ use_id_random <- function(x) {
   if(missing(x)) {
     uuid::UUIDgenerate(use.time = TRUE, dplyr::n())
   } else {
-    cli::cli_abort("{.code use_id_random()} must be used in `use_occurrences()`.")
+    cli_abort("{.code use_id_random()} must be used in `use_occurrences()`.")
     # vctrs::vec_rank(x, ties = "sequential", incomplete = "na")
   }
 }

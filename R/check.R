@@ -128,7 +128,7 @@ check_is_numeric <- function(.df,
   if(!inherits(x, c("numeric", "integer"))){
     
     bullets <- cli::cli_bullets(c(
-      "{.field {field_name}} must be numeric vector, not {class(x)}."
+      "{.field {field_name}} must be a numeric vector, not {class(x)}."
       )) |>
       cli::cli_fmt()
     
@@ -150,7 +150,11 @@ check_is_string <- function(.df,
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
   if(!inherits(x, "character")){
-    bullets <- c(i = glue("`{field_name}` is not a string"))
+    bullets <- c(
+      "{.field {field_name}} must be a character vector, not {class(x)}."
+    ) |>
+      cli_bullets() |>
+      cli_fmt()
     switch_check(level, 
                  bullets,
                  call = call)
@@ -170,7 +174,12 @@ check_unique <- function(.df,
   x <- .df |> pull(field_name)
   unique_check <- length(unique(x)) == length(x)
   if(!unique_check){
-    bullets <- c(i = glue("`{field_name}` does not contain a unique value in each cell"))
+    bullets <- c(
+      "Duplicate values in {.field {field_name}}.",
+      i = "All values must be unique."
+      ) |>
+      cli_bullets() |>
+      cli_fmt()
     switch_check(level, 
                  bullets,
                  call = call)
