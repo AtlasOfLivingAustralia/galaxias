@@ -47,8 +47,8 @@ use_collection <- function(
   if(missing(.df)){
     abort("df is missing, with no default")
   }
+  
   fn_args <- ls()
-  check_missing_all_args(match.call(), fn_args)
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
@@ -56,7 +56,8 @@ use_collection <- function(
   names(fn_quos) <- fn_args
   
   # find arguments that are NULL but exist already in `df`
-  # these DwC columns are otherwise deleted by `mutate()` later
+  # then remove their names before `mutate()`
+  # otherwise, these DwC columns are deleted by `mutate(.keep = "unused")` 
   fn_quo_is_null <- fn_quos |> 
     purrr::map(\(user_arg)
                rlang::quo_is_null(user_arg)) |> 
@@ -65,8 +66,11 @@ use_collection <- function(
   null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
   
   if(any(null_col_exists_in_df)){
-    purrr::pluck(fn_quos, names(which(null_col_exists_in_df))) <- rlang::zap()
+    fn_quos <- fn_quos |> 
+      purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
   }
+  
+  check_missing_all_args(match.call(), fn_args)
   
   # Update df
   result <- .df |> 
