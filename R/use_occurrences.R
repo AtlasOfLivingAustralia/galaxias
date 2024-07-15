@@ -92,6 +92,11 @@ use_occurrences <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
   check_basisOfRecord(result, level = "abort")
   check_occurrenceID(result, level = "abort")
   

@@ -71,6 +71,11 @@ use_locality <- function(.df,
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
   check_continent(result, level = "abort")
   check_country(result, level = "abort")
   check_countryCode(result, level = "abort")

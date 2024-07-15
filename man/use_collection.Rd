@@ -5,7 +5,7 @@
 \title{Add museum- or collection-specific information to a \code{tibble}}
 \usage{
 use_collection(
-  df,
+  .df,
   datasetID = NULL,
   datasetName = NULL,
   catalogNumber = NULL,
@@ -13,8 +13,6 @@ use_collection(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{datasetID}{An identifier for the set of data. May be a global unique
 identifier or an identifier specific to a collection or institution.}
 
@@ -28,6 +26,8 @@ or collection.}
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.
@@ -35,12 +35,12 @@ A tibble with the requested fields added.
 \description{
 Format fields that specify the collection or catelog number of a
 specimen or occurrence record.
-}
-\details{
+
 In practice this is no different from using \code{mutate()}, but gives some
 informative errors, and serves as a useful lookup for fields in
 the Darwin Core Standard.
-
+}
+\details{
 Examples of \code{datasetID} values:
 \itemize{
 \item \verb{b15d4952-7d20-46f1-8a3e-556a512b04c5}

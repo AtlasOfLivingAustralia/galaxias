@@ -76,6 +76,11 @@ use_scientific_name <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
   check_scientificName(result, level = "abort")
   check_scientificNameRank(result, level = "abort")
   check_scientificNameAuthorship(result, level = "abort")

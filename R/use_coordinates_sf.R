@@ -71,6 +71,11 @@ use_coordinates_sf <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
   # Add sf coords if valid
   check_coords(result, level = "abort")
   

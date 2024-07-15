@@ -69,6 +69,10 @@ use_datetime <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
   check_eventDate(result, level = "abort")
   check_year(result, level = "abort")
   check_month(result, level = "abort")
@@ -78,6 +82,8 @@ use_datetime <- function(
   # other tests likely to be needed here
   result
 }
+
+
 
 #' @rdname check_dwc
 #' @order 6
@@ -90,16 +96,16 @@ check_eventDate <- function(.df,
   if(any(colnames(.df) == "eventDate")){
     .df |>
       select("eventDate") |>
-      check_date(level = level) |>
-      check_time(level = level)
+      check_is_date(level = level) |>
+      check_is_time(level = level)
       # mutate(eventDate = lubridate::parse_date_time(eventDate, orders = "ymd"))
     
     bullets <- c(
-      "!" = "{.field eventDate} defaults to UTC standard.",
-      i = "To specify a different timezone, use {.code {.pkg lubridate}::ymd_hms(x, tz = \"timezone\")}"
+      "{.field eventDate} defaults to UTC standard.",
+      i = "To specify a different timezone, use e.g. {.code {.pkg lubridate}::ymd_hms(x, tz = \"timezone\")}"
     ) 
     
-    cli::cli_inform(bullets)
+    cli::cli_warn(bullets)
     
   } 
 }
@@ -165,13 +171,15 @@ check_month <- function(.df,
         # Detect and handle month abbreviations
         if(any(match(.df$month,month.abb))) {
           if(any(is.na(match(.df$month, month.abb)))) {
-            cli::cli_warn("Some month abbreviations did not match.")
+            unmatched <- sum(is.na(match(.df$month, month.abb)))
+            cli::cli_warn("There {?was/were} {unmatched} unrecognised month abbreviation{?s}.")
           }
           } else {
             # Detect and handle month names
             if(any(match(.df$month, month.name))) {
               if(any(is.na(match(.df$month, month.name)))) {
-                cli::cli_warn("Some month names did not match.")
+                unmatched <- sum(is.na(match(.df$month, month.name)))
+                cli::cli_warn("There {?was/were} {unmatched} unrecognised month name{?s}.")
               }
               }
           } 

@@ -73,6 +73,14 @@ use_observer <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
+  check_recordedBy(level = "abort")
+  check_recordedByID(level = "abort")
+  
   result
 }
 

@@ -37,6 +37,47 @@ check_data_frame <- function(.df,
 }
 
 
+#' Inform users which columns are being checked
+#' 
+#' @description
+#' Informs users which columns will be checked by `check_` functions. This includes 
+#' columns that have been specified in a `use_` function by the user, or columns 
+#' that exist in the user dataframe that already match Darwin Core terms.
+#' 
+#' @importFrom cli make_spinner
+#' @importFrom cli cli_status
+#' @importFrom cli cli_status_update
+#' @importFrom cli cli_status_clear
+#' @noRd
+#' @keywords Internal
+col_check_spinny_message <- function(cols) {
+  
+  # format message
+  id <- cli_status("") # create blank message slate
+  
+  message <- cli_status_update(
+    id, 
+    "Checking {length(cols)} column{?s}: {.field {cols}}"
+    ) |> cli_fmt()
+  
+  # define the spinner
+  spinny <- cli::make_spinner(
+    which = "dots10",
+    template = paste0("{spin} ", message)
+  )
+  
+  # update the spinner 100 times
+  for(i in 1:100) {
+    spinny$spin()
+    wait(.0185)
+  }
+  
+  # clear the spinner from the status bar
+  spinny$finish()
+  
+  cli_status_clear() # refresh
+}
+
 
 #' check a vector consists only of values in a second vector
 #' @param x vector of values
@@ -215,14 +256,14 @@ check_within_range <- function(.df,
   .df
 }
 
-#' check a vector has one row per value
+#' check that a field is of a date class
 #' @noRd
 #' @importFrom lubridate is.timepoint
 #' @importFrom lubridate is.POSIXt
 #' @importFrom cli cli_fmt
 #' @importFrom cli cli_bullets
 #' @keywords Internal
-check_date <- function(.df,
+check_is_date <- function(.df,
                        level = "warn",
                        call = caller_env()
                        ){
@@ -244,14 +285,14 @@ check_date <- function(.df,
   }
   
   if(any(lubridate::is.POSIXt(x))) {
-    check_date_time(x,level)
+    check_is_date_time(x,level)
     }
 
   .df
 
 }
 
-#' check a vector has one row per value
+#' check a vector is date/time format
 #' @noRd
 #' @importFrom lubridate is.POSIXt
 #' @importFrom lubridate ymd_hms
@@ -260,7 +301,7 @@ check_date <- function(.df,
 #' @importFrom cli cli_fmt
 #' @importFrom cli cli_bullets
 #' @keywords Internal
-check_date_time <- function(x,
+check_is_date_time <- function(x,
                             level = "warn",
                             call = caller_env()
 ){
@@ -291,14 +332,14 @@ check_date_time <- function(x,
   
 }
 
-#' check a vector has one row per value
+#' check if vector is a valid time format
 #' @noRd
 #' @importFrom lubridate is.timepoint
 #' @importFrom lubridate is.POSIXt
 #' @importFrom cli cli_fmt
 #' @importFrom cli cli_bullets
 #' @keywords Internal
-check_time <- function(.df,
+check_is_time <- function(.df,
                        level = "warn",
                        call = caller_env()
 ){

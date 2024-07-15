@@ -71,6 +71,11 @@ use_coordinates <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
   check_decimalLatitude(result, level = "abort")
   check_decimalLongitude(result, level = "abort")
   check_geodeticDatum(result, level = "abort")

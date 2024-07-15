@@ -79,6 +79,11 @@ use_taxonomy <- function(
     mutate(!!!fn_quos, 
            .keep = .keep)
   
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_check_spinny_message(cols = matched_cols)
+  
+  # run column checks
   # Q: Should taxonomic names be validated in galaxias?
   #    Would a separate taxonomic checking package be worthwhile?
   check_kingdom(result, level = "abort")

@@ -1,11 +1,3 @@
-library(tibble)
-df <- tibble(
-  latitude = c(-35.310, -35.273),
-  longitude = c(149.125, 149.133),
-  date = c("14-01-2023", "15-01-2023"),
-  time = c("10:23", "11:25"),
-  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
-  n = c(2, 3))
 
 test_that("use_occurrences errors when missing .df", {
   expect_error(use_occurrences(basisOfRecord = basisOfRecord), 
@@ -29,27 +21,20 @@ test_that("use_occurrences returns tibble with updated dwc column names", {
   expect_match(colnames(result), c("basisOfRecord"))
 })
 
-test_that("use_occurrences detects existing dwc column names in df", {
+test_that("use_occurrences detects unnamed but existing dwc column names in df", {
   df <- tibble(basisOfRecord = "humanObservation",
                col2 = 1:2)
+  df2 <- tibble(basisOfRecord = "borp",
+                col2 = 1:2)
   
   result <- df |>
     use_occurrences()
   
   expect_s3_class(result, c("tbl_df", "tbl", "data.frame"))
-  expect_match(colnames(result), c("basisOfRecord"))
+  expect_equal(colnames(result), c("basisOfRecord", "col2"))
+  expect_error(df2 |> use_occurrences(), 
+               "Unexpected value in basisOfRecord")
 })
-
-# test_that("use_occurrences runs correct checks for each column", {
-#   df <- tibble(basisOfRecord = "humanObservation",
-#                col2 = 1:2)
-#   
-#   result <- df |>
-#     use_occurrences()
-#   
-#   expect_s3_class(result, c("tbl_df", "tbl", "data.frame"))
-#   expect_match(colnames(result), c("basisOfRecord"))
-# })
 
 test_that("use_occurrences handles `use_id_random()`", {
   df <- tibble(basisOfRecord = "humanObservation",
@@ -59,29 +44,29 @@ test_that("use_occurrences handles `use_id_random()`", {
     use_occurrences(occurrenceID = use_id_random())
   
   expect_s3_class(result, c("tbl_df", "tbl", "data.frame"))
-  expect_match(colnames(result), c("basisOfRecord", "col2", "occurrenceID"))
+  expect_equal(colnames(result), c("basisOfRecord", "col2", "occurrenceID"))
   expect_s3_class(result$occurrenceID, "character")
   expect_match(nchar(result$occurrenceID), c(36, 36))
 })
 
-test_that("use_id_random() generates UUID", {
-  test_that("use_occurrences handles `use_id_random()`", {
-    df <- tibble(basisOfRecord = "humanObservation",
-                 col2 = 1:2)
-    
-    result <- df |>
-      use_occurrences(occurrenceID = use_id_random())
-    
-    # if any aren't UUIDs, they will return NA
-    uuid_check <- result |>
-      select(occurrenceID) |>
-      purrr::map_dfr(uuid::as.UUID)
-    
-    expect_s3_class(result$occurrenceID, "character")
-    expect_match(nchar(result$occurrenceID), c(36, 36))
-    expect_true(all(!is.na(uuid_check)))
-    expect_equal(length(unique(result$occurrenceID)), length(result))
-  })
+test_that("use_id_random() generates unique UUID", {
+  df <- tibble(
+    basisOfRecord = "humanObservation",
+    col2 = 1:2
+  )
+
+  result <- df |>
+    use_occurrences(occurrenceID = use_id_random())
+
+  # if any aren't UUIDs, they will return NA
+  uuid_check <- result |>
+    select(occurrenceID) |>
+    purrr::map_dfr(uuid::as.UUID)
+
+  expect_s3_class(result$occurrenceID, "character")
+  expect_match(nchar(result$occurrenceID), c(36, 36))
+  expect_true(all(!is.na(uuid_check)))
+  expect_equal(length(unique(result$occurrenceID)), length(result))
 })
 
 test_that("use_occurrences errors when UUID is already present in df", {
@@ -92,7 +77,7 @@ test_that("use_occurrences errors when UUID is already present in df", {
                "Column id_col contains UUID values")
 })
 
-test_that("use_occurrences only accepts valid values", {
+test_that("use_occurrences only accepts valid values for basisOfRecord", {
   valid_values <- c("humanObservation", "machineObservation", "livingSpecimen",
                        "preservedSpecimen", "fossilSpecimen", "materialCitation")
   

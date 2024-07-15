@@ -5,7 +5,7 @@
 \title{Add information of individual organisms to a \code{tibble}}
 \usage{
 use_individual_traits(
-  df,
+  .df,
   individualID = NULL,
   lifeStage = NULL,
   sex = NULL,
@@ -15,8 +15,6 @@ use_individual_traits(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
-
 \item{individualID}{An identifier for an individual or named group of
 individual organisms represented in the Occurrence. Meant to accommodate
 resampling of the same individual or group for monitoring purposes. May
@@ -37,6 +35,8 @@ individual.}
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.
@@ -44,13 +44,14 @@ A tibble with the requested fields added.
 \description{
 Format fields that contain measurements or attributes of individual
 organisms to a \code{tibble}. Fields include those that specify sex, life stage
-or condition. Individuals are identified by an \code{individualID}.
-}
-\details{
+or condition. Individuals can be identified by an \code{individualID} if data
+contains resampling.
+
 In practice this is no different from using \code{mutate()}, but gives some
 informative errors, and serves as a useful lookup for fields in
 the Darwin Core Standard.
-
+}
+\details{
 Examples of \code{lifeStage} values:
 \itemize{
 \item \code{zygote}
