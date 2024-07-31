@@ -71,7 +71,7 @@ use_datetime <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_check_spinny_message(cols = matched_cols)
+  col_progress_bar(cols = matched_cols)
   
   check_eventDate(result, level = "abort")
   check_year(result, level = "abort")
@@ -172,14 +172,14 @@ check_month <- function(.df,
         if(any(match(.df$month,month.abb))) {
           if(any(is.na(match(.df$month, month.abb)))) {
             unmatched <- sum(is.na(match(.df$month, month.abb)))
-            cli::cli_warn("There {?was/were} {unmatched} unrecognised month abbreviation{?s}.")
+            cli::cli_warn("{.field month} contains {unmatched} unrecognised month abbreviation{?s}.")
           }
           } else {
             # Detect and handle month names
             if(any(match(.df$month, month.name))) {
               if(any(is.na(match(.df$month, month.name)))) {
                 unmatched <- sum(is.na(match(.df$month, month.name)))
-                cli::cli_warn("There {?was/were} {unmatched} unrecognised month name{?s}.")
+                cli::cli_warn("{.field month} contains {unmatched} unrecognised month name{?s}.")
               }
               }
           } 

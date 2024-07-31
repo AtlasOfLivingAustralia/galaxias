@@ -79,6 +79,37 @@ col_check_spinny_message <- function(cols) {
 }
 
 
+#' Inform users which columns are being checked
+#' 
+#' @description
+#' Informs users which columns will be checked by `check_` functions. This includes 
+#' columns that have been specified in a `use_` function by the user, or columns 
+#' that exist in the user dataframe that already match Darwin Core terms.
+#' 
+#' @importFrom cli make_spinner
+#' @importFrom cli cli_status
+#' @importFrom cli cli_status_update
+#' @importFrom cli cli_status_clear
+#' @noRd
+#' @keywords Internal
+col_progress_bar <- function(cols) {
+  
+  # message <- cli::cli_bullets(" Checking {length(cols)} column{?s}: {.field {cols}}") |> cli_fmt()
+  
+  cli::cli_progress_bar(
+    format = paste0(
+      "{cli::pb_bar} ",
+      "Checking {length(cols)} column{?s}: {.field {cols}}",
+      " |{cli::pb_eta}"
+    ),
+    total = 100, clear = FALSE)
+  
+  for (i in 1:100) {
+    Sys.sleep((0.92 * length(cols))/100)
+    cli::cli_progress_update()
+  }
+}
+
 #' check a vector consists only of values in a second vector
 #' @param x vector of values
 #' @param y vector against which x should be compared
@@ -371,9 +402,9 @@ check_is_time <- function(.df,
 #' @noRd
 #' @keywords Internal
 check_missing_all_args <- function(function_call,
-                               args,
-                               error_call = caller_env()
-                               ){
+                                   args,
+                                   error_call = caller_env()
+                                   ){
   function_name <- function_call[1]
   function_args <- args
   user_args <- names(as.list(function_call)[-1])

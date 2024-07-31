@@ -73,7 +73,7 @@ use_coordinates <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_check_spinny_message(cols = matched_cols)
+  col_progress_bar(cols = matched_cols)
   
   # run column checks
   check_decimalLatitude(result, level = "abort")

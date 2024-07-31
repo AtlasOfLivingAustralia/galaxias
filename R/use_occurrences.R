@@ -70,7 +70,7 @@ use_occurrences <- function(
       purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
   }
   
-  check_missing_all_args(names(fn_quos), fn_args)
+  check_missing_all_args(match.call(), fn_args)
   
   # if used in occurrenceID, run `use_id_random()`
   mc <- match.call(expand.dots = FALSE)
@@ -94,7 +94,7 @@ use_occurrences <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_check_spinny_message(cols = matched_cols)
+  col_progress_bar(cols = matched_cols)
   
   # run column checks
   check_basisOfRecord(result, level = "abort")
