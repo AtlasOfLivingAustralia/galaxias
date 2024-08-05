@@ -70,8 +70,6 @@ use_occurrences <- function(
       purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
   }
   
-  check_missing_all_args(match.call(), fn_args)
-  
   # if used in occurrenceID, run `use_id_random()`
   mc <- match.call(expand.dots = FALSE)
   
@@ -91,6 +89,10 @@ use_occurrences <- function(
   result <- .df |> 
     mutate(!!!fn_quos, 
            .keep = .keep)
+  
+  check_missing_all_args(fn_call = match.call(), 
+                         fn_args = fn_args, 
+                         user_cols = colnames(result))
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]

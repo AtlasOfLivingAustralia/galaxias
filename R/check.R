@@ -44,49 +44,7 @@ check_data_frame <- function(.df,
 #' columns that have been specified in a `use_` function by the user, or columns 
 #' that exist in the user dataframe that already match Darwin Core terms.
 #' 
-#' @importFrom cli make_spinner
-#' @importFrom cli cli_status
-#' @importFrom cli cli_status_update
-#' @importFrom cli cli_status_clear
-#' @noRd
-#' @keywords Internal
-col_check_spinny_message <- function(cols) {
-  
-  # format message
-  id <- cli_status("") # create blank message slate
-  
-  message <- cli_status_update(
-    id, 
-    "Checking {length(cols)} column{?s}: {.field {cols}}"
-    ) |> cli_fmt()
-  
-  # define the spinner
-  spinny <- cli::make_spinner(
-    which = "dots10",
-    template = paste0("{spin} ", message)
-  )
-  
-  # update the spinner 100 times
-  for(i in 1:100) {
-    spinny$spin()
-    wait(.0185)
-  }
-  
-  # clear the spinner from the status bar
-  spinny$finish()
-  
-  cli_status_clear() # refresh
-}
-
-
-#' Inform users which columns are being checked
-#' 
-#' @description
-#' Informs users which columns will be checked by `check_` functions. This includes 
-#' columns that have been specified in a `use_` function by the user, or columns 
-#' that exist in the user dataframe that already match Darwin Core terms.
-#' 
-#' @importFrom cli make_spinner
+#' @importFrom cli cli_progress_step
 #' @importFrom cli cli_status
 #' @importFrom cli cli_status_update
 #' @importFrom cli cli_status_clear
@@ -94,20 +52,18 @@ col_check_spinny_message <- function(cols) {
 #' @keywords Internal
 col_progress_bar <- function(cols) {
   
-  # message <- cli::cli_bullets(" Checking {length(cols)} column{?s}: {.field {cols}}") |> cli_fmt()
+  cli::cli_progress_step(
+    paste0(
+      "Checking {length(cols)} column{?s}: {.field {cols}}"
+      ), 
+    spinner = TRUE
+    )
   
-  cli::cli_progress_bar(
-    format = paste0(
-      "{cli::pb_bar} ",
-      "Checking {length(cols)} column{?s}: {.field {cols}}",
-      " |{cli::pb_eta}"
-    ),
-    total = 100, clear = FALSE)
-  
-  for (i in 1:100) {
-    Sys.sleep((0.92 * length(cols))/100)
+  for (i in 1:length(cols)) {
+    Sys.sleep(0.3)
     cli::cli_progress_update()
   }
+
 }
 
 #' check a vector consists only of values in a second vector
@@ -401,20 +357,20 @@ check_is_time <- function(.df,
 #' check whether all column args are missing in a function call
 #' @noRd
 #' @keywords Internal
-check_missing_all_args <- function(function_call,
-                                   args,
+check_missing_all_args <- function(fn_call,
+                                   fn_args,
+                                   user_cols,
                                    error_call = caller_env()
                                    ){
-  function_name <- function_call[1]
-  function_args <- args
-  user_args <- names(as.list(function_call)[-1])
+  # browser()
+  function_name <- fn_call[1]
+  # user_args <- names(as.list(function_call)[-1])
   
-  if (length(user_args) == 1 && user_args %in% ".df") {
+  if (!any(user_cols %in% fn_args)) {
     bullets <- c(
-      "No Darwin Core arguments supplied to {.code {function_name}()}.",
-      i = "See {.code ?{function_name}} for valid arguments."
+      "No Darwin Core terms detected by {.code {function_name}()}. See {.code ?{function_name}}."
     )
-    cli::cli_abort(bullets, call = caller_env())
+    cli::cli_warn(bullets, call = error_call)
   }
 }
 

@@ -42,7 +42,6 @@ use_coordinates <- function(
   }
   
   fn_args <- ls()
-  check_missing_all_args(match.call(), fn_args)
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
@@ -64,12 +63,14 @@ use_coordinates <- function(
       purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
   }
   
-  check_missing_all_args(match.call(), fn_args)
-  
   # Update df
   result <- .df |> 
     mutate(!!!fn_quos, 
            .keep = .keep)
+  
+  check_missing_all_args(fn_call = match.call(), 
+                         fn_args = fn_args, 
+                         user_cols = colnames(result))
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]

@@ -62,12 +62,14 @@ use_datetime <- function(
       purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
   }
   
-  check_missing_all_args(match.call(), fn_args)
-  
   # Update df
   result <- .df |> 
     mutate(!!!fn_quos, 
            .keep = .keep)
+  
+  check_missing_all_args(fn_call = match.call(), 
+                         fn_args = fn_args, 
+                         user_cols = colnames(result))
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
@@ -102,7 +104,10 @@ check_eventDate <- function(.df,
     
     bullets <- c(
       "{.field eventDate} defaults to UTC standard.",
-      i = "To specify a different timezone, use e.g. {.code {.pkg lubridate}::ymd_hms(x, tz = \"timezone\")}"
+      i = paste0(
+        "To change timezone, use e.g. {.code {.pkg lubridate}::ymd_hms(x, tz = \"timezone\")}"
+        ) |> 
+        cli::col_grey()
     ) 
     
     cli::cli_warn(bullets)
