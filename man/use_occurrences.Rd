@@ -8,7 +8,8 @@ use_occurrences(
   .df,
   occurrenceID = NULL,
   basisOfRecord = NULL,
-  .keep = "unused"
+  .keep = "unused",
+  .messages = TRUE
 )
 }
 \arguments{

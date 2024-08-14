@@ -42,7 +42,8 @@ use_occurrences <- function(
     occurrenceID = NULL,
     basisOfRecord = NULL,
     # recordNumber = NULL, # keep?
-    .keep = "unused"
+    .keep = "unused",
+    .messages = TRUE
 ){
   if(missing(.df)){
     abort(".df is missing, with no default.")
@@ -96,7 +97,12 @@ use_occurrences <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_progress_bar(cols = matched_cols)
+  
+  if(isTRUE(.messages)) {
+    if(length(matched_cols > 0)) {
+      col_progress_bar(cols = matched_cols)
+    }
+  }
   
   # run column checks
   check_basisOfRecord(result, level = "abort")

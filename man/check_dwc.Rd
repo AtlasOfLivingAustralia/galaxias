@@ -20,10 +20,10 @@
 \alias{check_is_sf}
 \alias{col_sf_to_dwc}
 \alias{check_eventDate}
-\alias{check_time}
 \alias{check_year}
 \alias{check_month}
 \alias{check_day}
+\alias{check_eventTime}
 \alias{check_datasetName}
 \alias{check_decimalLongitude}
 \alias{check_geodeticDatum}
@@ -82,13 +82,13 @@ col_sf_to_dwc(.df, level = c("inform", "warn", "abort"), call = caller_env())
 
 check_eventDate(.df, level = c("inform", "warn", "abort"))
 
-check_time(.df, level = c("inform", "warn", "abort"))
-
 check_year(.df, level = c("inform", "warn", "abort"))
 
 check_month(.df, level = c("inform", "warn", "abort"))
 
 check_day(.df, level = c("inform", "warn", "abort"))
+
+check_eventTime(.df, level = c("inform", "warn", "abort"))
 
 check_datasetName(.df, level = c("inform", "warn", "abort"))
 

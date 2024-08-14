@@ -32,19 +32,20 @@ use_datetime <- function(
     year = NULL,
     month = NULL,
     day = NULL,
-    time = NULL,
-    .keep = "unused"
+    eventTime = NULL,
+    .keep = "unused",
+    .messages = TRUE
 ){
   
   if(missing(.df)){
-    abort("df is missing, with no default.")
+    abort(".df is missing, with no default.")
   }
   
   fn_args <- ls()
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
-  fn_quos <- enquos(day, eventDate, month, time, year)
+  fn_quos <- enquos(day, eventDate, eventTime, month, year)
   names(fn_quos) <- fn_args
   
   # find arguments that are NULL but exist already in `df`
@@ -73,13 +74,18 @@ use_datetime <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_progress_bar(cols = matched_cols)
+  
+  if(isTRUE(.messages)) {
+    if(length(matched_cols > 0)) {
+    col_progress_bar(cols = matched_cols)
+    }
+  }
   
   check_eventDate(result, level = "abort")
   check_year(result, level = "abort")
   check_month(result, level = "abort")
   check_day(result, level = "abort")
-  check_time(result, level = "abort")
+  check_eventTime(result, level = "abort")
     
   # other tests likely to be needed here
   result
@@ -115,21 +121,6 @@ check_eventDate <- function(.df,
   } 
 }
 
-#' @rdname check_dwc
-#' @order 6
-#' @importFrom lubridate year
-#' @importFrom lubridate today
-#' @export
-check_time <- function(.df, 
-                       level = c("inform", "warn", "abort")
-){
-  level <- match.arg(level)
-  if(any(colnames(.df) == "eventTime")){
-    .df |>
-      select("eventTime") |>
-      check_time(level = level)
-  } 
-}
 
 #' @rdname check_dwc
 #' @order 6
@@ -155,43 +146,40 @@ check_year <- function(.df,
 #' @importFrom lubridate year
 #' @importFrom lubridate today
 #' @export
-check_month <- function(.df, 
-                       level = c("inform", "warn", "abort")
-){
+check_month <- function(.df,
+                        level = c("inform", "warn", "abort")) {
   level <- match.arg(level)
-  if(any(colnames(.df) == "month")){
-    
+  if (any(colnames(.df) == "month")) {
     month <- .df |>
       select("month")
-    
-    if(inherits(.df$month, "numeric")) {
+
+    if (inherits(.df$month, "numeric")) {
       month |>
-      check_within_range(lower = 1,
-                         upper = 12,
-                         level = level
-      )
+        check_within_range(
+          lower = 1,
+          upper = 12,
+          level = level
+        )
     } else {
-      if(inherits(.df$month, "character")) {
-        
+      if (inherits(.df$month, "character")) {
         # Detect and handle month abbreviations
-        if(any(match(.df$month,month.abb))) {
-          if(any(is.na(match(.df$month, month.abb)))) {
+        if (!is.na(any(match(.df$month, month.abb)))) {
+          if (any(is.na(match(.df$month, month.abb)))) {
             unmatched <- sum(is.na(match(.df$month, month.abb)))
             cli::cli_warn("{.field month} contains {unmatched} unrecognised month abbreviation{?s}.")
           }
-          } else {
-            # Detect and handle month names
-            if(any(match(.df$month, month.name))) {
-              if(any(is.na(match(.df$month, month.name)))) {
-                unmatched <- sum(is.na(match(.df$month, month.name)))
-                cli::cli_warn("{.field month} contains {unmatched} unrecognised month name{?s}.")
-              }
-              }
-          } 
+        } else {
+          # Detect and handle month names
+          if (!is.na(any(match(.df$month, month.name)))) {
+            if (any(is.na(match(.df$month, month.name)))) {
+              unmatched <- sum(is.na(match(.df$month, month.name)))
+              cli::cli_warn("{.field month} contains {unmatched} unrecognised month name{?s}.")
+            }
+          }
         }
-      
+      }
     }
-  } 
+  }
 }
 
 #' @rdname check_dwc
@@ -216,14 +204,31 @@ check_day <- function(.df,
         )
     } else {
       bullets <- cli::cli_bullets(c(
-        "Invalid {.field day} class.",
-        i = "See {.code ?lubridate::mday()} to see how to convert a date to day of month.",
-        x = "{.field day} must be numeric, not {class(.df$day)}." 
+        "{.field day} must be a numeric vector, not {class(.df$day)}.",
+        i = "See {.code ?lubridate::mday()} to see how to convert a date to day of month."
       ))|>
         cli::cli_fmt()
       
       cli::cli_abort(bullets)
       
     }
+  } 
+}
+
+
+
+#' @rdname check_dwc
+#' @order 6
+#' @importFrom lubridate year
+#' @importFrom lubridate today
+#' @export
+check_eventTime <- function(.df, 
+                       level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "eventTime")){
+    .df |>
+      select("eventTime") |>
+      check_is_time(level = level)
   } 
 }

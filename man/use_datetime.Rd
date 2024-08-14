@@ -10,8 +10,9 @@ use_datetime(
   year = NULL,
   month = NULL,
   day = NULL,
-  time = NULL,
-  .keep = "unused"
+  eventTime = NULL,
+  .keep = "unused",
+  .messages = TRUE
 )
 }
 \arguments{
@@ -23,14 +24,14 @@ use_datetime(
 
 \item{day}{The day of the observation/event.}
 
-\item{time}{The time of the observation/event.}
-
 \item{.keep}{Control which columns from .data are retained in the output.
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
 
 \item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
+
+\item{time}{The time of the observation/event.}
 }
 \value{
 A tibble with the requested fields added.

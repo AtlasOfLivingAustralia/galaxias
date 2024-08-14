@@ -45,9 +45,7 @@ check_data_frame <- function(.df,
 #' that exist in the user dataframe that already match Darwin Core terms.
 #' 
 #' @importFrom cli cli_progress_step
-#' @importFrom cli cli_status
-#' @importFrom cli cli_status_update
-#' @importFrom cli cli_status_clear
+#' @importFrom cli cli_progress_update
 #' @noRd
 #' @keywords Internal
 col_progress_bar <- function(cols) {
@@ -233,7 +231,7 @@ check_within_range <- function(.df,
   if(!all(range_check)){
     bullets <- cli::cli_bullets(c(
       "Value is outside of expected range in {.field {field_name}}.",
-      i = "Column contains values ouside of {lower} <= x <= {upper}."
+      i = "Column contains values outside of {lower} <= x <= {upper}."
                )) |> 
         cli::cli_fmt()
     switch_check(level,
@@ -327,30 +325,51 @@ check_is_date_time <- function(x,
 #' @importFrom cli cli_bullets
 #' @keywords Internal
 check_is_time <- function(.df,
-                       level = "warn",
-                       call = caller_env()
-){
+                          level = "warn",
+                          call = caller_env()) {
   check_data_frame(.df)
   field_name <- colnames(.df)[[1]]
   x <- .df |> pull(field_name)
-  
-  # Is there a time?
-  if(any(lubridate::is.POSIXt(x))) {
-    
-    # what format is the time?
-    if(!any(is.na(as.POSIXct(x, format = "%H:%M:%S"))) |
-       !any(is.na(as.POSIXct(x, format = "%H:%M")))) { 
 
-      if(any(is.na(as.POSIXct(x, format = "%H:%M")))) { 
-        .df[1] <- hms::parse_hms(.df[1], format = "%H:%M") # hours minutes seconds
+  # browser()
+  # hms::parse_hm(x)
+
+  # time period supplied
+  if (any(lubridate::is.period(x)) |
+    any(hms::is_hms(x))) {
+    x <- x
+  } else {
+    # character class supplied
+    if (any(is.character(x))) {
+      # are they time format?
+      if (!any(is.na(as.POSIXct(x, format = "%H:%M:%S")))) {
+        .df[1] <- hms::parse_hms(x) # hours minutes seconds
+      } else {
+        if (!any(is.na(as.POSIXct(x, format = "%H:%M")))) {
+          .df[1] <- hms::parse_hm(x)
+        } else {
+          bullets <- c(
+            "Invalid time format in {.field {field_name}}.",
+            i = "{.field {field_name}} accepts hours:minutes:seconds or hours:minutes."
+          ) |>
+            cli::cli_bullets() |>
+            cli::cli_fmt()
+
+          cli::cli_abort(bullets, call = call)
+        }
+      }
     } else {
-      .df[1] <- hms::parse_hm(.df[1]) # hours minutes
-    }
-    } else {
-      cli::cli_abort("Must format {.field {field_name}} as hours:minutes or hours:minutes:seconds.")
+      bullets <- c(
+        "Must format {.field {field_name}} as hours:minutes:seconds or hours:minutes.",
+        i = "Specify time format with {.pkg lubridate} e.g. {.code hms()} or {.code hm()}}."
+      ) |>
+        cli::cli_bullets() |>
+        cli::cli_fmt()
+
+      cli::cli_abort(bullets, call = call)
     }
   }
-
+  # NOTE: This class isn't retained in final df for some reason
   .df
 }
 
