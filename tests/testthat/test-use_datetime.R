@@ -1,14 +1,6 @@
-library(tibble)
-df <- tibble(
-  latitude = c(-35.310, -35.273),
-  longitude = c(149.125, 149.133),
-  date = c("14-01-2023", "15-01-2023"),
-  time = c("10:23", "11:25"),
-  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
-  n = c(2, 3)
-  )
 
 # create quiet function that captures side-effects
+# NOTE: This must be re-run if changes are made to `use_datetime()` for bug-fixing
 quiet_use_datetime <- purrr::quietly(use_datetime)
 
 test_that("use_datetime errors when missing .df", {
