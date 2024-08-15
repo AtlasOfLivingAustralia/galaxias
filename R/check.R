@@ -387,8 +387,9 @@ check_missing_all_args <- function(fn_call,
   
   if (!any(user_cols %in% fn_args)) {
     bullets <- c(
-      "No Darwin Core terms detected by {.code {function_name}()}. See {.code ?{function_name}}."
-    )
+      "*" = "No Darwin Core terms detected by {.code {function_name}()}. See {.code ?{function_name}}."
+    ) |>
+      cli::cli_bullets() |> cli_fmt()
     cli::cli_warn(bullets, call = error_call)
   }
 }
