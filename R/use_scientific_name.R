@@ -44,7 +44,7 @@ use_scientific_name <- function(
     .keep = "unused"
 ){
   if(missing(.df)){
-    abort("df is missing, with no default")
+    abort(".df is missing, with no default")
   }
   
   fn_args <- ls()
