@@ -38,7 +38,7 @@ use_coordinates <- function(
     .keep = "unused"
 ){
   if(missing(.df)){
-    abort("df is missing, with no default")
+    abort(".df is missing, with no default")
   }
   
   fn_args <- ls()
@@ -148,10 +148,16 @@ check_crs <- function(.df,
   
   rlang::try_fetch(
     lapply(x, function(x) sf::st_crs(x)), 
+    warning = function(cnd) {
+      bullets <- c(
+        "*" = "{.field {field_name}} contains unrecognised Coordinate Reference System (CRS)."
+      ) |> cli::cli_bullets() |> cli::cli_fmt()
+      cli::cli_warn(bullets, parent = cnd, call = call)
+    },
     error = function(cnd) {
       bullets <- c(
-        "{.field {field_name}} contains invalid Coordinate Reference System."
-      )
+        "{.field {field_name}} contains invalid Coordinate Reference System (CRS)."
+      ) |> cli::cli_bullets() |> cli::cli_fmt()
       cli::cli_abort(bullets, parent = cnd, call = call)
       })
 }
