@@ -80,7 +80,9 @@ use_scientific_name <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_progress_bar(cols = matched_cols)
+  if(length(matched_cols > 0)) {
+    col_progress_bar(cols = matched_cols)
+  }
   
   # run column checks
   check_scientificName(result, level = "abort")
