@@ -94,7 +94,7 @@ test_that("use_coordinates checks decimalLatitude format", {
   )
 })
 
-test_that("use_coordinates checks geodeticDatum format", {
+test_that("use_coordinates checks geodeticDatum for valid CRS", {
   quiet_use_coordinates <- purrr::quietly(use_coordinates)
   df <- tibble(geodeticDatum = c("WGS84", "WGS84"),
                col_number = c(97, -35.273),

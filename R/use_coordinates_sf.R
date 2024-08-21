@@ -39,7 +39,7 @@ use_coordinates_sf <- function(
     .keep = "unused"
 ){
   if(missing(.df)){
-    abort("df is missing, with no default.")
+    abort(".df is missing, with no default.")
   }
   
   fn_args <- ls()
@@ -64,10 +64,35 @@ use_coordinates_sf <- function(
       purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
   }
   
+  # browser()
+  # handle sf object operations prior to `mutate()`
+  if (inherits(.df, "sf")) {
+    # get `geometry` column name
+    col_name_sfc <- .df |>
+      select(which(sapply(.df, class) == 'sfc_POINT')) |>
+      colnames()
+    
+    coords <- .df |>
+      select(which(sapply(.df, class) == 'sfc_POINT'))
+    # st_geometry(.df) <- "coords"
+    fn_quos <- fn_quos |>
+      purrr::keep(!names(fn_quos) %in% "coords")
+  } else {
+    bullets <- c(
+      "No {.code geometry} detected.",
+      i = "{.code use_coordinates_sf()} must be supplied a dataframe with an {.pkg sf} geometry (i.e. {.code st_POINT})."
+    ) |> cli_bullets() |> cli_fmt()
+    cli::cli_abort(bullets)
+  }
+  
   # Update df
   result <- .df |> 
     mutate(!!!fn_quos, 
            .keep = .keep)
+  
+  # browser()
+  # unique to this use_coordinates_sf, `geometry` is a valid term
+  fn_args <- c(fn_args, col_name_sfc)
   
   check_missing_all_args(fn_call = match.call(), 
                          fn_args = fn_args, 
@@ -75,7 +100,9 @@ use_coordinates_sf <- function(
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_progress_bar(cols = matched_cols)
+  if(length(matched_cols > 0)) {
+    col_progress_bar(cols = matched_cols)
+  }
   
   # run column checks
   # Add sf coords if valid
@@ -83,8 +110,8 @@ use_coordinates_sf <- function(
   
   result <- col_sf_to_dwc(.df, level = level) |>
     st_drop_geometry()
-  
-  cli::cli_warn("{.field geometry} dropped from data frame.")
+
+  cli::cli_warn("{.field {col_name_sfc}} dropped from data frame.")
   
   result
 }
@@ -143,10 +170,17 @@ col_sf_to_dwc <- function(.df,
   # check_data_frame(.df)
   # field_name <- colnames(.df)[[1]]
   # x <- .df |> pull(field_name)
-  .df |>
+  result <- .df |>
     mutate(
       decimalLongitude = sf::st_coordinates(.df)[,1],
       decimalLatitude = sf::st_coordinates(.df)[,2],
       geodeticDatum = sf::st_crs(.df)$input
       )
+  
+  new_cols <- colnames(result)[colnames(result) %in% c("decimalLongitude", "decimalLatitude", "geodeticDatum")]
+  bullets <- c("*" = "Converted {cli::col_cyan(paste('coords'))} {symbol$arrow_right} {.field {new_cols}}.") |> cli_bullets() |> cli_fmt()
+  cli_inform(bullets)
+  
+  return(result)
+  
 }
