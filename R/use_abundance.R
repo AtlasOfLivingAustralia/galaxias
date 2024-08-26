@@ -15,8 +15,8 @@
 #' This needs some clever behaviour
 #' @importFrom dplyr mutate
 #' @importFrom rlang abort
-#' @noRd
-add_abundance <- function(.df,
+#' @export
+use_abundance <- function(.df,
                           individualCount = NULL,
                           organismQuantity = NULL,
                           organismQuantityType = NULL,

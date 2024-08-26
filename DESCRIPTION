@@ -22,7 +22,6 @@ Imports:
   cli,
   dplyr,
   elm,
-  fs,
   glue,
   httr2,
   lubridate,
@@ -33,8 +32,8 @@ Imports:
   sf,
   stringr,
   tidyr,
-  tibble,
   usethis,
+  uuid,
   withr,
   xml2,
   zip
