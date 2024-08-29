@@ -8,133 +8,173 @@
 #' NOTE: this code should be updated to use `{elm}` for building `xml`; if that
 #' works, can remove `{xml2}` dependency.
 #' 
-#' @param project a directory containing Darwin Core data, preferrably built
+#' @param project a directory containing Darwin Core data, preferably built
 #' with `use_bd_project()`.
-#' @returns Does not retun an object to the workspace; called for the side
+#' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom purrr map
-#' @importFrom xml2 xml_add_child
 #' @export
-build_schema <- function(project = ".") {
-  supported_types <- c("occurrences.csv", # Q: put these into a function? Might be more consistent across the package
-                       "events.csv",
-                       "multimedia.csv")
-                       # measurementOrFact could be good too
-  present_types <- supported_types |>
-    map(\(x) file.exists(x)) |> 
-    unlist()
-  available_types <- supported_types[present_types]
+build_schema <- function(directory = ".") {
   
-  # create object and add children
-  result <- create_archive_xml()
-  if(length(available_types) > 1){
-    nodes <- map(.x = available_types,
-                 .f = \(x){
-                   type <- sub(".csv$", "", x)
-                   field_names <- get_field_names(x)
-                   create_file_index(field_names, 
-                                     type, 
-                                     core = {x == 1})
-                 })
-    for(i in seq_along(nodes)){ 
-      xml_add_child(result, nodes[[i]])
-    }
-  }
-  result
+  schema_tibble <- detect_dwc_files(directory) |>
+    detect_dwc_fields() |>
+    add_front_matter()
+
+  # TODO: tibble doesn't parse to xml because it lacks class `md_tibble`
+  class(schema_tibble) <- c("md_tibble", class(schema_tibble))
+  write_md_xml(schema_tibble, 
+               file = glue("{directory}/data/meta.xml")) 
 }
 
-#' simple function to get column names from a csv
-#' this could use readr::read_csv, but that seems overkill, so uses scan() instead
-#' @importFrom purrr pluck
-#' @noRd
-#' @keywords Internal
-get_field_names <- function(file){
-  scan(file, 
-       what = "character",
-       nlines = 1L,
-       quiet = TRUE) |>
-    strsplit(split = ",") |>
-    pluck(1)
-}
-
-#' Internal function to build root node for schema
-#' @importFrom xml2 as_xml_document
-#' @importFrom xml2 xml_set_attrs
-#' @noRd
-#' @keywords Internal
-create_archive_xml <- function(){
-  result <- list(archive = list()) |>
-    as_xml_document()
-  xml_set_attrs(result,
-                c(xmlns ="http://rs.tdwg.org/dwc/text/",
-                  metadata="eml.xml"))
-  result
-}
-
-#' Internal function to map field names of a tibble for schema
+#' Internal function to create core/extension framework for files
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr select
 #' @importFrom glue glue
 #' @importFrom purrr map
-#' @importFrom xml2 as_xml_document
-#' @importFrom xml2 xml_set_attrs
 #' @noRd
 #' @keywords Internal
-create_file_index <- function(field_names, type, core = TRUE){
-  # Join information into a single list
-  result <- list(c(create_file_list(type), 
-    create_id_list(),
-    create_field_list(field_names)))
-  names(result) <- ifelse(core == TRUE, "core", "extension")
-  # Convert to xml and set attributes 
-  result_xml <- as_xml_document(result)
-  xml_set_attrs(result_xml, c(
-    encoding = "UTF-8",
-    rowType = glue("http://rs.tdwg.org/dwc/terms/{type}"), # REPLACE with class lookup c/o {dwc_terms()}
-    fieldsTerminatedBy = ",",
-    linesTerminatedBy = "\r\n",
-    fieldsEnclosedBy = "&quot;",
-    ignoreHeaderLines = "1"))
-  result_xml # return
+detect_dwc_files <- function(directory){
+  available_exts <- dwc_extensions()
+  supported_files <- available_exts |>
+    pull("file")
+  available_exts$present <- supported_files |>
+    map(\(x) {glue("{directory}/data/{x}") |> file.exists()}) |> 
+    unlist()
+  available_exts |>
+    filter(present == TRUE) |>
+    mutate(label = c("core", rep("extension", length(which(present == TRUE)) - 1)),
+           level = 2,
+           directory = glue("{directory}/data")) |>
+    select("type", "directory", "file", "level", "label", "attributes")
+}
+
+#' Internal function to list metadata for Darwin Core extensions
+#' @importFrom tibble tibble
+#' @noRd
+#' @keywords Internal
+dwc_extensions <- function(){
+  tibble(
+    type = c("event",
+             "occurrence", 
+             "multimedia"),
+    file = c("events.csv",
+             "occurrences.csv",
+             "multimedia.csv"),
+    attributes = list(
+      list(encoding="UTF-8",
+           rowType="http://rs.gbif.org/terms/Event",
+           fieldsTerminatedBy=",",
+           linesTerminatedBy="\r\n",
+           fieldsEnclosedBy="&quot;",
+           ignoreHeaderLines="1"),
+      list(encoding="UTF-8",
+           rowType="http://rs.tdwg.org/dwc/terms/Occurrence",
+           fieldsTerminatedBy=",",
+           linesTerminatedBy="\r\n",
+           fieldsEnclosedBy="&quot;",
+           ignoreHeaderLines="1"),
+      list(encoding="UTF-8",
+           rowType="http://rs.gbif.org/terms/1.0/Multimedia",
+           fieldsTerminatedBy=",",
+           linesTerminatedBy="\r\n",
+           fieldsEnclosedBy="&quot;",
+           ignoreHeaderLines="1")
+    )
+  )
+}
+
+#' Internal function to add field names to tibble
+#' @noRd
+#' @keywords Internal
+detect_dwc_fields <- function(df){
+  split(df, seq_len(nrow(df))) |>
+    map(\(x){
+      bind_rows(create_schema_row(x),
+                create_file_row(x),
+                create_id_row(),
+                create_field_rows(x))
+
+    }) |>
+    bind_rows()
 }
 
 #' Internal function to create file name
 #' @importFrom glue glue
 #' @noRd
 #' @keywords Internal
-create_file_list <- function(type){
-  list(files = list(
-    location = list(
-      glue("{type}.csv")
-      )
-    )
-  )
+create_schema_row <- function(x){
+  x |> 
+    mutate(text = "") |>
+    select("level", "label", "text", "attributes")
+}
+
+#' Internal function to create file name
+#' @importFrom glue glue
+#' @noRd
+#' @keywords Internal
+create_file_row <- function(x){
+  tibble(
+    level = c(3, 4),
+    label = c("files", "location"),
+    text = c("", x$file),
+    attributes = list(NA))
 }
 
 #' Internal function to create id field
 #' @noRd
 #' @keywords Internal
-create_id_list <- function(){
-  id <- list()
-  attributes(id) <- list(index = "0")
-  list(id = list(id))
+create_id_row <- function(){
+  tibble(
+    level = 4,
+    label = "id",
+    text = "",
+    attributes = list(list(index = "0")))
 }
-# TODO: This doesn't parse correctly any more - unclear why.
 
 #' Internal function to create xml map of column names
+#' @importFrom purrr map
 #' @noRd
 #' @keywords Internal
-create_field_list <- function(field_names){
-  # Create field list
+create_field_rows <- function(x){
+  field_names <- glue("{x$directory}/{x$file}") |>
+    get_field_names()
   n_fields <- length(field_names)
-  field <- map(
-    .x = seq_len(n_fields), 
-    .f = \(a){
-      out <- list()
-      attributes(out) <- list(
-        index = as.character(a),
-        url = glue("http://rs.tdwg.org/dwc/terms/{field_names[[a]]}") # REPLACE with terms lookup c/o {dwc_terms()}
-      )
-      return(out)
-    })
-  names(field) <- rep("field", n_fields)
-  field
+  # get sequence of indexes
+  index_list <- as.list(seq_along(field_names))
+  names(index_list) <- rep("index", n_fields)
+  # get sequence of urls
+  term_list <- as.list(glue("http://rs.tdwg.org/dwc/terms/{field_names}"))
+  names(term_list) <- rep("term", n_fields)
+  # combine
+  tibble(level = 4,
+         label = "field",
+         text = "",
+         attributes = map(seq_len(n_fields), 
+                          \(x){c(index_list[x], term_list[x])}))
+}
+
+#' simple function to get column names from a csv
+#' @noRd
+#' @keywords Internal
+get_field_names <- function(file){
+  read.csv(file, 
+           nrows = 1) |>
+    colnames()
+}
+
+#' Internal function to add `xml` and `archive` sections to tibble
+#' @importFrom tibble tibble
+#' @importFrom dplyr bind_rows
+#' @noRd
+#' @keywords Internal
+add_front_matter <- function(df){
+  front_rows <- tibble(level = c(1, 1),
+                       label = c("xml", "archive"),
+                       text = c("", ""),
+                       attributes = list(
+                         list(version = "1.0"),
+                         list(xmlns = "http://rs.tdwg.org/dwc/text/",
+                              metadata = "eml.xml"))
+  )
+  bind_rows(front_rows, df)
 }

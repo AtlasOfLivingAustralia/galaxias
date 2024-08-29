@@ -21,18 +21,17 @@ build_metadata <- function(file) {
   if(!file.exists(file)){
     abort("`file` doesn't exist in specified location.")
   }
+  # check if `data` folder is present
+  if(!file.exists("data")){
+    use_directory("data")
+  }
   
   # import file, ensure EML metadata is added, convert to XML
   result <- read_md_chr(file) |>
     add_eml_row() |>
     as_md_xml()
   
-  # check if `data` folder is present
-  if(!file.exists("data")){
-    use_directory("data")
-  }
-  
   # save XML to `data/eml.xml`
-  write_md_xml(result, 
+  write_md_xml(result,
                file = glue("data/eml.xml"))
 }
