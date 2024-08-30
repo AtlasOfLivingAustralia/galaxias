@@ -16,14 +16,14 @@
 #' @importFrom dplyr mutate
 #' @importFrom rlang abort
 #' @noRd
-add_abundance <- function(.df,
+use_abundance <- function(.df,
                           individualCount = NULL,
                           organismQuantity = NULL,
                           organismQuantityType = NULL,
                           occurrenceStatus = NULL
                           ){
   if(missing(.df)){
-    abort("df is missing, with no default")
+    abort(".df is missing, with no default")
   }
   
   fn_args <- ls()
@@ -59,7 +59,9 @@ add_abundance <- function(.df,
   
   # inform user which columns will be checked
   matched_cols <- names(result)[names(result) %in% fn_args]
-  col_progress_bar(cols = matched_cols)
+  if(length(matched_cols > 0)) {
+    col_progress_bar(cols = matched_cols)
+  }
   
   # run column checks
   # TODO: Add checks
