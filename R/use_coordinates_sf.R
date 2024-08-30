@@ -10,11 +10,7 @@
 #' informative errors, and serves as a useful lookup for how spatial fields are
 #' represented in the Darwin Core Standard.
 #' @param df a `data.frame` or `tibble` that the column should be appended to.
-#' @param coords the latitude in decimal degrees as `sf` `POINT` class
-#' @param coordinateUncertaintyInMeters (numeric) radius of the smallest circle 
-#' that contains the whole location, given any possible measurement error.
-#' @param coordinatePrecision (numeric) the precision that `decimalLatitude` and 
-#' `decimalLongitude` are supplied to.
+#' @param geometry the latitude in decimal degrees as `sf` `POINT` class
 #' @param .keep Control which columns from .data are retained in the output. 
 #' Note that unlike `dplyr::mutate`, which defaults to `"all"` this defaults to 
 #' `"unused"`; i.e. only keeps Darwin Core fields, and not those fields used to 
@@ -31,52 +27,27 @@
 #' @importFrom rlang abort
 #' @importFrom sf st_drop_geometry
 #' @export
-use_coordinates_sf <- function(
+use_sf <- function(
     .df,
-    coords = NULL,
-    coordinateUncertaintyInMeters = NULL,
-    coordinatePrecision = NULL,
+    geometry = NULL,
     .keep = "unused"
 ){
   if(missing(.df)){
     abort(".df is missing, with no default.")
   }
   
-  fn_args <- ls()
-  
-  # capture arguments as a list of quosures
-  # NOTE: enquos() must be listed alphabetically
-  fn_quos <- enquos(coords, coordinatePrecision, coordinateUncertaintyInMeters)
-  names(fn_quos) <- fn_args
-  
-  # find arguments that are NULL but exist already in `df`
-  # then remove their names before `mutate()`
-  # otherwise, these DwC columns are deleted by `mutate(.keep = "unused")` 
-  fn_quo_is_null <- fn_quos |> 
-    purrr::map(\(user_arg)
-               rlang::quo_is_null(user_arg)) |> 
-    unlist()
-  
-  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
-  
-  if(any(null_col_exists_in_df)){
-    fn_quos <- fn_quos |> 
-      purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
-  }
-  
   # browser()
-  # handle sf object operations prior to `mutate()`
+  # check for sf object with `geometry`
   if (inherits(.df, "sf")) {
-    # get `geometry` column name
+    
+    # get column name that holds `geometry`
     col_name_sfc <- .df |>
       select(which(sapply(.df, class) == 'sfc_POINT')) |>
       colnames()
     
-    coords <- .df |>
+    geometry <- .df |>
       select(which(sapply(.df, class) == 'sfc_POINT'))
-    # st_geometry(.df) <- "coords"
-    fn_quos <- fn_quos |>
-      purrr::keep(!names(fn_quos) %in% "coords")
+    
   } else {
     bullets <- c(
       "No {.code geometry} detected.",
@@ -84,6 +55,30 @@ use_coordinates_sf <- function(
     ) |> cli_bullets() |> cli_fmt()
     cli::cli_abort(bullets)
   }
+  
+  fn_args <- ls()
+  
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  # fn_quos <- enquos(geometry)
+  # names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # then remove their names before `mutate()`
+  # otherwise, these DwC columns are deleted by `mutate(.keep = "unused")` 
+  # fn_quo_is_null <- fn_quos |> 
+  #   purrr::map(\(user_arg)
+  #              rlang::quo_is_null(user_arg)) |> 
+  #   unlist()
+  # 
+  # null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  # 
+  # if(any(null_col_exists_in_df)){
+  #   fn_quos <- fn_quos |> 
+  #     purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
+  # }
+  # 
+
   
   # Update df
   result <- .df |> 
@@ -105,7 +100,7 @@ use_coordinates_sf <- function(
   }
   
   # run column checks
-  # Add sf coords if valid
+  # Check whether coords are POINT coordinates
   check_coords(result, level = "abort")
   
   result <- col_sf_to_dwc(.df, level = level) |>
@@ -146,7 +141,7 @@ check_is_sf <- function(.df,
   if(!all(st_is(st_geometry(df), "POINT"))){
     
     bullets <- cli::cli_bullets(c(
-      "{.field {field_name}} must be a POINT geometry, not {class(x)}."
+      "{.field {field_name}} must be st_POINT geometry, not {class(x)}."
     )) |>
       cli::cli_fmt()
     
@@ -162,6 +157,8 @@ check_is_sf <- function(.df,
 #' @importFrom sf st_coordinates
 #' @importFrom sf st_crs
 #' @importFrom sf st_drop_geometry
+#' @importFrom cli cli_bullets
+#' @importFrom cli cli_fmt
 #' @keywords Internal
 col_sf_to_dwc <- function(.df, 
                           level = c("inform", "warn", "abort"),
@@ -178,7 +175,7 @@ col_sf_to_dwc <- function(.df,
       )
   
   new_cols <- colnames(result)[colnames(result) %in% c("decimalLongitude", "decimalLatitude", "geodeticDatum")]
-  bullets <- c("*" = "Converted {cli::col_cyan(paste('coords'))} {symbol$arrow_right} {.field {new_cols}}.") |> cli_bullets() |> cli_fmt()
+  bullets <- c("*" = "Converted {cli::col_cyan(paste('geometry'))} {symbol$arrow_right} {.field {new_cols}}.") |> cli_bullets() |> cli_fmt()
   cli_inform(bullets)
   
   return(result)
