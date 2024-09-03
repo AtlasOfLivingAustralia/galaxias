@@ -200,7 +200,7 @@ check_basisOfRecord <- function(.df,
     .df |>
       select("basisOfRecord") |>
       check_is_string(level = level) |>
-      check_contains_values(y = valid_basisOfRecord(), 
+      check_contains_values(values = valid_basisOfRecord(), 
                             level = level)
   }
   .df

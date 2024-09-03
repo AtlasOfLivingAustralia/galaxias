@@ -104,8 +104,8 @@ check_eventDate <- function(.df,
   if(any(colnames(.df) == "eventDate")){
     .df |>
       select("eventDate") |>
-      check_is_date(level = level) |>
-      check_is_time(level = level)
+      check_is_date(level = level)
+      # check_is_time(level = level)
       # mutate(eventDate = lubridate::parse_date_time(eventDate, orders = "ymd"))
     
     bullets <- c(
