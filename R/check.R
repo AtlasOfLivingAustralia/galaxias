@@ -78,7 +78,7 @@ col_progress_bar <- function(cols) {
 #' @noRd
 #' @keywords Internal
 check_contains_values <- function(.df, 
-                                 y, 
+                                 values, 
                                  level = "inform",
                                  .accepted_message = TRUE,
                                  call = caller_env()
@@ -89,7 +89,7 @@ check_contains_values <- function(.df,
     pull(field_name) |>
     unique() |>
     sort()
-  name_lookup <- user_values %in% y
+  name_lookup <- user_values %in% values
   if(any(!name_lookup)){
     unmatched_values <- user_values[!name_lookup]
     unmatched_string <- ansi_collapse(glue("{unmatched_values}"),
@@ -97,7 +97,7 @@ check_contains_values <- function(.df,
                                       last = " & ")     
     
     if(length(unmatched_values) > 0) {
-      accepted_values <- ansi_collapse(glue("\"{y}\""),
+      accepted_values <- ansi_collapse(glue("\"{values}\""),
                                        sep = ", " ,
                                        last = " & ")
       
