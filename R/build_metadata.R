@@ -27,11 +27,7 @@ build_metadata <- function(file) {
   }
   
   # import file, ensure EML metadata is added, convert to XML
-  result <- read_md_chr(file) |>
+  read_md_chr(file) |>
     add_eml_row() |>
-    as_md_xml()
-  
-  # save XML to `data/eml.xml`
-  write_md_xml(result,
-               file = glue("data/eml.xml"))
+    write_md_xml(file = glue("data/eml.xml"))
 }

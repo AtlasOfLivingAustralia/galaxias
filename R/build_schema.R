@@ -12,6 +12,7 @@
 #' with `use_bd_project()`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
+#' @importFrom elm write_md_xml
 #' @export
 build_schema <- function(directory = ".") {
   
@@ -19,8 +20,6 @@ build_schema <- function(directory = ".") {
     detect_dwc_fields() |>
     add_front_matter()
 
-  # TODO: tibble doesn't parse to xml because it lacks class `md_tibble`
-  class(schema_tibble) <- c("md_tibble", class(schema_tibble))
   write_md_xml(schema_tibble, 
                file = glue("{directory}/data/meta.xml")) 
 }
@@ -168,13 +167,14 @@ get_field_names <- function(file){
 #' @noRd
 #' @keywords Internal
 add_front_matter <- function(df){
-  front_rows <- tibble(level = c(1, 1),
-                       label = c("xml", "archive"),
-                       text = c("", ""),
-                       attributes = list(
-                         list(version = "1.0"),
-                         list(xmlns = "http://rs.tdwg.org/dwc/text/",
-                              metadata = "eml.xml"))
+  front_row <- tibble(
+    level = 1,
+    label = "archive",
+    text = "",
+    attributes = list(
+      list(xmlns = "http://rs.tdwg.org/dwc/text/",
+           metadata = "eml.xml")
+    )
   )
-  bind_rows(front_rows, df)
+  bind_rows(front_row, df)
 }
