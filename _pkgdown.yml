@@ -39,23 +39,23 @@ reference:
   - use_bd_readme_rmd
 - title: Add Darwin Core Terms
   contents:
-  - use_occurrenceID
-  - use_basisOfRecord
+  - use_abundance
+  - use_collection
   - use_coordinates
-  - use_eventDate
+  - use_coordinates_sf
+  - use_occurrences
+  - use_datetime
+  - use_id_random
+  - use_individual_traits
   - use_locality
-- title: Check data for Darwin Core compliance
+  - use_observer
+  - use_occurrences
+  - use_scientific_name
+  - use_taxonomy
+- title: Check and build an archive
   contents:
   - check_dwc
-  - check_fields
-  - check_occurrenceID
-  - check_basisOfRecord
-  - check_continent
-  - check_country
-  - check_countryCode
-  - check_decimalLatitude
-  - check_decimalLongitude
-- title: Build and check an archive
-  contents:
+  - build_metadata
+  - build_schema
   - build_dwca
   - validate_dwca

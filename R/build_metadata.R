@@ -1,43 +1,33 @@
 #' Create a metadata statement for a Darwin Core Archive
 #' 
 #' A metadata statement lists the owner of the dataset, how it was collected,
-#' and how it may used (i.e. it's licence). This function is intended to be 
-#' primarily internal, and is called by `build_dwca()`, but is provided for 
-#' debugging purposes.
+#' and how it may used (i.e. its' licence). This function simply converts
+#' metadata stored in a markdown file to xml, and stores it in the `data` 
+#' folder.
 #' @param file path to a metadata statement stored in markdown format (.md).
-#' @param project a directory containing Darwin Core data, preferrably built
-#' with `use_bd_project()`.
 #' @returns Does not return an object to the workspace; called for the side
-#' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom elm read_md
-#' @importFrom elm as_xml
-#' @importFrom elm write_xml
+#' effect of building a file named `meta.xml` in the `data` directory.
+#' @importFrom elm add_eml_row
+#' @importFrom elm read_md_chr
+#' @importFrom elm as_md_xml
+#' @importFrom elm write_md_xml
 #' @export
-build_metadata <- function(file, project = ".") {
+build_metadata <- function(file) {
   
+  # check file is present
   if(missing(file)){
     abort("`file` is missing, with no default.")
   }
   if(!file.exists(file)){
     abort("`file` doesn't exist in specified location.")
   }
-  read_md(file) |>
-    as_xml() |>
-    write_xml(file = glue("{project}/eml.xml"))
+  # check if `data` folder is present
+  if(!file.exists("data")){
+    use_directory("data")
+  }
   
-  # # convert to xml
-  # object <- list(`eml:eml` = structure(
-  #   parse_tibble_to_list(x),
-  #   `xmlns:d` = "eml://ecoinformatics.org/dataset-2.1.0",
-  #   `xmlns:eml` = "eml://ecoinformatics.org/eml-2.1.1",
-  #   `xmlns:xsi` = "http://www.w3.org/2001/XMLSchema-instance",
-  #   `xmlns:dc` = "http://purl.org/dc/terms/",
-  #   `xsi:schemaLocation` = "eml://ecoinformatics.org/eml-2.1.1 http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml-gbif-profile.xsd",
-  #   # system = "ALA-Registry", # needed?
-  #   scope = "system",
-  #   `xml:lang` = "en"
-  # ))
-  # result <- as_xml_document(object)
-  # write_xml(result, 
-  #           glue("{project}/eml.xml"))
+  # import file, ensure EML metadata is added, convert to XML
+  read_md_chr(file) |>
+    add_eml_row() |>
+    write_md_xml(file = glue("data/eml.xml"))
 }

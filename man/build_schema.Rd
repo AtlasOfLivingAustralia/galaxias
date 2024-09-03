@@ -4,14 +4,14 @@
 \alias{build_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-build_schema(project = ".")
+build_schema(directory = ".")
 }
 \arguments{
-\item{project}{a directory containing Darwin Core data, preferrably built
+\item{project}{a directory containing Darwin Core data, preferably built
 with \code{use_bd_project()}.}
 }
 \value{
-Does not retun an object to the workspace; called for the side
+Does not return an object to the workspace; called for the side
 effect of building a file named \code{meta.xml} in the specified directory.
 }
 \description{

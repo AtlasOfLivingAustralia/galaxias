@@ -20,7 +20,7 @@
 #' * many (`organismQuantity`) individuals (`organismQuantityType`)
 #' @importFrom dplyr mutate
 #' @importFrom rlang abort
-#' @noRd
+#' @export
 use_abundance <- function(.df,
                           individualCount = NULL,
                           organismQuantity = NULL,

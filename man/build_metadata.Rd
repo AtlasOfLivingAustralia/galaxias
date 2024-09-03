@@ -4,21 +4,18 @@
 \alias{build_metadata}
 \title{Create a metadata statement for a Darwin Core Archive}
 \usage{
-build_metadata(file, project = ".")
+build_metadata(file)
 }
 \arguments{
 \item{file}{path to a metadata statement stored in markdown format (.md).}
-
-\item{project}{a directory containing Darwin Core data, preferrably built
-with \code{use_bd_project()}.}
 }
 \value{
 Does not return an object to the workspace; called for the side
-effect of building a file named \code{meta.xml} in the specified directory.
+effect of building a file named \code{meta.xml} in the \code{data} directory.
 }
 \description{
 A metadata statement lists the owner of the dataset, how it was collected,
-and how it may used (i.e. it's licence). This function is intended to be
-primarily internal, and is called by \code{build_dwca()}, but is provided for
-debugging purposes.
+and how it may used (i.e. its' licence). This function simply converts
+metadata stored in a markdown file to xml, and stores it in the \code{data}
+folder.
 }
