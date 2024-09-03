@@ -3,8 +3,7 @@
 %   R/use_abundance.R, R/use_locality.R, R/use_coordinates.R, R/use_datetime.R,
 %   R/use_sf.R, R/use_collection.R, R/use_individual_traits.R, R/use_observer.R,
 %   R/use_scientific_name.R, R/use_taxonomy.R
-\name{check_dwc}
-\alias{check_dwc}
+\name{check_fields}
 \alias{check_fields}
 \alias{check_occurrenceID}
 \alias{check_individualCount}
@@ -49,10 +48,9 @@
 \alias{check_species}
 \alias{check_specificEpithet}
 \alias{check_vernacularName}
-\title{Check for Darwin Core field conformance}
+\title{Check for non DwC fields
+NOTE: should probably swap to check_contains() for this.}
 \usage{
-check_dwc(.df)
-
 check_fields(.df, level = c("inform", "warn", "abort"))
 
 check_occurrenceID(.df, level = c("inform", "warn", "abort"))
@@ -153,17 +151,59 @@ check_vernacularName(.df, level = c("inform", "warn", "abort"))
 \arguments{
 \item{level}{what action should the function take for non-conformance?
 Defaults to \code{"inform"}.}
-
-\item{df}{A tibble against which checks should be run}
-}
-\value{
-Invisibly returns the input, but primarily called for the
-side-effect of running check functions on that input.
 }
 \description{
-Function to check whether a \code{data.frame} or \code{tibble} conforms to Darwin
-Core standards. While most users will only want to call \code{check_dwc()},
-the underlying check functions are exported for detailed work, or for
-debugging.
+Check for non DwC fields
+NOTE: should probably swap to check_contains() for this.
+
+Check individualCount field is valid
+
+Check individualCount field is valid
+
+Check individualCount field is valid
+
+Check basisOfRecord field is valid
+
+Check stateProvince field is valid
+
+Check locality field is valid
+
+Check datasetName field is valid
+
+Check individualID field is valid
+
+Check lifeStage field is valid
+
+Check sex field is valid
+
+Check vitality field is valid
+
+Check recordedBy field is valid
+
+Check recordedByID field is valid
+
+Check scientificName field is valid
+
+Check scientificNameRank field is valid
+
+Check scientificNameAuthorship field is valid
+
+Check kingdom field is valid
+
+Check phylum field is valid
+
+Check class field is valid
+
+Check order field is valid
+
+Check family field is valid
+
+Check genus field is valid
+
+Check species field is valid
+
+Check specificEpithet field is valid
+
+Check vernacularName field is valid
 }
 \keyword{Internal}

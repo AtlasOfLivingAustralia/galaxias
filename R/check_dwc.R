@@ -11,7 +11,7 @@
 #' side-effect of running check functions on that input.
 #' @order 1
 #' @export
-check_dwc <- function(.df){
+suggest_workflow <- function(.df){
   # dwc_terms
   fields <- colnames(.df)
   available_checks <- c("occurrenceID",
@@ -105,6 +105,7 @@ dwc_spinny_message <- function(which) {
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr unnest
 #' @importFrom stringr str_pad
+#' @importFrom tibble lst
 #' @noRd
 #' @keywords Internal
 check_contains_terms <- function(.df, 
@@ -317,7 +318,7 @@ fn_to_term_table <- function() {
     "use_taxonomy", "vernacularName"
   )
   
-  table <- list(main, optional) # named list
+  table <- tibble::lst(main, optional) # named list
   
   return(table) 
 }
