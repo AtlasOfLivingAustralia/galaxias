@@ -194,13 +194,13 @@ check_contains_terms <- function(.df,
   
   # if POINT sf class, suggest `use_coordinates_sf()`
   if(isTRUE(is_sf)) {
-    if(any(stringr::str_detect(suggested_functions, "use_coordinates()"))) {
+    if(any(stringr::str_detect(suggested_functions, "use_coordinates()"))) { # this might need fixing since `use_sf()` only handles coordinates
       # replace
       suggested_functions <- suggested_functions |>
-        stringr::str_replace_all("use_coordinates", "use_coordinates_sf")
+        stringr::str_replace_all("use_coordinates", "use_sf")
     } else {
       # add
-      suggested_functions <- c(suggested_functions, "use_coordinates_sf()")
+      suggested_functions <- c(suggested_functions, "use_sf()")
     }
   }
   
@@ -315,7 +315,29 @@ fn_to_term_table <- function() {
     "use_taxonomy", "genus",
     "use_taxonomy", "species",
     "use_taxonomy", "specificEpithet",
-    "use_taxonomy", "vernacularName"
+    "use_taxonomy", "vernacularName",
+    "use_abundance", "individualCount",
+    "use_abundance", "organismQuantity",
+    "use_abundance", "organismQuantityType",
+    "use_abundance", "organismQuantity",
+    "use_collection", "datasetID",
+    "use_collection", "datasetName",
+    "use_collection", "catalogNumber",
+    "use_coordinates", "coordinatePrecision",
+    "use_scientific_name", "scientificNameRank",
+    "use_scientific_name", "scientificNameAuthorship",
+    "use_datetime", "year",
+    "use_datetime", "month",
+    "use_datetime", "day",
+    "use_datetime", "eventTime",
+    "use_individual_traits", "individualID",
+    "use_individual_traits", "lifeStage",
+    "use_individual_traits", "sex",
+    "use_individual_traits", "vitality",
+    "use_individual_traits", "reproductiveCondition",
+    "use_individual_traits", "recordedBy",
+    "use_observer", "recordedByID",
+    "use_observer", "recordedByID",
   )
   
   table <- tibble::lst(main, optional) # named list
