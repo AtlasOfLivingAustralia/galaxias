@@ -8,6 +8,8 @@
 \alias{check_fields}
 \alias{check_occurrenceID}
 \alias{check_individualCount}
+\alias{check_organismQuantity}
+\alias{check_organismQuantityType}
 \alias{check_basisOfRecord}
 \alias{check_continent}
 \alias{check_country}
@@ -56,6 +58,10 @@ check_fields(.df, level = c("inform", "warn", "abort"))
 check_occurrenceID(.df, level = c("inform", "warn", "abort"))
 
 check_individualCount(.df, level = c("inform", "warn", "abort"))
+
+check_organismQuantity(.df, level = c("inform", "warn", "abort"))
+
+check_organismQuantityType(.df, level = c("inform", "warn", "abort"))
 
 check_basisOfRecord(.df, level = c("inform", "warn", "abort"))
 
@@ -148,32 +154,16 @@ check_vernacularName(.df, level = c("inform", "warn", "abort"))
 \item{level}{what action should the function take for non-conformance?
 Defaults to \code{"inform"}.}
 
-\item{df}{a tibble containing data}
+\item{df}{A tibble against which checks should be run}
+}
+\value{
+Invisibly returns the input, but primarily called for the
+side-effect of running check functions on that input.
 }
 \description{
-Function to check whether a data.frame or tibble conforms to DwC standards
-NOTE: Option to use \code{bdc} for checks, and/or \code{pointblank} for running them
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
-
-TODO: Currently only checks whether input is a string
+Function to check whether a \code{data.frame} or \code{tibble} conforms to Darwin
+Core standards. While most users will only want to call \code{check_dwc()},
+the underlying check functions are exported for detailed work, or for
+debugging.
 }
 \keyword{Internal}

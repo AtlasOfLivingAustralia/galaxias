@@ -9,7 +9,8 @@ use_abundance(
   individualCount = NULL,
   organismQuantity = NULL,
   organismQuantityType = NULL,
-  occurrenceStatus = NULL
+  occurrenceStatus = NULL,
+  .keep = "unused"
 )
 }
 \arguments{
@@ -17,11 +18,12 @@ use_abundance(
 
 \item{individualCount}{The number of individuals present}
 
-\item{organismQuantity}{A number or enumeration value for the quantity}
+\item{organismQuantity}{A number or enumeration value for the quantity of
+organisms. Used together with \code{organismQuantityType} to provide context.}
 
 \item{organismQuantityType}{The type of quantification system used for \code{organismQuantity}}
 
-\item{occurrenceStatus}{whether the taxon in question is \code{present} or \code{absent}}
+\item{occurrenceStatus}{Whether the taxon in question is \code{present} or \code{absent}}
 }
 \value{
 A tibble with the requested fields (see details).
@@ -34,5 +36,11 @@ As these approaches use different DwC terms, this function assists in
 specifying abundances in a flexible way.
 }
 \details{
-This needs some clever behaviour
+Examples of \code{organismQuantity} & \code{organismQuantityType} values:
+\itemize{
+\item 27 (\code{organismQuantity}) individuals (\code{organismQuantityType})
+\item 12.5 (\code{organismQuantity}) \% biomass (\code{organismQuantityType})
+\item r (\code{organismQuantity}) Braun-Blanquet Scale (\code{organismQuantityType})
+\item many (\code{organismQuantity}) individuals (\code{organismQuantityType})
+}
 }

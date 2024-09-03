@@ -1,11 +1,14 @@
 #' Check for Darwin Core field conformance
 #' 
-#' Function to check whether a data.frame or tibble conforms to DwC standards
-#' NOTE: Option to use `bdc` for checks, and/or `pointblank` for running them
+#' Function to check whether a `data.frame` or `tibble` conforms to Darwin 
+#' Core standards. While most users will only want to call `check_dwc()`,
+#' the underlying check functions are exported for detailed work, or for 
+#' debugging.
 #' @param df A tibble against which checks should be run
 #' @importFrom rlang inform
 #' @importFrom cli cli_bullets
-#' @param df a tibble containing data
+#' @returns Invisibly returns the input, but primarily called for the 
+#' side-effect of running check functions on that input.
 #' @order 1
 #' @export
 check_dwc <- function(.df){
@@ -24,6 +27,8 @@ check_dwc <- function(.df){
   lapply(check_functions, 
          function(x){do.call(x, args = list(.df = .df))}) |>
     invisible()
+  
+  invisible(.df)
 }
 
 #' Check for non DwC fields
@@ -312,7 +317,7 @@ fn_to_term_table <- function() {
     "use_taxonomy", "vernacularName"
   )
   
-  table <- lst(main, optional) # named list
+  table <- list(main, optional) # named list
   
   return(table) 
 }

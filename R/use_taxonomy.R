@@ -103,7 +103,6 @@ use_taxonomy <- function(
 
 #' Check kingdom field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -120,10 +119,10 @@ check_kingdom <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check phylum field is valid
-#' 
-#' TODO: Currently only checks whether input is a string
+#'
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -140,10 +139,10 @@ check_phylum <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check class field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -160,10 +159,10 @@ check_class <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check order field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -180,10 +179,10 @@ check_order <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check family field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -200,10 +199,10 @@ check_family <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check genus field is valid
-#' 
-#' TODO: Currently only checks whether input is a string
+#'
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -220,10 +219,10 @@ check_genus <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check species field is valid
-#' 
-#' TODO: Currently only checks whether input is a string
+#'
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -240,10 +239,10 @@ check_species <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check specificEpithet field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -262,10 +261,10 @@ check_specificEpithet <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check vernacularName field is valid
-#' 
-#' TODO: Currently only checks whether input is a string
+#'
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -282,4 +281,4 @@ check_vernacularName <- function(.df,
   }
   .df
 }
-
+# TODO: Currently only checks whether input is a string

@@ -94,7 +94,6 @@ use_scientific_name <- function(
 
 #' Check scientificName field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -111,10 +110,10 @@ check_scientificName <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check scientificNameRank field is valid
 #' 
-#' TODO: Currently only checks whether input is a string
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -132,6 +131,7 @@ check_scientificNameRank <- function(.df,
   }
   .df
 }
+# TODO: Currently only checks whether input is a string
 
 #' Check scientificNameAuthorship field is valid
 #' 

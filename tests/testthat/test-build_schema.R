@@ -13,7 +13,6 @@ test_that("build_schema() creates a valid xml in `/data`", {
   tibble(basisOfRecord = "humanObservation", individualCount = 1) |>
     write.csv(file = glue("{testdir}/data/occurrences.csv"),
               row.names = FALSE)
-  browser()
   # run function
   build_schema(directory = testdir)
   # find file
