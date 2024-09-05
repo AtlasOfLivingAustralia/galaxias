@@ -59,12 +59,13 @@ wait <- function(seconds = 1) {
 }
 
 #' Theatrics
+#' @importFrom cli make_spinner
 #' @noRd
 #' @keywords Internal
 dwc_spinny_message <- function(which) {
   
   # define the spinner
-  spinny <- cli::make_spinner(
+  spinny <- make_spinner(
     which = "dots2",
     template = "{spin} Checking DwC fields."
   )
@@ -86,9 +87,11 @@ dwc_spinny_message <- function(which) {
 #' @importFrom dplyr group_by
 #' @importFrom dplyr filter
 #' @importFrom glue glue
+#' @importFrom cli cli_alert
 #' @importFrom cli cli_alert_success
 #' @importFrom cli cli_alert_warning
 #' @importFrom cli cli_alert_danger
+#' @importFrom cli cat_line
 #' @importFrom cli cli_text
 #' @importFrom cli cli_bullets
 #' @importFrom cli ansi_collapse
@@ -100,8 +103,12 @@ dwc_spinny_message <- function(which) {
 #' @importFrom cli col_blue
 #' @importFrom cli col_red
 #' @importFrom cli col_green
+#' @importFrom cli col_grey
 #' @importFrom cli symbol
-#' @importFrom cli cat_line
+#' @importFrom cli cli_h1
+#' @importFrom cli cli_h2
+#' @importFrom cli cli_h3
+#' @importFrom cli style_italic
 #' @importFrom tidyr replace_na
 #' @importFrom tidyr unnest
 #' @importFrom stringr str_pad
@@ -135,7 +142,7 @@ check_contains_terms <- function(.df,
   # create message components
   result_message <- "Matched {length(matched_values)} of {length(user_column_names)} column name{?s} to DwC terms:"
   matches_message <- c("v" = "Matched: {.field {matched_string}}")
-  unmatch_message <- c("x" = "Unmatched: {cli::col_red({unmatched_string})}")
+  unmatch_message <- c("x" = "Unmatched: {col_red({unmatched_string})}")
   
   all_cols_match <- rlang::is_empty(unmatched_values)
   
@@ -143,14 +150,14 @@ check_contains_terms <- function(.df,
   all_terms_message <- function(matches_message, 
                                 unmatch_message, 
                                 all_cols_match) {
-    cli::cli_h2("All DwC terms")
-    cli::cat_line(cli::cli_text(result_message))
-    cli::cli_bullets(matches_message)
-    cli::cli_bullets(unmatch_message)
-    cli::cli_par()
+    cli_h2("All DwC terms")
+    cat_line(cli_text(result_message))
+    cli_bullets(matches_message)
+    cli_bullets(unmatch_message)
+    cli_par()
     if(isTRUE(all_cols_match)) {
       # celebrate
-      cli::cat_line(paste0("\n", add_emoji(), " ", cli::col_green("All column names matched DwC terms!"), "\n"))
+      cat_line(paste0("\n", add_emoji(), " ", col_green("All column names matched DwC terms!"), "\n"))
     }
   }
   
@@ -168,16 +175,16 @@ check_contains_terms <- function(.df,
   # build message
   req_terms_message <- function(table, 
                                 all_found) {
-    cli::cat_line(table)
+    cat_line(table)
     if(isTRUE(all_found)) {
       # celebrate
-      cli::cat_line(paste0("\n", add_emoji(), " ", cli::col_green("All minimum requirements met!"), "\n"))
+      cat_line(paste0("\n", add_emoji(), " ", col_green("All minimum requirements met!"), "\n"))
     }
   }
   
   
   ## Suggested workflow
-  
+  # browser()
   # Function matching for suggested workflow
   main_functions <- fn_to_term_table()$main
   other_functions <- fn_to_term_table()$optional
@@ -188,20 +195,14 @@ check_contains_terms <- function(.df,
     pull(use_function)
   
   optional_functions <- other_functions |>
-    dplyr::filter(!dwc_term %in% matched_values) |>
+    dplyr::filter(dwc_term %in% matched_values) |>
     dplyr::distinct(use_function) |>
     pull(use_function)
   
   # if POINT sf class, suggest `use_coordinates_sf()`
   if(isTRUE(is_sf)) {
-    if(any(stringr::str_detect(suggested_functions, "use_coordinates()"))) { # this might need fixing since `use_sf()` only handles coordinates
-      # replace
-      suggested_functions <- suggested_functions |>
-        stringr::str_replace_all("use_coordinates", "use_sf")
-    } else {
       # add
-      suggested_functions <- c(suggested_functions, "use_sf()")
-    }
+      suggested_functions <- c("use_sf()", suggested_functions)
   }
   
   # add pipe when there are multiple suggested functions
@@ -217,11 +218,10 @@ check_contains_terms <- function(.df,
                                         sep = ", ",
                                         last = ", ",
                                         trunc = 3)
-    optional_functions_message <- cli_text(
-      cli::col_grey("Additional functions: {optional_functions_string}")
-      ) |> cli_fmt()
+    optional_functions_message <- paste0(
+      "{optional_functions_string}") |> cli_text() |> cli_fmt()
   } else {
-    optional_functions_message <- ""
+    optional_functions_message <- NA
   }
   
   workflow_is_empty <- rlang::is_empty(suggested_functions_piped)
@@ -229,24 +229,36 @@ check_contains_terms <- function(.df,
   # build message
   suggest_message <- function(workflow_is_empty,
                               suggested_functions_piped, 
-                              optional_functions_message, 
+                              # optional_functions_message, 
                               .envir = parent.frame()) {
     if(!any(workflow_is_empty)) {
-      cli::cat_line(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:", "\n"))
-      cli::cli_text("df |>")
-      cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-      lapply(suggested_functions_piped, cli::cli_alert, .envir = .envir)
-      cli::cli_end()
-      cli::cat_line(paste0("\n", optional_functions_message, "\n"))
+      cat_line(style_italic(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:", "\n")))
+      cli_text("df |>")
+      cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(suggested_functions_piped, cli_alert, .envir = .envir)
+      cat_line()
+      cli_end()
+
     } else {
-      cli::cat_line(paste0("\n", add_emoji(), " ", cli::col_green("Your dataframe is Darwin Core compliant!"), "\n"))
-      cli::cat_line(paste0("Use your dataframe to build a Darwin Core Archive:\n"))
-      cli::cli_text("df |>")
-      cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-      lapply(paste0("build_dwca()"), cli::cli_alert, .envir = .envir)
-      cli::cat_line()
-      cli::cli_end()
+      cat_line(paste0("\n", add_emoji(), " ", col_green("Your dataframe is Darwin Core compliant!"), "\n"))
+      cat_line(paste0("Run checks, or use your dataframe to build a Darwin Core Archive:\n"))
+      cli_text("df |>")
+      cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(paste0("check_dataset()"), cli_alert, .envir = .envir)
+      cat_line()
+      cli_end()
+      # cat_line(col_gray("See all `use_` functions at {.url https://galaxias.ala.org.au/functions}"))
     }
+  }
+  
+  additional_message <- function(optional_functions_message,
+                                  .envir = parent.frame()) {
+    # cat_line()
+    if(!is.na(optional_functions_message)) {
+      cli_text(paste0("Based on your matched terms, you can also add to your pipe: ", "\n"))
+      cli_bullets(c("*" = optional_functions_message))
+    }
+    cli_text(col_grey("See all `use_` functions at {.url https://galaxias.ala.org.au/functions}"))
   }
   
   
@@ -255,22 +267,25 @@ check_contains_terms <- function(.df,
   full_alert <- function() {
     
     # DwC terms
-    cli::cli_div()
-    cli::cli_h1("Darwin Core terms")
+    cli_div()
+    cli_h1("Darwin Core terms")
     all_terms_message(matches_message, 
                       unmatch_message, 
                       all_cols_match)
     
-    cli::cli_h2("Minimum required DwC terms")
+    cli_h2("Minimum required DwC terms")
     req_terms_message(req_terms_table, 
                       all_req_terms_found)
-    cli::cli_end()
+    cli_end()
     
     # Suggested workflow
-    cli::cli_h1("Suggested workflow")
+    cli_h1("Suggested workflow")
     suggest_message(workflow_is_empty, 
                     suggested_functions_piped, 
                     optional_functions_message)
+    
+    cli_h3(col_grey("Additional functions"))
+    additional_message(optional_functions_message)
   }
   
   # withr::with_options(
@@ -340,7 +355,7 @@ fn_to_term_table <- function() {
     "use_observer", "recordedByID",
   )
   
-  table <- tibble::lst(main, optional) # named list
+  table <- lst(main, optional) # named list
   
   return(table) 
 }
@@ -352,6 +367,8 @@ fn_to_term_table <- function() {
 #' @importFrom tidyr unnest
 #' @importFrom dplyr case_when
 #' @importFrom tidyr replace_na 
+#' @importFrom cli ansi_align
+#' @importFrom cli ansi_nchar
 #' @noRd
 #' @keywords Internal
 build_req_terms_table <- function(req_terms) {
@@ -362,7 +379,7 @@ build_req_terms_table <- function(req_terms) {
     tidyr::unnest(cols = c(missing)) |>
     dplyr::group_by(term_group) |>
     mutate( # glue names
-      missing = cli::ansi_collapse(missing, sep = ", ", last = ", ")
+      missing = ansi_collapse(missing, sep = ", ", last = ", ")
     ) |>
     unique()
   
@@ -371,7 +388,7 @@ build_req_terms_table <- function(req_terms) {
     tidyr::unnest(cols = c(matched)) |>
     dplyr::group_by(term_group) |>
     mutate( # glue names
-      matched = cli::ansi_collapse(matched, sep = ", ", last = ", ")
+      matched = ansi_collapse(matched, sep = ", ", last = ", ")
     ) |>
     unique()
   
@@ -404,25 +421,25 @@ build_req_terms_table <- function(req_terms) {
   
   headers <- paste0(
     "  ",
-    cli::ansi_align(cli::col_blue("Type"), max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
-    cli::ansi_align(cli::col_blue("Matched term(s)"), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
-    cli::ansi_align(cli::col_blue("Missing term(s)"), max(cli::ansi_nchar(c(pass_missing, fail_missing)))),"\n",
+    ansi_align(col_blue("Type"), max(ansi_nchar(c(pass_group, fail_group)))), " ",
+    ansi_align(col_blue("Matched term(s)"), max(ansi_nchar(c(pass_matched, fail_matched)))), " ",
+    ansi_align(col_blue("Missing term(s)"), max(ansi_nchar(c(pass_missing, fail_missing)))),"\n",
     collapse = "\n"
   )
   
   bullets_found <- paste0(paste0(
-    cli::col_green(cli::symbol$tick), " ", 
-    cli::ansi_align(pass_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
-    cli::ansi_align(cli::col_green(pass_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
-    cli::ansi_align(cli::col_red(pass_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
+    col_green(symbol$tick), " ", 
+    ansi_align(pass_group, max(ansi_nchar(c(pass_group, fail_group)))), " ",
+    ansi_align(col_green(pass_matched), max(ansi_nchar(c(pass_matched, fail_matched)))), " ",
+    ansi_align(col_red(pass_missing), max(ansi_nchar(c(pass_missing, fail_missing)))), " ",
     collapse = "\n"
   ), "\n")
   
   bullets_missing <- paste0(paste0(
-    cli::col_red(cli::symbol$cross), " ",
-    cli::ansi_align(fail_group, max(cli::ansi_nchar(c(pass_group, fail_group)))), " ",
-    cli::ansi_align(cli::col_green(fail_matched), max(cli::ansi_nchar(c(pass_matched, fail_matched)))), " ",
-    cli::ansi_align(cli::col_red(fail_missing), max(cli::ansi_nchar(c(pass_missing, fail_missing)))), " ",
+    col_red(symbol$cross), " ",
+    ansi_align(fail_group, max(ansi_nchar(c(pass_group, fail_group)))), " ",
+    ansi_align(col_green(fail_matched), max(ansi_nchar(c(pass_matched, fail_matched)))), " ",
+    ansi_align(col_red(fail_missing), max(ansi_nchar(c(pass_missing, fail_missing)))), " ",
     collapse = "\n"
   ), "\n")
   
