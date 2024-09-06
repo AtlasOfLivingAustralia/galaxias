@@ -25,7 +25,7 @@ use_abundance <- function(.df,
                           individualCount = NULL,
                           organismQuantity = NULL,
                           organismQuantityType = NULL,
-                          occurrenceStatus = NULL,
+                          # occurrenceStatus = NULL,
                           .keep = "unused"
                           ){
   if(missing(.df)){
@@ -36,7 +36,7 @@ use_abundance <- function(.df,
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
-  fn_quos <- enquos(individualCount, occurrenceStatus, organismQuantity, organismQuantityType)
+  fn_quos <- enquos(individualCount, organismQuantity, organismQuantityType)
   names(fn_quos) <- fn_args
   
   # find arguments that are NULL but exist already in `df`
@@ -82,6 +82,7 @@ use_abundance <- function(.df,
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
+#' @importFrom cli cli_abort
 #' @order 4
 #' @export
 check_individualCount <- function(.df, 
@@ -92,11 +93,43 @@ check_individualCount <- function(.df,
     .df |>
       select("individualCount") |>
       check_is_numeric(level = level)
+    
+    if(any(.df$individualCount == 0)) {
+      
+      # check for occurrenceStatus column
+      if("occurrenceStatus" %in% colnames(.df)) {
+        
+        # make sure 0s are tagged as absences in occurrenceStatus
+        absences <- .df |> 
+          select(individualCount, occurrenceStatus) |>
+          filter(individualCount == 0) |>
+          mutate(match = individualCount == 0 & occurrenceStatus == "absent")
+        
+        if(any(absences$match == FALSE)) {
+          n_unmatched = absences |> filter(match == FALSE) |> nrow()
+          bullets <- c(
+            "{.field individualCount} values do not match {.field occurrenceStatus}.",
+            x = "Found {n_unmatched} row{?s} where individualCount = 0 but occurrenceStatus = \"present\"."
+          ) |> cli_bullets() |> cli_fmt()
+          cli_abort(bullets)
+        }
+      } else {
+        
+        # enforce that occurrenceStatus must be included
+        bullets <- c(
+          "{.field individualCount} of 0 detected but not marked as absence.",
+          i = "Must use {.field occurrenceStatus} to mark counts of 0 as \"absent\".",
+          i = "Use {.code use_occurrences(occurrenceStatus = ifelse(individualCount == 0, \"absent\", \"present\"))}." 
+        ) |> cli_bullets() |> cli_fmt()
+        cli_abort(bullets)
+      }
+      }
   }
+  
   .df
 }
 
-#' Check individualCount field is valid
+#' Check organismQuantity field is valid
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -109,16 +142,16 @@ check_organismQuantity <- function(.df,
   if(any(colnames(.df) == "organismQuantity")){
     if (!any(colnames(.df) == "organismQuantityType")) {
       bullets <- cli_bullets(c(
-        "Missing {.field organismQuantityType} in data frame.",
+        "Missing {.field organismQuantityType} in dataframe.",
         i = "Include {.field organismQuantityType} to give context to quantity. See {.code ?use_abundance}."
       )) |> cli_fmt()
-      cli_warn(bullets)
+      cli_abort(bullets)
     }
   }
   .df
 }
 
-#' Check individualCount field is valid
+#' Check organismQuantityType field is valid
 #' @rdname check_dwc
 #' @param level what action should the function take for non-conformance? 
 #' Defaults to `"inform"`.
@@ -135,10 +168,10 @@ check_organismQuantityType <- function(.df,
     
     if (!any(colnames(.df) == "organismQuantity")) {
       bullets <- cli_bullets(c(
-        "Missing {.field organismQuantity} in data frame.",
+        "Missing {.field organismQuantity} in dataframe.",
         i = "Include {.field organismQuantity} to give a quantity to measurement type. See {.code ?use_abundance}."
       )) |> cli_fmt()
-      cli_warn(bullets)
+      cli_abort(bullets)
     }
   }
   .df
