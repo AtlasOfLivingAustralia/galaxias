@@ -117,3 +117,31 @@ test_that("use_occurrences only accepts valid values for basisOfRecord", {
     )
 })
 
+test_that("use_datetime checks occurrenceStatus format", {
+  quiet_use_occurrences <- purrr::quietly(use_occurrences)
+  valid_values <- c("present", "absent")
+  df <- tibble(occurrenceStatus = valid_values)
+  df_wrong_class <- tibble(occurrenceStatus = c(1, 2))
+  df_wrong_name <- tibble(occurrenceStatus = c(valid_values, "blop"))
+  
+  result <- df |>
+    quiet_use_occurrences(occurrenceStatus = occurrenceStatus)
+  
+  expect_s3_class(result$result, c("tbl_df", "tbl", "data.frame"))
+  expect_equal(colnames(result$result), c("occurrenceStatus"))
+  expect_type(result$result$occurrenceStatus, "character")
+  
+  expect_error(
+    suppressMessages(
+      df_wrong_class |> use_occurrences(occurrenceStatus = occurrenceStatus)
+    ),
+    "occurrenceStatus must be a character vector, not numeric"
+  )
+  
+  expect_error(
+    suppressMessages(
+      df_wrong_name |> use_occurrences(occurrenceStatus = occurrenceStatus)
+    ),
+    "Unexpected value in occurrenceStatus"
+  )
+})

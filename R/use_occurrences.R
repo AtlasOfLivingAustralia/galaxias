@@ -41,6 +41,7 @@ use_occurrences <- function(
     .df,
     occurrenceID = NULL,
     basisOfRecord = NULL,
+    occurrenceStatus = NULL,
     # recordNumber = NULL, # keep?
     .keep = "unused",
     .messages = TRUE
@@ -53,7 +54,7 @@ use_occurrences <- function(
   
   # capture arguments as a list of quosures
   # NOTE: enquos() must be listed alphabetically
-  fn_quos <- enquos(basisOfRecord, occurrenceID)
+  fn_quos <- enquos(basisOfRecord, occurrenceID, occurrenceStatus)
   names(fn_quos) <- fn_args
   
   # find arguments that are NULL but exist already in `df`
@@ -107,6 +108,7 @@ use_occurrences <- function(
   # run column checks
   check_basisOfRecord(result, level = "abort")
   check_occurrenceID(result, level = "abort")
+  check_occurrenceStatus(result, level = "abort")
   
   return(result)
 }
@@ -231,4 +233,25 @@ check_occurrenceID <- function(.df,
       select("occurrenceID") |>
       check_unique(level = level)
   }
+}
+
+#' Check occurrenceStatus field is valid
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 4
+#' @export
+check_occurrenceStatus <- function(.df, 
+                                level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "occurrenceStatus")){
+    .df |>
+      select("occurrenceStatus") |>
+      check_is_string(level = level) |>
+      check_contains_values(values = c("present", "absent"), 
+                            level = level)
+  }
+  
+  .df
 }
