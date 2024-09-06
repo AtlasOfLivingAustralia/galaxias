@@ -214,7 +214,7 @@ check_contains_terms <- function(.df,
   
   # add list of optional functions
   if(length(optional_functions) >= 1) {
-    optional_functions_string <- ansi_collapse(glue("`{optional_functions}()`"),
+    optional_functions_string <- ansi_collapse(glue("`{optional_functions}`"),
                                         sep = ", ",
                                         last = ", ",
                                         trunc = 3)
@@ -236,7 +236,6 @@ check_contains_terms <- function(.df,
       cli_text("df |>")
       cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
       lapply(suggested_functions_piped, cli_alert, .envir = .envir)
-      cat_line()
       cli_end()
 
     } else {
@@ -245,9 +244,7 @@ check_contains_terms <- function(.df,
       cli_text("df |>")
       cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
       lapply(paste0("check_dataset()"), cli_alert, .envir = .envir)
-      cat_line()
       cli_end()
-      # cat_line(col_gray("See all `use_` functions at {.url https://galaxias.ala.org.au/functions}"))
     }
   }
   
@@ -258,7 +255,7 @@ check_contains_terms <- function(.df,
       cli_text(paste0("Based on your matched terms, you can also add to your pipe: ", "\n"))
       cli_bullets(c("*" = optional_functions_message))
     }
-    cli_text(col_grey("See all `use_` functions at {.url https://galaxias.ala.org.au/functions}"))
+    cli_bullets(c("i" = col_grey("See all `use_` functions at {.url https://galaxias.ala.org.au/reference/index.html#add-darin-core-terms}")))
   }
   
   
@@ -302,9 +299,8 @@ check_contains_terms <- function(.df,
 #' @noRd
 #' @keywords Internal
 fn_to_term_table <- function() {
-
   main <- tibble::tribble(
-    ~"use_function",      ~"dwc_term",
+    ~"use_function", ~"dwc_term",
     "use_occurrences()", "basisOfRecord",
     "use_occurrences()", "occurrenceID",
     "use_scientific_name()", "scientificName",
@@ -314,50 +310,49 @@ fn_to_term_table <- function() {
     "use_coordinates()", "coordinateUncertaintyInMeters",
     "use_datetime()", "eventDate"
   )
-  
+
   optional <- tibble::tribble(
     ~"use_function", ~"dwc_term",
-    "use_locality", "continent", 
-    "use_locality", "country",
-    "use_locality", "countryCode",
-    "use_locality", "stateProvince",
-    "use_locality", "locality",
-    "use_taxonomy", "kingdom",
-    "use_taxonomy", "phylum",
-    "use_taxonomy", "class",
-    "use_taxonomy", "order",
-    "use_taxonomy", "family",
-    "use_taxonomy", "genus",
-    "use_taxonomy", "species",
-    "use_taxonomy", "specificEpithet",
-    "use_taxonomy", "vernacularName",
-    "use_abundance", "individualCount",
-    "use_abundance", "organismQuantity",
-    "use_abundance", "organismQuantityType",
-    "use_abundance", "organismQuantity",
-    "use_collection", "datasetID",
-    "use_collection", "datasetName",
-    "use_collection", "catalogNumber",
-    "use_coordinates", "coordinatePrecision",
-    "use_scientific_name", "scientificNameRank",
-    "use_scientific_name", "scientificNameAuthorship",
-    "use_datetime", "year",
-    "use_datetime", "month",
-    "use_datetime", "day",
-    "use_datetime", "eventTime",
-    "use_individual_traits", "individualID",
-    "use_individual_traits", "lifeStage",
-    "use_individual_traits", "sex",
-    "use_individual_traits", "vitality",
-    "use_individual_traits", "reproductiveCondition",
-    "use_individual_traits", "recordedBy",
-    "use_observer", "recordedByID",
-    "use_observer", "recordedByID",
+    "use_locality()", "continent",
+    "use_locality()", "country",
+    "use_locality()", "countryCode",
+    "use_locality()", "stateProvince",
+    "use_locality()", "locality",
+    "use_taxonomy()", "kingdom",
+    "use_taxonomy()", "phylum",
+    "use_taxonomy()", "class",
+    "use_taxonomy()", "order",
+    "use_taxonomy()", "family",
+    "use_taxonomy()", "genus",
+    "use_taxonomy()", "species",
+    "use_taxonomy()", "specificEpithet",
+    "use_taxonomy()", "vernacularName",
+    "use_abundance()", "individualCount",
+    "use_abundance()", "organismQuantity",
+    "use_abundance()", "organismQuantityType",
+    "use_abundance()", "organismQuantity",
+    "use_collection()", "datasetID",
+    "use_collection()", "datasetName",
+    "use_collection()", "catalogNumber",
+    "use_coordinates()", "coordinatePrecision",
+    "use_scientific_name()", "scientificNameRank",
+    "use_scientific_name()", "scientificNameAuthorship",
+    "use_datetime()", "year",
+    "use_datetime()", "month",
+    "use_datetime()", "day",
+    "use_datetime()", "eventTime",
+    "use_individual_traits()", "individualID",
+    "use_individual_traits()", "lifeStage",
+    "use_individual_traits()", "sex",
+    "use_individual_traits()", "vitality",
+    "use_individual_traits()", "reproductiveCondition",
+    "use_observer()", "recordedBy",
+    "use_observer()", "recordedByID",
   )
-  
+
   table <- lst(main, optional) # named list
-  
-  return(table) 
+
+  return(table)
 }
 
 
