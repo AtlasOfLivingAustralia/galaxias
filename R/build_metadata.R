@@ -4,6 +4,10 @@
 #' and how it may used (i.e. its' licence). This function simply converts
 #' metadata stored in a markdown file to xml, and stores it in the `data` 
 #' folder.
+#' 
+#' In practice, this is a fairly shallow wrapper on top of functionality build
+#' in the `elm` package; you can use that package to gain greater control 
+#' should you wish.
 #' @param file path to a metadata statement stored in markdown format (.md).
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the `data` directory.

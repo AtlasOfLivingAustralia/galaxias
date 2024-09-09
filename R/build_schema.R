@@ -4,10 +4,6 @@
 #' This function is intended to be primarily internal, and is called by 
 #' `build_dwca()`, but is provided for debugging purposes. It works on csv files
 #' in a specified directory.
-#' 
-#' NOTE: this code should be updated to use `{elm}` for building `xml`; if that
-#' works, can remove `{xml2}` dependency.
-#' 
 #' @param project a directory containing Darwin Core data, preferably built
 #' with `use_bd_project()`.
 #' @returns Does not return an object to the workspace; called for the side

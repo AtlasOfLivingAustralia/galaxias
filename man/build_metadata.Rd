@@ -19,3 +19,8 @@ and how it may used (i.e. its' licence). This function simply converts
 metadata stored in a markdown file to xml, and stores it in the \code{data}
 folder.
 }
+\details{
+In practice, this is a fairly shallow wrapper on top of functionality build
+in the \code{elm} package; you can use that package to gain greater control
+should you wish.
+}

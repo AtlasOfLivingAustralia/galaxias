@@ -20,7 +20,3 @@ This function is intended to be primarily internal, and is called by
 \code{build_dwca()}, but is provided for debugging purposes. It works on csv files
 in a specified directory.
 }
-\details{
-NOTE: this code should be updated to use \code{{elm}} for building \code{xml}; if that
-works, can remove \code{{xml2}} dependency.
-}
