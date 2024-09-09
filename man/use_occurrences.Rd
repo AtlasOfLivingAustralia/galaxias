@@ -8,6 +8,7 @@ use_occurrences(
   .df,
   occurrenceID = NULL,
   basisOfRecord = NULL,
+  occurrenceStatus = NULL,
   .keep = "unused",
   .messages = TRUE
 )

@@ -1,7 +1,7 @@
 #' Check for Darwin Core field conformance
 #' 
 #' Function to check whether a `data.frame` or `tibble` conforms to Darwin 
-#' Core standards. While most users will only want to call `check_dwc()`,
+#' Core standards. While most users will only want to call `suggest_workflow()`,
 #' the underlying check functions are exported for detailed work, or for 
 #' debugging.
 #' @param df A tibble against which checks should be run
@@ -32,7 +32,6 @@ suggest_workflow <- function(.df){
 }
 
 #' Check for non DwC fields
-#' NOTE: should probably swap to check_contains() for this.
 #' @importFrom glue glue
 #' @importFrom glue glue_collapse
 #' @importFrom rlang warn
@@ -50,6 +49,7 @@ check_fields <- function(.df,
                          level = level)
   .df
 }
+# NOTE: should probably swap to check_contains() for this.
 
 #' Wait time
 #' @noRd

@@ -10,7 +10,6 @@
 #' @param organismQuantity A number or enumeration value for the quantity of 
 #' organisms. Used together with `organismQuantityType` to provide context.
 #' @param organismQuantityType The type of quantification system used for `organismQuantity`
-#' @param occurrenceStatus Whether the taxon in question is `present` or `absent`
 #' @returns A tibble with the requested fields (see details).
 #' @details
 #' Examples of `organismQuantity` & `organismQuantityType` values:
@@ -25,7 +24,6 @@ use_abundance <- function(.df,
                           individualCount = NULL,
                           organismQuantity = NULL,
                           organismQuantityType = NULL,
-                          # occurrenceStatus = NULL,
                           .keep = "unused"
                           ){
   if(missing(.df)){

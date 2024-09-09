@@ -9,7 +9,6 @@ use_abundance(
   individualCount = NULL,
   organismQuantity = NULL,
   organismQuantityType = NULL,
-  occurrenceStatus = NULL,
   .keep = "unused"
 )
 }
@@ -22,8 +21,6 @@ use_abundance(
 organisms. Used together with \code{organismQuantityType} to provide context.}
 
 \item{organismQuantityType}{The type of quantification system used for \code{organismQuantity}}
-
-\item{occurrenceStatus}{Whether the taxon in question is \code{present} or \code{absent}}
 }
 \value{
 A tibble with the requested fields (see details).

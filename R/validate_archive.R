@@ -1,37 +1,27 @@
 #' Validate a Darwin Core Archive via API
 #' 
-#' @param path path to a nominated Biodiversity Data Package
-#' @param file optionally specify a pre-built DwCA instead of a directory
-#' @param provider (string) the institution to be queried for validation 
+#' @param path Path to a nominated archive.
+#' @param file Optionally specify a pre-built DwCA instead of a directory.
+#' @param provider (string) The institution to be queried for validation 
 #' services. Currently only `"GBIF"` is supported.
 #' @returns A report on the supplied archive.
 #' @export
-validate_dwca <- function(pkg = ".", 
-                          file = NULL,
-                          provider = "GBIF"
-                          ){
-  galaxias_API(pkg = pkg, 
-               file = file, 
-               api = "validate",
-               provider = provider)
-}
-
-#' Internal function to construct a valid DwCA for shipping with API
-#' @noRd
-#' @keywords Internal
-galaxias_API <- function(pkg = ".", 
-                         file = NULL, 
-                         api){
+validate_archive <- function(pkg = ".", 
+                             file = NULL, 
+                             provider = "GBIF"){
   # checking
   if(is.null(pkg) & is.null(file)){
     abort("One of `pkg` or `file` must be supplied")
   }
-  if(!is.null(pkg)){
+  
+  if(is.null(file) & !is.null(pkg)){
     tempfile <- tempdir()
     build_dwca(pkg, path = tempfile)
     file <- glue("{tempfile}/{pkg}.zip")
   }
-  post_API(file = file, api = api)
+  post_API(file = file, 
+           api = "validate",
+           provider = "GBIF")
 }
 
 #' Internal function to post content to the specified `validate` API
