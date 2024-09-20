@@ -19,10 +19,10 @@
 #'    be constructed manually, or using `use_bd_metadata()` to create a markdown
 #'    file followed by `build_metadata()` to save it in xml.
 #'  * A 'schema' document, also stored in xml, called `meta.xml`. This is 
-#'    usually constructed automatically using `build_schema()`.
+#'    usually constructed using `build_schema()`.
 #'
 #' You will get an error if these files are not present. The resulting file
-#' shares the name of the wprking directory (with a .zip file extension),
+#' shares the name of the working directory (with a .zip file extension),
 #' and is placed in the parent directory
 #' @param directory A directory containing the files to be published. Defaults
 #' to the `data` folder within the current working directory.
@@ -54,8 +54,8 @@ build_archive <- function(directory = "data") {
 find_data <- function(directory,
                       call = caller_env()){
   if(!file.exists(directory)){
-    bullets <- c(glue("`{directory}` directory is required, but missing"),
-                 i = "use `usethis::use_data()` to add data to your package")
+    bullets <- c(glue("`{directory}` directory is required, but missing."),
+                 i = "use `usethis::use_data()` to add data to your project.")
     abort(bullets,
           call = call)
   }

@@ -35,10 +35,10 @@ altered to use Darwin Core terms as column headers. The functions
 be constructed manually, or using \code{use_bd_metadata()} to create a markdown
 file followed by \code{build_metadata()} to save it in xml.
 \item A 'schema' document, also stored in xml, called \code{meta.xml}. This is
-usually constructed automatically using \code{build_schema()}.
+usually constructed using \code{build_schema()}.
 }
 
 You will get an error if these files are not present. The resulting file
-shares the name of the wprking directory (with a .zip file extension),
+shares the name of the working directory (with a .zip file extension),
 and is placed in the parent directory
 }

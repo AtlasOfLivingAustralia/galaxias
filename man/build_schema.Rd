@@ -4,11 +4,10 @@
 \alias{build_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-build_schema(directory = ".")
+build_schema(directory = "data")
 }
 \arguments{
-\item{project}{a directory containing Darwin Core data, preferably built
-with \code{use_bd_project()}.}
+\item{directory}{A folder containing Darwin Core data. Defaults to \code{data}.}
 }
 \value{
 Does not return an object to the workspace; called for the side
@@ -16,7 +15,7 @@ effect of building a file named \code{meta.xml} in the specified directory.
 }
 \description{
 A schema is an xml document that maps the files and field names in a DwCA.
-This function is intended to be primarily internal, and is called by
-\code{build_dwca()}, but is provided for debugging purposes. It works on csv files
-in a specified directory.
+It works by detecting column names on csv files in a specified directory;
+these should all be Darwin Core terms for this function to produce reliable
+results.
 }

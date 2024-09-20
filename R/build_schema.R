@@ -1,23 +1,29 @@
 #' Create a `schema` for a Darwin Core Archive
 #' 
 #' A schema is an xml document that maps the files and field names in a DwCA.
-#' This function is intended to be primarily internal, and is called by 
-#' `build_dwca()`, but is provided for debugging purposes. It works on csv files
-#' in a specified directory.
-#' @param project a directory containing Darwin Core data, preferably built
-#' with `use_bd_project()`.
+#' It works by detecting column names on csv files in a specified directory;
+#' these should all be Darwin Core terms for this function to produce reliable
+#' results.
+#' @param directory A folder containing Darwin Core data. Defaults to `data`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom elm write_md_xml
+#' @importFrom elm write_elm
+#' @importFrom glue glue
 #' @export
-build_schema <- function(directory = ".") {
+build_schema <- function(directory = "data") {
+  # check if specified `directory` is present
+  if(!file.exists(directory)){
+    bullets <- c(glue("`{directory}` directory is required, but missing."),
+                 i = "use `usethis::use_data()` to add data to your project.")
+    abort(bullets,
+          call = call)
+  }
   
-  schema_tibble <- detect_dwc_files(directory) |>
+  directory |>
+    detect_dwc_files() |>
     detect_dwc_fields() |>
-    add_front_matter()
-
-  write_md_xml(schema_tibble, 
-               file = glue("{directory}/data/meta.xml")) 
+    add_front_matter() |>
+    write_elm(file = glue("{directory}/meta.xml"))
 }
 
 #' Internal function to create core/extension framework for files
@@ -33,13 +39,23 @@ detect_dwc_files <- function(directory){
   supported_files <- available_exts |>
     pull("file")
   available_exts$present <- supported_files |>
-    map(\(x) {glue("{directory}/data/{x}") |> file.exists()}) |> 
+    map(\(x) {glue("{directory}/{x}") |> file.exists()}) |> 
     unlist()
+  # check whether there are no csvs, and if so, abort
+  if(all(!available_exts$present)){
+    file_names <- glue_collapse(available_exts$file,
+                                sep = ", ",
+                                last = " or ")
+    bullets <- c(
+      glue("Specified directory (\"{directory}\") does not contain any dwc-compliant csv files."),
+      i = glue("Accepted names are {file_names}"))
+    abort(bullets)
+  }
   available_exts |>
     filter(present == TRUE) |>
     mutate(label = c("core", rep("extension", length(which(present == TRUE)) - 1)),
            level = 2,
-           directory = glue("{directory}/data")) |>
+           directory = glue("{directory}")) |>
     select("type", "directory", "file", "level", "label", "attributes")
 }
 
