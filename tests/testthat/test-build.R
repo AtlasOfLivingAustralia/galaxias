@@ -15,20 +15,17 @@ test_that("build_ functions work correctly in sequence", {
   tibble(basisOfRecord = "humanObservation", individualCount = 1) |>
     write.csv(file = "data/occurrences.csv",
               row.names = FALSE)
-  
   expect_error(build_archive()) # no schema or metadata
   
   ## TEST 1: `build_schema()`
   # run function
   build_schema()
-  # find file
-  "data/meta.xml" |>
-    file.exists() |>
-    expect_true()
-  # scan() then use grepl() to detect specific strings
-  # NOTE: there is currently a bug here: no `text` or `attributes` are being 
-  # saved to `meta.xml`
-  expect_error(build_archive()) # no metadata
+  expect_true(file.exists("data/meta.xml"))
+  result <- readLines("data/meta.xml")
+  expect_equal(length(result), 15) # correct number of entries
+  expect_true(all(grepl("^\\s*<", result))) # all open with `<`
+  # NOTE: still has problems with attributes containing `amp` instead of `&`
+  expect_error(build_archive()) # no metadata yet
   
   ## TEST 2: `build_metadata()`
   build_metadata("bionet_metadata.md")
@@ -41,7 +38,7 @@ test_that("build_ functions work correctly in sequence", {
     expect_true()
   
   ## TEST 3: `build_archive()`
-  build_dwca()
+  build_archive()
   setwd(original_directory)
   archive <- glue("{testdir}.zip")
   archive |>
@@ -49,7 +46,7 @@ test_that("build_ functions work correctly in sequence", {
     expect_true()
   
   contents <- utils::unzip(archive, list = TRUE)
-  expect_equal(nrow(contents), 3)
+  expect_equal(nrow(contents), 4)
   (c("eml.xml",
     "events.csv", 
     "meta.xml", 
@@ -58,6 +55,7 @@ test_that("build_ functions work correctly in sequence", {
     expect_true()
 
   # end
-  unlink(testdir, recursive = TRUE)
-  unlink(glue("{testdir}.zip"), recursive = TRUE)
+  unlink(glue("{testdir}/data"), recursive = TRUE)
+  unlink("testdata.zip", recursive = TRUE)
+  setwd(original_directory)
 })

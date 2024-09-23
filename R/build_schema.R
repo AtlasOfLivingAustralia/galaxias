@@ -18,7 +18,6 @@ build_schema <- function(directory = "data") {
     abort(bullets,
           call = call)
   }
-  
   directory |>
     detect_dwc_files() |>
     detect_dwc_fields() |>
@@ -115,7 +114,7 @@ detect_dwc_fields <- function(df){
 #' @keywords Internal
 create_schema_row <- function(x){
   x |> 
-    mutate(text = "") |>
+    mutate(text = NA) |>
     select("level", "label", "text", "attributes")
 }
 
@@ -127,7 +126,7 @@ create_file_row <- function(x){
   tibble(
     level = c(3, 4),
     label = c("files", "location"),
-    text = c("", x$file),
+    text = c(NA, x$file),
     attributes = list(NA))
 }
 
@@ -136,9 +135,9 @@ create_file_row <- function(x){
 #' @keywords Internal
 create_id_row <- function(){
   tibble(
-    level = 4,
+    level = 3,
     label = "id",
-    text = "",
+    text = NA,
     attributes = list(list(index = "0")))
 }
 
@@ -157,9 +156,9 @@ create_field_rows <- function(x){
   term_list <- as.list(glue("http://rs.tdwg.org/dwc/terms/{field_names}"))
   names(term_list) <- rep("term", n_fields)
   # combine
-  tibble(level = 4,
+  tibble(level = 3,
          label = "field",
-         text = "",
+         text = NA,
          attributes = map(seq_len(n_fields), 
                           \(x){c(index_list[x], term_list[x])}))
 }
@@ -182,7 +181,7 @@ add_front_matter <- function(df){
   front_row <- tibble(
     level = 1,
     label = "archive",
-    text = "",
+    text = NA,
     attributes = list(
       list(xmlns = "http://rs.tdwg.org/dwc/text/",
            metadata = "eml.xml")
