@@ -1,16 +1,11 @@
 # NOTE: This code is useful, but not yet well-integrated with the rest of the
-# package. To be truly useful it should probably be called within `check_dwc()`
-# or similar.
-
-# Note also that, because `read_md()` now returns a tibble, this could be 
-# made somewhat more readable.
+# package. It is scheduled for deletion.
 
 #' Check that a supplied metadata statement is valid according to GBIF schema
 #' 
 #' Note: this function requires the user to be online.
 #' @param metadata xml object representing metadata
 #' @return A tibble showing parsed errors
-#' @importFrom xml2 read_xml
 #' @noRd
 #' @keywords Internal
 check_metadata <- function(metadata) {

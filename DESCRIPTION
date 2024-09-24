@@ -25,6 +25,7 @@ Imports:
   glue,
   httr2,
   lubridate,
+  potions,
   purrr,
   readr,
   rlang,
@@ -35,10 +36,10 @@ Imports:
   usethis,
   uuid,
   withr,
-  xml2,
   zip
 Suggests:
   testthat (>= 3.0.0)
+  xml2
 License: GNU
 Encoding: UTF-8
 LazyData: true
