@@ -12,9 +12,9 @@ switch_check <- function(level = "inform",
                          bullets = "", 
                          call = caller_env()){
   switch(level, 
-         "inform" = cli_inform(bullets, call = call),
-         "warn" = cli_warn(bullets, call = call),
-         "abort" = cli_abort(bullets, call = call))
+         "inform" = cli_inform(bullets, call = call, class = c("galax_message")),
+         "warn" = cli_warn(bullets, call = call, class = c("galax_warning")),
+         "abort" = cli_abort(bullets, call = call, class = c("galax_error")))
 }
 
 #' Internal function used to catch errors in low-level `check_` functions
@@ -50,9 +50,11 @@ check_data_frame <- function(.df,
 #' @keywords Internal
 col_progress_bar <- function(cols) {
   
+  cols_formatted <- cli::cli_vec(cols, style = list("vec-trunc" = 4)) # uncertain this works
+  
   cli::cli_progress_step(
     paste0(
-      "Checking {length(cols)} column{?s}: {.field {cols}}"
+      "Checking {length(cols)} column{?s}: {.field {cols_formatted}}"
       ), 
     spinner = TRUE
     )
@@ -79,7 +81,7 @@ col_progress_bar <- function(cols) {
 #' @keywords Internal
 check_contains_values <- function(.df, 
                                  values, 
-                                 level = "inform",
+                                 level = "abort",
                                  .accepted_message = TRUE,
                                  call = caller_env()
 ){
@@ -145,7 +147,7 @@ check_contains_values <- function(.df,
 #' @noRd
 #' @keywords Internal
 check_is_numeric <- function(.df, 
-                             level = "inform",
+                             level = "abort",
                              call = caller_env()
 ){
   check_data_frame(.df)
@@ -309,7 +311,9 @@ check_is_date_time <- function(x,
       )) |>
         cli::cli_fmt()
       
-      cli::cli_abort(bullets, call = call)
+      switch_check(level,
+                   bullets,
+                   call = call)
     }
   }
   
@@ -355,7 +359,9 @@ check_is_time <- function(.df,
             cli::cli_bullets() |>
             cli::cli_fmt()
 
-          cli::cli_abort(bullets, call = call)
+          switch_check(level,
+                       bullets,
+                       call = call)
         }
       }
     } else {
@@ -366,7 +372,9 @@ check_is_time <- function(.df,
         cli::cli_bullets() |>
         cli::cli_fmt()
 
-      cli::cli_abort(bullets, call = call)
+      switch_check(level,
+                   bullets,
+                   call = call)
     }
   }
   # NOTE: This class isn't retained in final df for some reason

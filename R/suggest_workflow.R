@@ -1,10 +1,10 @@
-#' Check for Darwin Core field conformance
+#' Suggest workflow to make data compliant with Darwin Core
 #' 
 #' Function to check whether a `data.frame` or `tibble` conforms to Darwin 
 #' Core standards. While most users will only want to call `suggest_workflow()`,
 #' the underlying check functions are exported for detailed work, or for 
 #' debugging.
-#' @param df A tibble against which checks should be run
+#' @param .df A tibble against which checks should be run
 #' @importFrom rlang inform
 #' @importFrom cli cli_bullets
 #' @returns Invisibly returns the input, but primarily called for the 
@@ -19,8 +19,7 @@ suggest_workflow <- function(.df){
                         "decimalLatitude",
                         "decimalLongitude")
   checkable_fields <- fields[fields %in% available_checks]
-  check_functions <- c("check_fields",
-                       glue("check_{checkable_fields}"))
+  check_functions <- c("check_fields")
   dwc_spinny_message()
   
   # run each function on df
@@ -41,11 +40,11 @@ suggest_workflow <- function(.df){
 check_fields <- function(.df, 
                          level = c("inform", "warn", "abort")){
   level <- match.arg(level)
-  has_sf_class <- inherits(.df, "sf")
+  is_sf <- inherits(.df, "sf")
   
   result <- tibble(dwc_terms = colnames(.df)) |>
-    check_contains_terms(y = dwc_terms,
-                         is_sf = has_sf_class,
+    check_contains_terms(dwc_terms = dwc_terms,
+                         is_sf = is_sf,
                          level = level)
   .df
 }
@@ -82,7 +81,7 @@ dwc_spinny_message <- function(which) {
 
 #' Match DwC terms to column names
 #' @param .df vector of values
-#' @param y vector against which x should be compared
+#' @param dwc_terms vector of valid Darwin Core terms against which .df should be compared
 #' @importFrom dplyr pull
 #' @importFrom dplyr group_by
 #' @importFrom dplyr filter
@@ -116,7 +115,7 @@ dwc_spinny_message <- function(which) {
 #' @noRd
 #' @keywords Internal
 check_contains_terms <- function(.df, 
-                                 y, 
+                                 dwc_terms, 
                                  is_sf,
                                  level = "inform",
                                  call = caller_env()
@@ -127,7 +126,7 @@ check_contains_terms <- function(.df,
     pull(field_name) |>
     unique() |>
     sort()
-  name_lookup <- user_column_names %in% y$term
+  name_lookup <- user_column_names %in% dwc_terms$term
   
   ### All terms
   
@@ -183,8 +182,8 @@ check_contains_terms <- function(.df,
   }
   
   
-  ## Suggested workflow
-  # browser()
+  ## Suggested workflow & Additional functions
+  
   # Function matching for suggested workflow
   main_functions <- fn_to_term_table()$main
   other_functions <- fn_to_term_table()$optional
@@ -198,66 +197,6 @@ check_contains_terms <- function(.df,
     dplyr::filter(dwc_term %in% matched_values) |>
     dplyr::distinct(use_function) |>
     pull(use_function)
-  
-  # if POINT sf class, suggest `use_coordinates_sf()`
-  if(isTRUE(is_sf)) {
-      # add
-      suggested_functions <- c("use_sf()", suggested_functions)
-  }
-  
-  # add pipe when there are multiple suggested functions
-  if(length(suggested_functions) > 1) {
-    suggested_functions_piped <- c(paste0(head(suggested_functions, -1), " |> "), tail(suggested_functions, 1))
-  } else {
-      suggested_functions_piped <- suggested_functions
-  }
-  
-  # add list of optional functions
-  if(length(optional_functions) >= 1) {
-    optional_functions_string <- ansi_collapse(glue("`{optional_functions}`"),
-                                        sep = ", ",
-                                        last = ", ",
-                                        trunc = 3)
-    optional_functions_message <- paste0(
-      "{optional_functions_string}") |> cli_text() |> cli_fmt()
-  } else {
-    optional_functions_message <- NA
-  }
-  
-  workflow_is_empty <- rlang::is_empty(suggested_functions_piped)
-  
-  # build message
-  suggest_message <- function(workflow_is_empty,
-                              suggested_functions_piped, 
-                              # optional_functions_message, 
-                              .envir = parent.frame()) {
-    if(!any(workflow_is_empty)) {
-      cat_line(style_italic(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:", "\n")))
-      cli_text("df |>")
-      cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-      lapply(suggested_functions_piped, cli_alert, .envir = .envir)
-      cli_end()
-
-    } else {
-      cat_line(paste0("\n", add_emoji(), " ", col_green("Your dataframe is Darwin Core compliant!"), "\n"))
-      cat_line(paste0("Run checks, or use your dataframe to build a Darwin Core Archive:\n"))
-      cli_text("df |>")
-      cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-      lapply(paste0("check_dataset()"), cli_alert, .envir = .envir)
-      cli_end()
-    }
-  }
-  
-  additional_message <- function(optional_functions_message,
-                                  .envir = parent.frame()) {
-    # cat_line()
-    if(!is.na(optional_functions_message)) {
-      cli_text(paste0("Based on your matched terms, you can also add to your pipe: ", "\n"))
-      cli_bullets(c("*" = optional_functions_message))
-    }
-    cli_bullets(c("i" = col_grey("See all `use_` functions at {.url https://galaxias.ala.org.au/reference/index.html#add-darin-core-terms}")))
-  }
-  
   
   
   ### Build final message
@@ -277,12 +216,11 @@ check_contains_terms <- function(.df,
     
     # Suggested workflow
     cli_h1("Suggested workflow")
-    suggest_message(workflow_is_empty, 
-                    suggested_functions_piped, 
-                    optional_functions_message)
+    suggest_message(suggested_functions, 
+                    is_sf)
     
     cli_h3(col_grey("Additional functions"))
-    additional_message(optional_functions_message)
+    additional_message(optional_functions)
   }
   
   # withr::with_options(
@@ -294,6 +232,73 @@ check_contains_terms <- function(.df,
   
   .df
 }
+
+#' build suggested workflow message
+#' @noRd
+#' @keywords Internal
+suggest_message <- function(suggested_functions,
+                            is_sf,
+                            .envir = parent.frame()) {
+  
+  # if POINT sf class, suggest `use_coordinates_sf()`
+  if(isTRUE(is_sf)) {
+    # add
+    suggested_functions <- c("use_sf()", suggested_functions)
+  }
+  
+  # add pipe when there are multiple suggested functions
+  if(length(suggested_functions) > 1) {
+    suggested_functions_piped <- c(paste0(head(suggested_functions, -1), " |> "), tail(suggested_functions, 1))
+  } else {
+    suggested_functions_piped <- suggested_functions
+  }
+  
+  # test whether user doesn't need any additional functions
+  workflow_is_empty <- rlang::is_empty(suggested_functions_piped)
+  
+    if(!any(workflow_is_empty)) {
+      cat_line(style_italic(paste0("\n", "To make your data Darwin Core compliant, use the following workflow:", "\n")))
+      cli_text("df |>")
+      cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(suggested_functions_piped, cli_alert, .envir = .envir)
+      cli_end()
+      
+    } else {
+      cat_line(paste0("\n", add_emoji(), " ", col_green("Your dataframe is Darwin Core compliant!"), "\n"))
+      cat_line(paste0("Run checks, or use your dataframe to build a Darwin Core Archive:\n"))
+      cli_text("df |>")
+      cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+      lapply(paste0("check_dataset()"), cli_alert, .envir = .envir)
+      cli_end()
+    }
+}
+
+
+#' build additional functions message
+#' @noRd
+#' @keywords Internal
+additional_message <- function(optional_functions,
+                               .envir = parent.frame()) {
+  
+  # add list of optional functions
+  if(length(optional_functions) >= 1) {
+    optional_functions_string <- ansi_collapse(glue("`{optional_functions}`"),
+                                               sep = ", ",
+                                               last = ", ",
+                                               trunc = 3)
+    optional_functions_message <- paste0(
+      "{optional_functions_string}") |> cli_text() |> cli_fmt()
+  } else {
+    optional_functions_message <- NA
+  }
+  
+  if(!is.na(optional_functions_message)) {
+    cli_text(paste0("Based on your matched terms, you can also add to your pipe: ", "\n"))
+    cli_bullets(c("*" = optional_functions_message))
+  }
+  cli_bullets(c("i" = col_grey("See all `use_` functions at {.url https://galaxias.ala.org.au/reference/index.html#add-darin-core-terms}")))
+}
+
 
 #' Build message about minimum required terms
 #' @noRd
