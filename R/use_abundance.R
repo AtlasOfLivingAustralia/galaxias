@@ -109,7 +109,9 @@ check_individualCount <- function(.df,
             "{.field individualCount} values do not match {.field occurrenceStatus}.",
             x = "Found {n_unmatched} row{?s} where individualCount = 0 but occurrenceStatus = \"present\"."
           ) |> cli_bullets() |> cli_fmt()
-          cli_abort(bullets)
+          switch_check(level,
+                       bullets,
+                       call = caller_env())
         }
       } else {
         
@@ -119,7 +121,9 @@ check_individualCount <- function(.df,
           i = "Must use {.field occurrenceStatus} to mark counts of 0 as \"absent\".",
           i = "Use {.code use_occurrences(occurrenceStatus = ifelse(individualCount == 0, \"absent\", \"present\"))}." 
         ) |> cli_bullets() |> cli_fmt()
-        cli_abort(bullets)
+        switch_check(level,
+                     bullets,
+                     call = caller_env())
       }
       }
   }
@@ -143,7 +147,9 @@ check_organismQuantity <- function(.df,
         "Missing {.field organismQuantityType} in dataframe.",
         i = "Include {.field organismQuantityType} to give context to quantity. See {.code ?use_abundance}."
       )) |> cli_fmt()
-      cli_abort(bullets)
+      switch_check(level,
+                   bullets,
+                   call = call)
     }
   }
   .df
@@ -169,7 +175,9 @@ check_organismQuantityType <- function(.df,
         "Missing {.field organismQuantity} in dataframe.",
         i = "Include {.field organismQuantity} to give a quantity to measurement type. See {.code ?use_abundance}."
       )) |> cli_fmt()
-      cli_abort(bullets)
+      switch_check(level,
+                   bullets,
+                   call = call)
     }
   }
   .df
