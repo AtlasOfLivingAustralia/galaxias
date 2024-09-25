@@ -2,16 +2,30 @@
 % Please edit documentation in R/check_metadata.R
 \name{check_metadata}
 \alias{check_metadata}
-\title{Check that a supplied metadata statement is valid according to GBIF schema}
+\title{Check validity of a metadata statement}
 \usage{
-check_metadata(metadata)
+check_metadata(filename)
 }
 \arguments{
-\item{metadata}{xml object representing metadata}
+\item{filename}{A local file containing metadata in xml format. This will
+typically be called \code{eml.xml} and can be constructed from markdown using
+\code{build_metadata()}.}
 }
 \value{
-A tibble showing parsed errors
+Invisibly returns a tibble showing parsed errors; or an empty
+tibble if no errors are identified.
 }
 \description{
-Note: this function requires the user to be online.
+In the Darwin Core standard, metadata statements are mandatory and must be
+provided in Ecological Meta Language (EML) in a file called \code{eml.xml}. This
+function applies a series of checks designed by GBIF to check the structure
+of the specified \code{filename} for consistency with the standard. Note,
+however, that this function doesn't check the \emph{content} of those files,
+meaning a file could be structurally sound and still be lacking critical
+information.
+}
+\details{
+This function uses local versions of \code{dc.xsd}, \code{eml-gbif-profile.xsd} and
+\code{eml.xsd} downloaded from
+\link{http://rs.gbif.org/schema/eml-gbif-profile/1.3/} on 2024-09-25.
 }
