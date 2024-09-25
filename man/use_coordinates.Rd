@@ -5,7 +5,7 @@
 \title{Add spatial fields to a \code{tibble}}
 \usage{
 use_coordinates(
-  df,
+  .df,
   decimalLatitude = NULL,
   decimalLongitude = NULL,
   geodeticDatum = NULL,
@@ -15,42 +15,46 @@ use_coordinates(
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
+\item{decimalLatitude}{The latitude in decimal degrees}
 
-\item{decimalLatitude}{the latitude in decimal degrees}
+\item{decimalLongitude}{The longitude in decimal degrees}
 
-\item{decimalLongitude}{the longitude in decimal degrees}
+\item{geodeticDatum}{The datum or spatial reference system that coordinates
+are recorded against (usually "WGS84" or "EPSG:4326"). This is often known
+as the Coordinate Reference System (CRS). If your coordinates are from a GPS
+system, your data are already using WGS84.}
 
-\item{geodeticDatum}{the datum that coordinates are recorded against}
+\item{coordinateUncertaintyInMeters}{(numeric) Radius of the smallest circle
+that contains the whole location, given any possible measurement error.
+\code{coordinateUncertaintyInMeters} will typically be around \code{30} (metres) if
+recorded with a GPS after 2000, or \code{100} before that year.}
 
-\item{coordinateUncertaintyInMeters}{(numeric) radius of the smallest circle
-that contains the whole location, given any possible measurement error.}
-
-\item{coordinatePrecision}{(numeric) the precision that \code{decimalLatitude} and
-\code{decimalLongitude} are supplied to.}
+\item{coordinatePrecision}{(numeric) The precision that \code{decimalLatitude} and
+\code{decimalLongitude} are supplied to. \code{coordinatePrecision} should be no less
+than 0.00001 if data were collected using GPS.}
 
 \item{.keep}{Control which columns from .data are retained in the output.
 Note that unlike \code{dplyr::mutate}, which defaults to \code{"all"} this defaults to
 \code{"unused"}; i.e. only keeps Darwin Core fields, and not those fields used to
 generate them.}
+
+\item{df}{a \code{data.frame} or \code{tibble} that the column should be appended to.}
 }
 \value{
 A tibble with the requested fields added.
 }
 \description{
-This function helps format standard location fields to a \code{tibble}. In
+This function helps format standard location fields to a \code{tibble}.
+}
+\details{
+In
 practice this is no different from using \code{mutate()}, but gives some
 informative errors, and serves as a useful lookup for how spatial fields are
 represented in the Darwin Core Standard.
-}
-\details{
+
 Example values are:
 \itemize{
 \item \code{geodeticDatum} should be a valid EPSG code
-\item \code{coordinatePrecision} should be no less than 0.00001 if data were collected
-using GPS
-\item \code{coordinateUncertaintyInMeters} will typically be around \code{30} (metres) if
-recorded with a GPS after 2000, or \code{100} before that year.
 }
 }
 \seealso{

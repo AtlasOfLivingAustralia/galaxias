@@ -6,106 +6,81 @@
 \alias{galaxias-package}
 \title{Build repositories to share biodiversity data}
 \description{
-\code{galaxias} provides tools to build repositories optimized to store, document,
-and share biodiversity information.
+\code{{galaxias}} is a \code{{usethis}} extension for building 'Darwin Core Archives'; a
+global data standard to store, document, and share biodiversity information.
+The package provides tools build data projects, manipulate data to
+conform with the standard, and check validity against established norms.
 
-Once the repository is built and populated with biodiversity data, \code{galaxias}
-also provides tools to assess compatibility of the data with the
-'Darwin Core' standard, convert the package into a valid
-'Darwin Core Archive', and publish that archive to a data infrastructure
-(though currently only the Atlas of Living Australia is formally supported).
-
-\code{galaxias} is named for a genus of freshwater fish.
+The package is named for a genus of freshwater fish.
 }
 \section{Functions}{
 
 \strong{Building your project}
 
-There are two functions that you can use to create your workspace:
-\itemize{
-\item \code{\link[=create_bd_project]{create_bd_project()}} to create an RStudio project (recommended)
-\item \code{\link[=create_bd_package]{create_bd_package()}} to create an R package (advanced)
-}
-
+The default method to start your project is to call \code{\link[=create_bd_project]{create_bd_project()}}.
 Alternatively, you can call the following functions to add specific content
 to an existing directory:
 \itemize{
-\item \code{\link[=use_bd_citation]{use_bd_citation()}} to give advice on citing your repository
 \item \code{\link[=use_bd_data]{use_bd_data()}} to create the requisite 'processed' data files
 \item \code{\link[=use_bd_data_raw]{use_bd_data_raw()}} build \code{data-raw} folder, with example code
 \item \code{\link[=use_bd_description]{use_bd_description()}} add a \code{DESCIRPTION} file
 \item \code{\link[=use_bd_metadata]{use_bd_metadata()}} to create a metadata statement in the home directory
-\item \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a \code{README.Rmd} file with advice for biodiversity data
-\item \code{\link[=use_bd_schema]{use_bd_schema()}} to create a schema based on objects in the \code{data} folder
-\item \code{\link[=use_bd_testthat]{use_bd_testthat()}} add tests for conformance with Darwin Core standards
-\item \code{\link[=use_bd_vignette]{use_bd_vignette()}} add a vignette that summarizes data in your repository
+\item \code{\link[=use_bd_readme_md]{use_bd_readme_md()}}, \code{\link[=use_bd_readme_rmd]{use_bd_readme_rmd()}} Add a \code{README.Rmd} file with advice for biodiversity data
 }
 
-Note the syntax here is based on\code{ usethis}.
+\strong{Add Darwin Core Terms}
 
-\strong{Report on DwC compliance within \code{dplyr} pipes}
-
-These functions assist with populating specific Darwin Core fields.
+The following functions add single DwC fields, or collections of related
+fields, to an existing \code{tibble}.
 \itemize{
-\item \code{\link[=use_dwc]{use_dwc()}} to give real-time feedback on modifications to your data
-\item \code{\link[=mutate.dwc_df]{mutate.dwc_df()}}
-\item \code{\link[=rename.dwc_df]{rename.dwc_df()}}
-\item \code{\link[=rename_with.dwc_df]{rename_with.dwc_df()}}
-\item \code{\link[=select.dwc_df]{select.dwc_df()}}
-}
-
-. These functions are masked from \code{dplyr}.
-
-\strong{Add specific Darwin Core Terms}
-
-The following micro-functions add single DwC fields, or collections of
-related fields. They are all powered by \code{mutate()} under the hood, and run
-checks as if running \code{use_dwc() |> mutate()} (albeit with
-\code{level = "abort"}); but are included here as a primer for those new to
-Darwin Core who may want some guidance.
-\itemize{
-\item \code{\link[=use_occurrenceID]{use_occurrenceID()}}
-\item \code{\link[=use_basisOfRecord]{use_basisOfRecord()}}
 \item \code{\link[=use_coordinates]{use_coordinates()}} for spatial data
-\item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
 \item \code{\link[=use_eventDate]{use_eventDate()}} for temporal data
+\item \code{\link[=use_locality]{use_locality()}} for spatial descriptions
 }
 
-Related:
+Proposed:
 \itemize{
-\item \code{\link[=dwc_fields]{dwc_fields()}} NOT IMPLEMENTED YET, but would be useful e.g. \code{df |> select(any_of(dwc_fields()))}
+\item \code{\link[=use_occurrences]{use_occurrences()}} basic information on observations (occurrenceID, basisOfrecord, recordID (?))
+\item \code{\link[=use_events]{use_events()}} basic information on observation events (eventID, parentEventID)
+\item \code{\link[=use_scientificName]{use_scientificName()}} record the highest level of taxonomic specificity in the dataset (scientificName, scientificNameRank, scientificNameAuthorship)
+\item \code{\link[=use_taxonomy]{use_taxonomy()}} to specify higher taxonomic columns (kingdom, phylum, class, order, family, genus, species, specificEpithet, vernacularName)
+\item \code{\link[=use_abundance]{use_abundance()}} to state how many animals were seen during the observation (individualCount, organismQuantity, organismQuantityType, occurrenceStatus)
 }
 
-\strong{Checking data for DwC compliance}
+Possible functions for added functionality:
+\itemize{
+\item \code{\link[=use_darwin_core]{use_darwin_core()}} to subset to only fields with DwC names (i.e. same as \code{df |> select(any_of(dwc_fields()))})
+\item \code{\link[=use_individuals]{use_individuals()}} attributes of individuals measured (individualID, lifeStage, sex, vitality, reproductiveCondition)
+\item \code{\link[=use_observer]{use_observer()}} to specify who made the observation (recordedByID, recordedBy)
+\item \code{\link[=use_collection]{use_collection()}} to give museum- or collection- specific information (datasetID, datasetName, catalogNumber)
+\item \code{\link[=use_measurement]{use_measurement()}} for 'Measurement or Fact' data (optional rn)
+\item \code{\link[=use_media]{use_media()}} good idea, but unclear how users would supply said media; should be urls, but to where?
+}
 
-The wrapper function for checking tibbles for Darwin Core complicance is
+\strong{Checking data for Darwin Core compliance}
+
+The wrapper function for checking tibbles for Darwin Core compliance is
 \code{\link[=check_dwc]{check_dwc()}}. It calls the following microfunctions:
 \itemize{
-\item \code{\link[=check_dwc]{check_dwc()}} to run all applicable \code{check_} functions
-\item \code{\link[=check_fields]{check_fields()}} Checks whether non-DwC fields are present
+\item \code{\link[=check_fields]{check_fields()}} Checks whether non-DwC fields are presen
 \item \code{\link[=check_occurrenceID]{check_occurrenceID()}}
 \item \code{\link[=check_basisOfRecord]{check_basisOfRecord()}}
+\item \code{\link[=check_continent]{check_continent()}}
+\item \code{\link[=check_country]{check_country()}}
 \item \code{\link[=check_countryCode]{check_countryCode()}}
 \item \code{\link[=check_decimalLatitude]{check_decimalLatitude()}}
 \item \code{\link[=check_decimalLongitude]{check_decimalLongitude()}}
 }
 
 Note that there are more \code{check_} functions than \code{use_} functions, because
-we expect that users will call e.g. \code{decimalLatitude} via \code{mutate()} or
-\code{rename()} rather than create it from scratch.
+some \code{use_} functions affect multiple fields.
 
-\strong{Checking and publication}
+\strong{DwCA functions}
 \itemize{
-\item \code{\link[=build_dwca]{build_dwca()}} convert a Biodiversity Data package to a Darwin Core Archive (DwCA)
-\item \code{\link[=check_dwca]{check_dwca()}} Function to check whole repository for conformance with DwC (NOT FUNCTIONAL)
-\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API (NOT FUNCTIONAL)
-\item \code{\link[=publish_dwca]{publish_dwca()}} send your data to the ALA for publication (NOT FUNCTIONAL)
-}
-
-\strong{Internal Functions}
-\itemize{
-\item \code{\link[=read_md]{read_md()}} read a markdown file into R as xml
-\item \code{\link[=write_md]{write_md()}} convert an xml document in the workspace to a markdown file
+\item \code{\link[=build_schema]{build_schema()}} Identify DwC csvs in a directory and build a schema file (\code{meta.xml})
+\item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (\code{eml.xml})
+\item \code{\link[=build_dwca]{build_dwca()}} Convert a Biodiversity Data directory to a Darwin Core Archive (DwCA)
+\item \code{\link[=validate_dwca]{validate_dwca()}} check your archive via the ALA validate API
 }
 }
 

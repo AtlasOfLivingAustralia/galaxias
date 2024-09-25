@@ -4,7 +4,7 @@
 \alias{use_bd_readme}
 \alias{use_bd_readme_md}
 \alias{use_bd_readme_rmd}
-\title{Add \code{README} to a biodiversity data repository}
+\title{Add \code{README} to a biodiversity data project}
 \usage{
 use_bd_readme_md()
 
@@ -12,9 +12,5 @@ use_bd_readme_rmd()
 }
 \description{
 This function adds \code{galaxias}-specific \code{README} instead of the \code{usethis}
-default. Note that the two functions deliver quite different content.
-\code{README.md} is intended as a metadata statement, for \emph{projects} (i.e. same
-as \code{use_bd_metadata()} for packages, but in a different location).
-\code{README.Rmd} is for describing \emph{packages} and does not have a metadata-like
-flavour.
+default.
 }

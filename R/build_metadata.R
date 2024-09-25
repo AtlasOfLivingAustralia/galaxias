@@ -1,45 +1,42 @@
-#' Internal function to build a metadata statement
+#' Create a metadata statement for a Darwin Core Archive
 #' 
-#' Uses DESCRIPTION. Called by `use_bd_metadata()`.
-#' @importFrom devtools as.package
-#' @importFrom usethis use_template
-#' @noRd
-#' @keywords Internal
-build_metadata <- function(){
-  desc_list <- as.package(".")
-  authors <- desc_list$`authors@r` |>
-    parse(text = _) |>
-    eval()
-  use_template(template = "pkg-metadata",
-               save_as = "inst/metadata.md",
-               data = list("Title" = desc_list$title,
-                           "Description" = desc_list$description,
-                           "Licence" = desc_list$licence,
-                           "Creator" = get_creator(desc_list)
-                           # would be cool to extract CITATION here too
-                           ),
-               package = "galaxias")
-}
-
-#' Internal function to paste Creator from DESCRIPTION
+#' A metadata statement lists the owner of the dataset, how it was collected,
+#' and how it may used (i.e. its' licence). This function simply converts
+#' metadata stored in a markdown file to xml, and stores it in the folder 
+#' specified using the `directory` argument.
 #' 
-#' FIXME: This function isn't generating anything rn
-#' @noRd
-#' @keywords Internal
-get_creator <- function(x){
-  if(is.null(x$`authors@r`)){
-    ""
-  }else{
-    authors <- x$`authors@r` |>
-      parse(text = _) |>
-      eval()   
-    result <- lapply(authors, function(a){
-      if("cre" %in% a$role){
-        paste(a$given, a$family, sep = " ")
-      }else{
-        NULL
-      }
-    })
-    unlist(result)
+#' This function is a fairly shallow wrapper on top of functionality build
+#' in the `elm` package, particularly `read_elm()` and `write_elm()`. You can 
+#' use that package to gain greater control, or to debug problems, should you 
+#' wish.
+#' @param file Path to a metadata statement stored in markdown format (.md).
+#' @param directory A folder to place the resulting file. Defaults to `data`.
+#' @returns Does not return an object to the workspace; called for the side
+#' effect of building a file named `meta.xml` in the `data` directory.
+#' @importFrom elm add_elm_header
+#' @importFrom elm read_elm
+#' @importFrom elm write_elm
+#' @export
+build_metadata <- function(file, 
+                           directory = "data") {
+  
+  # check file is present
+  if(missing(file)){
+    abort("`file` is missing, with no default.")
   }
+  if(!file.exists(file)){
+    abort("`file` doesn't exist in specified location.")
+  }
+  # check if specified `directory` is present
+  if(!file.exists(directory)){
+    bullets <- c(glue("`{directory}` directory is required, but missing."),
+                 i = "use `usethis::use_data()` to add data to your project.")
+    abort(bullets,
+          call = call)
+  }
+  
+  # import file, ensure EML metadata is added, convert to XML
+  read_elm(file) |>
+    add_elm_header() |>
+    write_elm(file = glue("data/eml.xml"))
 }

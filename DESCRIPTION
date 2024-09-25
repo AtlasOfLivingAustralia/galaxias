@@ -17,22 +17,24 @@ Authors@R:
              role = c("aut")))
 Description: Simple tools for converting data into DwC format.
 Depends: 
-  R (>= 4.1.0)
+  R (>= 4.3.0)
 Imports:
   cli,
-  devtools,
   dplyr,
-  fs,
+  elm,
   glue,
   httr2,
-  pkgload,
+  lubridate,
+  potions,
+  purrr,
   readr,
   rlang,
-  snakecase,
+  rstudioapi,
+  sf,
   stringr,
-  tibble,
-  tidyselect,
+  tidyr,
   usethis,
+  uuid,
   withr,
   xml2,
   zip

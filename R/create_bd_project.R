@@ -26,6 +26,7 @@ create_bd_project <- function(path,
   local_project(path, force = TRUE)
   unlink("R", recursive = TRUE)
   use_bd_readme_md()
+  use_bd_metadata()
   use_bd_data_raw()
   use_directory("data")
   if (open) {

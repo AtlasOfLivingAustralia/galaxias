@@ -1,33 +1,38 @@
-#' Add `CITATION` file to a biodiversity data repository
-#' @importFrom pkgload pkg_name
-#' @importFrom usethis use_directory
-#' @importFrom usethis use_template
-#' @export
-use_bd_citation <- function(){
-  use_directory("inst")
-  use_template(template = "CITATION",
-               save_as = "inst/CITATION",
-               data = list("Project" = pkg_name()),
-               package = "galaxias")
-}
-
-#' Add `data` folder to a biodiversity data repository
+#' Add `data` folder to a biodiversity data project
 #' 
-#' This function is largely synonymous with `usethis::use_data()`, but is 
-#' included here for completeness, and to enforce some defaults that affect 
-#' where and how data is stored.
-#' @param ... Unquoted names of existing objects to save.
+#' This function places specified objects in the `data` folder as `.csv` files.
+#' Note that this is very different from `usethis::use_data()` which uses `.rda`
+#' format (and then only when `internal = FALSE`). This is provided for 
+#' consistency with `usethis`, but a more flexible approach is simply to use
+#' `readr::write_csv()`.
+#' @param ... Unquoted names of an object to save.
 #' @param overwrite (logical) Should existing objects be overwritten? Defaults
 #' to FALSE.
-#' @importFrom usethis use_data
+#' @importFrom glue glue
+#' @importFrom readr write_csv
+#' @importFrom rlang as_label
+#' @importFrom rlang enquos
 #' @export
 use_bd_data <- function(..., overwrite = FALSE){
-  use_data(..., 
-           internal = FALSE,
-           overwrite = overwrite)
+  use_directory("data")
+  dots <- enquos(...)[[1]]
+  path <- glue("data/{as_label(dots)}.csv")
+  if(file.exists(path)){
+    if(overwrite){
+      inform(glue("overwriting existing file: {path}"))
+      write_csv(x = eval_tidy(dots), file = path)
+    }else{
+      bullets <- c(glue("file already exists at {path}"),
+                   i = "to replace, set `overwrite = TRUE`")
+      inform(bullets)
+    }
+  }else{
+    inform(glue("saving to {path}"))
+    write_csv(x = eval_tidy(dots), file = path)  
+  }
 }
 
-#' Add `data-raw` folder to a biodiversity data repository
+#' Add `data-raw` folder to a biodiversity data project
 #' 
 #' Add a script to `data-raw` with example code of how to rename/select/relocate 
 #' fields.
@@ -39,16 +44,13 @@ use_bd_data_raw <- function(){
   use_template(template = "data_manipulation_script.R",
                save_as = "data-raw/data_manipulation_script.R",
                package = "galaxias")
-  # update DESCRIPTION
-  ## use_package("galaxias", type = "Suggests")
-  # Unclear if this is needed
 }
 
-#' Add `DESCRIPTION` to a biodiversity data repository
+#' Add `DESCRIPTION` to a biodiversity data project
 #' 
-#' In a biodiversity data repository, the DESCRIPTION file is used to add 
-#' authorship and licencing information, which is then used by `build_dwca()` 
-#' to create a metadata statement (in conjunction with README.Rmd)
+#' In a biodiversity data project, it is possible to use a DESCRIPTION file to 
+#' add authorship and licencing information. This can be useful, for example,
+#' if you require the data and repository to have different licences.
 #' @importFrom usethis use_description
 #' @export
 use_bd_description <- function(){
@@ -58,25 +60,23 @@ use_bd_description <- function(){
     "Licence" = "`use_ccby_licence()` (recommended), `use_cc0_licence()` or friends to pick a licence appropriate for a data package"))
 }
 
-#' Add a metadata statement to a biodiversity data repository
+#' Add a metadata statement to a biodiversity data project
 #' 
-#' Builds a file called `metadata.md` in the `inst` folder; this folder is 
-#' created if not already present. Partially populated using `DESCRIPTION`.
+#' Builds a file called `metadata.md`, for storing information on your dataset.
+#' This provides a convenient document structure to describe what your data is, 
+#' who collected it, and what licence it is released under.
 #' @importFrom usethis use_directory
 #' @export
 use_bd_metadata <- function(){
-  use_directory("inst")
-  build_metadata()
+  use_template(template = "pkg-metadata",
+               save_as = "metadata.md",
+               package = "galaxias")
 }
 
-#' Add `README` to a biodiversity data repository
+#' Add `README` to a biodiversity data project
 #' 
 #' This function adds `galaxias`-specific `README` instead of the `usethis` 
-#' default. Note that the two functions deliver quite different content. 
-#' `README.md` is intended as a metadata statement, for *projects* (i.e. same
-#' as `use_bd_metadata()` for packages, but in a different location). 
-#' `README.Rmd` is for describing *packages* and does not have a metadata-like
-#' flavour.
+#' default.
 #' @name use_bd_readme
 #' @importFrom usethis use_template
 #' @export
@@ -93,46 +93,5 @@ use_bd_readme_rmd <- function(){
   use_template(template = "pkg-README",
                save_as = "README.Rmd",
                data = list("Project" = pkg_name()),
-               package = "galaxias")
-}
-
-#' Add `schema.md` to a biodiversity data repository
-#' 
-#' Builds a file called `schema.md` in the `inst` folder; this folder is 
-#' created if not already present. The schema is a standard part of Darwin Core 
-#' Archives and requires data to be present in the `data` folder to do anything 
-#' useful.
-#' @export
-use_bd_schema <- function(){
-  write_md(build_schema(),
-           file = "inst/schema.md")
-}
-
-#' Add Darwin Core tests to a biodiversity data repository
-#' 
-#' This optional first initiates the `tests/testthat` folder, then adds a set of 
-#' boilerplate tests suitable for checking data. These tests all assume that 
-#' data has been added to the `data` folder following the steps outlined in 
-#' `data_manipulation_script.R` (created using `use_bd_data_raw()`).
-#' @importFrom fs path_package
-#' @importFrom usethis use_testthat
-#' @export
-use_bd_testthat <- function(){
-  use_testthat()
-  # add tests here, one at a time
-  use_template(template = "test-decimalLatitude_decimalLongitude.R",
-               save_as = "tests/testthat/test-decimalLatitude_decimalLongitude.R",
-               package = "galaxias")
-}
-
-#' Add a vignette to report on contents of a biodiversity data repository
-#' 
-#' Still in test, this function builds a report-style vignette so you (and your
-#' users) can see what kind of data is in your package.
-#' @export
-use_bd_vignette <- function(){
-  use_directory("vignettes")
-  use_template(template = "pkg-report.Rmd",
-               save_as = "vignettes/pkg_report.Rmd",
                package = "galaxias")
 }

@@ -23,12 +23,8 @@ navbar:
     articles:
       text: Articles
       menu:
-      - text: Darwin Core fields
-        href: articles/DwC_fields.html
       - text: Darwin Core Archives
         href: articles/Structure_of_DwCAs.html
-      - text: Biodiversity Data Packages
-        href: articles/packages.html
     news:
       text: News
       href: news/index.html
@@ -36,47 +32,30 @@ reference:
 - title: Building your project
   contents: 
   - create_bd_project
-  - create_bd_package
-  - use_bd_citation
   - use_bd_data
   - use_bd_data_raw
   - use_bd_description
   - use_bd_metadata
   - use_bd_readme_rmd
-  - use_bd_schema
-  - use_bd_testthat
-  - use_bd_vignette
-- title: Report on DwC compliance within `dplyr` pipes
-  contents:
-  - use_dwc
-  - mutate.dwc_df
-  - rename.dwc_df
-  - rename_with.dwc_df
-  - select.dwc_df
 - title: Add Darwin Core Terms
   contents:
-  - use_occurrenceID
-  - use_basisOfRecord
+  - use_abundance
+  - use_collection
   - use_coordinates
-  - use_eventDate
+  - use_coordinates_sf
+  - use_occurrences
+  - use_datetime
+  - use_id_random
+  - use_individual_traits
   - use_locality
-- title: Check data for DwC compliance
+  - use_observer
+  - use_occurrences
+  - use_scientific_name
+  - use_taxonomy
+- title: Check and build an archive
   contents:
   - check_dwc
-  - check_fields
-  - check_occurrenceID
-  - check_basisOfRecord
-  - check_continent
-  - check_country
-  - check_countryCode
-  - check_decimalLatitude
-  - check_decimalLongitude
-- title: Checking and publication
-  contents:
+  - build_metadata
+  - build_schema
   - build_dwca
   - validate_dwca
-  - publish_dwca
-- title: Internal functions
-  contents:
-  - read_md
-  - write_md

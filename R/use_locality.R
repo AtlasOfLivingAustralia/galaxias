@@ -24,8 +24,13 @@
 #' @importFrom dplyr mutate
 #' @importFrom rlang abort
 #' @importFrom rlang warn
+#' @importFrom rlang enquos
+#' @importFrom rlang quo_is_null
+#' @importFrom rlang zap
+#' @importFrom purrr map
+#' @importFrom purrr pluck
 #' @export
-use_locality <- function(df, 
+use_locality <- function(.df, 
                          continent = NULL,
                          country = NULL,
                          countryCode = NULL,
@@ -33,24 +38,55 @@ use_locality <- function(df,
                          locality = NULL,
                          .keep = "unused"
 ){
-  if(missing(df)){
+  if(missing(.df)){
     abort("df is missing, with no default")
   }
-  result <- df |>
-    mutate(continent = continent,
-           country = country,
-           countryCode = countryCode,
-           stateProvince = stateProvince,
-           locality = locality,
+  
+  fn_args <- ls()
+  
+  # capture arguments as a list of quosures
+  # NOTE: enquos() must be listed alphabetically
+  fn_quos <- enquos(continent, country, countryCode, locality, stateProvince)
+  names(fn_quos) <- fn_args
+  
+  # find arguments that are NULL but exist already in `df`
+  # then remove their names before `mutate()`
+  # otherwise, these DwC columns are deleted by `mutate(.keep = "unused")` 
+  fn_quo_is_null <- fn_quos |> 
+    purrr::map(\(user_arg)
+               rlang::quo_is_null(user_arg)) |> 
+    unlist()
+  
+  null_col_exists_in_df <- fn_quo_is_null & (names(fn_quos) %in% colnames(.df))
+  
+  if(any(null_col_exists_in_df)){
+    fn_quos <- fn_quos |> 
+      purrr::keep(!names(fn_quos) %in% names(which(null_col_exists_in_df)))
+  }
+  
+  # Update df
+  result <- .df |> 
+    mutate(!!!fn_quos, 
            .keep = .keep)
-  check_continent(df, level = "abort")
-  check_country(df, level = "abort")
-  check_countryCode(df, level = "abort")
-  if(!is.null(stateProvince)){check_is_string(df$stateProvince)}
-  if(!is.null(locality)){check_is_string(df$locality)}
-  # other tests likely to be needed here
+  
+  check_missing_all_args(fn_call = match.call(), 
+                         fn_args = fn_args, 
+                         user_cols = colnames(result))
+  
+  # inform user which columns will be checked
+  matched_cols <- names(result)[names(result) %in% fn_args]
+  col_progress_bar(cols = matched_cols)
+  
+  # run column checks
+  check_continent(result, level = "abort")
+  check_country(result, level = "abort")
+  check_countryCode(result, level = "abort")
+  check_stateProvince(result, level = "abort")
+  check_locality(result, level = "abort")
+  
   result
 }
+
 # Q: Add function to show countryCodes?
 
 
@@ -59,19 +95,22 @@ use_locality <- function(df,
 #' @export
 check_continent <- function(df, 
                             level = c("inform", "warn", "abort")
-){
+                            ){
   level <- match.arg(level)
+  accepted_values <- c("Africa",
+                       "Antarctica",
+                       "Asia",
+                       "Europe",
+                       "North America",
+                       "Oceania",
+                       "South America")
+  
   if(any(colnames(df) == "continent")){
-    x <- df$continent
-    check_is_string(x)
-    accepted_values <- c("Africa",
-                         "Antarctica",
-                         "Asia",
-                         "Europe",
-                         "North America",
-                         "Oceania",
-                         "South America")
-    check_contains(unique(x), accepted_values)
+    df |>
+      select("continent") |>
+      check_is_string() |>
+      check_contains_values(accepted_values, 
+                            level = level)
   }
 }
 
@@ -84,9 +123,12 @@ check_country <- function(df,
 ){
   level <- match.arg(level)
   if(any(colnames(df) == "country")){
-    check_is_string(df$country)
-    check_contains(unique(df$country), 
-                   country_codes$country_name)
+    df |>
+      select("country") |>
+      check_is_string(level = level) |>
+      check_contains_values(country_codes$country_name, 
+                            level = level,
+                            .accepted_message = FALSE)
   }
 }
 
@@ -95,33 +137,63 @@ check_country <- function(df,
 #' @order 5
 #' @export
 check_countryCode <- function(df, 
-                              level = c("inform", "warn", "abort")
+                              level = c("inform", "warn", "abort"),
+                              call = caller_env()
 ){
   level <- match.arg(level)
   if(any(colnames(df) == "countryCode")){
-    x <- df$countryCode
-    check_is_string(x)
-    
-    accepted_values <- country_codes$code
-    if(!(value %in% accepted_values)){
-      bullets <- c("Unexpected `value` received", 
-                   i = "Please provide a two-digit country code in ISO 3166-1 Alpha 2",
-                   i = "see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2")
-      abort(bullets)
-    }
-    
-    if(any(colnames(df) == "country")){
-      if(!(df$country[1] %in% country_codes$country_name)){
-        bullets <- c("supplied `df` has a `country` field that is not present in the reference dataset",
-                     i = "did you mean X?")
-        warn(bullets)
-      }
-      lookup_country <- country_codes$country_name[country_codes$code == value]
-      if(lookup_country != df$country[1]){
-        bullets <- c("supplied `df` has a `country` field that does not correspond to the supplied country code",
-                     i = "did you mean X?")
-        warn(bullets)
-      }
-    }
+    df |> 
+      select("countryCode") |>
+      check_is_string(level = level) |>
+      check_contains_values(country_codes$code,
+                            level = level,
+                            .accepted_message = FALSE)
   }
+  # browser()
+  # FIXME: Check that country code matches country
+  # NOTE: Does this need to be in galaxias?
+  # if(any(colnames(df) == "country")) {
+  #   df |>
+  #     select("countryCode", "country") |>
+  #     check_mismatch_code_country(level = level)
+  # }
+}
+
+
+#' Check stateProvince field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 5
+#' @export
+check_stateProvince <- function(.df, 
+                                 level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "stateProvince")){
+    .df |>
+      select("stateProvince") |>
+      check_is_string(level = level)
+  }
+  .df
+}
+
+#' Check locality field is valid
+#' 
+#' @rdname check_dwc
+#' @param level what action should the function take for non-conformance? 
+#' Defaults to `"inform"`.
+#' @order 5
+#' @export
+check_locality <- function(.df, 
+                           level = c("inform", "warn", "abort")
+){
+  level <- match.arg(level)
+  if(any(colnames(.df) == "locality")){
+    .df |>
+      select("locality") |>
+      check_is_string(level = level)
+  }
+  .df
 }

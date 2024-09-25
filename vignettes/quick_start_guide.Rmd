@@ -42,6 +42,7 @@ that project, which will have the following structure:
 
 ```
 ├── README.md                        : Darwin Core Metadata statement in .md format
+├── metadata.md                      : Metadata statement for data in this project
 ├── projectname.Rproj                : RStudio project file
 ├── data-raw                         : Folder to store source data
 │   └── data_manipulation_script.R   : Script with example code
@@ -60,7 +61,7 @@ script within that folder to manipulate it to a suitable interchange format
 (such as Darwin Core). Let's assume, for example, that your data is looks like 
 this:
 
-```{r}
+```{r, eval=FALSE}
 library(tibble)
 
 df <- tibble(
@@ -68,65 +69,80 @@ df <- tibble(
   longitude = c(149.125, 149.133),
   date = c("14-01-2023", "15-01-2023"),
   time = c("10:23", "11:25"),
-  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
-  n = c(2, 3))
+  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"))
 ```
 
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-We recommend that you use `dplyr` for all your data manipulation needs. If 
-you would like, you can add `use_dwc()` to your pipe to provide DwC-specific
-information about conformance with the standard, e.g.
+Just as we used `usethis` syntax when building our directory, `galaxias`
+provides a set of helper functions for adding or manipulating columns to 
+conform to the Darwin Core standard. Each function starts with a `use_`
+prefix.
 
-```{r,eval=FALSE}
-df |>
-  use_dwc() |>
-  rename(decimalLatitude = latitude)
-```
+To give an example of what we mean, here is an example workflow:
 
-In this case, `decimalLatitude` is recorded as a string, not a number. 
-`use_dwc()` only informs on columns that you are editting. A more complete
-pipeline could look like this:
-
-```{r,eval=FALSE}
-df |>
-  use_dwc() |> # request notes on your progress
-  # Rename columns to Darwin Core names
-  rename(decimalLatitude = latitude,
-         decimalLongitude = longitude,
-         scientificName = species,
-         individualCount = n) |>
-  # Add previously missing information supported or required by Darwin Core
-  mutate(taxonRank = "species",
-         basisOfRecord = "humanObservation",
-         recordedBy = "A. Person") |>
-  # Place columns in a sensible order
-  select(occurrenceID, decimalLatitude, decimalLongitude,
-         scientificName, taxonRank, individualCount, recordedBy,
-         basisOfRecord)
-```
-
-A different method of achieving the same outcome would be to use the various
-`use_` functions for Darwin Core Fields in `galaxias`. These do not require
-you to preface your pipe with `use_dwc()`, and use the same tests. They also
-remove transformed columns incrementally:
-
-```{r,eval=FALSE}
-df |> 
-  use_occurrenceID() |>
-  use_eventDate(date, time) |>
-  use_basisOfRecord("humanObservation") |>
+```{r, eval=FALSE}
+dwc_df <- df |>
   use_coordinates(decimalLatitude = latitude,
                   decimalLongitude = longitude)
 ```
 
-It is quite possible to integrate `dplyr` functions and `use_` functions into 
-the same pipe, though `use_` functions shouldn't be called within e.g. 
-`mutate()`.
+In this case, `decimalLatitude` is recorded as a string, not a number; we can
+correct as follows:
+ 
+
+```{r, eval=FALSE}
+dwc_df <- df |>
+  use_coordinates(decimalLatitude = as.numeric(latitude),
+                  decimalLongitude = longitude)
+```
+
+A minimally complete set of individual observations would include:
+
+```{r, eval=FALSE}
+occurrences <- df |>
+  # basic requirements of Darwin Core
+  use_occurrenceID() |> 
+  use_basisOfRecord("humanObservation")
+  # place and time
+  use_coordinates(latitude, 
+                  longitude) |>
+  use_locality(country = "Australia", 
+               locality = "City of Town") |>
+  use_eventDate(date = date, time = time) |>
+  # taxonomy
+  use_scientificName(scientificName = species, 
+                     scientificNameRank = "species") |>
+  use_taxonomy(kingdom = "Animalia", 
+               phylum = "Aves") 
+```
+
+Note that this deliberately includes some redundancy. The coordinate data are
+useful by themselves, for example, but in case of ambiguity it is useful to
+specify a text string given some information on location. Similarly, the 
+`scientificName` field should be sufficient to identify the taxon in question, 
+but adding higher taxonomic information makes the identification less ambiguous.
+
+Although it is possible to provide data as a set of unrelated observations,
+this structure doesn't reflect the way in which ecological surveys are typically
+conducted. If, for example, you have conducted a survey in which many species
+can be detected at once, you can try:
+
+(add code block here showing `use_events()` and `use_abundance()`)
 
 
-From there, it is simple to save your files out to `/data` as `csv`:
+(add example of refining only to DwC terms)
+
+We have saved our tibble as an object with a Darwin Core-specific name, so we 
+can save it out with `use_bd_data()`:
+
+```{r, eval=FALSE}
+use_bd_data(occurrences)
+```
+
+If your object is not a valid Darwin Core file name, use `readr::write_csv` 
+instead:
 
 ```{r, eval=FALSE}
 library(readr)
@@ -148,24 +164,17 @@ in your project directory by calling:
 use_bd_metadata()
 ```
 
-Storing metadata in markdown files has several advantages over xml:
-
-- **clarity:** markdown is easy to read and edit
-- **persistence:** markdown files live in your file structure rather than your R environment, so
-  are easy to store, share and update
-- **visualisation:** it is straightforward to render the file as a PDF or HTML for viewing or sharing
 
 
 ## Check your respository
 
 Darwin Core may be an unfamiliar format, so it can be useful to 'check' your
-data for common issues. `galaxias` supports three methods for delivering this,
-the easiest of which is to use the features built into `README.Rmd` to check your 
-data (INCOMPLETE)
+data for common issues. We suggest first using `check_dwca()`:
 
-Second is to use `pointblank` somehow
 
-Finally, you can use the ALA 'validate' API to check your data (not functional!)
+
+
+Alternatively, you can use the ALA 'validate' API to check your data (not functional!)
 
 ```{r, eval=FALSE}
 validate_dwca()
