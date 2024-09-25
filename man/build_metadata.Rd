@@ -4,10 +4,12 @@
 \alias{build_metadata}
 \title{Create a metadata statement for a Darwin Core Archive}
 \usage{
-build_metadata(file)
+build_metadata(file, directory = "data")
 }
 \arguments{
-\item{file}{path to a metadata statement stored in markdown format (.md).}
+\item{file}{Path to a metadata statement stored in markdown format (.md).}
+
+\item{directory}{A folder to place the resulting file. Defaults to \code{data}.}
 }
 \value{
 Does not return an object to the workspace; called for the side
@@ -16,6 +18,12 @@ effect of building a file named \code{meta.xml} in the \code{data} directory.
 \description{
 A metadata statement lists the owner of the dataset, how it was collected,
 and how it may used (i.e. its' licence). This function simply converts
-metadata stored in a markdown file to xml, and stores it in the \code{data}
-folder.
+metadata stored in a markdown file to xml, and stores it in the folder
+specified using the \code{directory} argument.
+}
+\details{
+This function is a fairly shallow wrapper on top of functionality build
+in the \code{elm} package, particularly \code{read_elm()} and \code{write_elm()}. You can
+use that package to gain greater control, or to debug problems, should you
+wish.
 }

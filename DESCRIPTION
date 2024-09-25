@@ -25,6 +25,7 @@ Imports:
   glue,
   httr2,
   lubridate,
+  potions,
   purrr,
   readr,
   rlang,

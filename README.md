@@ -45,10 +45,11 @@ library(galaxias)
 - Establish a new RStudio project with a standardised structure
   (`create_bd_project()`)
 - Support translating biodiversity data into the Darwin Core standard
-  (`use_dwc()`)
-- Import markdown to a range of formats for easy metadata editing
-  (`read_md()`)
-- Build and validate Darwin Core Archives (`build_dwca()`)
+  (`use_()` functions)
+- Check elements for consistency with the Darwin Core standard
+  (`suggest_workflow()` and `check_` functions)
+- Assemble metadata, schemas and spreadsheets into an archive (`build_`
+  functions)
 
 ## Citing galaxias
 

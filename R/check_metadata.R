@@ -1,18 +1,11 @@
-# NOTE: This code is useful, but not yet well-integrated with the rest of the
-# package. To be truly useful it should probably be called within `check_dwc()`
-# or similar.
-
-# Note also that, because `read_md()` now returns a tibble, this could be 
-# made somewhat more readable.
-
 #' Check that a supplied metadata statement is valid according to GBIF schema
 #' 
 #' Note: this function requires the user to be online.
 #' @param metadata xml object representing metadata
 #' @return A tibble showing parsed errors
+#' @importFrom xml2 xml_validate
 #' @importFrom xml2 read_xml
-#' @noRd
-#' @keywords Internal
+#' @export
 check_metadata <- function(metadata) {
   
   # 1. validate against "./data-raw/eml-gbif-profile.xsd" with xml2::xml_validate()
@@ -33,21 +26,6 @@ check_metadata <- function(metadata) {
   
   errors_df
 }
-
-#' Vector of field terms required by ALA
-#' Q: should we be checking requirements that only ALA has?
-#' Q: are these checked for by `xml_validate()`?
-#' @noRd
-#' @keywords Internal
-required_fields <- function(){
-  c(
-  "title",
-  "abstract",
-  # not sure if referencePublication is equivalent to "citation" in ALA terms
-  "referencePublication",
-  "creator",
-  "intellectualRights"
-)}
 
 #' Internal function to extract information from `xml_validate()` error strings
 #' @importFrom dplyr bind_rows
