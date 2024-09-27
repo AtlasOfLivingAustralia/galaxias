@@ -20,10 +20,12 @@ Depends:
   R (>= 4.3.0)
 Imports:
   cli,
+  curl,
   dplyr,
   elm,
   glue,
   httr2,
+  jsonlite,
   lubridate,
   potions,
   purrr,
