@@ -29,14 +29,6 @@ navbar:
       text: News
       href: news/index.html
 reference:
-- title: Building your project
-  contents: 
-  - create_bd_project
-  - use_bd_data
-  - use_bd_data_raw
-  - use_bd_description
-  - use_bd_metadata
-  - use_bd_readme_rmd
 - title: Add Darwin Core Terms
   contents:
   - use_abundance
@@ -54,8 +46,12 @@ reference:
   - use_taxonomy
 - title: Check and build an archive
   contents:
-  - check_dwc
+  - suggest_workflow
+  - check_occurrences
+  - check_metadata
   - build_metadata
   - build_schema
-  - build_dwca
-  - validate_dwca
+  - build_archive
+  - validate_archive
+  - get_validator_report
+  

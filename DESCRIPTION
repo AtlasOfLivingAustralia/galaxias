@@ -31,13 +31,10 @@ Imports:
   purrr,
   readr,
   rlang,
-  rstudioapi,
   sf,
   stringr,
   tidyr,
-  usethis,
   uuid,
-  withr,
   xml2,
   zip
 Suggests:

@@ -49,7 +49,6 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
- - Establish a new RStudio project with a standardised structure (`create_bd_project()`)
  - Support translating biodiversity data into the Darwin Core standard (`use_()` functions)
  - Check elements for consistency with the Darwin Core standard (`suggest_workflow()` and `check_` functions)
  - Assemble metadata, schemas and spreadsheets into an archive (`build_` functions)
