@@ -50,6 +50,7 @@ library(galaxias)
   (`suggest_workflow()` and `check_` functions)
 - Assemble metadata, schemas and spreadsheets into an archive (`build_`
   functions)
+- Validate that archive via API (`validate_archive()`)
 
 ## Citing galaxias
 

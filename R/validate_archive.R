@@ -1,15 +1,18 @@
 #' Validate a Darwin Core Archive via API
 #' 
-#' Note: Unclear whether this is available yet, from GBIF or ALA.
+#' Work in progress.
+#' @name validate_archive
 #' @param directory Path to a nominated archive.
 #' @param filename Optionally specify a pre-built DwCA instead of a directory.
 #' @param provider (string) The institution to be queried for validation 
 #' services. Currently only `"GBIF"` is supported.
 #' @returns A report on the supplied archive.
+#' @order 1
 #' @export
 validate_archive <- function(directory = ".",
                              filename = NULL, 
                              provider = "GBIF"){
+  
   # checking
   if(is.null(directory) & is.null(filename)){
     abort("One of `directory` or `filename` must be supplied")
@@ -24,11 +27,15 @@ validate_archive <- function(directory = ".",
   
   # POST query to GBIF validator API
   post_response <- api_gbif_validator_post(filename)
+  # if there is an error, this function should return `post_response`
+  # to allow the user to retry later using the `key` arg, 
+  # supplied to `get_validator_report()`
   
   # GET status of query
   # NOTE: This will require a loop with rate-limiting to ensure success
   # see galah-R/R/check_queue.R
-  status_response <- api_gbif_validator_status_get(post_response$key)
+  # note also that `get_validator_report()` is also an exported function
+  status_response <- get_validator_report(post_response$key)
   
 }
 
@@ -99,28 +106,6 @@ api_gbif_validator_post <- function(filename){
   }else{
     abort("GBIF validator API did not return a result")
   }
-}
-
-#' Internal function to get status of query to the `validator` API
-#' https://techdocs.gbif.org/en/openapi/v1/validator#/validation-resource/get
-#' @param key A unique identifier key from GBIF `api_gbif_validator_post()`
-#' @importFrom httr2 request
-#' @importFrom httr2 req_options
-#' @importFrom httr2 req_perform
-#' @importFrom httr2 resp_body_json
-#' @importFrom glue glue
-#' @noRd
-#' @keywords Internal
-api_gbif_validator_status_get <- function(key){
-  result <- glue("https://api.gbif.org/v1/validation/{key}") |>
-    request() |>
-    req_options(
-      httpauth = 1,
-      userpwd = gbif_username_string()) |>
-    req_perform() |>
-    resp_body_json()
-  class(result) <- c("gbif_validator_response", "list")
-  result
 }
 
 #' get version for galaxias to put in API call headers

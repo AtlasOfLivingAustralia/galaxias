@@ -1,10 +1,19 @@
 #' Print objects returned by APIs
 #' 
-#' Currently only `validate_archive()`
+#' Currently only `validate_archive()` and `get_validator_report()`, where the 
+#' latter is called by the former.
 #' @param x An object to print.
-#' @param n Number of entries to print
 #' @param \dots Additional arguments, currently ignored.
 #' @name print_validation
+#' @export
+print.gbif_validator_post <- function(x, ...){
+  str(x)
+  # this is a placeholder until a better print function is written.
+}
+
+
+#' @rdname print_validation
+#' @param n Number of entries to print
 #' @importFrom cli cli_h2
 #' @importFrom cli cat_line
 #' @export
@@ -12,8 +21,10 @@ print.gbif_validator_response <- function(x, n = 5, ...){
   
   # summary information first  
   cli_h2("Validation report")
-  cat_line(glue("File \"{x$file}\" uploaded to \'api.gbif.org.au/v1/validation\'"))
-  cat_line(glue("by user \'{x$username}\' on {x$created}"))
+  cat_line(glue("Report from \'api.gbif.org.au/v1/validation\' for \'{x$username}\'"))
+  cat_line(glue("File: {x$file}"))
+  cat_line(glue("Date: {x$created}"))
+  cat_line(glue("Key: {x$key}"))
   if(x$status != "FAILED"){
     cat_line(glue("Status: {col_green(x$status)}"))
   }else{
@@ -34,8 +45,7 @@ print_validator_issues <- function(x, n){
   n_issues <- nrow(issues_tibble)
   
   # print
-  cat_line(glue("Status: {col_red(x$status)}"))
-  cat_line(glue("Report: {n_issues} issues found in {length(files)} files"))
+  cat_line(glue("Status: {col_red(x$status)} ({n_issues} issues found in {length(files)} files)"))
   cat_line()
   if(n_issues > n){
     cli_h3(glue("First {n} issues:"))
