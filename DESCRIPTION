@@ -35,10 +35,10 @@ Imports:
   stringr,
   tidyr,
   uuid,
-  xml2,
   zip
 Suggests:
-  testthat (>= 3.0.0)
+  testthat (>= 3.0.0),
+  xml2
 License: GNU
 Encoding: UTF-8
 LazyData: true

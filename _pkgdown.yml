@@ -48,7 +48,6 @@ reference:
   contents:
   - suggest_workflow
   - check_occurrences
-  - check_metadata
   - build_metadata
   - build_schema
   - build_archive
