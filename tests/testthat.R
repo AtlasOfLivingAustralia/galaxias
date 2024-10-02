@@ -6,10 +6,10 @@
 # * https://r-pkgs.org/tests.html
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
-library(testthat)
+library(dplyr)
 library(galaxias)
 library(glue)
-library(tibble)
 library(lubridate)
-
+library(testthat)
+library(tibble)
 test_check("galaxias")

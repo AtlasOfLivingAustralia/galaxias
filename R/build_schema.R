@@ -9,6 +9,7 @@
 #' effect of building a file named `meta.xml` in the specified directory.
 #' @importFrom elm write_elm
 #' @importFrom glue glue
+#' @importFrom rlang abort
 #' @export
 build_schema <- function(directory = "data") {
   # check if specified `directory` is present
@@ -28,8 +29,10 @@ build_schema <- function(directory = "data") {
 #' Internal function to create core/extension framework for files
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
+#' @importFrom dplyr pull
 #' @importFrom dplyr select
 #' @importFrom glue glue
+#' @importFrom glue glue_collapse
 #' @importFrom purrr map
 #' @noRd
 #' @keywords Internal

@@ -1,6 +1,6 @@
 Package: galaxias
 Type: Package
-Title: Standardise, Document and Share Biodiversity Data
+Title: Describe, Package and Share Biodiversity Data
 Version: 0.1.0.9999
 Authors@R:
     c(person(given = "Martin",
@@ -15,7 +15,11 @@ Authors@R:
              family = "Kellie",
              email = "dax.kellie@csiro.au",
              role = c("aut")))
-Description: Simple tools for converting data into DwC format.
+Description: galaxias helps users describe, package and share biodiversity 
+  information using the 'Darwin Core' data standard, which is the format used
+  and accepted by the Global Biodiversity Information Facility (GBIF) and it's
+  partner nodes. It is functionally similar to `devtools`, but with a focus on
+  building Darwin Core Archives (DwCA's) rather than R packages.
 Depends: 
   R (>= 4.3.0)
 Imports:
@@ -26,17 +30,15 @@ Imports:
   glue,
   httr2,
   jsonlite,
-  lubridate,
   potions,
   purrr,
-  readr,
   rlang,
-  sf,
   stringr,
-  tidyr,
-  uuid,
+  tibble,
   zip
 Suggests:
+  lubridate,
+  readr,
   testthat (>= 3.0.0),
   xml2
 License: GNU

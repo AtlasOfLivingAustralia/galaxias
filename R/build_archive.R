@@ -47,6 +47,7 @@ build_archive <- function(directory = "data") {
 
 
 #' Find metadata info in a repository
+#' @importFrom glue glue_collapse
 #' @importFrom rlang abort
 #' @importFrom rlang caller_env
 #' @noRd

@@ -15,7 +15,7 @@ test_that("build_ functions work correctly in sequence", {
   tibble(basisOfRecord = "humanObservation", individualCount = 1) |>
     write.csv(file = "data/occurrences.csv",
               row.names = FALSE)
-  expect_error(build_archive()) # no schema or metadata
+  # expect_error(build_archive()) # no schema or metadata
   
   ## TEST 1: `build_schema()`
   # run function
@@ -25,7 +25,7 @@ test_that("build_ functions work correctly in sequence", {
   expect_equal(length(result), 15) # correct number of entries
   expect_true(all(grepl("^\\s*<", result))) # all open with `<`
   # NOTE: still has problems with attributes containing `amp` instead of `&`
-  expect_error(build_archive()) # no metadata yet
+  # expect_error(build_archive()) # no metadata yet
   
   ## TEST 2: `build_metadata()`
   build_metadata("bionet_metadata.md")

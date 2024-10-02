@@ -29,28 +29,12 @@ navbar:
       text: News
       href: news/index.html
 reference:
-- title: Add Darwin Core Terms
+- title: Construct an archive
   contents:
-  - use_abundance
-  - use_collection
-  - use_coordinates
-  - use_coordinates_sf
-  - use_occurrences
-  - use_datetime
-  - use_id_random
-  - use_individual_traits
-  - use_locality
-  - use_observer
-  - use_occurrences
-  - use_scientific_name
-  - use_taxonomy
-- title: Check and build an archive
-  contents:
-  - suggest_workflow
-  - check_occurrences
   - build_metadata
   - build_schema
   - build_archive
+- title: Validate via API
+  - galaxias_config
   - validate_archive
-  - get_validator_report
-  
+  - print_validation

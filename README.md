@@ -5,13 +5,9 @@
 
 ## Overview
 
-`galaxias` is an R package that helps users standardize, document and
-share biodiversity information using the [‘Darwin
-Core’](https://dwc.tdwg.org) data standard. It supports users to set up
-data sharing projects in a standardised way; provides tools and examples
-for how to use standard data and object types; and allows validation of
-the resulting archive against the Darwin Core Standard. `galaxias` was
-built, and is maintained, by the [Science & Decision Support
+`galaxias` is an R package that helps users describe, package and share
+biodiversity information using the [‘Darwin Core’](https://dwc.tdwg.org)
+data standard. It was created by the [Science & Decision Support
 Team](https://labs.ala.org.au) at the [Atlas of Living
 Australia](https://www.ala.org.au) (ALA).
 
@@ -42,15 +38,17 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
-- Establish a new RStudio project with a standardised structure
-  (`create_bd_project()`)
-- Support translating biodiversity data into the Darwin Core standard
-  (`use_()` functions)
-- Check elements for consistency with the Darwin Core standard
-  (`suggest_workflow()` and `check_` functions)
-- Assemble metadata, schemas and spreadsheets into an archive (`build_`
-  functions)
+- Convert metadata statements stored as markdown (.md) files into xml
+  (`build_metadata()`)
+- Write a ‘schema’ document for a given folder (`build_schema()`)
+- Convert a folder to a Darwin Core Archive (`build_archive()`)
 - Validate that archive via API (`validate_archive()`)
+
+`galaxias` is part of a group of packages that help users publish data
+using the Darwin Core standard. The other packages are:
+
+- `koala` for converting tibbles to the required column names, and;
+- `elm` for converting markdown files to `xml`.
 
 ## Citing galaxias
 
