@@ -52,8 +52,10 @@ detect_dwc_files <- function(directory){
     abort(bullets)
   }
   available_exts |>
-    filter(present == TRUE) |>
-    mutate(label = c("core", rep("extension", length(which(.data$present == TRUE)) - 1)),
+    filter(.data$present == TRUE) |>
+    mutate(label = c("core", 
+                     rep("extension", 
+                         length(which(.data$present == TRUE)) - 1)),
            level = 2,
            directory = glue("{directory}")) |>
     select("type", "directory", "file", "level", "label", "attributes")

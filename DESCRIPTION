@@ -33,6 +33,7 @@ Imports:
   jsonlite,
   potions,
   purrr,
+  readr,
   rlang,
   stringr,
   tibble,
@@ -41,7 +42,6 @@ Imports:
 Suggests:
   knitr,
   lubridate,
-  readr,
   rmarkdown,
   testthat (>= 3.0.0),
   xml2

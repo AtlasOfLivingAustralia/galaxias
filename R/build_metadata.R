@@ -9,8 +9,9 @@
 #' in the `elm` package, particularly `read_elm()` and `write_elm()`. You can 
 #' use that package to gain greater control, or to debug problems, should you 
 #' wish.
-#' @param file Path to a metadata statement stored in markdown format (.md).
-#' @param directory A folder to place the resulting file. Defaults to `data`.
+#' @param x Path to a metadata statement stored in markdown format (.md).
+#' @param file A file where the result should be saved. Defaults to 
+#' `data/eml.xml`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the `data` directory.
 #' @importFrom elm add_elm_header

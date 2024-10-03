@@ -7,9 +7,10 @@
 build_metadata(x = "data", file = "./data/eml.xml")
 }
 \arguments{
-\item{file}{Path to a metadata statement stored in markdown format (.md).}
+\item{x}{Path to a metadata statement stored in markdown format (.md).}
 
-\item{directory}{A folder to place the resulting file. Defaults to \code{data}.}
+\item{file}{A file where the result should be saved. Defaults to
+\code{data/eml.xml}.}
 }
 \value{
 Does not return an object to the workspace; called for the side

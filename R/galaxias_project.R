@@ -8,17 +8,20 @@
 #' created, provided that the parent path exists.
 #' @param \dots Other arguments passed to `usethis::create_project()` or 
 #' `usethis::create_package()`
-#' @importFrom usethis create_project
-#' @importFrom usethis use_directory
 #' @returns Does not return an object to the workspace; called for the 
 #' side-effect of building a new project or package.
 #' @name galaxias_project
 #' @order 1
+#' @importFrom elm use_metadata
+#' @importFrom usethis create_project
+#' @importFrom usethis use_directory
 #' @export
 galaxias_project <- function(path, ...){
   create_project(path, ...)
+  use_metadata()
   use_directory("data_raw")
   use_directory("data")
+  
 }
 
 #' @rdname galaxias_project

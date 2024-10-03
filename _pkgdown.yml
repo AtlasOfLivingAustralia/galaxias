@@ -29,12 +29,17 @@ navbar:
       text: News
       href: news/index.html
 reference:
+- title: Set up a project
+  contents:
+  - galaxias_project
 - title: Construct an archive
   contents:
   - build_metadata
   - build_schema
   - build_archive
 - title: Validate via API
+  contents:
+  - check_archive
   - galaxias_config
   - validate_archive
   - print_validation

@@ -27,6 +27,7 @@ check_archive <- function(x = "data"){
 
 #' Internal function to check all files
 #' @importFrom corroboree check_occurrences
+#' @importFrom elm check_elm
 #' @importFrom purrr map
 #' @importFrom readr read_csv
 #' @noRd
