@@ -29,33 +29,17 @@ navbar:
       text: News
       href: news/index.html
 reference:
-- title: Building your project
-  contents: 
-  - create_bd_project
-  - use_bd_data
-  - use_bd_data_raw
-  - use_bd_description
-  - use_bd_metadata
-  - use_bd_readme_rmd
-- title: Add Darwin Core Terms
+- title: Set up a project
   contents:
-  - use_abundance
-  - use_collection
-  - use_coordinates
-  - use_coordinates_sf
-  - use_occurrences
-  - use_datetime
-  - use_id_random
-  - use_individual_traits
-  - use_locality
-  - use_observer
-  - use_occurrences
-  - use_scientific_name
-  - use_taxonomy
-- title: Check and build an archive
+  - galaxias_project
+- title: Construct an archive
   contents:
-  - check_dwc
   - build_metadata
   - build_schema
-  - build_dwca
-  - validate_dwca
+  - build_archive
+- title: Validate via API
+  contents:
+  - check_archive
+  - galaxias_config
+  - validate_archive
+  - print_validation

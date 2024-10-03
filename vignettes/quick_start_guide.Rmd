@@ -10,10 +10,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo=FALSE}
-library(galaxias)
-```
-
 `galaxias` is an R package to help users build repositories that are optimised
 for storing, documenting and sharing biodiversity data. These repositories can 
 be seamlessly converted into a **Darwin Core Archive**, the data standard used 
@@ -23,29 +19,21 @@ it's partner nodes.
 
 ## Start a new project
 
-To start a new data project in RStudio, simply click:
-
-`File` > `New Project` > `New Directory` > `Biodiversity Data Project using galaxias` 
-
-(Note: if this is your first time installing `galaxias`, you will need to close 
-and reopen RStudio for this menu item to appear)
-
-Alternatively, you can use the following function in the console:
+To start a new data project using galaxias, call: 
 
 ```{r, eval=FALSE}
 library(galaxias)
-create_bd_project("myprojectname")
+galaxias_project("myprojectname")
 ```
 
-If you are using RStudio, both options should launch a new RStudio instance for
+If you are using RStudio, this should launch a new RStudio instance for
 that project, which will have the following structure:
 
 ```
-├── README.md                        : Darwin Core Metadata statement in .md format
-├── metadata.md                      : Metadata statement for data in this project
+├── README.md                        : Description of the repository
+├── metadata.md                      : Boilerplate metadata statement for this project
 ├── projectname.Rproj                : RStudio project file
 ├── data-raw                         : Folder to store source data
-│   └── data_manipulation_script.R   : Script with example code
 └── data                             : Folder to store processed data
 ```
 
@@ -53,6 +41,8 @@ It is a good idea to write some basic information in your `README.Rmd` file
 first, as this provides guidance to your users as to what your package contains,
 as well as what they are allowed to use it for.
 
+At this point, we suggest storing your repository on GitHub or similar. See ...
+for advice on setting this up.
 
 ## Adding data to your project
 
@@ -61,11 +51,11 @@ script within that folder to manipulate it to a suitable interchange format
 (such as Darwin Core). Let's assume, for example, that your data is looks like 
 this:
 
-```{r, eval=FALSE}
+```{r}
 library(tibble)
 
 df <- tibble(
-  latitude = c(-35.310, "-35.273"), # deliberate error for demonstration purposes
+  latitude = c(-35.310, -35.273),
   longitude = c(149.125, 149.133),
   date = c("14-01-2023", "15-01-2023"),
   time = c("10:23", "11:25"),
@@ -75,45 +65,28 @@ df <- tibble(
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-Just as we used `usethis` syntax when building our directory, `galaxias`
-provides a set of helper functions for adding or manipulating columns to 
-conform to the Darwin Core standard. Each function starts with a `use_`
-prefix.
+We recommend using the `corroboree` package for converting tibbles to Darwin 
+Core. A minimally complete set of individual observations formatted using
+this package might look like this:
 
-To give an example of what we mean, here is an example workflow:
+```{r}
+library(corroboree)
+library(lubridate)
 
-```{r, eval=FALSE}
-dwc_df <- df |>
-  use_coordinates(decimalLatitude = latitude,
-                  decimalLongitude = longitude)
-```
-
-In this case, `decimalLatitude` is recorded as a string, not a number; we can
-correct as follows:
- 
-
-```{r, eval=FALSE}
-dwc_df <- df |>
-  use_coordinates(decimalLatitude = as.numeric(latitude),
-                  decimalLongitude = longitude)
-```
-
-A minimally complete set of individual observations would include:
-
-```{r, eval=FALSE}
 occurrences <- df |>
   # basic requirements of Darwin Core
-  use_occurrenceID() |> 
-  use_basisOfRecord("humanObservation")
+  use_occurrences(occurrenceID = seq_len(nrow(df)),
+                  basisOfRecord = "humanObservation") |> 
   # place and time
-  use_coordinates(latitude, 
-                  longitude) |>
+  use_coordinates(decimalLatitude = latitude, 
+                  decimalLongitude = longitude) |>
   use_locality(country = "Australia", 
                locality = "City of Town") |>
-  use_eventDate(date = date, time = time) |>
+  use_datetime(eventDate = lubridate::dmy(date),
+               eventTime = lubridate::hm(time)) |>
   # taxonomy
-  use_scientificName(scientificName = species, 
-                     scientificNameRank = "species") |>
+  use_scientific_name(scientificName = species, 
+                      scientificNameRank = "species") |>
   use_taxonomy(kingdom = "Animalia", 
                phylum = "Aves") 
 ```
@@ -131,64 +104,42 @@ can be detected at once, you can try:
 
 (add code block here showing `use_events()` and `use_abundance()`)
 
-
 (add example of refining only to DwC terms)
 
 We have saved our tibble as an object with a Darwin Core-specific name, so we 
-can save it out with `use_bd_data()`:
-
-```{r, eval=FALSE}
-use_bd_data(occurrences)
-```
-
-If your object is not a valid Darwin Core file name, use `readr::write_csv` 
-instead:
+can save it out using `write_csv()`
 
 ```{r, eval=FALSE}
 library(readr)
-write_csv(df, "./data/occurrences.csv")
+write_csv(occurrences, ".data/occurrences.csv")
 ```
 
 If your data are _already_ in Darwin Core format, you can simply place them 
 in the data folder and remove your `data-raw` folder.
 
-
 ## Adding package metadata
 
-Darwin Core Archives use `xml` files to store metadata, but this format is 
-tricky to work with for data entry. Therefore, we suggest that you store your 
-metadata as a markdown file. You can generate a file called `metadata.md` 
-in your project directory by calling:
+Darwin Core Archives use `xml` files to store two metadata files; one that 
+describes your data and ownership, and a second that stores its' structure.
+We recommend using the `elm` package to manipulate these files.
 
-```{r, eval=FALSE}
-use_bd_metadata()
-```
+`build_schema()` example
 
+`build_metadata()` example
 
+Finally, best to `build_archive()`.
 
 ## Check your respository
 
 Darwin Core may be an unfamiliar format, so it can be useful to 'check' your
-data for common issues. We suggest first using `check_dwca()`:
+data for common issues. We suggest first using `check_archive()`:
 
 
-
-
-Alternatively, you can use the ALA 'validate' API to check your data (not functional!)
+Alternatively, you can use the GBIF 'validate' API to check your data (not functional!)
 
 ```{r, eval=FALSE}
-validate_dwca()
+validate_archive()
 ```
 
-## Sharing your data
+## Sharing data
 
-build_dwca() # convert to a DwCA
-
-This does the following steps:
-
-  * looks for data and builds a schema using `use_bd_schema()`
-  * converts `schema.md` and `metadata.md` to `xml`
-  * zips data and metadata into a DwCA
-
-`publish_dwca()` can take a pre-built archive if you have already run 
-`build_dwca()`, or can build one for you in a temporary directory and send that.

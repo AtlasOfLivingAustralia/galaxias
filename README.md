@@ -5,13 +5,9 @@
 
 ## Overview
 
-`galaxias` is an R package that helps users standardize, document and
-share biodiversity information using the [‘Darwin
-Core’](https://dwc.tdwg.org) data standard. It supports users to set up
-data sharing projects in a standardised way; provides tools and examples
-for how to use standard data and object types; and allows validation of
-the resulting archive against the Darwin Core Standard. `galaxias` was
-built, and is maintained, by the [Science & Decision Support
+`galaxias` is an R package that helps users describe, package and share
+biodiversity information using the [‘Darwin Core’](https://dwc.tdwg.org)
+data standard. It was created by the [Science & Decision Support
 Team](https://labs.ala.org.au) at the [Atlas of Living
 Australia](https://www.ala.org.au) (ALA).
 
@@ -42,14 +38,20 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
-- Establish a new RStudio project with a standardised structure
-  (`create_bd_project()`)
-- Support translating biodiversity data into the Darwin Core standard
-  (`use_()` functions)
-- Check elements for consistency with the Darwin Core standard
-  (`suggest_workflow()` and `check_` functions)
-- Assemble metadata, schemas and spreadsheets into an archive (`build_`
-  functions)
+- Create a new RStudio project or package for storing biodiversity data
+  and data-processing scripts using `galaxias_project()`.
+- Create metadata and schema documents to describe the origin and
+  structure of your data using `build_metadata()` and `build_schema()`.
+- Zip up your data for sharing or publication using `build_archive()`.
+- Check data for consistency with the Darwin Core standard, either
+  locally using `check_archive()`, or via API using
+  `validate_archive()`.
+
+`galaxias` is part of a group of packages that help users publish data
+using the Darwin Core standard. The other packages are:
+
+- `corroboree` for converting tibbles to the required column names, and;
+- `elm` for converting markdown files to `xml`.
 
 ## Citing galaxias
 
