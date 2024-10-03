@@ -46,16 +46,19 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
- - Convert metadata statements stored as markdown (.md) files into xml (`build_metadata()`)
- - Write a 'schema' document for a given folder (`build_schema()`)
- - Convert a folder to a Darwin Core Archive (`build_archive()`)
- - Validate that archive via API (`validate_archive()`)
+ - Create a new RStudio project or package for storing biodiversity data 
+   and data-processing scripts using `galaxias_project()`.
+ - Create metadata and schema documents to describe the origin and structure
+   of your data using `build_metadata()` and `build_schema()`.
+ - Zip up your data for sharing or publication using `build_archive()`.
+ - Check data for consistency with the Darwin Core standard, either locally 
+   using `check_archive()`, or via API using `validate_archive()`.
  
  
 `galaxias` is part of a group of packages that help users publish data using 
 the Darwin Core standard. The other packages are:
 
- - `koala` for converting tibbles to the required column names, and;
+ - `corroboree` for converting tibbles to the required column names, and;
  - `elm` for converting markdown files to `xml`.
 
 

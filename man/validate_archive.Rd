@@ -5,14 +5,14 @@
 \alias{get_validator_report}
 \title{Validate a Darwin Core Archive via API}
 \usage{
-validate_archive(directory = ".", filename = NULL, provider = "GBIF")
+validate_archive(x = "data", provider = "GBIF")
 
 get_validator_report(key)
 }
 \arguments{
-\item{directory}{Path to a nominated archive.}
-
-\item{filename}{Optionally specify a pre-built DwCA instead of a directory.}
+\item{x}{(string) Either a directory containing all the files to be stored in
+the archive, or a filename (ending in .zip) of the specified archive.
+Defaults to the \code{data} folder within the current working directory.}
 
 \item{provider}{(string) The institution to be queried for validation
 services. Currently only \code{"GBIF"} is supported.}
@@ -20,8 +20,14 @@ services. Currently only \code{"GBIF"} is supported.}
 \item{key}{A unique identifier key from GBIF}
 }
 \value{
-A report on the supplied archive.
+Invisibly returns a tibble to the workspace containing validation
+results; but primarily called for the side-effect of generating a report in
+the console.
 }
 \description{
-Work in progress.
+Validation is a process of checking whether a specified archive is ready for
+sharing and publication, according to the Darwin Core standard.
+}
+\seealso{
+\code{check_archive()} which runs checks locally, rather than via API.
 }

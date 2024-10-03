@@ -6,11 +6,11 @@
 \alias{galaxias-package}
 \title{Build repositories to share biodiversity data}
 \description{
-\code{{galaxias}} helps users describe, package and share biodiversity
+\code{galaxias} helps users describe, package and share biodiversity
 information using the 'Darwin Core' data standard, which is the format used
 and accepted by the Global Biodiversity Information Facility (GBIF) and it's
 partner nodes. It is functionally similar to \code{devtools}, but with a focus on
-building Darwin Core Archives (DwCA's) rather than R packages.
+building Darwin Core Archives rather than R packages.
 
 The package is named for a genus of freshwater fish.
 }
@@ -18,19 +18,32 @@ The package is named for a genus of freshwater fish.
 If you have any questions, comments or suggestions, please email
 \href{mailto:support@ala.org.au}{support@ala.org.au}.
 
-\strong{Construct an archive}
+\strong{Set up a project}
 \itemize{
-\item \code{\link[=build_schema]{build_schema()}} Identify DwC csvs in a directory and build a schema file (\code{meta.xml})
-\item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (\code{eml.xml})
-\item \code{\link[=build_archive]{build_archive()}} Convert a Biodiversity Data directory to a Darwin Core Archive (DwCA)
+\item \code{\link[=galaxias_project]{galaxias_project()}} Set up a project with the necessary folder structure
 }
 
-\strong{Validate via API}
+\strong{Construct an archive}
 \itemize{
+\item \code{\link[=build_schema]{build_schema()}} Build a schema file (\code{meta.xml}) for a given directory
+\item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (\code{eml.xml})
+\item \code{\link[=build_archive]{build_archive()}} Convert a directory to a Darwin Core Archive
+}
+
+\strong{Validate an archive}
+\itemize{
+\item \code{\link[=check_archive]{check_archive()}} Check your archive using the \code{elm} and \code{corroboree} packages
 \item \code{\link[=galaxias_config]{galaxias_config()}} Store credentials for your API call
-\item \code{\link[=validate_dwca]{validate_dwca()}} Check your archive using the GBIF 'validator' API
+\item \code{\link[=validate_archive]{validate_archive()}} Check your archive using the GBIF 'validator' API
 \item \code{\link[=print_validation]{print_validation()}} Methods for displaying API responses
 }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/AtlasOfLivingAustralia/galaxias/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Martin Westgate \email{martin.westgate@csiro.au}

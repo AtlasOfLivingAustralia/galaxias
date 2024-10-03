@@ -4,26 +4,23 @@
 #' It works by detecting column names on csv files in a specified directory;
 #' these should all be Darwin Core terms for this function to produce reliable
 #' results.
-#' @param directory A folder containing Darwin Core data. Defaults to `data`.
+#' @param x (string) A directory containing all the files to be stored in the
+#' archive. Defaults to the `data` folder within the current working directory.
+#' @param file (string) A file name for the resulting schema document.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
 #' @importFrom elm write_elm
 #' @importFrom glue glue
 #' @importFrom rlang abort
 #' @export
-build_schema <- function(directory = "data") {
-  # check if specified `directory` is present
-  if(!file.exists(directory)){
-    bullets <- c(glue("`{directory}` directory is required, but missing."),
-                 i = "use `usethis::use_data()` to add data to your project.")
-    abort(bullets,
-          call = call)
-  }
-  directory |>
+build_schema <- function(x = "data", 
+                         file = "./data/meta.xml") {
+  x <- get_default_directory(x)
+  x |>
     detect_dwc_files() |>
     detect_dwc_fields() |>
     add_front_matter() |>
-    write_elm(file = glue("{directory}/meta.xml"))
+    write_elm(file = file)
 }
 
 #' Internal function to create core/extension framework for files
@@ -34,6 +31,7 @@ build_schema <- function(directory = "data") {
 #' @importFrom glue glue
 #' @importFrom glue glue_collapse
 #' @importFrom purrr map
+#' @importFrom rlang .data
 #' @noRd
 #' @keywords Internal
 detect_dwc_files <- function(directory){
@@ -55,7 +53,7 @@ detect_dwc_files <- function(directory){
   }
   available_exts |>
     filter(present == TRUE) |>
-    mutate(label = c("core", rep("extension", length(which(present == TRUE)) - 1)),
+    mutate(label = c("core", rep("extension", length(which(.data$present == TRUE)) - 1)),
            level = 2,
            directory = glue("{directory}")) |>
     select("type", "directory", "file", "level", "label", "attributes")
@@ -167,11 +165,11 @@ create_field_rows <- function(x){
 }
 
 #' simple function to get column names from a csv
+#' @importFrom utils read.csv
 #' @noRd
 #' @keywords Internal
 get_field_names <- function(file){
-  read.csv(file, 
-           nrows = 1) |>
+  read.csv(file, nrows = 1) |>
     colnames()
 }
 

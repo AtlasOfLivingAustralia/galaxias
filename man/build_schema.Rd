@@ -4,10 +4,13 @@
 \alias{build_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-build_schema(directory = "data")
+build_schema(x = "data", file = "./data/meta.xml")
 }
 \arguments{
-\item{directory}{A folder containing Darwin Core data. Defaults to \code{data}.}
+\item{x}{(string) A directory containing all the files to be stored in the
+archive. Defaults to the \code{data} folder within the current working directory.}
+
+\item{file}{(string) A file name for the resulting schema document.}
 }
 \value{
 Does not return an object to the workspace; called for the side

@@ -161,7 +161,7 @@ metadata as a markdown file. You can generate a file called `metadata.md`
 in your project directory by calling:
 
 ```{r, eval=FALSE}
-use_bd_metadata()
+# use_bd_metadata() # doesn't exist
 ```
 
 
@@ -177,18 +177,15 @@ data for common issues. We suggest first using `check_dwca()`:
 Alternatively, you can use the ALA 'validate' API to check your data (not functional!)
 
 ```{r, eval=FALSE}
-validate_dwca()
+validate_archive()
 ```
 
 ## Sharing your data
 
-build_dwca() # convert to a DwCA
+`build_archive()` # convert to a DwCA
 
 This does the following steps:
 
   * looks for data and builds a schema using `use_bd_schema()`
   * converts `schema.md` and `metadata.md` to `xml`
   * zips data and metadata into a DwCA
-
-`publish_dwca()` can take a pre-built archive if you have already run 
-`build_dwca()`, or can build one for you in a temporary directory and send that.

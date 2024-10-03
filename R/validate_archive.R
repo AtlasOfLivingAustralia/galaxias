@@ -1,32 +1,29 @@
 #' Validate a Darwin Core Archive via API
 #' 
-#' Work in progress.
+#' Validation is a process of checking whether a specified archive is ready for
+#' sharing and publication, according to the Darwin Core standard. 
 #' @name validate_archive
-#' @param directory Path to a nominated archive.
-#' @param filename Optionally specify a pre-built DwCA instead of a directory.
+#' @param x (string) Either a directory containing all the files to be stored in 
+#' the archive, or a filename (ending in .zip) of the specified archive. 
+#' Defaults to the `data` folder within the current working directory.
 #' @param provider (string) The institution to be queried for validation 
 #' services. Currently only `"GBIF"` is supported.
-#' @returns A report on the supplied archive.
+#' @returns Invisibly returns a tibble to the workspace containing validation 
+#' results; but primarily called for the side-effect of generating a report in 
+#' the console.
+#' @seealso `check_archive()` which runs checks locally, rather than via API.
 #' @order 1
 #' @export
-validate_archive <- function(directory = ".",
-                             filename = NULL, 
+validate_archive <- function(x = "data",
                              provider = "GBIF"){
-  
-  # checking
-  if(is.null(directory) & is.null(filename)){
-    abort("One of `directory` or `filename` must be supplied")
-  }
-  
-  # ig directory is supplied, build a file
-  if(is.null(filename) & !is.null(directory)){
-    tempfile <- tempdir()
-    build_archive(directory, path = tempfile)
-    filename <- glue("{tempfile}/{directory}.zip")
+
+  # if this isn't a zip file, build one, and return the location
+  if(!grepl(x, ".zip$")){
+    x <- build_archive(x)
   }
   
   # POST query to GBIF validator API
-  post_response <- api_gbif_validator_post(filename)
+  post_response <- api_gbif_validator_post(x)
   # if there is an error, this function should return `post_response`
   # to allow the user to retry later using the `key` arg, 
   # supplied to `get_validator_report()`

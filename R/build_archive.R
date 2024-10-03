@@ -13,38 +13,75 @@
 #' 
 #'  * One or more `csv` files such as `occurrences.csv` &/or `events.csv`. 
 #'    These will be manipulated versions of the raw dataset, which have been
-#'    altered to use Darwin Core terms as column headers. The functions
-#'    `suggest_workflow()` and `check_occurrences()` may be useful here.
-#'  * A metadata statement, stored in xml using the filename `eml.xml`. This can
-#'    be constructed manually, or using `use_bd_metadata()` to create a markdown
-#'    file followed by `build_metadata()` to save it in xml.
+#'    altered to use Darwin Core terms as column headers. See the `corroboree`
+#'    package for details.
+#'  * A metadata statement, stored in xml using the filename `eml.xml`. The
+#'    function `use_metadata()` from the `elm` package is a good starting point
+#'    here, followed by `build_metadata()` to save it in xml.
 #'  * A 'schema' document, also stored in xml, called `meta.xml`. This is 
 #'    usually constructed using `build_schema()`.
 #'
 #' You will get an error if these files are not present. The resulting file
 #' shares the name of the working directory (with a .zip file extension),
 #' and is placed in the parent directory
-#' @param directory A directory containing the files to be published. Defaults
-#' to the `data` folder within the current working directory.
-#' @return Called exclusively for the side-effect of building a 'Darwin Core 
-#' Archive' (i.e. a zip file); doesn't return anything to the workspace.
-#' @importFrom glue glue
+#' @param x (string) A directory containing all the files to be stored in the
+#' archive. Defaults to the `data` folder within the current working directory.
+#' @param file (string) A file name to save the resulting zip file.
+#' @return Invisibly returns the location of the built zip file; but typically
+#' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
+#' file).
 #' @importFrom zip zip
 #' @export
-build_archive <- function(directory = "data") {
-  
-  # place result next to working directory
-  file_out <- glue("{getwd()}.zip")
-  
-  # find files in specified directory
-  files_in <- find_data(directory) # also runs checks
-  
-  # build archive
+build_archive <- function(x = "data", file) {
+  x <- get_default_directory(x)
+  files_in <- find_data(x)
+  file_out <- get_default_file(file)
   zip::zip(zipfile = file_out, 
            files = files_in,
            mode = "cherry-pick")
+  invisible(return(file_out))
 }
 
+#' Simple function to specify a zip file if no arg given
+#' @importFrom glue glue
+#' @importFrom rlang abort
+#' @noRd
+#' @keywords Internal
+get_default_file <- function(file){
+  if(missing(file)){
+    glue("{getwd()}.zip")
+  }else{
+    if(!grepl(".zip$", file)){
+      abort("file must end in `.zip`")
+    }else{
+      file
+    }
+  }
+}
+
+#' Simple function to check that a `data` directory exists if no arg given
+#' @importFrom rlang abort
+#' @importFrom rlang inform
+#' @importFrom glue glue
+#' @noRd
+#' @keywords Internal
+get_default_directory <- function(x){
+  if(missing(x)){
+    if(dir.exists("data")){
+      inform("`x` is missing; defaulting to `data` folder")
+      x <- "data"
+    }else{
+      abort(c("`x` is missing, and `data` folder is missing", 
+              i = "please supply a folder containing required data"))
+    }
+  }else{
+    if(!dir.exists(x)){
+      abort(glue("Specified folder '{x}' not found"))
+    }else{
+      x
+    }
+  }
+}
 
 #' Find metadata info in a repository
 #' @importFrom glue glue_collapse
@@ -83,7 +120,8 @@ find_data <- function(directory,
   
   if(!file.exists(glue("{directory}/eml.xml"))){
     bullets <- c("No metadata statement (`eml.xml`) is present in the specified directory.",
-                 i = "use `use_bd_metadata()` then `build_metadata()` to create one")
+                 i = "See `elm::use_metadata()` for an example metadata statement,",
+                 i = "then `build_metadata()` to convert to `eml.xml`.")
     abort(bullets,
           call = call)
   }

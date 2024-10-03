@@ -5,6 +5,7 @@
 #' @param x An object to print.
 #' @param \dots Additional arguments, currently ignored.
 #' @name print_validation
+#' @importFrom utils str
 #' @export
 print.gbif_validator_post <- function(x, ...){
   str(x)
@@ -90,6 +91,7 @@ get_validator_file_name <- function(x){
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr mutate
 #' @importFrom purrr map
+#' @importFrom rlang .data
 #' @noRd
 #' @keywords Internal
 get_single_validator_issues_tibble <- function(x){

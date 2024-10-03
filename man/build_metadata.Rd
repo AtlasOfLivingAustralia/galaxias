@@ -4,7 +4,7 @@
 \alias{build_metadata}
 \title{Create a metadata statement for a Darwin Core Archive}
 \usage{
-build_metadata(file, directory = "data")
+build_metadata(x = "data", file = "./data/eml.xml")
 }
 \arguments{
 \item{file}{Path to a metadata statement stored in markdown format (.md).}

@@ -4,15 +4,18 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(directory = "data")
+build_archive(x = "data", file)
 }
 \arguments{
-\item{directory}{A directory containing the files to be published. Defaults
-to the \code{data} folder within the current working directory.}
+\item{x}{(string) A directory containing all the files to be stored in the
+archive. Defaults to the \code{data} folder within the current working directory.}
+
+\item{file}{(string) A file name to save the resulting zip file.}
 }
 \value{
-Called exclusively for the side-effect of building a 'Darwin Core
-Archive' (i.e. a zip file); doesn't return anything to the workspace.
+Invisibly returns the location of the built zip file; but typically
+called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip
+file).
 }
 \description{
 A Darwin Core archive is a zip file with a specified combination of data
@@ -29,11 +32,11 @@ This function looks for three types of objects in the specified \code{directory}
 \itemize{
 \item One or more \code{csv} files such as \code{occurrences.csv} &/or \code{events.csv}.
 These will be manipulated versions of the raw dataset, which have been
-altered to use Darwin Core terms as column headers. The functions
-\code{suggest_workflow()} and \code{check_occurrences()} may be useful here.
-\item A metadata statement, stored in xml using the filename \code{eml.xml}. This can
-be constructed manually, or using \code{use_bd_metadata()} to create a markdown
-file followed by \code{build_metadata()} to save it in xml.
+altered to use Darwin Core terms as column headers. See the \code{corroboree}
+package for details.
+\item A metadata statement, stored in xml using the filename \code{eml.xml}. The
+function \code{use_metadata()} from the \code{elm} package is a good starting point
+here, followed by \code{build_metadata()} to save it in xml.
 \item A 'schema' document, also stored in xml, called \code{meta.xml}. This is
 usually constructed using \code{build_schema()}.
 }
