@@ -19,12 +19,12 @@ build_schema <- function(x = "data",
   
   files <- detect_dwc_files(x)
   fields <- detect_dwc_fields(files)
-  result <- add_front_matter(result)
+  result <- add_front_matter(fields)
   write_elm(result, file = file)
   
   cli::cli_alert_success(
     paste0(
-    "Schema successfully built"
+    "Schema successfully built. Saved as {.file /data/meta.xml}."
   ))
   cli::cli_progress_done()
 }
