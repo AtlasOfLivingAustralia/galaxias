@@ -34,12 +34,24 @@
 #' @export
 build_archive <- function(x = "data", file) {
   x <- get_default_directory(x)
+  
+  progress_update("Retrieving metadata...")
   files_in <- find_data(x)
+  
+  progress_update("Creating zip folder...")
   file_out <- get_default_file(file)
+  
+  progress_update("Building Darwin Core Archive...")
   zip::zip(zipfile = file_out, 
            files = files_in,
            mode = "cherry-pick")
-  invisible(return(file_out))
+  
+  cli::cli_alert_success("Darwin Core Archive successfully built. \nSaved as {.file {file_out}}.")
+  cli::cli_progress_done()
+  
+  # invisible(return(file_out)) # might need this to save
+  
+
 }
 
 #' Simple function to specify a zip file if no arg given
@@ -52,7 +64,7 @@ get_default_file <- function(file){
     glue("{getwd()}.zip")
   }else{
     if(!grepl(".zip$", file)){
-      abort("file must end in `.zip`")
+      abort("File must end in `.zip`.")
     }else{
       file
     }
@@ -62,17 +74,18 @@ get_default_file <- function(file){
 #' Simple function to check that a `data` directory exists if no arg given
 #' @importFrom rlang abort
 #' @importFrom rlang inform
+#' @importFrom cli cli_inform
 #' @importFrom glue glue
 #' @noRd
 #' @keywords Internal
 get_default_directory <- function(x){
   if(missing(x)){
     if(dir.exists("data")){
-      inform("`x` is missing; defaulting to `data` folder")
+      cli_inform("Missing `directory`. Defaulting to {.file data} folder.")
       x <- "data"
     }else{
-      abort(c("`x` is missing, and `data` folder is missing", 
-              i = "please supply a folder containing required data"))
+      abort(c("Missing `directory` and missing `data` folder.", 
+              i = "Please specify a folder containing required data."))
     }
   }else{
     if(!dir.exists(x)){
@@ -86,15 +99,17 @@ get_default_directory <- function(x){
 #' Find metadata info in a repository
 #' @importFrom glue glue_collapse
 #' @importFrom rlang abort
+#' @importFrom cli cli_abort
 #' @importFrom rlang caller_env
 #' @noRd
 #' @keywords Internal
 find_data <- function(directory,
                       call = caller_env()){
   if(!file.exists(directory)){
-    bullets <- c(glue("`{directory}` directory is required, but missing."),
-                 i = "use `usethis::use_data()` to add data to your project.")
-    abort(bullets,
+    bullets <- c(glue("Missing `directory`."),
+                 i = "Use `usethis::use_data()` to add data to your project.",
+                 x = "Can't find directory `{directory}`.")
+    cli_abort(bullets,
           call = call)
   }
   accepted_names <- c("occurrences", 
@@ -105,24 +120,24 @@ find_data <- function(directory,
                           pattern = glue("^{accepted_names}.csv$"))
   if(length(file_list) < 1){
     bullets <- c("No data meeting Darwin Core requirements is given in `data`.",
-                 i = "use `add_bd_data_raw()` for examples of how to add raw data to your package",
-                 i =  "use `usethis::use_data()` to add data to your package")
+                 i = "Use `add_bd_data_raw()` for examples of how to add raw data to your package.",
+                 i =  "Use `usethis::use_data()` to add data to your package.")
     abort(bullets,
           call = call)
   }
   
   if(!file.exists(glue("{directory}/meta.xml"))){
-    bullets <- c("No schema file (`meta.xml`) is present in the specified directory.",
-                 i = "use `build_schema()` to create one")
-    abort(bullets,
+    bullets <- c("No schema file ({.file meta.xml}) is present in the specified directory.",
+                 i = "Use `build_schema()` to create a schema file.")
+    cli_abort(bullets,
           call = call)
   }
   
   if(!file.exists(glue("{directory}/eml.xml"))){
-    bullets <- c("No metadata statement (`eml.xml`) is present in the specified directory.",
-                 i = "See `elm::use_metadata()` for an example metadata statement,",
-                 i = "then `build_metadata()` to convert to `eml.xml`.")
-    abort(bullets,
+    bullets <- c("No metadata statement ({.file eml.xml}) is present in the specified directory.",
+                 i = "See `elm::use_metadata()` for an example metadata statement.",
+                 i = "Use `build_metadata()` to convert to {.file eml.xml}.")
+    cli_abort(bullets,
           call = call)
   }
   

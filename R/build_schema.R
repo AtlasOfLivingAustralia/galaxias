@@ -20,12 +20,11 @@ build_schema <- function(x = "data",
   files <- detect_dwc_files(x)
   fields <- detect_dwc_fields(files)
   result <- add_front_matter(fields)
+  
+  progress_update("Writing file...")
   write_elm(result, file = file)
   
-  cli::cli_alert_success(
-    paste0(
-    "Schema successfully built. Saved as {.file /data/meta.xml}."
-  ))
+  cli::cli_alert_success("Schema successfully built. Saved as {.file /data/meta.xml}.")
   cli::cli_progress_done()
 }
 
@@ -86,8 +85,8 @@ detect_dwc_files <- function(directory){
                                 sep = ", ",
                                 last = " or ")
     bullets <- c(
-      glue("Specified directory (\"{directory}\") does not contain any dwc-compliant csv files."),
-      i = glue("Accepted names are {file_names}"))
+      glue("Specified directory (\"{directory}\") does not contain any Darwin Core-compliant csv files."),
+      i = glue("Accepted names are {file_names}."))
     abort(bullets)
   }
   available_exts |>
