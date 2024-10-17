@@ -3,6 +3,12 @@
 
 # galaxias <img src="man/figures/logo.png" align="right" style="margin: 0px 10px 0px 10px;" alt="" width="120"/><br>
 
+<!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/galaxias)](https://CRAN.R-project.org/package=galaxias)
+<!-- badges: end -->
+
 ## Overview
 
 `galaxias` is an R package that helps users describe, package and share
@@ -40,8 +46,8 @@ library(galaxias)
 
 - Create a new RStudio project or package for storing biodiversity data
   and data-processing scripts using `galaxias_project()`.
-- Create metadata and schema documents to describe the origin and
-  structure of your data using `build_metadata()` and `build_schema()`.
+- Create documents to describe the origin and structure of your data
+  using `build_metadata()` and `build_schema()`.
 - Zip up your data for sharing or publication using `build_archive()`.
 - Check data for consistency with the Darwin Core standard, either
   locally using `check_archive()`, or via API using
@@ -50,8 +56,10 @@ library(galaxias)
 `galaxias` is part of a group of packages that help users publish data
 using the Darwin Core standard. The other packages are:
 
-- `corroboree` for converting tibbles to the required column names, and;
-- `elm` for converting markdown files to `xml`.
+- [`corella`](https://github.com/AtlasOfLivingAustralia/corella) for
+  converting tibbles to the required column names
+- [`elm`](https://github.com/AtlasOfLivingAustralia/elm) for converting
+  markdown files to `xml`.
 
 ## Citing galaxias
 

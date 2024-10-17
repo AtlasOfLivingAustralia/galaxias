@@ -23,7 +23,7 @@
 #'   * [build_archive()] Convert a directory to a Darwin Core Archive
 #'   
 #'  **Validate an archive**
-#'   * [check_archive()] Check your archive using the `elm` and `corroboree` packages
+#'   * [check_archive()] Check your archive using the `elm` and `corella` packages
 #'   * [galaxias_config()] Store credentials for your API call
 #'   * [validate_archive()] Check your archive using the GBIF 'validator' API
 #'   * [print_validation()] Methods for displaying API responses

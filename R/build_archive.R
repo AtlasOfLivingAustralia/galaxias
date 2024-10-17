@@ -13,7 +13,7 @@
 #' 
 #'  * One or more `csv` files such as `occurrences.csv` &/or `events.csv`. 
 #'    These will be manipulated versions of the raw dataset, which have been
-#'    altered to use Darwin Core terms as column headers. See the `corroboree`
+#'    altered to use Darwin Core terms as column headers. See the `corella`
 #'    package for details.
 #'  * A metadata statement, stored in xml using the filename `eml.xml`. The
 #'    function `use_metadata()` from the `elm` package is a good starting point

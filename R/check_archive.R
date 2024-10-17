@@ -1,7 +1,7 @@
 #' Check an archive against Darwin Core standards
 #' 
 #' This is a wrapper to two other packages; schema and EML files (i.e. xml) are
-#' checked with the `elm` package; csv files are checked with the `corroboree`
+#' checked with the `elm` package; csv files are checked with the `corella`
 #' package.
 #' @param x (string) A directory containing the files to be published, or 
 #' optionally a `.zip` file built from the same (i.e. with `build_archive()`). 
@@ -26,7 +26,7 @@ check_archive <- function(x = "data"){
 }
 
 #' Internal function to check all files
-#' @importFrom corroboree check_occurrences
+#' @importFrom corella check_occurrences
 #' @importFrom elm check_eml
 #' @importFrom purrr map
 #' @importFrom readr read_csv
