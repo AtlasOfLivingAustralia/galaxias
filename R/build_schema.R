@@ -9,7 +9,7 @@
 #' @param file (string) A file name for the resulting schema document.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom elm write_elm
+#' @importFrom elm write_eml
 #' @importFrom glue glue
 #' @importFrom rlang abort
 #' @export
@@ -22,7 +22,7 @@ build_schema <- function(x = "data",
   result <- add_front_matter(fields)
   
   progress_update("Writing file...")
-  write_elm(result, file = file)
+  write_eml(result, file = file)
   
   cli::cli_alert_success("Schema successfully built. Saved as {.file /data/meta.xml}.")
   cli::cli_progress_done()

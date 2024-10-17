@@ -27,7 +27,7 @@ check_archive <- function(x = "data"){
 
 #' Internal function to check all files
 #' @importFrom corroboree check_occurrences
-#' @importFrom elm check_elm
+#' @importFrom elm check_eml
 #' @importFrom purrr map
 #' @importFrom readr read_csv
 #' @noRd
@@ -38,8 +38,8 @@ check_files <- function(filenames){
         switch(a, 
                "occurrences.csv" = {read_csv(a) |>
                                     check_occurrences()},
-               "meta.xml" = {check_elm(a)},
-               "eml.xml" = {check_elm(a)}
+               "meta.xml" = {check_eml(a)},
+               "eml.xml" = {check_eml(a)}
        )
   }) |>
     invisible()
