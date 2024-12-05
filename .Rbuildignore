@@ -8,3 +8,4 @@
 ^inst/hex.R$
 README.Rmd
 ^doc$
+^\.github$
