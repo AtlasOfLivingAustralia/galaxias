@@ -26,7 +26,7 @@ check_archive <- function(x = "data"){
 }
 
 #' Internal function to check all files
-#' @importFrom corella check_occurrences
+#' @importFrom corella check_dataset
 #' @importFrom paperbark check_eml
 #' @importFrom purrr map
 #' @importFrom readr read_csv
@@ -37,7 +37,7 @@ check_files <- function(filenames){
       \(a){
         switch(a, 
                "occurrences.csv" = {read_csv(a) |>
-                                    check_occurrences()},
+                                    check_dataset()},
                "meta.xml" = {check_eml(a)},
                "eml.xml" = {check_eml(a)}
        )
