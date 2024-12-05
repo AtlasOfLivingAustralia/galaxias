@@ -1,0 +1,10 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  quick_start_guide: quick_start_guide.html
+  Structure_of_DwCAs: Structure_of_DwCAs.html
+last_built: 2024-12-05T08:51Z
+urls:
+  reference: https://galaxias.ala.org.au/reference
+  article: https://galaxias.ala.org.au/articles
