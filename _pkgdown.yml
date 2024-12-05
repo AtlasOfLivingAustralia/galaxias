@@ -7,7 +7,7 @@ template:
   params:
     bootswatch: cerulean
 development:
-  mode: auto
+  mode: release
 navbar:
   structure:
     left:
