@@ -62,8 +62,8 @@ library(galaxias)
 `galaxias` is part of a group of packages that help users publish data using 
 the Darwin Core standard. The other packages are:
 
- - [`corella`](https://github.com/AtlasOfLivingAustralia/corella) for converting tibbles to the required column names
- - [`elm`](https://github.com/AtlasOfLivingAustralia/elm) for converting markdown files to `xml`.
+ - [`corella`](https://corella.ala.org.au) for converting tibbles to the required column names
+ - [`paperbark`](https://paperbark.ala.org.au) for converting markdown files to `xml`.
 
 
 ## Citing galaxias

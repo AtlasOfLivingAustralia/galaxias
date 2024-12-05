@@ -6,7 +6,7 @@
 #' specified using the `directory` argument.
 #' 
 #' This function is a fairly shallow wrapper on top of functionality build
-#' in the `elm` package, particularly `read_md()` and `write_eml()`. You can 
+#' in the `paperbark` package, particularly `read_md()` and `write_eml()`. You can 
 #' use that package to gain greater control, or to debug problems, should you 
 #' wish.
 #' @param path Path to a metadata statement stored in markdown format (.md).
@@ -14,9 +14,8 @@
 #' `data/eml.xml`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the `data` directory.
-#' @importFrom elm add_eml_header
-#' @importFrom elm read_md
-#' @importFrom elm write_eml
+#' @importFrom paperbark read_md
+#' @importFrom paperbark write_eml
 #' @export
 build_metadata <- function(x = "data", 
                            file = "./data/eml.xml"){
@@ -26,10 +25,7 @@ build_metadata <- function(x = "data",
   # import file, ensure EML metadata is added, convert to XML
   progress_update("Reading file...")
   metadata_file <- read_md(x)
-  
-  progress_update("Building xml components...")
-  built_file <- add_eml_header(metadata_file)
-  
+
   progress_update("Writing file...")
   write_eml(built_file, file = file)
   

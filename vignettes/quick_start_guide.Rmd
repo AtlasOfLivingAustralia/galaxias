@@ -121,7 +121,7 @@ in the data folder and remove your `data-raw` folder.
 
 Darwin Core Archives use `xml` files to store two metadata files; one that 
 describes your data and ownership, and a second that stores its' structure.
-We recommend using the `elm` package to manipulate these files.
+We recommend using the `paperbark` package to manipulate these files.
 
 `build_schema()` example
 

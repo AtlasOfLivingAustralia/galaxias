@@ -9,7 +9,7 @@
 #' @param file (string) A file name for the resulting schema document.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom elm write_eml
+#' @importFrom paperbark write_eml
 #' @importFrom glue glue
 #' @importFrom rlang abort
 #' @export

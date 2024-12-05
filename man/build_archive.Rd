@@ -35,8 +35,8 @@ These will be manipulated versions of the raw dataset, which have been
 altered to use Darwin Core terms as column headers. See the \code{corella}
 package for details.
 \item A metadata statement, stored in xml using the filename \code{eml.xml}. The
-function \code{use_metadata()} from the \code{elm} package is a good starting point
-here, followed by \code{build_metadata()} to save it in xml.
+function \code{use_metadata()} from the \code{paperbark} package is a good starting
+point here, followed by \code{build_metadata()} to save it in xml.
 \item A 'schema' document, also stored in xml, called \code{meta.xml}. This is
 usually constructed using \code{build_schema()}.
 }

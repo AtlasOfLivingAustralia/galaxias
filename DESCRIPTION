@@ -27,10 +27,10 @@ Imports:
   corella,
   curl,
   dplyr,
-  elm,
   glue,
   httr2,
   jsonlite,
+  paperbark,
   potions,
   purrr,
   readr,
@@ -45,6 +45,9 @@ Suggests:
   rmarkdown,
   testthat (>= 3.0.0),
   xml2
+Remotes:
+  AtlasOfLivingAustralia/corella
+  AtlasOfLivingAustralia/paperbark
 License: MPL-2.0
 URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues

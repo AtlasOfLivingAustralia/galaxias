@@ -16,8 +16,8 @@
 #'    altered to use Darwin Core terms as column headers. See the `corella`
 #'    package for details.
 #'  * A metadata statement, stored in xml using the filename `eml.xml`. The
-#'    function `use_metadata()` from the `elm` package is a good starting point
-#'    here, followed by `build_metadata()` to save it in xml.
+#'    function `use_metadata()` from the `paperbark` package is a good starting 
+#'    point here, followed by `build_metadata()` to save it in xml.
 #'  * A 'schema' document, also stored in xml, called `meta.xml`. This is 
 #'    usually constructed using `build_schema()`.
 #'
@@ -135,7 +135,7 @@ find_data <- function(directory,
   
   if(!file.exists(glue("{directory}/eml.xml"))){
     bullets <- c("No metadata statement ({.file eml.xml}) is present in the specified directory.",
-                 i = "See `elm::use_metadata()` for an example metadata statement.",
+                 i = "See `paperbark::use_metadata()` for an example metadata statement.",
                  i = "Use `build_metadata()` to convert to {.file eml.xml}.")
     cli_abort(bullets,
           call = call)

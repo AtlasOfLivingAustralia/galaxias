@@ -12,7 +12,7 @@
 #' side-effect of building a new project or package.
 #' @name galaxias_project
 #' @order 1
-#' @importFrom elm use_metadata
+#' @importFrom paperbark use_metadata
 #' @importFrom usethis create_project
 #' @importFrom usethis use_directory
 #' @export
