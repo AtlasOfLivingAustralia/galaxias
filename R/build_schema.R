@@ -9,18 +9,55 @@
 #' @param file (string) A file name for the resulting schema document.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
-#' @importFrom elm write_elm
+#' @importFrom elm write_eml
 #' @importFrom glue glue
 #' @importFrom rlang abort
 #' @export
 build_schema <- function(x = "data", 
                          file = "./data/meta.xml") {
   x <- get_default_directory(x)
-  x |>
-    detect_dwc_files() |>
-    detect_dwc_fields() |>
-    add_front_matter() |>
-    write_elm(file = file)
+  
+  files <- detect_dwc_files(x)
+  fields <- detect_dwc_fields(files)
+  result <- add_front_matter(fields)
+  
+  progress_update("Writing file...")
+  write_eml(result, file = file)
+  
+  cli::cli_alert_success("Schema successfully built. Saved as {.file /data/meta.xml}.")
+  cli::cli_progress_done()
+}
+
+#' Wait time
+#' @noRd
+#' @keywords Internal
+wait <- function(seconds = 1) {
+  Sys.sleep(seconds)
+}
+
+
+#' Function progress message
+#'
+#' @description
+#' Informs users about the progress of their ongoing function steps.
+#'
+#' @importFrom cli cli_progress_step
+#' @importFrom cli cli_progress_update
+#' @noRd
+#' @keywords Internal
+progress_update <- function(message) {
+  cli::cli_progress_step(
+    paste0(
+      message
+    ),
+    spinner = TRUE
+  )
+  
+  for (i in 1:100) {
+    wait(0.0001) # remove zeroes to make messages slower
+    cli::cli_progress_update()
+  }
+  
 }
 
 #' Internal function to create core/extension framework for files
@@ -35,6 +72,7 @@ build_schema <- function(x = "data",
 #' @noRd
 #' @keywords Internal
 detect_dwc_files <- function(directory){
+  progress_update("Detecting Darwin Core files...")
   available_exts <- dwc_extensions()
   supported_files <- available_exts |>
     pull("file")
@@ -47,8 +85,8 @@ detect_dwc_files <- function(directory){
                                 sep = ", ",
                                 last = " or ")
     bullets <- c(
-      glue("Specified directory (\"{directory}\") does not contain any dwc-compliant csv files."),
-      i = glue("Accepted names are {file_names}"))
+      glue("Specified directory (\"{directory}\") does not contain any Darwin Core-compliant csv files."),
+      i = glue("Accepted names are {file_names}."))
     abort(bullets)
   }
   available_exts |>
@@ -100,6 +138,7 @@ dwc_extensions <- function(){
 #' @noRd
 #' @keywords Internal
 detect_dwc_fields <- function(df){
+  progress_update("Detecting Darwin Core fields in dataset...")
   split(df, seq_len(nrow(df))) |>
     map(\(x){
       bind_rows(create_schema_row(x),
@@ -181,6 +220,7 @@ get_field_names <- function(file){
 #' @noRd
 #' @keywords Internal
 add_front_matter <- function(df){
+  progress_update("Building xml components...")
   front_row <- tibble(
     level = 1,
     label = "archive",

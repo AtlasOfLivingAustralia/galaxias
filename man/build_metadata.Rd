@@ -7,10 +7,10 @@
 build_metadata(x = "data", file = "./data/eml.xml")
 }
 \arguments{
-\item{x}{Path to a metadata statement stored in markdown format (.md).}
-
 \item{file}{A file where the result should be saved. Defaults to
 \code{data/eml.xml}.}
+
+\item{path}{Path to a metadata statement stored in markdown format (.md).}
 }
 \value{
 Does not return an object to the workspace; called for the side
@@ -24,7 +24,7 @@ specified using the \code{directory} argument.
 }
 \details{
 This function is a fairly shallow wrapper on top of functionality build
-in the \code{elm} package, particularly \code{read_elm()} and \code{write_elm()}. You can
+in the \code{elm} package, particularly \code{read_md()} and \code{write_eml()}. You can
 use that package to gain greater control, or to debug problems, should you
 wish.
 }

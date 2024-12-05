@@ -24,7 +24,7 @@ Depends:
   R (>= 4.3.0)
 Imports:
   cli,
-  corroboree,
+  corella,
   curl,
   dplyr,
   elm,
@@ -46,6 +46,7 @@ Suggests:
   testthat (>= 3.0.0),
   xml2
 License: MPL-2.0
+URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues
 Maintainer: Martin Westgate <martin.westgate@csiro.au>
 Encoding: UTF-8

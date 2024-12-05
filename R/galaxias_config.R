@@ -7,8 +7,8 @@
 #' Note that unlike `galah`, you cannot set a 'default' provider in `galaxias`;
 #' the organisation is always an argument to the function in question. Also 
 #' unlike `galah`, `galaxias_config()` enables you to store configuration 
-#' details for multiple organisations at once. Currently, the this function is
-#' only useful in relation to `validate_archive()`, and only then for validating
+#' details for multiple organisations at once. Currently, this function is
+#' only useful to `validate_archive()`, and only then for validating
 #' via GBIF.
 #' @name galaxias_config 
 #' @param gbif A list containing the entries `username`, `email` and `password`

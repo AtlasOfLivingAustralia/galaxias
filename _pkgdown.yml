@@ -1,7 +1,9 @@
+url: https://galaxias.ala.org.au
 template:
   bootstrap: 5
   bslib:
-    code_font: {google: "Source Code Pro"}
+    code_font:
+      google: Source Code Pro
   params:
     bootswatch: cerulean
 development:
@@ -30,8 +32,7 @@ navbar:
       href: news/index.html
 reference:
 - title: Set up a project
-  contents:
-  - galaxias_project
+  contents: galaxias_project
 - title: Construct an archive
   contents:
   - build_metadata
@@ -43,3 +44,4 @@ reference:
   - galaxias_config
   - validate_archive
   - print_validation
+

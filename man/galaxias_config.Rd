@@ -26,7 +26,7 @@ that information for access by \code{galaxias} API functions.
 Note that unlike \code{galah}, you cannot set a 'default' provider in \code{galaxias};
 the organisation is always an argument to the function in question. Also
 unlike \code{galah}, \code{galaxias_config()} enables you to store configuration
-details for multiple organisations at once. Currently, the this function is
-only useful in relation to \code{validate_archive()}, and only then for validating
+details for multiple organisations at once. Currently, this function is
+only useful to \code{validate_archive()}, and only then for validating
 via GBIF.
 }

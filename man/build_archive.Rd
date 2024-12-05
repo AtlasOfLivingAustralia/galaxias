@@ -32,7 +32,7 @@ This function looks for three types of objects in the specified \code{directory}
 \itemize{
 \item One or more \code{csv} files such as \code{occurrences.csv} &/or \code{events.csv}.
 These will be manipulated versions of the raw dataset, which have been
-altered to use Darwin Core terms as column headers. See the \code{corroboree}
+altered to use Darwin Core terms as column headers. See the \code{corella}
 package for details.
 \item A metadata statement, stored in xml using the filename \code{eml.xml}. The
 function \code{use_metadata()} from the \code{elm} package is a good starting point

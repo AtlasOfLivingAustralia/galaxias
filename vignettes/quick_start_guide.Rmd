@@ -65,12 +65,12 @@ df <- tibble(
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-We recommend using the `corroboree` package for converting tibbles to Darwin 
+We recommend using the `corella` package for converting tibbles to Darwin 
 Core. A minimally complete set of individual observations formatted using
 this package might look like this:
 
 ```{r}
-library(corroboree)
+library(corella)
 library(lubridate)
 
 occurrences <- df |>
