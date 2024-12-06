@@ -32,7 +32,10 @@ navbar:
       href: news/index.html
 reference:
 - title: Set up a project
-  contents: galaxias_project
+  contents: 
+  - galaxias_project
+  - use_metadata
+  - suggest_workflow
 - title: Construct an archive
   contents:
   - build_metadata

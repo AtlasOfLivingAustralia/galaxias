@@ -12,7 +12,7 @@
 #' the console.
 #' @importFrom utils unzip
 #' @export
-check_archive <- function(x = "data"){
+check_archive <- function(x = "data"){ # add `file` arg for consistency with `check_eml()`
   if(!file.exists(x)){
     abort(glue("file or directory '{x}' not found"))
   }else{
@@ -38,8 +38,8 @@ check_files <- function(filenames){
         switch(a, 
                "occurrences.csv" = {read_csv(a) |>
                                     check_dataset()},
-               "meta.xml" = {check_eml(a)},
-               "eml.xml" = {check_eml(a)}
+               "meta.xml" = {check_eml(file = a)},
+               "eml.xml" = {check_eml(file = a)}
        )
   }) |>
     invisible()

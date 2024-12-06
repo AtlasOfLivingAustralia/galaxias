@@ -21,10 +21,10 @@ Description: galaxias helps users describe, package and share biodiversity
   partner nodes. It is functionally similar to `devtools`, but with a focus on
   building Darwin Core Archives (DwCA's) rather than R packages.
 Depends: 
-  R (>= 4.3.0)
+  R (>= 4.3.0),
+  corella
 Imports:
   cli,
-  corella,
   curl,
   dplyr,
   glue,
