@@ -135,7 +135,7 @@ Darwin Core may be an unfamiliar format, so it can be useful to 'check' your
 data for common issues. We suggest first using `check_archive()`:
 
 
-Alternatively, you can use the GBIF 'validate' API to check your data (not functional!)
+Alternatively, you can use the GBIF 'validate' API to check your data:
 
 ```{r, eval=FALSE}
 validate_archive()

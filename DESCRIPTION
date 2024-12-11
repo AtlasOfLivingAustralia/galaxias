@@ -17,9 +17,9 @@ Authors@R:
              role = c("aut")))
 Description: galaxias helps users describe, package and share biodiversity 
   information using the 'Darwin Core' data standard, which is the format used
-  and accepted by the Global Biodiversity Information Facility (GBIF) and it's
+  and accepted by the Global Biodiversity Information Facility (GBIF) and its'
   partner nodes. It is functionally similar to `devtools`, but with a focus on
-  building Darwin Core Archives (DwCA's) rather than R packages.
+  building 'Darwin Core Archives' rather than R packages.
 Depends: 
   R (>= 4.3.0),
   corella

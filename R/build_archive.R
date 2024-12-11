@@ -4,54 +4,51 @@
 #' and metadata. This function assumes that all of these file types have been
 #' pre-constructed, and can be found inside a single folder, with no additional
 #' or redundant information. This function is similar to `devtools::build()`,
-#' in the sense that it takes a repository and wraps it for publication, without
-#' assessing the contents in any meaningful way. It differs from 
-#' `devtools::build()` in that it builds a Darwin Core Archive, rather than an 
-#' R package.
+#' in the sense that it takes a repository and wraps it for publication, It 
+#' differs from `devtools::build()` in that it builds a Darwin Core Archive, 
+#' rather than an R package.
 #' @details
 #' This function looks for three types of objects in the specified `directory`:
 #' 
 #'  * One or more `csv` files such as `occurrences.csv` &/or `events.csv`. 
 #'    These will be manipulated versions of the raw dataset, which have been
-#'    altered to use Darwin Core terms as column headers. See the `corella`
-#'    package for details.
-#'  * A metadata statement, stored in xml using the filename `eml.xml`. The
-#'    function `use_metadata()` from the `paperbark` package is a good starting 
-#'    point here, followed by `build_metadata()` to save it in xml.
+#'    altered to use Darwin Core terms as column headers. See 
+#'    [corella::corella-package()] for details.
+#'  * A metadata statement, stored in `EML` using the filename `eml.xml`. The
+#'    function [use_metadata()] is a good starting point here, followed by 
+#'    [build_metadata()] once you have populated your metadata statement.
 #'  * A 'schema' document, also stored in xml, called `meta.xml`. This is 
-#'    usually constructed using `build_schema()`.
+#'    usually constructed using [build_schema()].
 #'
 #' You will get an error if these files are not present. The resulting file
 #' shares the name of the working directory (with a .zip file extension),
 #' and is placed in the parent directory
-#' @param x (string) A directory containing all the files to be stored in the
-#' archive. Defaults to the `data` folder within the current working directory.
-#' @param file (string) A file name to save the resulting zip file.
+#' @param source (string) A directory containing all the files to be stored in 
+#' the archive. Defaults to the `data` folder within the current working 
+#' directory.
+#' @param destination (string) A file name to save the resulting zip file.
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
 #' @importFrom zip zip
 #' @export
-build_archive <- function(x = "data", file) {
-  x <- get_default_directory(x)
-  
-  progress_update("Retrieving metadata...")
-  files_in <- find_data(x)
+build_archive <- function(source = "data", destination) {
+  progress_update("Retrieving data...")
+  files_in <- get_default_directory(source) |>
+    find_data()
   
   progress_update("Creating zip folder...")
-  file_out <- get_default_file(file)
+  file_out <- get_default_file(destination)
   
   progress_update("Building Darwin Core Archive...")
   zip::zip(zipfile = file_out, 
            files = files_in,
            mode = "cherry-pick")
   
-  cli::cli_alert_success("Darwin Core Archive successfully built. \nSaved as {.file {file_out}}.")
+  cli::cli_alert_success("Darwin Core Archive successfully built. \nSaved as `{.file {file_out}}`.")
   cli::cli_progress_done()
   
-  # invisible(return(file_out)) # might need this to save
-  
-
+  invisible(file_out)
 }
 
 #' Simple function to specify a zip file if no arg given

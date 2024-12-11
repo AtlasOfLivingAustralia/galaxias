@@ -4,27 +4,26 @@
 #' It works by detecting column names on csv files in a specified directory;
 #' these should all be Darwin Core terms for this function to produce reliable
 #' results.
-#' @param x (string) A directory containing all the files to be stored in the
-#' archive. Defaults to the `data` folder within the current working directory.
-#' @param file (string) A file name for the resulting schema document.
+#' @param source A directory (**not** a file) containing files to be documented 
+#' in the schema document. Defaults to the `data` folder within the current 
+#' working directory. Note that files that do not match the Darwin Core naming 
+#' convention and/or do not end in `.csv` are ignored.
+#' @param destination A file name for the resulting schema document. Defaults
+#' to `./data/meta.xml` for consistency with the Darwin Core standard.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
 #' @importFrom paperbark write_eml
 #' @importFrom glue glue
 #' @importFrom rlang abort
 #' @export
-build_schema <- function(x = "data", 
-                         file = "./data/meta.xml") {
-  x <- get_default_directory(x)
-  
-  files <- detect_dwc_files(x)
-  fields <- detect_dwc_fields(files)
-  result <- add_front_matter(fields)
-  
-  progress_update("Writing file...")
-  write_eml(result, file = file)
-  
-  cli::cli_alert_success("Schema successfully built. Saved as {.file /data/meta.xml}.")
+build_schema <- function(source = "data", 
+                         destination = "./data/meta.xml") {
+  get_default_directory(source) |>
+    detect_dwc_files() |>
+    detect_dwc_fields() |>
+    add_front_matter() |>
+    write_eml(file = destination)
+  cli::cli_alert_success("Schema successfully built. Saved as {destination}.")
   cli::cli_progress_done()
 }
 
@@ -195,7 +194,17 @@ create_field_rows <- function(x){
   index_list <- as.list(seq_along(field_names))
   names(index_list) <- rep("index", n_fields)
   # get sequence of urls
-  term_list <- as.list(glue("http://rs.tdwg.org/dwc/terms/{field_names}"))
+  dwc_df <- corella::darwin_core_terms
+  term_list <- map(field_names, 
+      .f = \(a){
+        term_lookup <- dwc_df$term == a
+        if(any(term_lookup)){
+          dwc_df$url[which(term_lookup)[1]]
+        }else{
+          "no-dwc-term-found"
+        }
+      })
+  # term_list <- as.list(glue("http://rs.tdwg.org/dwc/terms/{field_names}")) # obsolete
   names(term_list) <- rep("term", n_fields)
   # combine
   tibble(level = 3,
