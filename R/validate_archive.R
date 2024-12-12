@@ -18,7 +18,7 @@ validate_archive <- function(x = "data",
                              provider = "GBIF"){
 
   # if this isn't a zip file, build one, and return the location
-  if(!grepl(x, ".zip$")){
+  if(!grepl(".zip$", x)){
     x <- build_archive(x)
   }
   

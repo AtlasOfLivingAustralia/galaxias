@@ -15,6 +15,7 @@ navbar:
     - quickstart
     - reference
     right:
+    - search
     - news
     - github
   components:
