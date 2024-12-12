@@ -18,9 +18,8 @@ it's partner nodes.
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # load packages now to avoid messages later
-devtools::load_all()
+library(galaxias)
 library(lubridate)
-library(corella)
 ```
 
 ## Start a new project
