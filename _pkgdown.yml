@@ -13,7 +13,6 @@ navbar:
     left:
     - home
     - quickstart
-    - articles
     - reference
     right:
     - news
@@ -22,11 +21,6 @@ navbar:
     quickstart:
       text: Quick start guide
       href: articles/quick_start_guide.html
-    articles:
-      text: Articles
-      menu:
-      - text: Darwin Core Archives
-        href: articles/Structure_of_DwCAs.html
     news:
       text: News
       href: news/index.html

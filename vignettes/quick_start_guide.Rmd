@@ -1,7 +1,7 @@
 ---
 title: "Quick start guide"
 author: "Martin Westgate"
-date: '2024-05-10'
+date: '2024-12-12'
 output:
   rmarkdown::html_vignette
 vignette: >
@@ -16,6 +16,12 @@ be seamlessly converted into a **Darwin Core Archive**, the data standard used
 by the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and
 it's partner nodes.
 
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+# load packages now to avoid messages later
+devtools::load_all()
+library(lubridate)
+library(corella)
+```
 
 ## Start a new project
 
@@ -41,15 +47,11 @@ It is a good idea to write some basic information in your `README.Rmd` file
 first, as this provides guidance to your users as to what your package contains,
 as well as what they are allowed to use it for.
 
-At this point, we suggest storing your repository on GitHub or similar. See ...
-for advice on setting this up.
-
 ## Adding data to your project
 
 We recommend that you first add your data to the `data-raw` folder, then use a 
-script within that folder to manipulate it to a suitable interchange format 
-(such as Darwin Core). Let's assume, for example, that your data is looks like 
-this:
+script within that folder to manipulate it to Darwin Core format. Let's assume, 
+for example, that your data is looks like this:
 
 ```{r}
 library(tibble)
@@ -65,30 +67,54 @@ df <- tibble(
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-We recommend using the `corella` package for converting tibbles to Darwin 
-Core. A minimally complete set of individual observations formatted using
-this package might look like this:
+We recommend using functions from the `corella` package for converting tibbles 
+to Darwin Core. `corella` is automatically loaded when you load `galaxias`. A 
+minimally complete set of formatted observations might look like this:
 
-```{r}
-library(corella)
+```{r, echo=FALSE, message=FALSE}
 library(lubridate)
 
 occurrences <- df |>
   # basic requirements of Darwin Core
-  use_occurrences(occurrenceID = seq_len(nrow(df)),
+  use_occurrences(occurrenceID = sequential_id(),
                   basisOfRecord = "humanObservation") |> 
   # place and time
   use_coordinates(decimalLatitude = latitude, 
                   decimalLongitude = longitude) |>
   use_locality(country = "Australia", 
-               locality = "City of Town") |>
+               locality = "Canberra") |>
   use_datetime(eventDate = lubridate::dmy(date),
                eventTime = lubridate::hm(time)) |>
   # taxonomy
   use_scientific_name(scientificName = species, 
-                      scientificNameRank = "species") |>
+                      taxonRank = "species") |>
   use_taxonomy(kingdom = "Animalia", 
                phylum = "Aves") 
+```
+
+```{r, echo=TRUE, eval=FALSE}
+library(lubridate)
+
+occurrences <- df |>
+  # basic requirements of Darwin Core
+  use_occurrences(occurrenceID = sequential_id(),
+                  basisOfRecord = "humanObservation") |> 
+  # place and time
+  use_coordinates(decimalLatitude = latitude, 
+                  decimalLongitude = longitude) |>
+  use_locality(country = "Australia", 
+               locality = "Canberra") |>
+  use_datetime(eventDate = lubridate::dmy(date),
+               eventTime = lubridate::hm(time)) |>
+  # taxonomy
+  use_scientific_name(scientificName = species, 
+                      taxonRank = "species") |>
+  use_taxonomy(kingdom = "Animalia", 
+               phylum = "Aves") 
+```
+
+```{r, echo=TRUE}
+print(occurrences, n = 5)
 ```
 
 Note that this deliberately includes some redundancy. The coordinate data are
@@ -97,49 +123,68 @@ specify a text string given some information on location. Similarly, the
 `scientificName` field should be sufficient to identify the taxon in question, 
 but adding higher taxonomic information makes the identification less ambiguous.
 
-Although it is possible to provide data as a set of unrelated observations,
-this structure doesn't reflect the way in which ecological surveys are typically
-conducted. If, for example, you have conducted a survey in which many species
-can be detected at once, you can try:
-
-(add code block here showing `use_events()` and `use_abundance()`)
-
-(add example of refining only to DwC terms)
-
 We have saved our tibble as an object with a Darwin Core-specific name, so we 
-can save it out using `write_csv()`
+can subset to only Darwin Core terms, and save it out using `write_csv()`
 
 ```{r, eval=FALSE}
 library(readr)
-write_csv(occurrences, ".data/occurrences.csv")
+occurrences |>
+  select(any_of(occurrence_terms())) |>
+  write_csv(".data/occurrences.csv")
 ```
 
 If your data are _already_ in Darwin Core format, you can simply place them 
-in the data folder and remove your `data-raw` folder.
+in the `data` folder. You can then use `build_schema()` to create a 'schema'
+file, which is an `xml` document that tells users what data is present in your 
+archive.
 
 ## Adding package metadata
 
-Darwin Core Archives use `xml` files to store two metadata files; one that 
-describes your data and ownership, and a second that stores its' structure.
-We recommend using the `paperbark` package to manipulate these files.
-
-`build_schema()` example
-
-`build_metadata()` example
-
-Finally, best to `build_archive()`.
-
-## Check your respository
-
-Darwin Core may be an unfamiliar format, so it can be useful to 'check' your
-data for common issues. We suggest first using `check_archive()`:
-
-
-Alternatively, you can use the GBIF 'validate' API to check your data:
+A critical part of a Darwin Core archive is a metadata statement; this tells 
+users who owns the data, what the data were collected for, and what uses they
+can be put to (i.e. a data licence). To get an example statement, call
+`use_metadata()`
 
 ```{r, eval=FALSE}
-validate_archive()
+use_metadata()
 ```
 
-## Sharing data
+This creates a blank statement called 'metadata.md', which looks like this:
 
+```{r, echo=FALSE, eval=TRUE}
+library(paperbark)
+metadata_string <- as_eml_chr(metadata_example)[3:15]
+  metadata_string |>
+  paste0("\n") |>
+  cat()
+```
+
+Once you have editted the statement to reflect the information you want to
+convey, you can convert it to `EML` using:
+
+```{r, eval=FALSE}
+build_metadata()
+```
+
+A second piece of metadata required by the Darwin Core standard is the 'schema'
+document. This is a machine-readable `xml` document that describes the content
+of the archive's data files. You can generate one using:
+
+```{r, eval=FALSE}
+build_schema()
+```
+
+## Build an archive
+At the end of the above process, you should have a folder named `data` that 
+contains at least three files:
+
+- One or more `.csv` files containing data
+- a `meta.xml` file containing your schema
+- an `eml.xml` file containing your metadata
+
+If that is true, then you can run `build_archive()` to zip your data into a 
+Darwin Core Archive:
+
+```{r eval=FALSE}
+build_archive()
+```
