@@ -38,12 +38,6 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="active nav-item"><a class="nav-link" href="../articles/quick_start_guide.html">Quick start guide</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Structure_of_DwCAs.html">Darwin Core Archives</a></li>
-  </ul>
-</li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -65,7 +59,7 @@
                         <h4 data-toc-skip class="author">Martin
 Westgate</h4>
             
-            <h4 data-toc-skip class="date">2024-05-10</h4>
+            <h4 data-toc-skip class="date">2024-12-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/main/vignettes/quick_start_guide.Rmd" class="external-link"><code>vignettes/quick_start_guide.Rmd</code></a></small>
       <div class="d-none name"><code>quick_start_guide.Rmd</code></div>
@@ -96,16 +90,14 @@ for that project, which will have the following structure:</p>
 <code>README.Rmd</code> file first, as this provides guidance to your
 users as to what your package contains, as well as what they are allowed
 to use it for.</p>
-<p>At this point, we suggest storing your repository on GitHub or
-similar. See … for advice on setting this up.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-data-to-your-project">Adding data to your project<a class="anchor" aria-label="anchor" href="#adding-data-to-your-project"></a>
 </h2>
 <p>We recommend that you first add your data to the
 <code>data-raw</code> folder, then use a script within that folder to
-manipulate it to a suitable interchange format (such as Darwin Core).
-Let’s assume, for example, that your data is looks like this:</p>
+manipulate it to Darwin Core format. Let’s assume, for example, that
+your data is looks like this:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span></span>
@@ -118,100 +110,107 @@ Let’s assume, for example, that your data is looks like this:</p>
 <p>(Note that normally you’d import your data from an external file
 (e.g. using <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code>), but we’ve constructed one
 here for example purposes.)</p>
-<p>We recommend using the <code>corella</code> package for converting
-tibbles to Darwin Core. A minimally complete set of individual
-observations formatted using this package might look like this:</p>
+<p>We recommend using functions from the <code>corella</code> package
+for converting tibbles to Darwin Core. <code>corella</code> is
+automatically loaded when you load <code>galaxias</code>. A minimally
+complete set of formatted observations might look like this:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://corella.ala.org.au" class="external-link">corella</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'lubridate'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     date, intersect, setdiff, union</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">occurrences</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">occurrences</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># basic requirements of Darwin Core</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_occurrences.html" class="external-link">use_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_occurrences.html" class="external-link">use_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                  basisOfRecord <span class="op">=</span> <span class="st">"humanObservation"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># place and time</span></span>
 <span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_coordinates.html" class="external-link">use_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>, </span>
 <span>                  decimalLongitude <span class="op">=</span> <span class="va">longitude</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_locality.html" class="external-link">use_locality</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Australia"</span>, </span>
-<span>               locality <span class="op">=</span> <span class="st">"City of Town"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>               locality <span class="op">=</span> <span class="st">"Canberra"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_datetime.html" class="external-link">use_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">dmy</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>,</span>
 <span>               eventTime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hms.html" class="external-link">hm</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># taxonomy</span></span>
 <span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_scientific_name.html" class="external-link">use_scientific_name</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">species</span>, </span>
-<span>                      scientificNameRank <span class="op">=</span> <span class="st">"species"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>                      taxonRank <span class="op">=</span> <span class="st">"species"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_taxonomy.html" class="external-link">use_taxonomy</a></span><span class="op">(</span>kingdom <span class="op">=</span> <span class="st">"Animalia"</span>, </span>
 <span>               phylum <span class="op">=</span> <span class="st">"Aves"</span><span class="op">)</span> </span></code></pre></div>
-<pre><code><span><span class="co">## ⠙ Checking 2 columns: <span style="color: #00BB00;">basisOfRecord</span> and <span style="color: #00BB00;">occurrenceID</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">basisOfRecord</span> and <span style="color: #00BB00;">occurrenceID</span> <span style="color: #B2B2B2;">[646ms]</span></span></span></code></pre>
-<pre><code><span><span class="co">## </span></span></code></pre>
-<pre><code><span><span class="co">## ⠙ Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[622ms]</span></span></span></code></pre>
-<pre><code><span><span class="co">## </span></span></code></pre>
-<pre><code><span><span class="co">## ⠙ Checking 2 columns: <span style="color: #00BB00;">country</span> and <span style="color: #00BB00;">locality</span></span></span></code></pre>
-<pre><code><span><span class="co">## ⠹ Checking 2 columns: <span style="color: #00BB00;">country</span> and <span style="color: #00BB00;">locality</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">country</span> and <span style="color: #00BB00;">locality</span> <span style="color: #B2B2B2;">[628ms]</span></span></span></code></pre>
-<pre><code><span><span class="co">## </span></span></code></pre>
-<pre><code><span><span class="co">## ⠙ Checking 2 columns: <span style="color: #00BB00;">eventDate</span> and <span style="color: #00BB00;">eventTime</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">eventDate</span> and <span style="color: #00BB00;">eventTime</span> <span style="color: #B2B2B2;">[616ms]</span></span></span></code></pre>
-<pre><code><span><span class="co">## </span></span></code></pre>
-<pre><code><span><span class="co">## ⠙ Checking 2 columns: <span style="color: #00BB00;">scientificName</span> and <span style="color: #00BB00;">scientificNameRank</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">scientificName</span> and <span style="color: #00BB00;">scientificNameRank</span> <span style="color: #B2B2B2;">[616ms]</span></span></span></code></pre>
-<pre><code><span><span class="co">## </span></span></code></pre>
-<pre><code><span><span class="co">## ⠙ Checking 2 columns: <span style="color: #00BB00;">kingdom</span> and <span style="color: #00BB00;">phylum</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">kingdom</span> and <span style="color: #00BB00;">phylum</span> <span style="color: #B2B2B2;">[620ms]</span></span></span></code></pre>
-<pre><code><span><span class="co">## </span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">occurrences</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 12</span></span></span>
+<span><span class="co">##   basisOfRecord   occurrenceID decimalLatitude decimalLongitude country locality</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> humanObservati… 01                     -<span style="color: #BB0000;">35.3</span>             149. Austra… Canberra</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> humanObservati… 02                     -<span style="color: #BB0000;">35.3</span>             149. Austra… Canberra</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 6 more variables: eventDate &lt;date&gt;, eventTime &lt;Period&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   scientificName &lt;chr&gt;, taxonRank &lt;chr&gt;, kingdom &lt;chr&gt;, phylum &lt;chr&gt;</span></span></span></code></pre>
 <p>Note that this deliberately includes some redundancy. The coordinate
 data are useful by themselves, for example, but in case of ambiguity it
 is useful to specify a text string given some information on location.
 Similarly, the <code>scientificName</code> field should be sufficient to
 identify the taxon in question, but adding higher taxonomic information
 makes the identification less ambiguous.</p>
-<p>Although it is possible to provide data as a set of unrelated
-observations, this structure doesn’t reflect the way in which ecological
-surveys are typically conducted. If, for example, you have conducted a
-survey in which many species can be detected at once, you can try:</p>
-<p>(add code block here showing <code><a href="https://corella.ala.org.au/reference/use_events.html" class="external-link">use_events()</a></code> and
-<code><a href="https://corella.ala.org.au/reference/use_abundance.html" class="external-link">use_abundance()</a></code>)</p>
-<p>(add example of refining only to DwC terms)</p>
 <p>We have saved our tibble as an object with a Darwin Core-specific
-name, so we can save it out using <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+name, so we can subset to only Darwin Core terms, and save it out using
+<code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="va">occurrences</span>, <span class="st">".data/occurrences.csv"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">occurrences</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="st">".data/occurrences.csv"</span><span class="op">)</span></span></code></pre></div>
 <p>If your data are <em>already</em> in Darwin Core format, you can
-simply place them in the data folder and remove your
-<code>data-raw</code> folder.</p>
+simply place them in the <code>data</code> folder. You can then use
+<code><a href="../reference/build_schema.html">build_schema()</a></code> to create a ‘schema’ file, which is an
+<code>xml</code> document that tells users what data is present in your
+archive.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-package-metadata">Adding package metadata<a class="anchor" aria-label="anchor" href="#adding-package-metadata"></a>
 </h2>
-<p>Darwin Core Archives use <code>xml</code> files to store two metadata
-files; one that describes your data and ownership, and a second that
-stores its’ structure. We recommend using the <code>paperbark</code>
-package to manipulate these files.</p>
-<p><code><a href="../reference/build_schema.html">build_schema()</a></code> example</p>
-<p><code><a href="../reference/build_metadata.html">build_metadata()</a></code> example</p>
-<p>Finally, best to <code><a href="../reference/build_archive.html">build_archive()</a></code>.</p>
+<p>A critical part of a Darwin Core archive is a metadata statement;
+this tells users who owns the data, what the data were collected for,
+and what uses they can be put to (i.e. a data licence). To get an
+example statement, call <code><a href="../reference/use_metadata.html">use_metadata()</a></code></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_metadata.html">use_metadata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>This creates a blank statement called ‘metadata.md’, which looks like
+this:</p>
+<pre><code><span><span class="co">## ## Dataset</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ### Title</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  A Sentence Giving Your Dataset Title In Title Case</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ### Abstract</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  A paragraph outlining the content of the dataset</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ### Creator</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  #### Individual name</span></span></code></pre>
+<p>Once you have editted the statement to reflect the information you
+want to convey, you can convert it to <code>EML</code> using:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_metadata.html">build_metadata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>A second piece of metadata required by the Darwin Core standard is
+the ‘schema’ document. This is a machine-readable <code>xml</code>
+document that describes the content of the archive’s data files. You can
+generate one using:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_schema.html">build_schema</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="check-your-respository">Check your respository<a class="anchor" aria-label="anchor" href="#check-your-respository"></a>
+<h2 id="build-an-archive">Build an archive<a class="anchor" aria-label="anchor" href="#build-an-archive"></a>
 </h2>
-<p>Darwin Core may be an unfamiliar format, so it can be useful to
-‘check’ your data for common issues. We suggest first using
-<code><a href="../reference/check_archive.html">check_archive()</a></code>:</p>
-<p>Alternatively, you can use the GBIF ‘validate’ API to check your data
-(not functional!)</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/validate_archive.html">validate_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="sharing-data">Sharing data<a class="anchor" aria-label="anchor" href="#sharing-data"></a>
-</h2>
+<p>At the end of the above process, you should have a folder named
+<code>data</code> that contains at least three files:</p>
+<ul>
+<li>One or more <code>.csv</code> files containing data</li>
+<li>a <code>meta.xml</code> file containing your schema</li>
+<li>an <code>eml.xml</code> file containing your metadata</li>
+</ul>
+<p>If that is true, then you can run <code><a href="../reference/build_archive.html">build_archive()</a></code> to zip
+your data into a Darwin Core Archive:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
