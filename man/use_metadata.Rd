@@ -2,7 +2,7 @@
 % Please edit documentation in R/use_metadata.R
 \name{use_metadata}
 \alias{use_metadata}
-\title{Write an example metadata statement}
+\title{Create an example metadata statement file}
 \usage{
 use_metadata(file, overwrite = FALSE)
 }
@@ -18,7 +18,18 @@ Does not return an object to the workspace; called for the
 side-effect of saving a markdown file to the specified location.
 }
 \description{
-This function takes \code{metadata_example} and exports it to the specified file.
-This is useful for creating a boilerplate metadata statement that you
-can edit yourself.
+This function creates a metadata template and exports it to the specified
+file. The template is taken from \code{metadata_example} (see \code{metadata_example}
+for documentation). The template \code{.md} file can act as a boilerplate metadata
+statement that you can edit yourself.
+
+The final edited file can be converted for use in a Darwin
+Core Archive using \code{\link[=build_metadata]{build_metadata()}}
+}
+\examples{
+\dontrun{
+# Save template file metadata.md to local directory
+use_metadata()
+}
+
 }

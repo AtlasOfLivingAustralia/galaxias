@@ -28,23 +28,25 @@
 #' @importFrom cli cli_progress_step
 #' @importFrom cli cli_progress_done
 #' @importFrom cli cli_bullets
+#' @importFrom cli cli_fmt
+#' @importFrom cli col_grey
 #' @export
 use_metadata <- function(file, overwrite = FALSE){
   if(missing(file)){
-    cli::cli_progress_step("Creating template file {.file metadata.md}.")
+    cli_progress_step("Creating template file {.file metadata.md}.")
     file <- "metadata.md"
     cli::cli_progress_done()
   }
   if(overwrite){
-    cli::cli_progress_step("Overwriting existing file {.file {file}}.")
+    cli_progress_step("Overwriting existing file {.file {file}}.")
     write_md(paperbark::metadata_example, file = file)
-    cli::cli_progress_done()
+    cli_progress_done()
   }else{
     if(file.exists(file)){
       bullets <- c("File {.file {file}} already exists.",
                    i = "Use a different filename or set `overwrite = TRUE`") |>
-        cli::cli_bullets() |>
-        cli::cli_fmt()
+        cli_bullets() |>
+        cli_fmt()
       
       abort(bullets)
     }else{
@@ -52,11 +54,11 @@ use_metadata <- function(file, overwrite = FALSE){
     }
   }
 
-  cli::cli_bullets(c(
+  cli_bullets(c(
     v = "File template {.file {file}} saved to top folder in local directory.",
     i = paste(
-        c(" Edit {.file {file}}") |> cli::col_grey(), 
-        c("then use {.fn build_metadata} to build final metadata statement.") |> cli::col_grey()
+        c(" Edit {.file {file}}") |> col_grey(), 
+        c("then use {.fn build_metadata} to build final metadata statement.") |> col_grey()
         )
   ))
   
