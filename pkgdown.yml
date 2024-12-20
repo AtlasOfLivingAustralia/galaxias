@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   quick_start_guide: quick_start_guide.html
-last_built: 2024-12-20T05:13Z
+last_built: 2024-12-20T05:25Z
 urls:
   reference: https://galaxias.ala.org.au/reference
   article: https://galaxias.ala.org.au/articles
