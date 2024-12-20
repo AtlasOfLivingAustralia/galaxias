@@ -75,11 +75,13 @@ repositories that are optimised for storing, documenting and sharing
 biodiversity data. These repositories can be seamlessly converted into a
 <strong>Darwin Core Archive</strong>, the data standard used by the <a href="https://gbif.org" class="external-link">Global Biodiversity Information Facility
 (GBIF)</a> and it’s partner nodes.</p>
+<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
 <div class="section level2">
 <h2 id="start-a-new-project">Start a new project<a class="anchor" aria-label="anchor" href="#start-a-new-project"></a>
 </h2>
 <p>To start a new data project using galaxias, call:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au">galaxias</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/galaxias_project.html">galaxias_project</a></span><span class="op">(</span><span class="st">"myprojectname"</span><span class="op">)</span></span></code></pre></div>
 <p>If you are using RStudio, this should launch a new RStudio instance
@@ -101,7 +103,7 @@ to use it for.</p>
 <code>data-raw</code> folder, then use a script within that folder to
 manipulate it to Darwin Core format. Let’s assume, for example, that
 your data is looks like this:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
@@ -117,7 +119,7 @@ here for example purposes.)</p>
 for converting tibbles to Darwin Core. <code>corella</code> is
 automatically loaded when you load <code>galaxias</code>. A minimally
 complete set of formatted observations might look like this:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">occurrences</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
@@ -136,7 +138,7 @@ complete set of formatted observations might look like this:</p>
 <span>                      taxonRank <span class="op">=</span> <span class="st">"species"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_taxonomy.html" class="external-link">use_taxonomy</a></span><span class="op">(</span>kingdom <span class="op">=</span> <span class="st">"Animalia"</span>, </span>
 <span>               phylum <span class="op">=</span> <span class="st">"Aves"</span><span class="op">)</span> </span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">occurrences</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 12</span></span></span>
 <span><span class="co">##   basisOfRecord   occurrenceID decimalLatitude decimalLongitude country locality</span></span>
@@ -154,7 +156,7 @@ makes the identification less ambiguous.</p>
 <p>We have saved our tibble as an object with a Darwin Core-specific
 name, so we can subset to only Darwin Core terms, and save it out using
 <code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
 <span><span class="va">occurrences</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -172,7 +174,7 @@ archive.</p>
 this tells users who owns the data, what the data were collected for,
 and what uses they can be put to (i.e. a data licence). To get an
 example statement, call <code><a href="../reference/use_metadata.html">use_metadata()</a></code></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_metadata.html">use_metadata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This creates a blank statement called ‘metadata.md’, which looks like
 this:</p>
@@ -191,13 +193,13 @@ this:</p>
 <span><span class="co">##  #### Individual name</span></span></code></pre>
 <p>Once you have editted the statement to reflect the information you
 want to convey, you can convert it to <code>EML</code> using:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/build_metadata.html">build_metadata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>A second piece of metadata required by the Darwin Core standard is
 the ‘schema’ document. This is a machine-readable <code>xml</code>
 document that describes the content of the archive’s data files. You can
 generate one using:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/build_schema.html">build_schema</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -212,7 +214,7 @@ generate one using:</p>
 </ul>
 <p>If that is true, then you can run <code><a href="../reference/build_archive.html">build_archive()</a></code> to zip
 your data into a Darwin Core Archive:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
