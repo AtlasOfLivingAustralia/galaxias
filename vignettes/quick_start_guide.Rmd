@@ -16,7 +16,7 @@ be seamlessly converted into a **Darwin Core Archive**, the data standard used
 by the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and
 it's partner nodes.
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
+```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # load packages now to avoid messages later
 library(galaxias)
 library(lubridate)
@@ -28,7 +28,7 @@ To start a new data project using galaxias, call:
 
 ```{r, eval=FALSE}
 library(galaxias)
-galaxias_project("myprojectname")
+galaxias_project("my-project-name")
 ```
 
 If you are using RStudio, this should launch a new RStudio instance for
@@ -37,7 +37,7 @@ that project, which will have the following structure:
 ```
 ├── README.md                        : Description of the repository
 ├── metadata.md                      : Boilerplate metadata statement for this project
-├── projectname.Rproj                : RStudio project file
+├── my-project-name.Rproj            : RStudio project file
 ├── data-raw                         : Folder to store source data
 └── data                             : Folder to store processed data
 ```
@@ -66,28 +66,29 @@ df <- tibble(
 (Note that normally you'd import your data from an external file (e.g. using
 `readr::read_csv()`), but we've constructed one here for example purposes.)
 
-We recommend using functions from the `corella` package for converting tibbles 
-to Darwin Core. `corella` is automatically loaded when you load `galaxias`. A 
-minimally complete set of formatted observations might look like this:
+You can convert tibbles to use Darwin Core standard using `set_` functions 
+imported from the [corella package](https://corella.ala.org.au/) 
+(automatically loaded with galaxias). A minimally complete set of formatted 
+observations might look like this:
 
 ```{r, echo=FALSE, message=FALSE}
 library(lubridate)
 
 occurrences <- df |>
   # basic requirements of Darwin Core
-  use_occurrences(occurrenceID = sequential_id(),
+  set_occurrences(occurrenceID = sequential_id(),
                   basisOfRecord = "humanObservation") |> 
   # place and time
-  use_coordinates(decimalLatitude = latitude, 
+  set_coordinates(decimalLatitude = latitude, 
                   decimalLongitude = longitude) |>
-  use_locality(country = "Australia", 
+  set_locality(country = "Australia", 
                locality = "Canberra") |>
-  use_datetime(eventDate = lubridate::dmy(date),
+  set_datetime(eventDate = lubridate::dmy(date),
                eventTime = lubridate::hm(time)) |>
   # taxonomy
-  use_scientific_name(scientificName = species, 
+  set_scientific_name(scientificName = species, 
                       taxonRank = "species") |>
-  use_taxonomy(kingdom = "Animalia", 
+  set_taxonomy(kingdom = "Animalia", 
                phylum = "Aves") 
 ```
 
@@ -96,19 +97,19 @@ library(lubridate)
 
 occurrences <- df |>
   # basic requirements of Darwin Core
-  use_occurrences(occurrenceID = sequential_id(),
+  set_occurrences(occurrenceID = sequential_id(),
                   basisOfRecord = "humanObservation") |> 
   # place and time
-  use_coordinates(decimalLatitude = latitude, 
+  set_coordinates(decimalLatitude = latitude, 
                   decimalLongitude = longitude) |>
-  use_locality(country = "Australia", 
+  set_locality(country = "Australia", 
                locality = "Canberra") |>
-  use_datetime(eventDate = lubridate::dmy(date),
+  set_datetime(eventDate = lubridate::dmy(date),
                eventTime = lubridate::hm(time)) |>
   # taxonomy
-  use_scientific_name(scientificName = species, 
+  set_scientific_name(scientificName = species, 
                       taxonRank = "species") |>
-  use_taxonomy(kingdom = "Animalia", 
+  set_taxonomy(kingdom = "Animalia", 
                phylum = "Aves") 
 ```
 
