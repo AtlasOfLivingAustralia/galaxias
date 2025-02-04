@@ -8,6 +8,8 @@ template:
     bootswatch: cerulean
 development:
   mode: release
+project: 
+  render: ['*.qmd']
 navbar:
   structure:
     left:
@@ -22,6 +24,11 @@ navbar:
     quickstart:
       text: Quick start guide
       href: articles/quick_start_guide.html
+    articles:
+      text: Examples
+      menu:
+      - text: Standardise occurrence-based data
+        href: articles/occurrence-example.html
     news:
       text: News
       href: news/index.html
