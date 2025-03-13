@@ -60,8 +60,8 @@ using the Darwin Core standard. The other packages are:
 
 - [`corella`](https://corella.ala.org.au) for converting tibbles to the
   required column names
-- [`paperbark`](https://paperbark.ala.org.au) for converting markdown
-  files to `xml`.
+- [`delma`](https://delma.ala.org.au) for converting markdown files to
+  `xml`.
 
 ## Citing galaxias
 
