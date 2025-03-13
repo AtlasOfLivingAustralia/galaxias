@@ -12,23 +12,19 @@
 #' side-effect of building a new project or package.
 #' @name galaxias_project
 #' @order 1
-#' @importFrom usethis create_project
-#' @importFrom usethis use_directory
 #' @export
 galaxias_project <- function(path, ...){
-  create_project(path, ...)
-  use_metadata()
-  use_directory("data_raw")
-  use_directory("data")
+  usethis::create_project(path, ...)
+  delma::use_metadata()
+  usethis::use_directory("data_raw")
+  usethis::use_directory("data")
 }
 
 #' @rdname galaxias_project
 #' @order 2
-#' @importFrom usethis create_package
-#' @importFrom usethis use_directory
 #' @export
 galaxias_package <- function(path, ...){
-  create_package(path, ...)
-  use_directory("data_raw")
-  use_directory("data") 
+  usethis::create_package(path, ...)
+  usethis::use_directory("data_raw")
+  usethis::use_directory("data") 
 }

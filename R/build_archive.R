@@ -30,7 +30,6 @@
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
-#' @importFrom zip zip
 #' @export
 build_archive <- function(source = "data", destination) {
   progress_update("Retrieving data...")
@@ -52,16 +51,14 @@ build_archive <- function(source = "data", destination) {
 }
 
 #' Simple function to specify a zip file if no arg given
-#' @importFrom glue glue
-#' @importFrom rlang abort
 #' @noRd
 #' @keywords Internal
 get_default_file <- function(file){
   if(missing(file)){
-    glue("{getwd()}.zip")
+    glue::glue("{getwd()}.zip")
   }else{
     if(!grepl(".zip$", file)){
-      abort("File must end in `.zip`.")
+      cli::cli_abort("File must end in `.zip`.")
     }else{
       file
     }
@@ -69,24 +66,22 @@ get_default_file <- function(file){
 }
 
 #' Simple function to check that a `data` directory exists if no arg given
-#' @importFrom rlang abort
-#' @importFrom rlang inform
-#' @importFrom cli cli_inform
-#' @importFrom glue glue
 #' @noRd
 #' @keywords Internal
 get_default_directory <- function(x){
   if(missing(x)){
     if(dir.exists("data")){
-      cli_inform("Missing `directory`. Defaulting to {.file data} folder.")
+      cli::cli_inform("Missing `directory`. Defaulting to {.file data} folder.")
       x <- "data"
     }else{
-      abort(c("Missing `directory` and missing `data` folder.", 
-              i = "Please specify a folder containing required data."))
+      c("Missing `directory` and missing `data` folder.", 
+        i = "Please specify a folder containing required data.") |>
+      cli::cli_abort()
     }
   }else{
     if(!dir.exists(x)){
-      abort(glue("Specified folder '{x}' not found"))
+      glue::glue("Specified folder '{x}' not found") |>
+        cli::cli_abort()
     }else{
       x
     }
@@ -94,50 +89,46 @@ get_default_directory <- function(x){
 }
 
 #' Find metadata info in a repository
-#' @importFrom glue glue_collapse
-#' @importFrom rlang abort
-#' @importFrom cli cli_abort
-#' @importFrom rlang caller_env
 #' @noRd
 #' @keywords Internal
 find_data <- function(directory,
                       call = caller_env()){
   if(!file.exists(directory)){
-    bullets <- c(glue("Missing `directory`."),
+    bullets <- c(glue::glue("Missing `directory`."),
                  i = "Use `usethis::use_data()` to add data to your project.",
                  x = "Can't find directory `{directory}`.")
-    cli_abort(bullets,
-          call = call)
+    cli::cli_abort(bullets,
+                   call = call)
   }
   accepted_names <- c("occurrences", 
                       "events", 
                       "multimedia") |>
-    glue_collapse(sep = "|")
+    glue::glue_collapse(sep = "|")
   file_list <- list.files(directory,
-                          pattern = glue("^{accepted_names}.csv$"))
+                          pattern = glue::glue("^{accepted_names}.csv$"))
   if(length(file_list) < 1){
     bullets <- c("No data meeting Darwin Core requirements is given in `data`.",
                  i = "Use `add_bd_data_raw()` for examples of how to add raw data to your package.",
                  i =  "Use `usethis::use_data()` to add data to your package.")
-    abort(bullets,
-          call = call)
+    cli::cli_abort(bullets,
+                   call = call)
   }
   
   if(!file.exists(glue("{directory}/meta.xml"))){
     bullets <- c("No schema file ({.file meta.xml}) is present in the specified directory.",
                  i = "Use `build_schema()` to create a schema file.")
-    cli_abort(bullets,
-          call = call)
+    cl::cli_abort(bullets,
+                  call = call)
   }
   
   if(!file.exists(glue("{directory}/eml.xml"))){
     bullets <- c("No metadata statement ({.file eml.xml}) is present in the specified directory.",
                  i = "See `paperbark::use_metadata()` for an example metadata statement.",
                  i = "Use `build_metadata()` to convert to {.file eml.xml}.")
-    cli_abort(bullets,
-          call = call)
+    cli::cli_abort(bullets,
+                   call = call)
   }
   
   file_list <- c(file_list, "eml.xml", "meta.xml")
-  glue("{directory}/{file_list}")
+  glue::glue("{directory}/{file_list}")
 }

@@ -15,8 +15,6 @@
 #' `data/eml.xml`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the `data` directory.
-#' @importFrom paperbark read_md
-#' @importFrom paperbark write_eml
 #' @export
 build_metadata <- function(source = "metadata.md", 
                            destination = "./data/eml.xml"){
@@ -24,11 +22,11 @@ build_metadata <- function(source = "metadata.md",
     cli::cli_abort("`{source}` doesn't exist in specified location.")
   }
   # import file, ensure EML metadata is added, convert to XML
-  progress_update("Reading file...")
-  metadata_tbl <- read_md(source)
-
-  progress_update("Writing file...")
-  write_eml(metadata_tbl, file = destination)
+  progress_update("Reading metadata statement...")
+  metadata_file <- delma::read_md(x)
+  
+  progress_update("Writing EML file...")
+  delma::write_eml(built_file, file = file)
   
   cli::cli_alert_success("Metadata successfully built. Saved as `{destination}`.")
   cli::cli_progress_done()

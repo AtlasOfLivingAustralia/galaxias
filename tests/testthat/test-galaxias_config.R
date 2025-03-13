@@ -20,6 +20,6 @@ test_that("galaxias_config() accepts a correctly-formatted list", {
     email = "my_email@email.com",
     password = "a-safe-password")
   galaxias_config(gbif = credentials_obj)
-  result <- pour(.pkg = "galaxias")
+  result <- potions::pour(.pkg = "galaxias")
   expect_identical(credentials_obj, result$gbif)
 })

@@ -22,7 +22,8 @@ Description: galaxias helps users describe, package and share biodiversity
   building 'Darwin Core Archives' rather than R packages.
 Depends: 
   R (>= 4.3.0),
-  corella
+  corella,
+  delma
 Imports:
   cli,
   curl,

@@ -10,14 +10,14 @@
 #' @returns Invisibly returns a tibble to the workspace containing check 
 #' results; but primarily called for the side-effect of generating a report in 
 #' the console.
-#' @importFrom utils unzip
 #' @export
 check_archive <- function(x = "data"){ # add `file` arg for consistency with `check_eml()`
   if(!file.exists(x)){
-    abort(glue("file or directory '{x}' not found"))
+    glue::glue("file or directory '{x}' not found") |>
+      cli::cli_abort()
   }else{
     if(grepl(".zip$")){
-      file_list <- unzip(x, list = TRUE)
+      file_list <- utils::unzip(x, list = TRUE)
     }else{
       file_list <- list.files(x)
     }
@@ -26,20 +26,16 @@ check_archive <- function(x = "data"){ # add `file` arg for consistency with `ch
 }
 
 #' Internal function to check all files
-#' @importFrom corella check_dataset
-#' @importFrom paperbark check_eml
-#' @importFrom purrr map
-#' @importFrom readr read_csv
 #' @noRd
 #' @keywords Internal
 check_files <- function(filenames){
-  map(filenames, 
+  purrr::map(filenames, 
       \(a){
         switch(a, 
-               "occurrences.csv" = {read_csv(a) |>
-                                    check_dataset()},
-               "meta.xml" = {check_eml(file = a)},
-               "eml.xml" = {check_eml(file = a)}
+               "occurrences.csv" = {readr::read_csv(a) |>
+                                    corella::check_dataset()},
+               "meta.xml" = {delma::check_eml(a)},
+               "eml.xml" = {delma::check_eml(a)}
        )
   }) |>
     invisible()

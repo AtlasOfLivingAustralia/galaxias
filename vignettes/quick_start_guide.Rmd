@@ -26,6 +26,10 @@ library(lubridate)
 
 To start a new data project using galaxias, call: 
 
+```{r, eval=TRUE, echo=FALSE}
+devtools::load_all()
+```
+
 ```{r, eval=FALSE}
 library(galaxias)
 galaxias_project("my-project-name")
@@ -52,7 +56,7 @@ We recommend that you first add your data to the `data-raw` folder, then use a
 script within that folder to manipulate it to Darwin Core format. Let's assume, 
 for example, that your data is looks like this:
 
-```{r}
+```{r, eval=FALSE}
 library(tibble)
 
 df <- tibble(
@@ -88,7 +92,7 @@ occurrences <- df |>
   # taxonomy
   set_scientific_name(scientificName = species, 
                       taxonRank = "species") |>
-  set_taxonomy(kingdom = "Animalia", 
+  set_taxonomy(kingdom = "Animalia",
                phylum = "Aves") 
 ```
 
