@@ -9,7 +9,7 @@ Authors@R:
              role = c("aut", "cre")),
       person(given = "Shandiya",
              family = "Balasubramanium",
-             email = "shandiya.balasubramanium@csiro.au",
+             email = "shandiya.balasubramaniam@csiro.au",
              role = c("aut")),
       person(given = "Dax",
              family = "Kellie",
