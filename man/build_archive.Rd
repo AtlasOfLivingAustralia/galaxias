@@ -4,13 +4,14 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(x = "data", file)
+build_archive(source = "data", destination)
 }
 \arguments{
-\item{x}{(string) A directory containing all the files to be stored in the
-archive. Defaults to the \code{data} folder within the current working directory.}
+\item{source}{(string) A directory containing all the files to be stored in
+the archive. Defaults to the \code{data} folder within the current working
+directory.}
 
-\item{file}{(string) A file name to save the resulting zip file.}
+\item{destination}{(string) A file name to save the resulting zip file.}
 }
 \value{
 Invisibly returns the location of the built zip file; but typically
@@ -22,23 +23,22 @@ A Darwin Core archive is a zip file with a specified combination of data
 and metadata. This function assumes that all of these file types have been
 pre-constructed, and can be found inside a single folder, with no additional
 or redundant information. This function is similar to \code{devtools::build()},
-in the sense that it takes a repository and wraps it for publication, without
-assessing the contents in any meaningful way. It differs from
-\code{devtools::build()} in that it builds a Darwin Core Archive, rather than an
-R package.
+in the sense that it takes a repository and wraps it for publication, It
+differs from \code{devtools::build()} in that it builds a Darwin Core Archive,
+rather than an R package.
 }
 \details{
 This function looks for three types of objects in the specified \code{directory}:
 \itemize{
 \item One or more \code{csv} files such as \code{occurrences.csv} &/or \code{events.csv}.
 These will be manipulated versions of the raw dataset, which have been
-altered to use Darwin Core terms as column headers. See the \code{corella}
-package for details.
-\item A metadata statement, stored in xml using the filename \code{eml.xml}. The
-function \code{use_metadata()} from the \code{elm} package is a good starting point
-here, followed by \code{build_metadata()} to save it in xml.
+altered to use Darwin Core terms as column headers. See
+\code{\link[corella:corella-package]{corella::corella-package()}} for details.
+\item A metadata statement, stored in \code{EML} using the filename \code{eml.xml}. The
+function \code{\link[=use_metadata]{use_metadata()}} is a good starting point here, followed by
+\code{\link[=build_metadata]{build_metadata()}} once you have populated your metadata statement.
 \item A 'schema' document, also stored in xml, called \code{meta.xml}. This is
-usually constructed using \code{build_schema()}.
+usually constructed using \code{\link[=build_schema]{build_schema()}}.
 }
 
 You will get an error if these files are not present. The resulting file

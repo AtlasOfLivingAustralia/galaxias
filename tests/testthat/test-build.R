@@ -8,11 +8,14 @@ test_that("build_ functions work correctly in sequence", {
  
   # add data
   # add events.csv
-  tibble(eventID = 1, eventDate = "2024-01-01") |>
+  tibble(eventID = 1, 
+         eventDate = "2024-01-01") |>
     write.csv(file = "data/events.csv",
               row.names = FALSE)
   # add occurrences.csv
-  tibble(basisOfRecord = "humanObservation", individualCount = 1) |>
+  tibble(basisOfRecord = "humanObservation", 
+         individualCount = 1,
+         scientificName = "Litoria peronii") |>
     write.csv(file = "data/occurrences.csv",
               row.names = FALSE)
   # expect_error(build_archive()) # no schema or metadata
@@ -22,7 +25,7 @@ test_that("build_ functions work correctly in sequence", {
   build_schema()
   expect_true(file.exists("data/meta.xml"))
   result <- readLines("data/meta.xml")
-  expect_equal(length(result), 15) # correct number of entries
+  expect_equal(length(result), 16) # correct number of entries
   expect_true(all(grepl("^\\s*<", result))) # all open with `<`
   # NOTE: still has problems with attributes containing `amp` instead of `&`
   # expect_error(build_archive()) # no metadata yet

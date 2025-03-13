@@ -7,15 +7,17 @@ template:
   params:
     bootswatch: cerulean
 development:
-  mode: auto
+  mode: release
+project: 
+  render: ['*.qmd']
 navbar:
   structure:
     left:
     - home
     - quickstart
-    - articles
     - reference
     right:
+    - search
     - news
     - github
   components:
@@ -23,16 +25,19 @@ navbar:
       text: Quick start guide
       href: articles/quick_start_guide.html
     articles:
-      text: Articles
+      text: Examples
       menu:
-      - text: Darwin Core Archives
-        href: articles/Structure_of_DwCAs.html
+      - text: Standardise occurrence-based data
+        href: articles/occurrence-example.html
     news:
       text: News
       href: news/index.html
 reference:
 - title: Set up a project
-  contents: galaxias_project
+  contents: 
+  - galaxias_project
+  - use_metadata
+  - suggest_workflow
 - title: Construct an archive
   contents:
   - build_metadata

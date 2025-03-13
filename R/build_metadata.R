@@ -1,38 +1,33 @@
 #' Create a metadata statement for a Darwin Core Archive
 #' 
 #' A metadata statement lists the owner of the dataset, how it was collected,
-#' and how it may used (i.e. its' licence). This function simply converts
-#' metadata stored in a markdown file to xml, and stores it in the folder 
-#' specified using the `directory` argument.
+#' and how it can be used (i.e. its' licence). This function simply reads 
+#' converts metadata stored in a markdown file, converts it to xml, and saves it 
+#' in the `destination` file.
 #' 
 #' This function is a fairly shallow wrapper on top of functionality build
-#' in the `elm` package, particularly `read_md()` and `write_eml()`. You can 
+#' in the `paperbark` package, particularly `read_md()` and `write_eml()`. You can 
 #' use that package to gain greater control, or to debug problems, should you 
 #' wish.
-#' @param path Path to a metadata statement stored in markdown format (.md).
-#' @param file A file where the result should be saved. Defaults to 
+#' @param source A metadata file stored in markdown format (`.md`). Defaults
+#' to `metadata.md`, which is the same as is created by [use_metdata()]
+#' @param destination A file where the result should be saved. Defaults to 
 #' `data/eml.xml`.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the `data` directory.
-#' @importFrom elm add_eml_header
-#' @importFrom elm read_md
-#' @importFrom elm write_eml
 #' @export
-build_metadata <- function(x = "data", 
-                           file = "./data/eml.xml"){
-  if(!file.exists(x)){
-    cli::cli_abort("{.file {x}} doesn't exist in specified location.")
+build_metadata <- function(source = "metadata.md", 
+                           destination = "./data/eml.xml"){
+  if(!file.exists(source)){
+    cli::cli_abort("`{source}` doesn't exist in specified location.")
   }
   # import file, ensure EML metadata is added, convert to XML
-  progress_update("Reading file...")
-  metadata_file <- read_md(x)
+  progress_update("Reading metadata statement...")
+  metadata_file <- delma::read_md(x)
   
-  progress_update("Building xml components...")
-  built_file <- add_eml_header(metadata_file)
+  progress_update("Writing EML file...")
+  delma::write_eml(built_file, file = file)
   
-  progress_update("Writing file...")
-  write_eml(built_file, file = file)
-  
-  cli::cli_alert_success("Metadata successfully built. Saved as {.file /data/eml.xml}.")
+  cli::cli_alert_success("Metadata successfully built. Saved as `{destination}`.")
   cli::cli_progress_done()
 }

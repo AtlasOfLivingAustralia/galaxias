@@ -8,7 +8,7 @@
 \description{
 \code{galaxias} helps users describe, package and share biodiversity
 information using the 'Darwin Core' data standard, which is the format used
-and accepted by the Global Biodiversity Information Facility (GBIF) and it's
+and accepted by the Global Biodiversity Information Facility (GBIF) and its'
 partner nodes. It is functionally similar to \code{devtools}, but with a focus on
 building Darwin Core Archives rather than R packages.
 
@@ -21,18 +21,20 @@ If you have any questions, comments or suggestions, please email
 \strong{Set up a project}
 \itemize{
 \item \code{\link[=galaxias_project]{galaxias_project()}} Set up a project with the necessary folder structure
+\item \code{\link[=use_metadata]{use_metadata()}} Add a blank metadata statement to the working directory
+\item \code{\link[=suggest_workflow]{suggest_workflow()}} Advise on configuring a tibble for the Darwin Core standard
 }
 
 \strong{Construct an archive}
 \itemize{
 \item \code{\link[=build_schema]{build_schema()}} Build a schema file (\code{meta.xml}) for a given directory
-\item \code{\link[=build_metadata]{build_metadata()}} Supply a metadata file in .md format, and convert to a metadata file (\code{eml.xml})
+\item \code{\link[=build_metadata]{build_metadata()}} Convert a metadata file from markdown to EML (\code{eml.xml})
 \item \code{\link[=build_archive]{build_archive()}} Convert a directory to a Darwin Core Archive
 }
 
 \strong{Validate an archive}
 \itemize{
-\item \code{\link[=check_archive]{check_archive()}} Check your archive using the \code{elm} and \code{corella} packages
+\item \code{\link[=check_archive]{check_archive()}} Check your archive using the \code{paperbark} and \code{corella} packages
 \item \code{\link[=galaxias_config]{galaxias_config()}} Store credentials for your API call
 \item \code{\link[=validate_archive]{validate_archive()}} Check your archive using the GBIF 'validator' API
 \item \code{\link[=print_validation]{print_validation()}} Methods for displaying API responses
@@ -41,6 +43,7 @@ If you have any questions, comments or suggestions, please email
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://galaxias.ala.org.au}
   \item Report bugs at \url{https://github.com/AtlasOfLivingAustralia/galaxias/issues}
 }
 

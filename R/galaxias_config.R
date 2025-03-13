@@ -12,8 +12,6 @@
 #' via GBIF.
 #' @name galaxias_config 
 #' @param gbif A list containing the entries `username`, `email` and `password`
-#' @importFrom potions brew
-#' @importFrom potions pour
 #' @export
 galaxias_config <- function(gbif){
   # check if all arguments are missing
@@ -23,38 +21,36 @@ galaxias_config <- function(gbif){
   ) |>
     all()
   if(all_missing){ # if so, see whether data are already cached
-    if(length(pour()) < 1) { # if no caching, set defaults
+    if(length(potions::pour()) < 1) { # if no caching, set defaults
       galaxias_default_config() |>
-        brew()
-      pour()
+        potions::brew()
+      potions::pour()
     }else{ # if something is cached, return it
-      pour()
+      potions::pour()
     }
   }else{ # if arguments are supplied, store them
     if(!missing(gbif)){
       check_gbif_credentials(gbif)
-      brew(gbif = gbif, method = "leaves")
+      potions::brew(gbif = gbif, method = "leaves")
     } # NOTE: no `else` required here, as that is handled above
     # that will change once >1 service/organisation added
   }
 }
 
 #' Check a list contains only strings
-#' @importFrom purrr map
-#' @importFrom rlang abort
 #' @noRd
 #' @keywords Internal
 check_gbif_credentials <- function(x){
   
   # check is a list
   if(!is.list(x)){
-    abort("GBIF credentials should be supplied as a `list`.")
+    cli::cli_abort("GBIF credentials should be supplied as a `list`.")
   }
   
   # check all names are supplied, and only those names
   if(!(all(names(x) %in% c("username", "email", "password")) &
        all(c("username", "email", "password") %in% names(x)))){
-   abort("GBIF credentials should be named `username`, `email` and `password`.")
+   cli::cli_abort("GBIF credentials should be named `username`, `email` and `password`.")
   }
   
   # check list only contains characters
@@ -62,13 +58,13 @@ check_gbif_credentials <- function(x){
     unlist() |>
     all()
   if(!character_check){
-    abort("All GBIF credentials should be supplied as strings.")
+    cli::cli_abort("All GBIF credentials should be supplied as strings.")
   }
   
   # check all entries are length 1
   length_check <- all(lengths(x) == 1L)
   if(!length_check){
-    abort("All GBIF credentials should be length-1.")
+    cli::cli_abort("All GBIF credentials should be length-1.")
   }
 }
 

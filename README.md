@@ -19,7 +19,9 @@ Australia](https://www.ala.org.au) (ALA).
 
 The package is named for a genus of freshwater fish that is found only
 in the Southern Hemisphere, and predominantly in Australia and New
-Zealand.
+Zealand The logo shows a [Spotted
+Galaxias](https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec)
+(*Galaxias truttaceus*) drawn by Ian Brennan.
 
 If you have any comments, questions or suggestions, please [contact
 us](mailto:support@ala.org.au).
@@ -56,10 +58,10 @@ library(galaxias)
 `galaxias` is part of a group of packages that help users publish data
 using the Darwin Core standard. The other packages are:
 
-- [`corella`](https://github.com/AtlasOfLivingAustralia/corella) for
-  converting tibbles to the required column names
-- [`elm`](https://github.com/AtlasOfLivingAustralia/elm) for converting
-  markdown files to `xml`.
+- [`corella`](https://corella.ala.org.au) for converting tibbles to the
+  required column names
+- [`paperbark`](https://paperbark.ala.org.au) for converting markdown
+  files to `xml`.
 
 ## Citing galaxias
 

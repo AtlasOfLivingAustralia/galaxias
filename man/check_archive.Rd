@@ -18,7 +18,7 @@ the console.
 }
 \description{
 This is a wrapper to two other packages; schema and EML files (i.e. xml) are
-checked with the \code{elm} package; csv files are checked with the \code{corella}
+checked with the \code{paperbark} package; csv files are checked with the \code{corella}
 package.
 }
 \seealso{
