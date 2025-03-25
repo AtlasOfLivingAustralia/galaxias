@@ -22,8 +22,7 @@ Description: galaxias helps users describe, package and share biodiversity
   building 'Darwin Core Archives' rather than R packages.
 Depends: 
   R (>= 4.3.0),
-  corella,
-  delma
+  corella
 Imports:
   cli,
   curl,
@@ -45,6 +44,8 @@ Suggests:
   rmarkdown,
   testthat (>= 3.0.0),
   xml2
+Remotes:
+  AtlasOfLivingAustralia/delma
 License: MPL-2.0
 URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues
