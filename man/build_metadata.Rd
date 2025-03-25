@@ -25,7 +25,7 @@ in the \code{destination} file.
 }
 \details{
 This function is a fairly shallow wrapper on top of functionality build
-in the \code{paperbark} package, particularly \code{read_md()} and \code{write_eml()}. You can
-use that package to gain greater control, or to debug problems, should you
-wish.
+in the \code{delma} package, particularly \code{\link[delma:read_md]{delma::read_md()}} and
+\code{\link[delma:write_eml]{delma::write_eml()}}. You can use that package to gain greater control, or to
+debug problems, should you wish.
 }

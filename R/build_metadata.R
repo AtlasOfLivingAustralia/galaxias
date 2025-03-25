@@ -6,9 +6,9 @@
 #' in the `destination` file.
 #' 
 #' This function is a fairly shallow wrapper on top of functionality build
-#' in the `paperbark` package, particularly `read_md()` and `write_eml()`. You can 
-#' use that package to gain greater control, or to debug problems, should you 
-#' wish.
+#' in the `delma` package, particularly [delma::read_md()] and 
+#' [delma::write_eml()]. You can use that package to gain greater control, or to 
+#' debug problems, should you wish.
 #' @param source A metadata file stored in markdown format (`.md`). Defaults
 #' to `metadata.md`, which is the same as is created by [use_metdata()]
 #' @param destination A file where the result should be saved. Defaults to 

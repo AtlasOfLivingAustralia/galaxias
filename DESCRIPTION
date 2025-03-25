@@ -9,7 +9,7 @@ Authors@R:
              role = c("aut", "cre")),
       person(given = "Shandiya",
              family = "Balasubramanium",
-             email = "shandiya.balasubramanium@csiro.au",
+             email = "shandiya.balasubramaniam@csiro.au",
              role = c("aut")),
       person(given = "Dax",
              family = "Kellie",
@@ -31,7 +31,6 @@ Imports:
   glue,
   httr2,
   jsonlite,
-  paperbark,
   potions,
   purrr,
   readr,
@@ -46,9 +45,6 @@ Suggests:
   rmarkdown,
   testthat (>= 3.0.0),
   xml2
-Remotes:
-  AtlasOfLivingAustralia/corella,
-  AtlasOfLivingAustralia/paperbark
 License: MPL-2.0
 URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues

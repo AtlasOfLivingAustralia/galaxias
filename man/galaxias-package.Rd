@@ -34,7 +34,7 @@ If you have any questions, comments or suggestions, please email
 
 \strong{Validate an archive}
 \itemize{
-\item \code{\link[=check_archive]{check_archive()}} Check your archive using the \code{paperbark} and \code{corella} packages
+\item \code{\link[=check_archive]{check_archive()}} Check your archive using the \code{delma} and \code{corella} packages
 \item \code{\link[=galaxias_config]{galaxias_config()}} Store credentials for your API call
 \item \code{\link[=validate_archive]{validate_archive()}} Check your archive using the GBIF 'validator' API
 \item \code{\link[=print_validation]{print_validation()}} Methods for displaying API responses
@@ -53,7 +53,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Shandiya Balasubramanium \email{shandiya.balasubramanium@csiro.au}
+  \item Shandiya Balasubramanium \email{shandiya.balasubramaniam@csiro.au}
   \item Dax Kellie \email{dax.kellie@csiro.au}
 }
 

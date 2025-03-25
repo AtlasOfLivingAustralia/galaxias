@@ -4,16 +4,16 @@
 h1, h2, h3, h4, .h1, .h2, .h3, .main-title, .main-subtitle {
   font-family: Lato;
   font-weight: normal;
-  color: #c98502;
+  color: #1e5e2f;
 }
 
 a {
-    color: #779e3c;
+    color: #f58e80;
     text-decoration: none;
 }
 
 a:hover {
-  color: #B7CD96;
+  color: #f3b7b6;
 }
 
 body { font-family: Roboto; }
@@ -27,7 +27,7 @@ body { font-family: Roboto; }
 }
 
 .navbar.bg-primary {
-  background-image: linear-gradient(to bottom, #faf0dc, #fce7bb);
+  background-image: linear-gradient(to bottom, #f2f7da, #e9f1c7);
 }
 
 
@@ -36,7 +36,7 @@ body { font-family: Roboto; }
 }
 
 .navbar-brand:hover {
-    color: #c98502;
+    color: #699c4b;
 }
 
 .navbar-nav .nav-link {

@@ -123,7 +123,7 @@ find_data <- function(directory,
   
   if(!file.exists(glue("{directory}/eml.xml"))){
     bullets <- c("No metadata statement ({.file eml.xml}) is present in the specified directory.",
-                 i = "See `paperbark::use_metadata()` for an example metadata statement.",
+                 i = "See `delma::use_metadata()` for an example metadata statement.",
                  i = "Use `build_metadata()` to convert to {.file eml.xml}.")
     cli::cli_abort(bullets,
                    call = call)
