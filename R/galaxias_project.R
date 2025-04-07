@@ -2,8 +2,9 @@
 #' 
 #' This is a wrapper to `usethis` functions `create_project()` and 
 #' `create_package()`. It differs in that it builds the requisite folders
-#' `"data_raw"` for 'initial' data, and `"data"` for data that has been 
-#' formatted according to the Darwin Core standard.
+#' `"data-raw"` for 'initial' data, `"data"` for processed data, and 
+#' `"data-published"` for data that has been 
+#' formatted according to the Darwin Core Standard.
 #' @param path A path. If it exists, it is used. If it does not exist, it is 
 #' created, provided that the parent path exists.
 #' @param \dots Other arguments passed to `usethis::create_project()` or 
@@ -16,8 +17,9 @@
 galaxias_project <- function(path, ...){
   usethis::create_project(path, ...)
   delma::use_metadata()
-  usethis::use_directory("data_raw")
+  usethis::use_directory("data-raw")
   usethis::use_directory("data")
+  usethis::use_directory("data-published")
 }
 
 #' @rdname galaxias_project
@@ -25,6 +27,7 @@ galaxias_project <- function(path, ...){
 #' @export
 galaxias_package <- function(path, ...){
   usethis::create_package(path, ...)
-  usethis::use_directory("data_raw")
+  usethis::use_directory("data-raw")
   usethis::use_directory("data") 
+  usethis::use_directory("data-published") 
 }

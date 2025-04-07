@@ -5,22 +5,25 @@
 #' these should all be Darwin Core terms for this function to produce reliable
 #' results.
 #' @param source A directory (**not** a file) containing files to be documented 
-#' in the schema document. Defaults to the `data` folder within the current 
+#' in the schema document. Defaults to the `data-publish` folder within the current 
 #' working directory. Note that files that do not match the Darwin Core naming 
 #' convention and/or do not end in `.csv` are ignored.
 #' @param destination A file name for the resulting schema document. Defaults
-#' to `./data/meta.xml` for consistency with the Darwin Core standard.
+#' to `./data-publish/meta.xml` for consistency with the Darwin Core standard.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
 #' @export
-build_schema <- function(source = "data", 
-                         destination = "./data/meta.xml") {
-  get_default_directory(source) |>
+build_schema <- function(source = "data-publish", 
+                         destination = "./data-publish/meta.xml") {
+  schema <- get_default_directory(source) |>
     detect_dwc_files() |>
     detect_dwc_fields() |>
-    add_front_matter() |>
+    add_front_matter()
+  
+  usethis::use_directory("data-publish")
+  schema |>
     delma::write_eml(file = destination)
-  cli::cli_alert_success("Schema successfully built. Saved as {destination}.")
+  cli::cli_alert_success("Schema successfully built. Saved as {.file destination}.")
   cli::cli_progress_done()
 }
 
@@ -70,7 +73,7 @@ detect_dwc_files <- function(directory){
                                 sep = ", ",
                                 last = " or ")
     bullets <- c(
-      glue::glue("Specified directory (\"{directory}\") does not contain any Darwin Core-compliant csv files."),
+      glue::glue("Specified directory ({.file directory}) does not contain any Darwin Core-compliant csv files."),
       i = glue::glue("Accepted names are {file_names}."))
     cli::cli_abort(bullets)
   }

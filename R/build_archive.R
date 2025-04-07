@@ -24,7 +24,7 @@
 #' shares the name of the working directory (with a .zip file extension),
 #' and is placed in the parent directory
 #' @param source (string) A directory containing all the files to be stored in 
-#' the archive. Defaults to the `data` folder within the current working 
+#' the archive. Defaults to the `data-publish` folder within the current working 
 #' directory.
 #' @param destination (string) A file name to save the resulting zip file.
 #' @return Invisibly returns the location of the built zip file; but typically
@@ -70,17 +70,17 @@ get_default_file <- function(file){
 #' @keywords Internal
 get_default_directory <- function(x){
   if(missing(x)){
-    if(dir.exists("data")){
-      cli::cli_inform("Missing `directory`. Defaulting to {.file data} folder.")
-      x <- "data"
+    if(dir.exists("data-publish")){
+      cli::cli_inform("Missing `directory`. Defaulting to {.file data-[publish]} folder.")
+      x <- "data-publish"
     }else{
-      c("Missing `directory` and missing `data` folder.", 
-        i = "Please specify a folder containing required data.") |>
+      c("Missing `directory` and missing `data-publish` folder.", 
+        i = "Please specify a folder containing standardised data.") |>
       cli::cli_abort()
     }
   }else{
     if(!dir.exists(x)){
-      glue::glue("Specified folder '{x}' not found") |>
+      glue::glue("Specified folder '{.file x}' not found") |>
         cli::cli_abort()
     }else{
       x
@@ -96,7 +96,7 @@ find_data <- function(directory,
   if(!file.exists(directory)){
     bullets <- c(glue::glue("Missing `directory`."),
                  i = "Use `usethis::use_data()` to add data to your project.",
-                 x = "Can't find directory `{directory}`.")
+                 x = "Can't find directory `{.file directory}`.")
     cli::cli_abort(bullets,
                    call = call)
   }
@@ -107,7 +107,7 @@ find_data <- function(directory,
   file_list <- list.files(directory,
                           pattern = glue::glue("^{accepted_names}.csv$"))
   if(length(file_list) < 1){
-    bullets <- c("No data meeting Darwin Core requirements is given in `data`.",
+    bullets <- c("Cannot find data meeting Darwin Core requirements in {.file data-publish}.",
                  i = "Use `add_bd_data_raw()` for examples of how to add raw data to your package.",
                  i =  "Use `usethis::use_data()` to add data to your package.")
     cli::cli_abort(bullets,
