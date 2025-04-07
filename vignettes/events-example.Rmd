@@ -1,0 +1,86 @@
+---
+title: "Standardise an Events dataset"
+author: "Dax Kellie & Martin Westgate"
+date: '2025-01-15'
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Standardise an Events dataset}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In a single research project, data collection usually takes place in multiple locations and at several time points. At each site location multiple samples are usually taken, which are used to capture variation in a study area or time-period. In Darwin Core, each of these samples and site locations in Darwin Core are known as *Events*. 
+
+*Events* refer to any action that "occurs at some location during some time." ([from TDWG](https://dwc.tdwg.org/list/#dwc_Event)). Each sample, for example, is a unique event, with its own environmental attributes (like topography, tree cover, precipitation and soil composition) that affect what organisms occur there and how likely they are to occur. Observations of organisms take place within each Event. As such, Events add *hierarchy* to a dataset (as opposed to occurrences-only data which is processed as if all occurrences take place in a single "Event"), which adds richness to ecological data that can be useful for more advanced modelling techniques.
+
+Here we will demonstrate an example of converting data with Events and Occurrences to Darwin Core standard. These data will be saved as two csv files, events.csv and occurrences.csv, and used to build a Darwin Core Archive.
+
+## The dataset
+
+For this example, we'll use a sample dataset containing observations of frogs. Data was collected at using 5-minute audio surveys, where each row records whether each frog species was detected within a 5-minute audio recording, recorded as present (`1`) or absent (`0`). 
+
+First, let's view a list of the eight frog species recorded in this dataset. The `abbreviation` column contains the abbreviated column name used in the observational dataset.
+```{r}
+#| warning: false
+#| message: false
+library(readxl)
+library(dplyr)
+library(tidyr)
+
+species <- read_xlsx("Frogwatch_dataset.xlsx", 
+                     sheet = "species list") |> 
+  janitor::clean_names()
+
+species
+```
+
+Now let's view our observational dataset. Our data contains columns that describe the site location (e.g. `site_code`, `water_type`, `veg_canopy`) and columns containing data on whether each frog species was present or absent in a sample (e.g. `cpar`, `csig`, `limdum`). 
+:::{.panel-tabset}
+
+```{r}
+#| warning: false
+#| message: false
+obs <- read_xlsx("Frogwatch_dataset.xlsx", 
+                 sheet = "observations") |>
+  janitor::clean_names()
+```
+
+## Glimpse
+
+```{r}
+obs |> tibble::glimpse()
+```
+
+## Sample
+
+```{r}
+obs |> 
+  print(n = 8) |>
+  rmarkdown::paged_table()
+```
+
+:::
+
+Our observational dataset is in *wide* format. Each row represents one sample, containing multiple observations. For a Darwin Core Archive, we require data in *long* format, where each row contains one observation. Let's make this adjustment and 
+
+```{r}
+obs |>
+  select(site_code, any_of(species$abbreviation)) |>
+  pivot_longer(cols = species$abbreviation,
+               names_to = "abbreviation") |>
+  left_join(species, by = "abbreviation", keep = FALSE) |>
+  select(-abbreviation) |>
+  relocate(value, .after = last_col())
+```
+
+```{r}
+sites <- read_xlsx("Frogwatch_dataset.xlsx", 
+                   sheet = "sites") |>
+  janitor::clean_names()
+
+```
+
+
+
+This added hierarchical structure to data collection (ie Site -> Sample -> Occurrence) adds richness to ecological data. Events data can also allow for recording presences and absences data, which enables for more nuanced probabilistic analyses like species distribution models or occupancy models.
