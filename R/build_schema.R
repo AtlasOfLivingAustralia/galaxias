@@ -23,7 +23,7 @@ build_schema <- function(source = "data-publish",
   usethis::use_directory("data-publish")
   schema |>
     delma::write_eml(file = destination)
-  cli::cli_alert_success("Schema successfully built. Saved as {.file destination}.")
+  cli::cli_alert_success("Schema successfully built. Saved as {.file {destination}}.")
   cli::cli_progress_done()
 }
 
@@ -73,8 +73,10 @@ detect_dwc_files <- function(directory){
                                 sep = ", ",
                                 last = " or ")
     bullets <- c(
-      glue::glue("Specified directory ({.file directory}) does not contain any Darwin Core-compliant csv files."),
-      i = glue::glue("Accepted names are {file_names}."))
+      "Specified directory {.file {directory}} does not contain Darwin Core-compliant csv files.",
+      i = "Accepted names are {.file {file_names}}.") |>
+      cli::cli_bullets() |>
+      cli::cli_fmt()
     cli::cli_abort(bullets)
   }
   available_exts |>

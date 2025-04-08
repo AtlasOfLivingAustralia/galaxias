@@ -34,7 +34,7 @@ use_data_occurrences <- function(...,
       readr::write_csv(user_data, file = file_path)
       cli::cli_progress_done()
     }else{
-      c("{.file file_path} already exists.",
+      c("{.file {file_path}} already exists.",
         i = "Set `overwrite = TRUE` to overwrite existing file.") |>
         cli::cli_inform()     
     }
@@ -81,7 +81,7 @@ use_data_events <- function(...,
       readr::write_csv(user_data, file = file_path)
       cli::cli_progress_done()
     }else{
-      c("{.file file_path} already exists.",
+      c("{.file {file_path}} already exists.",
         i = "Set `overwrite = TRUE` to overwrite existing file.") |>
         cli::cli_inform()     
     }

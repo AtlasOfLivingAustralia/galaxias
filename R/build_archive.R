@@ -44,7 +44,7 @@ build_archive <- function(source = "data", destination) {
            files = files_in,
            mode = "cherry-pick")
   
-  cli::cli_alert_success("Darwin Core Archive successfully built. \nSaved as `{.file {file_out}}`.")
+  cli::cli_alert_success("Darwin Core Archive successfully built. \nSaved as {.file {file_out}}.")
   cli::cli_progress_done()
   
   invisible(file_out)
@@ -71,7 +71,7 @@ get_default_file <- function(file){
 get_default_directory <- function(x){
   if(missing(x)){
     if(dir.exists("data-publish")){
-      cli::cli_inform("Missing `directory`. Defaulting to {.file data-[publish]} folder.")
+      cli::cli_inform("Missing `directory`. Defaulting to {.file data-publish/} folder.")
       x <- "data-publish"
     }else{
       c("Missing `directory` and missing `data-publish` folder.", 
@@ -80,7 +80,7 @@ get_default_directory <- function(x){
     }
   }else{
     if(!dir.exists(x)){
-      glue::glue("Specified folder '{.file x}' not found") |>
+      glue::glue("Specified folder {.file {x}} not found") |>
         cli::cli_abort()
     }else{
       x
@@ -96,7 +96,7 @@ find_data <- function(directory,
   if(!file.exists(directory)){
     bullets <- c(glue::glue("Missing `directory`."),
                  i = "Use `usethis::use_data()` to add data to your project.",
-                 x = "Can't find directory `{.file directory}`.")
+                 x = "Can't find directory {.file {directory}}.")
     cli::cli_abort(bullets,
                    call = call)
   }
@@ -107,7 +107,7 @@ find_data <- function(directory,
   file_list <- list.files(directory,
                           pattern = glue::glue("^{accepted_names}.csv$"))
   if(length(file_list) < 1){
-    bullets <- c("Cannot find data meeting Darwin Core requirements in {.file data-publish}.",
+    bullets <- c("Cannot find data meeting Darwin Core requirements in {.file {data-publish}}.",
                  i = "Use `add_bd_data_raw()` for examples of how to add raw data to your package.",
                  i =  "Use `usethis::use_data()` to add data to your package.")
     cli::cli_abort(bullets,

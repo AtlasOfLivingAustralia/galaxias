@@ -29,6 +29,6 @@ build_metadata <- function(source = "metadata.md",
   delma::write_eml(built_file, file = file)
   
   usethis::use_directory("data-publish")
-  cli::cli_alert_success("Metadata successfully built. Saved as {.file destination}.")
+  cli::cli_alert_success("Metadata successfully built. Saved as {.file {destination}}.")
   cli::cli_progress_done()
 }

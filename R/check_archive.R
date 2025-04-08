@@ -13,7 +13,7 @@
 #' @export
 check_archive <- function(x = "data-publish"){ # add `file` arg for consistency with `check_eml()`
   if(!file.exists(x)){
-    glue::glue("file or directory '{.file x}' not found") |>
+    glue::glue("File or directory '{.file {x}}' not found.") |>
       cli::cli_abort()
   }else{
     if(grepl(".zip$")){
