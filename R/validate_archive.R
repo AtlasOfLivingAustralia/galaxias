@@ -5,7 +5,7 @@
 #' @name validate_archive
 #' @param x (string) Either a directory containing all the files to be stored in 
 #' the archive, or a filename (ending in .zip) of the specified archive. 
-#' Defaults to the `data` folder within the current working directory.
+#' Defaults to the `data-publish` folder within the current working directory.
 #' @param provider (string) The institution to be queried for validation 
 #' services. Currently only `"GBIF"` is supported.
 #' @returns Invisibly returns a tibble to the workspace containing validation 
@@ -14,7 +14,7 @@
 #' @seealso `check_archive()` which runs checks locally, rather than via API.
 #' @order 1
 #' @export
-validate_archive <- function(x = "data",
+validate_archive <- function(x = "data-publish",
                              provider = "GBIF"){
 
   # if this isn't a zip file, build one, and return the location
@@ -47,8 +47,8 @@ api_gbif_validator_post <- function(filename){
   userpwd_string <- gbif_username_string()
   email_string <- potions::pour("gbif", "email", .pkg = "galaxias")
   if(is.null(email_string)){
-    c("No email supplied for GBIF", 
-      i = "try `galaxias_config(gbif = list(email = \"my_email\"))`") |>
+    c("No email supplied for GBIF.", 
+      i = "Try `galaxias_config(gbif = list(email = \"my_email\"))`") |>
     cli::cli_abort()
   }
   
@@ -83,12 +83,12 @@ api_gbif_validator_post <- function(filename){
   if(is.list(result)){
     required_names <- c("key", "created", "modified", "status", "metrics")
     if(all(required_names %in% names(result))){
-      cli::cli_inform("GBIF validator API returned an unexpected result")
+      cli::cli_inform("GBIF validator API returned an unexpected result.")
     }
     class(result) <- c("gbif_validator_post", "list")
     result
   }else{
-    cli::cli_abort("GBIF validator API did not return a result")
+    cli::cli_abort("GBIF validator API did not return a result.")
   }
 }
 
@@ -111,17 +111,17 @@ gbif_username_string <- function(){
   username <- potions::pour("gbif", "username", .pkg = "galaxias")
   password <- potions::pour("gbif", "password", .pkg = "galaxias")
   if(is.null(username) & is.null(password)){
-    cli::cli_abort(c("No username or password supplied for GBIF", 
-            i = "see `?galaxias_config` for help"))
+    cli::cli_abort(c("No username or password supplied for GBIF.", 
+            i = "See `?galaxias_config` for help"))
   }
   if(is.null(username)){
-    c("No username supplied for GBIF", 
-      i = "try `galaxias_config(gbif = list(username = \"my_username\"))`") |>
+    c("No username supplied for GBIF.", 
+      i = "Try `galaxias_config(gbif = list(username = \"my_username\"))`.") |>
     cli::cli_abort()
   }
   if(is.null(password)){
-    c("No password supplied for GBIF", 
-      i = "try `galaxias_config(gbif = list(password = \"my_password\"))`") |>
+    c("No password supplied for GBIF.", 
+      i = "Try `galaxias_config(gbif = list(password = \"my_password\"))`.") |>
     cli::cli_abort()
   }
   glue::glue("{username}:{password}") |>

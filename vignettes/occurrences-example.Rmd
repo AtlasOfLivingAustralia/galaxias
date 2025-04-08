@@ -53,9 +53,9 @@ obs |>
   suggest_workflow()
 ```
 
-The suggested workflow provided tells us which functions we can use to rename, modify or add columns that we're missing. `set_` functions are specialised wrappers around `dplyr::mutate()`, with additional functionality to support Darwin Core. 
+Under "Suggest workflow", the output above suggests a series of piped `set_` functions that we can use to rename, modify or add columns that are missing from `obs` but required by Darwin Core. `set_` functions are specialised wrappers around `dplyr::mutate()`, with additional functionality to support using Darwin Core Standard. 
 
-For simplicity, let's do the easy part first of renaming columns we already have in our dataset to use accepted standard Darwin Core terms. `set_` functions will check to make sure each column is correctly formatted. We'll save our modified dataframe as `obs_dwc`.
+For simplicity, let's do the easy part first of renaming columns we already have in our dataset to use accepted standard Darwin Core terms. `set_` functions will automatically check to make sure each column is correctly formatted. We'll save our modified dataframe as `obs_dwc`.
 
 ```{r}
 obs_dwc <- obs |>
@@ -65,7 +65,7 @@ obs_dwc <- obs |>
   set_datetime(eventDate = lubridate::ymd(date)) # specify year-month-day format
 ```
 
-Running `suggest_workflow()` again will reflect our progress and show us what's left to do. The output tells us that we still need to add several columns to our dataset to meet minimum Darwin Core requirements.
+Running `suggest_workflow()` again will reflect our progress and show us what's left to do. Now the output tells us that we still need to add several columns to our dataset to meet minimum Darwin Core requirements.
 
 ```{r}
 obs_dwc |>
@@ -74,17 +74,19 @@ obs_dwc |>
 
 Here's a rundown of the columns we need to add:
 
-  *  `occurrenceID`: Unique identifiers of each record. This ensures that we can identify the specific record for any future updates or corrections. We can use `random_id()`, `composite_id()` or `sequential_id()` to add this unique IDs our dataframe.
+  *  `occurrenceID`: Unique identifiers of each record. This ensures that we can identify the specific record for any future updates or corrections. We can use `composite_id()`, `sequential_id()` or `random_id()` to add a unique IDs to each row.
   *  `basisOfRecord`: The type of record (e.g. human observation, specimen, machine observation). See a list of acceptable values with `corella::basisOfRecord_values()`.
   *  `geodeticDatum`: The Coordinate Reference System (CRS) projection of your data (for example, the CRS of Google Maps is "WGS84").
-  *  `coordinateUncertaintyInMeters`: The area of uncertainty around your observation. You may know this value based on your method of data collection, or you can use `with_uncertainty()` to provide a default value based on the method used.
+  *  `coordinateUncertaintyInMeters`: The area of uncertainty around your observation. You may know this value based on your method of data collection 
+  
+<!-- or you can use `with_uncertainty()` to provide a default value based on the method used -->
 
 Now let's add these columns using `set_occurrences()` and `set_coordinates()`. We can also add the suggested function `set_individual_traits()` which will automatically identify the matched column name `sex` and check the column's format.
 
 ```{r}
 obs_dwc <- obs_dwc |>
   set_occurrences(
-    occurrenceID = random_id(), # adds random UUID
+    occurrenceID = composite_id(sequential_id(), site, landscape),
     basisOfRecord = "humanObservation"
     ) |>
   set_coordinates(
