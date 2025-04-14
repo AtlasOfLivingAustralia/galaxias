@@ -15,7 +15,7 @@ Authors@R:
              family = "Kellie",
              email = "dax.kellie@csiro.au",
              role = c("aut")))
-Description: galaxias helps users describe, package and share biodiversity 
+Description: `galaxias` helps users describe, package and share biodiversity 
   information using the 'Darwin Core' data standard, which is the format used
   and accepted by the Global Biodiversity Information Facility (GBIF) and its'
   partner nodes. It is functionally similar to `devtools`, but with a focus on

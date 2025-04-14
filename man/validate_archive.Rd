@@ -5,14 +5,14 @@
 \alias{get_validator_report}
 \title{Validate a Darwin Core Archive via API}
 \usage{
-validate_archive(x = "data", provider = "GBIF")
+validate_archive(x = "data-publish", provider = "GBIF")
 
 get_validator_report(key)
 }
 \arguments{
 \item{x}{(string) Either a directory containing all the files to be stored in
 the archive, or a filename (ending in .zip) of the specified archive.
-Defaults to the \code{data} folder within the current working directory.}
+Defaults to the \code{data-publish} folder within the current working directory.}
 
 \item{provider}{(string) The institution to be queried for validation
 services. Currently only \code{"GBIF"} is supported.}

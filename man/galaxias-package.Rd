@@ -28,7 +28,7 @@ If you have any questions, comments or suggestions, please email
 \strong{Construct an archive}
 \itemize{
 \item \code{\link[=build_schema]{build_schema()}} Build a schema file (\code{meta.xml}) for a given directory
-\item \code{\link[=build_metadata]{build_metadata()}} Convert a metadata file from markdown to EML (\code{eml.xml})
+\item \code{\link[=use_metadata]{use_metadata()}} Read, convert and save a metadata file from markdown to EML (\code{eml.xml})
 \item \code{\link[=build_archive]{build_archive()}} Convert a directory to a Darwin Core Archive
 }
 

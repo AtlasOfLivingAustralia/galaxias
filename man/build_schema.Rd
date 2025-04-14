@@ -4,16 +4,16 @@
 \alias{build_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-build_schema(source = "data", destination = "./data/meta.xml")
+build_schema(source = "data-publish", destination = "./data-publish/meta.xml")
 }
 \arguments{
 \item{source}{A directory (\strong{not} a file) containing files to be documented
-in the schema document. Defaults to the \code{data} folder within the current
+in the schema document. Defaults to the \code{data-publish} folder within the current
 working directory. Note that files that do not match the Darwin Core naming
 convention and/or do not end in \code{.csv} are ignored.}
 
 \item{destination}{A file name for the resulting schema document. Defaults
-to \code{./data/meta.xml} for consistency with the Darwin Core standard.}
+to \code{./data-publish/meta.xml} for consistency with the Darwin Core standard.}
 }
 \value{
 Does not return an object to the workspace; called for the side

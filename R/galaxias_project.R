@@ -16,7 +16,7 @@
 #' @export
 galaxias_project <- function(path, ...){
   usethis::create_project(path, ...)
-  delma::use_metadata()
+  delma::use_metadata_template()
   usethis::use_directory("data-raw")
   usethis::use_directory("data")
   usethis::use_directory("data-published")

@@ -21,7 +21,7 @@
 #'
 #'  **Construct an archive**
 #'   * [build_schema()] Build a schema file (`meta.xml`) for a given directory
-#'   * [build_metadata()] Convert a metadata file from markdown to EML (`eml.xml`)
+#'   * [use_metadata()] Read, convert and save a metadata file from markdown to EML (`eml.xml`)
 #'   * [build_archive()] Convert a directory to a Darwin Core Archive
 #'   
 #'  **Validate an archive**

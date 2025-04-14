@@ -134,7 +134,7 @@ can subset to only Darwin Core terms, and save it out using `write_csv()`
 library(readr)
 occurrences |>
   select(any_of(occurrence_terms())) |>
-  write_csv(".data/occurrences.csv")
+  use_data_occurrences(".data/occurrences.csv")
 ```
 
 If your data are _already_ in Darwin Core format, you can simply place them 
@@ -169,7 +169,7 @@ Once you have editted the statement to reflect the information you want to
 convey, you can convert it to `EML` using:
 
 ```{r, eval=FALSE}
-build_metadata()
+use_metadata()
 ```
 
 A second piece of metadata required by the Darwin Core standard is the 'schema'

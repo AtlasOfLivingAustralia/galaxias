@@ -4,12 +4,12 @@
 \alias{check_archive}
 \title{Check an archive against Darwin Core standards}
 \usage{
-check_archive(x = "data")
+check_archive(x = "data-publish")
 }
 \arguments{
 \item{x}{(string) A directory containing the files to be published, or
 optionally a \code{.zip} file built from the same (i.e. with \code{build_archive()}).
-Defaults to the \code{data} folder within the current working directory.}
+Defaults to the \code{data-publish} folder within the current working directory.}
 }
 \value{
 Invisibly returns a tibble to the workspace containing check

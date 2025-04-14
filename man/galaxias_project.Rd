@@ -23,6 +23,7 @@ side-effect of building a new project or package.
 \description{
 This is a wrapper to \code{usethis} functions \code{create_project()} and
 \code{create_package()}. It differs in that it builds the requisite folders
-\code{"data_raw"} for 'initial' data, and \code{"data"} for data that has been
-formatted according to the Darwin Core standard.
+\code{"data-raw"} for 'initial' data, \code{"data"} for processed data, and
+\code{"data-published"} for data that has been
+formatted according to the Darwin Core Standard.
 }

@@ -4,11 +4,11 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(source = "data", destination)
+build_archive(source = "data-publish", destination)
 }
 \arguments{
 \item{source}{(string) A directory containing all the files to be stored in
-the archive. Defaults to the \code{data} folder within the current working
+the archive. Defaults to the \code{data-publish} folder within the current working
 directory.}
 
 \item{destination}{(string) A file name to save the resulting zip file.}
@@ -35,13 +35,13 @@ These will be manipulated versions of the raw dataset, which have been
 altered to use Darwin Core terms as column headers. See
 \code{\link[corella:corella-package]{corella::corella-package()}} for details.
 \item A metadata statement, stored in \code{EML} using the filename \code{eml.xml}. The
-function \code{\link[=use_metadata]{use_metadata()}} is a good starting point here, followed by
-\code{\link[=build_metadata]{build_metadata()}} once you have populated your metadata statement.
+function \code{\link[=use_metadata_template]{use_metadata_template()}} is a good starting point here, followed by
+\code{\link[=use_metadata]{use_metadata()}} once you have populated your metadata statement.
 \item A 'schema' document, also stored in xml, called \code{meta.xml}. This is
 usually constructed using \code{\link[=build_schema]{build_schema()}}.
 }
 
 You will get an error if these files are not present. The resulting file
 shares the name of the working directory (with a .zip file extension),
-and is placed in the parent directory
+and is placed in the parent directory.
 }
