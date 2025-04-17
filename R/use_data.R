@@ -99,13 +99,13 @@ get_objs_from_dots <- function(.dots, error_call = rlang::caller_env()) {
     cli::cli_abort("Nothing to save.",
                    call = error_call)
   }
-  
+
   is_name <- vapply(.dots, is.symbol, logical(1))
   if (!all(is_name)) {
     cli::cli_abort("Can only save existing named objects.",
                    call = error_call)
   }
-  
+
   return(.dots)
 }
 

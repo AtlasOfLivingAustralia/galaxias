@@ -53,7 +53,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Shandiya Balasubramanium \email{shandiya.balasubramaniam@csiro.au}
+  \item Shandiya Balasubramaniam \email{shandiya.balasubramaniam@csiro.au}
   \item Dax Kellie \email{dax.kellie@csiro.au}
 }
 

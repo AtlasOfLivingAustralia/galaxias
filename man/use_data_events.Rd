@@ -2,7 +2,7 @@
 % Please edit documentation in R/use_data.R
 \name{use_data_events}
 \alias{use_data_events}
-\title{Save standardised Event-based data}
+\title{Save standardised event-type data}
 \usage{
 use_data_events(..., overwrite = FALSE)
 }
@@ -16,7 +16,7 @@ overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 Invisibly returns the location of the saved csv file.
 }
 \description{
-Once data meetings Darwin Core Standard, \code{use_data_events()} makes it
+Once data conform to Darwin Core Standard, \code{use_data_events()} makes it
 easy to save data in the correct place for building a Darwin Core Archive
 with \code{\link[=build_archive]{build_archive()}}.
 }

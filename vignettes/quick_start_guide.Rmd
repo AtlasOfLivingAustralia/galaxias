@@ -165,7 +165,7 @@ metadata_string <- as_eml_chr(metadata_example)[3:15]
   cat()
 ```
 
-Once you have editted the statement to reflect the information you want to
+Once you have edited the statement to reflect the information you want to
 convey, you can convert it to `EML` using:
 
 ```{r, eval=FALSE}
