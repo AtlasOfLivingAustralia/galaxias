@@ -14,7 +14,7 @@ vignette: >
 for storing, documenting and sharing biodiversity data. These repositories can 
 be seamlessly converted into a **Darwin Core Archive**, the data standard used 
 by the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and
-it's partner nodes.
+its partner nodes.
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # load packages now to avoid messages later
@@ -40,7 +40,7 @@ that project, which will have the following structure:
 
 ```
 ├── README.md                        : Description of the repository
-├── metadata.md                      : Boilerplate metadata statement for this project
+├── metadata.Rmd                     : Boilerplate metadata statement for this project
 ├── my-project-name.Rproj            : RStudio project file
 ├── data-raw                         : Folder to store source data
 └── data                             : Folder to store processed data
@@ -54,7 +54,7 @@ as well as what they are allowed to use it for.
 
 We recommend that you first add your data to the `data-raw` folder, then use a 
 script within that folder to manipulate it to Darwin Core format. Let's assume, 
-for example, that your data is looks like this:
+for example, that your data looks like this:
 
 ```{r}
 library(tibble)
@@ -118,7 +118,7 @@ occurrences <- df |>
 ```
 
 ```{r, echo=TRUE}
-print(occurrences, n = 5)
+print(occurrences)
 ```
 
 Note that this deliberately includes some redundancy. The coordinate data are
@@ -128,7 +128,7 @@ specify a text string given some information on location. Similarly, the
 but adding higher taxonomic information makes the identification less ambiguous.
 
 We have saved our tibble as an object with a Darwin Core-specific name, so we 
-can subset to only Darwin Core terms, and save it out using `write_csv()`
+can subset to only Darwin Core terms, and save it using `write_csv()`
 
 ```{r, eval=FALSE}
 library(readr)

@@ -1,7 +1,7 @@
-#' Save standardised Occurrence-based data
+#' Save standardised occurrence-type data
 #' 
 #' @description
-#' Once data meetings Darwin Core Standard, `use_data_occurrences()` makes it 
+#' Once data conform to Darwin Core Standard, `use_data_occurrences()` makes it 
 #' easy to save data in the correct place for building a Darwin Core Archive 
 #' with [build_archive()].
 #' @details
@@ -46,10 +46,10 @@ use_data_occurrences <- function(...,
   
 }
 
-#' Save standardised Event-based data
+#' Save standardised event-type data
 #' 
 #' @description
-#' Once data meetings Darwin Core Standard, `use_data_events()` makes it 
+#' Once data conform to Darwin Core Standard, `use_data_events()` makes it 
 #' easy to save data in the correct place for building a Darwin Core Archive 
 #' with [build_archive()].
 #' @details
