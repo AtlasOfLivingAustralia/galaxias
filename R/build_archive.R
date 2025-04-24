@@ -69,7 +69,7 @@ get_default_file <- function(file){
 #' Simple function to check that a `data` directory exists if no arg given
 #' @noRd
 #' @keywords Internal
-get_default_directory <- function(x){
+get_default_directory <- function(x, error_call = caller_env()){
   if(missing(x)){
     if(dir.exists("data-publish")){
       cli::cli_inform("Missing `directory`. Defaulting to {.file data-publish/} folder.")
@@ -77,12 +77,12 @@ get_default_directory <- function(x){
     }else{
       c("Missing `directory` and missing {.file data-publish/} folder.", 
         i = "Please specify a folder containing standardised data.") |>
-      cli::cli_abort()
+      cli::cli_abort(call = error_call)
     }
   }else{
     if(!dir.exists(x)){
-      glue::glue("Specified folder {.file {x}} not found") |>
-        cli::cli_abort()
+      c("Specified folder {.file {x}} not found") |>
+        cli::cli_abort(call = error_call)
     }else{
       x
     }

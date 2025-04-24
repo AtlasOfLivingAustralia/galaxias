@@ -15,10 +15,18 @@
 #' @export
 build_schema <- function(source = "data-publish", 
                          destination = "./data-publish/meta.xml") {
-  schema <- get_default_directory(source) |>
-    detect_dwc_files() |>
-    detect_dwc_fields() |>
-    add_front_matter()
+  cli::cli_alert_info("Building schema")
+  
+  dir <- get_default_directory(source)
+  
+  # detect files
+  files <- detect_dwc_files(dir)
+  
+  # build schema wireframe in a tibble 
+  wireframe <- add_dwc_cols(files_formatted)
+  
+  # front matter
+  schema <- add_front_matter(schema_wireframe)
   
   usethis::use_directory("data-publish")
   schema |>
@@ -59,22 +67,40 @@ wait <- function(seconds = 1) {
 #' @noRd
 #' @keywords Internal
 detect_dwc_files <- function(directory){
-  progress_update("Detecting Darwin Core files...")
+  progress_update("Detecting files..."); wait(.1)
   available_exts <- dwc_extensions()
   supported_files <- available_exts |>
-    pull("file")
-  available_exts$present <- supported_files |>
-    purrr::map(\(x) {glue::glue("{directory}/{x}") |> 
-        file.exists()}) |> 
-    unlist()
+    dplyr::pull("file")
+  
+  # check if files exist, format result
+  available_exts <- available_exts |>
+    dplyr::mutate(
+      present = glue::glue("{directory}/{supported_files}") |>
+        purrr::map(~ file.exists(.x)) |>
+        unlist(),
+      present_formatted = ifelse(isTRUE(present), 
+                                 cli::symbol$tick |> cli::col_green(), 
+                                 cli::symbol$cross |> cli::col_red()
+                                 )
+    )
+  
+  # message
+  file_check_message(available_exts, "occurrence")
+  wait(.2)
+  file_check_message(available_exts, "event")
+  wait(.2)
+  file_check_message(available_exts, "multimedia")
+  wait(.2)
+  
   # check whether there are no csvs, and if so, abort
   if(all(!available_exts$present)){
-    file_names <- glue::glue_collapse(available_exts$file,
+    file_names <- cli::ansi_collapse(available_exts$file,
                                 sep = ", ",
                                 last = " or ")
     bullets <- c(
-      "Specified directory {.file {directory}} does not contain Darwin Core-compliant csv files.",
-      i = "Accepted names are {.file {file_names}}.") |>
+      "Must include at least one Darwin Core-compliant csv file in {.file {directory}}.",
+      i = "Accepted files are {.file {file_names}}.",
+      i = "Use `use_data()` to save standardised data in the correct file location.") |>
       cli::cli_bullets() |>
       cli::cli_fmt()
     cli::cli_abort(bullets)
@@ -123,11 +149,31 @@ dwc_extensions <- function(){
   )
 }
 
-#' Internal function to add field names to tibble
+#' Format message for detecting if a file is present or not
 #' @noRd
 #' @keywords Internal
-detect_dwc_fields <- function(df){
-  progress_update("Detecting Darwin Core fields in dataset...")
+file_check_message <- function(available_exts, type_name) {
+  
+  # length of longest file name
+  files_nchar <- available_exts |>
+    dplyr::pull("file") |>
+    cli::ansi_nchar() |>
+    max()
+  
+  # build message
+  paste0("  ", cli::col_cyan(cli::symbol$bullet), " ", 
+         cli::ansi_align(cli::col_blue(glue::glue("{available_exts[available_exts$type == type_name,]$file }")), files_nchar), " ",
+         cli::ansi_align(glue::glue("{available_exts[available_exts$type == type_name,]$present_formatted}"), cli::ansi_nchar(4))
+  ) |>
+    cli::cat_line()
+  
+}
+
+#' Internal function to add column names to tibble
+#' @noRd
+#' @keywords Internal
+add_dwc_cols <- function(df){
+  progress_update("Formatting Darwin Core terms...")
   split(df, seq_len(nrow(df))) |>
     purrr::map(\(x){
       dplyr::bind_rows(create_schema_row(x),
