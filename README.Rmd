@@ -55,7 +55,7 @@ library(galaxias)
 
  - Create a new RStudio project or package for storing biodiversity data 
    and data-processing scripts using `galaxias_project()`.
- - Convert ahd save metadata statements written in markdown, Rmarkdown or 
+ - Convert and save metadata statements written in markdown, Rmarkdown or 
    Quarto as EML files with `use_metadata()`.
  - Zip up your data for sharing or publication using `build_archive()`.
  - Check data for consistency with the Darwin Core standard, either locally 
