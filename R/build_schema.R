@@ -14,7 +14,7 @@
 #' effect of building a file named `meta.xml` in the specified directory.
 #' @export
 build_schema <- function(source = "data-publish", 
-                         destination = "./data-publish/meta.xml") {
+                         destination = "data-publish/meta.xml") {
   cli::cli_alert_info("Building schema")
   
   dir <- get_default_directory(source)
@@ -23,10 +23,10 @@ build_schema <- function(source = "data-publish",
   files <- detect_dwc_files(dir)
   
   # build schema wireframe in a tibble 
-  wireframe <- add_dwc_cols(files_formatted)
+  wireframe <- add_dwc_cols(files)
   
   # front matter
-  schema <- add_front_matter(schema_wireframe)
+  schema <- add_front_matter(wireframe)
   
   usethis::use_directory("data-publish")
   schema |>
@@ -76,13 +76,19 @@ detect_dwc_files <- function(directory){
   available_exts <- available_exts |>
     dplyr::mutate(
       present = glue::glue("{directory}/{supported_files}") |>
-        purrr::map(~ file.exists(.x)) |>
+        purrr::map(\(file_name)
+                   file.exists(file_name)) |>
         unlist(),
-      present_formatted = ifelse(isTRUE(present), 
-                                 cli::symbol$tick |> cli::col_green(), 
-                                 cli::symbol$cross |> cli::col_red()
-                                 )
+      present_formatted = present |>
+        purrr::map_chr(\(file_exists) 
+                       ifelse(isTRUE(file_exists), 
+               cli::symbol$tick |> cli::col_green(), 
+               cli::symbol$cross |> cli::col_red()
+               )
+      )
     )
+  
+  available_exts$present |> purrr::map_lgl(isTRUE)
   
   # message
   file_check_message(available_exts, "occurrence")
@@ -228,7 +234,7 @@ create_field_rows <- function(x){
   names(index_list) <- rep("index", n_fields)
   # get sequence of urls
   dwc_df <- corella::darwin_core_terms
-  term_list <- map(field_names, 
+  term_list <- purrr::map(field_names, 
       .f = \(a){
         term_lookup <- dwc_df$term == a
         if(any(term_lookup)){

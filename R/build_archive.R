@@ -69,7 +69,7 @@ get_default_file <- function(file){
 #' Simple function to check that a `data` directory exists if no arg given
 #' @noRd
 #' @keywords Internal
-get_default_directory <- function(x, error_call = caller_env()){
+get_default_directory <- function(x, error_call = rlang::caller_env()){
   if(missing(x)){
     if(dir.exists("data-publish")){
       cli::cli_inform("Missing `directory`. Defaulting to {.file data-publish/} folder.")
@@ -81,7 +81,7 @@ get_default_directory <- function(x, error_call = caller_env()){
     }
   }else{
     if(!dir.exists(x)){
-      c("Specified folder {.file {x}} not found") |>
+      c("Specified folder {.file {x}} not found.") |>
         cli::cli_abort(call = error_call)
     }else{
       x
@@ -93,7 +93,7 @@ get_default_directory <- function(x, error_call = caller_env()){
 #' @noRd
 #' @keywords Internal
 find_data <- function(directory,
-                      call = caller_env()){
+                      call = rlang::caller_env()){
   if(!file.exists(directory)){
     bullets <- c(glue::glue("Missing `directory`."),
                  i = "Use `usethis::use_data()` to add data to your project.",
