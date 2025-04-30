@@ -91,12 +91,9 @@ detect_dwc_files <- function(directory){
   available_exts$present |> purrr::map_lgl(isTRUE)
   
   # message
-  file_check_message(available_exts, "occurrence")
-  wait(.2)
-  file_check_message(available_exts, "event")
-  wait(.2)
-  file_check_message(available_exts, "multimedia")
-  wait(.2)
+  file_check_message(available_exts, "occurrences.csv")
+  file_check_message(available_exts, "events.csv")
+  file_check_message(available_exts, "multimedia.csv")
   
   # check whether there are no csvs, and if so, abort
   if(all(!available_exts$present)){
@@ -158,20 +155,22 @@ dwc_extensions <- function(){
 #' Format message for detecting if a file is present or not
 #' @noRd
 #' @keywords Internal
-file_check_message <- function(available_exts, type_name) {
+file_check_message <- function(file_df, file_name) {
   
   # length of longest file name
-  files_nchar <- available_exts |>
+  files_nchar <- file_df |>
     dplyr::pull("file") |>
     cli::ansi_nchar() |>
     max()
   
   # build message
   paste0("  ", cli::col_cyan(cli::symbol$bullet), " ", 
-         cli::ansi_align(cli::col_blue(glue::glue("{available_exts[available_exts$type == type_name,]$file }")), files_nchar), " ",
-         cli::ansi_align(glue::glue("{available_exts[available_exts$type == type_name,]$present_formatted}"), cli::ansi_nchar(4))
+         cli::ansi_align(cli::col_blue(glue::glue("{file_df[file_df$file == file_name,]$file }")), files_nchar), " ",
+         cli::ansi_align(glue::glue("{file_df[file_df$file == file_name,]$present_formatted}"), cli::ansi_nchar(4))
   ) |>
     cli::cat_line()
+  
+  wait(.2) # delay next message
   
 }
 
