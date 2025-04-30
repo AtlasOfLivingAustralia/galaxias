@@ -13,23 +13,35 @@
 #' to `metadata.md`, which is the same as is created by [use_metdata_template()]
 #' @param destination A file name to save the resulting `.xml` file. Defaults to 
 #' `data-publish/eml.xml`.
+#' @param overwrite By default, `use_metadata()` will not 
+#'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the `data-publish` directory.
 #' @seealso [use_metadata_statement()] to create a metadata statement template.
 #' @export
-use_metadata <- function(source = "metadata.md", 
-                           destination = "./data-publish/eml.xml"){
+use_metadata <- function(source = "metadata.Rmd", 
+                         destination = "data-publish/eml.xml",
+                         overwrite = FALSE){
   if(!file.exists(source)){
-    cli::cli_abort("`{source}` doesn't exist in specified location.")
+    cli::cli_abort("File {.file {source}} doesn't exist.")
   }
   # import file, ensure EML metadata is added, convert to XML
   progress_update("Reading metadata statement...")
-  metadata_file <- delma::read_md(x)
+  metadata_tibble <- delma::read_md(source)
   
-  progress_update("Writing EML file...")
-  delma::write_eml(built_file, file = file)
-  
-  usethis::use_directory("data-publish")
-  cli::cli_alert_success("Metadata successfully built. Saved as {.file {destination}}.")
-  cli::cli_progress_done()
+  if(file.exists(file_path)){
+    if(overwrite){
+      cli::cli_progress_step("Overwriting {.file {destination}}.")        
+      delma::write_eml(metadata_tibble, file = destination)
+      cli::cli_progress_done()
+    }else{
+      c("{.file {destination}} already exists.",
+        i = "Set `overwrite = TRUE` to overwrite existing file.") |>
+        cli::cli_inform()     
+    }
+  }else{
+    cli::cli_progress_step("Writing {.file {destination}}.")
+    delma::write_eml(metadata_tibble, file = destination)
+    cli::cli_progress_done()
+  }
 }
