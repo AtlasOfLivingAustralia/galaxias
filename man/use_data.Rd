@@ -2,33 +2,68 @@
 % Please edit documentation in R/use_data.R
 \name{use_data}
 \alias{use_data}
+\alias{use_data_occurrences}
+\alias{use_data_events}
 \title{Use standardised data in a Darwin Core Archive}
 \usage{
-use_data(..., type = c("occurrence", "event"), overwrite = FALSE)
+use_data(..., overwrite = FALSE)
+
+use_data_occurrences(df, overwrite = FALSE)
+
+use_data_events(df, overwrite = FALSE)
 }
 \arguments{
-\item{...}{(string) Unquoted name of \code{tibble}/\code{data.frame} to save.}
+\item{...}{Unquoted name of \code{tibble}/\code{data.frame} to save.}
 
-\item{type}{(string) Data type. Designates whether data are saved as
-\code{occurrences.csv} or \code{events.csv}. \code{type} is determined by detecting
-Event-type column names in data (only valid in an Event-type dataset).}
-
-\item{overwrite}{(logical) By default, \code{use_data()} will not
+\item{overwrite}{By default, \code{use_data_events()} will not
 overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
+
+\item{df}{A \code{tibble}/\code{data.frame} to save.}
 }
 \value{
+Invisibly returns the location of the saved csv file.
+
+Invisibly returns the location of the saved csv file.
+
 Invisibly returns the location of the saved csv file.
 }
 \description{
 Once data conform to Darwin Core Standard, \code{use_data()} makes it
 easy to save data in the correct place for building a Darwin Core Archive
 with \code{\link[=build_archive]{build_archive()}}.
+
+\code{use_data()} is an all-in-one function for accepted data types "occurrence",
+"event" and "multimedia". \code{use_data()} attempts to detect and save the
+correct data type based on the provided \code{tibble}/\code{data.frame}.
+
+Users can use bespoke data functions \code{\link[=use_data_occurrences]{use_data_occurrences()}},
+\code{\link[=use_data_events]{use_data_events()}} and \code{\link[=use_data_multimedia]{use_data_multimedia()}} to specify data type
+manually.
+
+Saves standardised data of occurrences in the correct folder for building
+a Darwin Core Archive with \code{\link[=build_archive]{build_archive()}}. Saves data in
+\code{./data-publish/occurrences.csv}.
+
+Saves standardised data of events in the correct folder for building
+a Darwin Core Archive with \code{\link[=build_archive]{build_archive()}}. Saves data in
+\code{./data-publish/events.csv}.
 }
 \details{
 This function saves data in the \code{data-publish} folder, which is the default
 folder that \code{galaxias} uses to build a Darwin Core Archive using
 \code{\link[=build_archive]{build_archive()}}.
+
+Data type is determined by detecting type-specific column names in
+supplied data.
+\itemize{
+\item Event: (\code{eventID}, \code{parentEventID}, \code{eventType})
+\item Multimedia: not yet supported
+}
 }
 \seealso{
 \code{\link[=use_metadata]{use_metadata()}}
+
+\code{\link[=use_data_events]{use_data_events()}},\code{\link[=use_metadata]{use_metadata()}}
+
+\code{\link[=use_data_occurrences]{use_data_occurrences()}}, \code{\link[=use_metadata]{use_metadata()}}
 }

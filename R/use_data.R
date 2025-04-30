@@ -150,10 +150,10 @@ switch_data_type <- function(user_data, type, overwrite) {
 #' a Darwin Core Archive with [build_archive()]. Saves data in 
 #' `./data-publish/occurrences.csv`.
 #' @param df A `tibble`/`data.frame` to save.
-#' @param overwrite By default, `use_data()` will not 
+#' @param overwrite By default, `use_data_occurrences()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
 #' @return Invisibly returns the location of the saved csv file.
-#' @seealso [use_metadata()]
+#' @seealso [use_data_events()],[use_metadata()]
 #' @rdname use_data
 #' @export
 use_data_occurrences <- function(df, 
@@ -173,6 +173,15 @@ use_data_occurrences <- function(df,
 }
 
 #' Use event-type data in a Darwin Core Archive
+#' @description
+#' Saves standardised data of events in the correct folder for building 
+#' a Darwin Core Archive with [build_archive()]. Saves data in 
+#' `./data-publish/events.csv`.
+#' @param df A `tibble`/`data.frame` to save.
+#' @param overwrite By default, `use_data_events()` will not 
+#'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
+#' @return Invisibly returns the location of the saved csv file.
+#' @seealso [use_data_occurrences()], [use_metadata()]
 #' @rdname use_data
 #' @export
 use_data_events <- function(df, 

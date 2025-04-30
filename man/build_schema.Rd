@@ -4,7 +4,7 @@
 \alias{build_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-build_schema(source = "data-publish", destination = "./data-publish/meta.xml")
+build_schema(source = "data-publish", destination = "data-publish/meta.xml")
 }
 \arguments{
 \item{source}{A directory (\strong{not} a file) containing files to be documented

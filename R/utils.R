@@ -1,5 +1,6 @@
 
 #' Evaluate dots
+#' @noRd
 #' @keywords Internal
 dots <- function(...) {
   eval(substitute(alist(...)))
@@ -10,6 +11,7 @@ dots <- function(...) {
 #' Built on top of utils::menu(). 
 #' Originally proposed by Hadley here: https://github.com/r-lib/cli/issues/228#issuecomment-1453614104
 #' Full code from gargle here: https://github.com/r-lib/gargle/blob/main/R/utils-ui.R
+#' @noRd
 #' @keywords Internal
 cli_menu <- function(header,
                      prompt,
@@ -61,6 +63,7 @@ cli_menu <- function(header,
 #' Allows for interactive testing of `cli_menu()` selection. 
 #' Originally proposed by Hadley here: https://github.com/r-lib/cli/issues/228#issuecomment-1453614104.
 #' Full code from gargle here: https://github.com/r-lib/gargle/blob/main/R/utils-ui.R
+#' @noRd
 #' @keywords Internal
 cli_readline <- function(prompt) {
   local_input <- getOption("cli_input", character())
