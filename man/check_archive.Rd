@@ -4,10 +4,10 @@
 \alias{check_archive}
 \title{Check an archive against Darwin Core standards}
 \usage{
-check_archive(x = "data-publish")
+check_archive(source = "data-publish")
 }
 \arguments{
-\item{x}{(string) A directory containing the files to be published, or
+\item{source}{(string) A directory containing the files to be published, or
 optionally a \code{.zip} file built from the same (i.e. with \code{build_archive()}).
 Defaults to the \code{data-publish} folder within the current working directory.}
 }
@@ -17,9 +17,9 @@ results; but primarily called for the side-effect of generating a report in
 the console.
 }
 \description{
-This is a wrapper to two other packages; schema and EML files (i.e. xml) are
-checked with the \code{delma} package; csv files are checked with the \code{corella}
-package.
+Check whether schema and EML files (i.e. \code{meta.xml} and \code{eml.xml}) are
+valid with the \code{delma} package; csv files are checked with the \code{corella}
+package. This is a wrapper to two other packages.
 }
 \seealso{
 \code{validate_archive()} which runs checks via API, rather than locally.

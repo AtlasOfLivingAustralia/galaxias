@@ -4,14 +4,15 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(source = "data-publish", destination)
+build_archive(source = "data-publish", destination = "dwc-archive.zip")
 }
 \arguments{
 \item{source}{(string) A directory containing all the files to be stored in
 the archive. Defaults to the \code{data-publish} folder within the current working
 directory.}
 
-\item{destination}{(string) A file name to save the resulting zip file.}
+\item{destination}{(string) A file name to save the resulting zip file.
+Defaults to \code{./dwc-archive.zip}.}
 }
 \value{
 Invisibly returns the location of the built zip file; but typically
@@ -19,29 +20,41 @@ called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip
 file).
 }
 \description{
-A Darwin Core archive is a zip file with a specified combination of data
-and metadata. This function assumes that all of these file types have been
-pre-constructed, and can be found inside a single folder, with no additional
-or redundant information. This function is similar to \code{devtools::build()},
-in the sense that it takes a repository and wraps it for publication, It
-differs from \code{devtools::build()} in that it builds a Darwin Core Archive,
-rather than an R package.
+A Darwin Core archive is a zip file containing a specified combination of data
+and metadata. \code{build_archive()} constructs this zip file.
+\code{build_archive()} assumes that all necessary
+files have been pre-constructed, and can be found inside a single folder
+with no additional or redundant information.
+
+\code{build_archive()} is similar to \code{devtools::build()},
+in the sense that it takes a repository and wraps it for publication.
 }
 \details{
 This function looks for three types of objects in the specified \code{directory}:
 \itemize{
-\item One or more \code{csv} files such as \code{occurrences.csv} &/or \code{events.csv}.
-These will be manipulated versions of the raw dataset, which have been
-altered to use Darwin Core terms as column headers. See
-\code{\link[corella:corella-package]{corella::corella-package()}} for details.
-\item A metadata statement, stored in \code{EML} using the filename \code{eml.xml}. The
-function \code{\link[=use_metadata_template]{use_metadata_template()}} is a good starting point here, followed by
-\code{\link[=use_metadata]{use_metadata()}} once you have populated your metadata statement.
-\item A 'schema' document, also stored in xml, called \code{meta.xml}. This is
-usually constructed using \code{\link[=build_schema]{build_schema()}}.
+\item Data
+
+One or more csv files named \code{occurrences.csv}, \code{events.csv} and/or
+\code{multimedia.csv}.
+These csv files contain data standardised using Darwin Core Standard
+(see \code{\link[corella:corella-package]{corella::corella-package()}} for details). A \code{data.frame}/\code{tibble}
+can be added to the correct folder using \code{\link[=use_data]{use_data()}}.
+\item Metadata
+
+A metadata statement in \code{EML} format with the file name \code{eml.xml}.
+Completed metadata statements written markdown as \code{.Rmd} or \code{qmd} files
+can be converted and saved to the correct folder using \code{\link[=use_metadata]{use_metadata()}}.
+Create a new template with \verb{[use_metadata_template()]}.
+\item Schema
+
+A 'schema' document in xml format with the file name \code{meta.xml}.
+This file can be constructed using \code{\link[=build_schema]{build_schema()}}.
 }
 
-You will get an error if these files are not present. The resulting file
-shares the name of the working directory (with a .zip file extension),
-and is placed in the parent directory.
+\code{build_archive()} will not build a Darwin Core Archive with these files
+present in the source directory. The resulting Archive is saved as a zip
+folder in the parent directory by default.
+}
+\seealso{
+\code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=build_schema]{build_schema()}}
 }

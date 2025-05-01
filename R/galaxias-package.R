@@ -4,7 +4,7 @@
 #' `galaxias` helps users describe, package and share biodiversity 
 #' information using the 'Darwin Core' data standard, which is the format used
 #' and accepted by the Global Biodiversity Information Facility (GBIF) and its'
-#' partner nodes. It is functionally similar to `devtools`, but with a focus on
+#' partner nodes. `galaxias` is functionally similar to `devtools`, but with a focus on
 #' building Darwin Core Archives rather than R packages.
 #' 
 #' The package is named for a genus of freshwater fish.
@@ -16,13 +16,15 @@
 #' 
 #' **Set up a project**
 #'   * [galaxias_project()] Set up a project with the necessary folder structure
-#'   * [use_metadata()] Add a blank metadata statement to the working directory
-#'   * [suggest_workflow()] Advise on configuring a tibble for the Darwin Core standard
+#'   * [use_metadata_template()] Add a blank metadata statement template to the working directory
+#'   * [suggest_workflow()] Advice to standardise data using the Darwin Core Standard
 #'
 #'  **Construct an archive**
-#'   * [build_schema()] Build a schema file (`meta.xml`) for a given directory
-#'   * [use_metadata()] Read, convert and save a metadata file from markdown to EML (`eml.xml`)
+#'  
+#'   * [use_data()] Save standardised data for use in a Darwin Core Archive
+#'   * [use_metadata()] Convert a metadata file from markdown to EML (`eml.xml`) and save for use in a Darwin Core Archive
 #'   * [build_archive()] Convert a directory to a Darwin Core Archive
+#'   * [build_schema()] Build a schema file (`meta.xml`) for a given directory and save for use in a Darwin Core Archive
 #'   
 #'  **Validate an archive**
 #'   * [check_archive()] Check your archive using the `delma` and `corella` packages

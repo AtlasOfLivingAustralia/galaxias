@@ -4,7 +4,11 @@
 \alias{use_metadata}
 \title{Use a metadata statement in a Darwin Core Archive}
 \usage{
-use_metadata(source = "metadata.md", destination = "./data-publish/eml.xml")
+use_metadata(
+  source = "metadata.Rmd",
+  destination = "data-publish/eml.xml",
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{source}{A metadata file in markdown (\code{.md}), Rmarkdown (\code{.Rmd}) or
@@ -13,6 +17,9 @@ to \code{metadata.md}, which is the same as is created by \code{\link[=use_metda
 
 \item{destination}{A file name to save the resulting \code{.xml} file. Defaults to
 \code{data-publish/eml.xml}.}
+
+\item{overwrite}{By default, \code{use_metadata()} will not
+overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 }
 \value{
 Does not return an object to the workspace; called for the side

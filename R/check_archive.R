@@ -46,5 +46,3 @@ check_files <- function(filenames){
     invisible()
 }
 
-corella::check_dataset(readr::read_csv("data-publish/events.csv"))
-suggest_workflow()

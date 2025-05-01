@@ -21,6 +21,8 @@ effect of building a file named \code{meta.xml} in the specified directory.
 }
 \description{
 A schema is an xml document that maps the files and field names in a DwCA.
+This map makes it easier to reconstruct one or more related datasets so that
+information is matched correctly
 It works by detecting column names on csv files in a specified directory;
 these should all be Darwin Core terms for this function to produce reliable
 results.

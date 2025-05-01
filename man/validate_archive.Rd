@@ -5,12 +5,12 @@
 \alias{get_validator_report}
 \title{Validate a Darwin Core Archive via API}
 \usage{
-validate_archive(x = "data-publish", provider = "GBIF")
+validate_archive(source = "data-publish", provider = "GBIF")
 
 get_validator_report(key)
 }
 \arguments{
-\item{x}{(string) Either a directory containing all the files to be stored in
+\item{source}{(string) Either a directory containing all the files to be stored in
 the archive, or a filename (ending in .zip) of the specified archive.
 Defaults to the \code{data-publish} folder within the current working directory.}
 
