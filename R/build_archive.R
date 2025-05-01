@@ -30,7 +30,7 @@
 #'  * Schema 
 #'  
 #'    A 'schema' document in xml format with the file name `meta.xml`. 
-#'    This file can be constructed using [build_schema()].
+#'    This file can be constructed using [use_schema()].
 #'
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
@@ -43,7 +43,7 @@
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
-#' @seealso [use_data()], [use_metadata()], [build_schema()]
+#' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
 build_archive <- function(source = "data-publish", 
                           destination = "dwc-archive.zip") {
@@ -71,7 +71,7 @@ build_archive <- function(source = "data-publish",
     )
     
     if (choice == 1) {
-      build_schema(source = source, 
+      use_schema(source = source, 
                    destination = glue::glue("{source}/meta.xml"))
     } else {
       cli::cli_inform(c(
@@ -85,13 +85,11 @@ build_archive <- function(source = "data-publish",
   
   progress_update("Creating zip folder...")
   file_out <- get_default_file(destination)
-  browser()
   
-  progress_update("Writing {.file {file_out}}.")
+  cli::cli_progress_step("Writing {.file {file_out}}.")
   zip::zip(zipfile = file_out, 
            files = files_in,
            mode = "cherry-pick")
-  
   cli::cli_progress_done()
   
   invisible(file_out)
@@ -102,7 +100,7 @@ build_archive <- function(source = "data-publish",
 #' @keywords Internal
 get_default_file <- function(file){
   if(missing(file)){
-    glue::glue("{getwd()}.zip")
+    glue::glue("dwc-archive.zip")
   }else{
     if(!grepl(".zip$", file)){
       cli::cli_abort("File must end in `.zip`.")
