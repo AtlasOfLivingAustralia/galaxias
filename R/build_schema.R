@@ -1,6 +1,9 @@
 #' Create a `schema` for a Darwin Core Archive
 #' 
-#' A schema is an xml document that maps the files and field names in a DwCA.
+#' @description
+#' A schema is an xml document that maps the files and field names in a DwCA. 
+#' This map makes it easier to reconstruct one or more related datasets so that 
+#' information is matched correctly
 #' It works by detecting column names on csv files in a specified directory;
 #' these should all be Darwin Core terms for this function to produce reliable
 #' results.
@@ -29,9 +32,9 @@ build_schema <- function(source = "data-publish",
   schema <- add_front_matter(wireframe)
   
   usethis::use_directory("data-publish")
+  cli::cli_alert_success("Writing {.file {destination}}.")
   schema |>
     delma::write_eml(file = destination)
-  cli::cli_alert_success("Schema successfully built. Saved as {.file {destination}}.")
   cli::cli_progress_done()
 }
 

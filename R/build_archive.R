@@ -1,39 +1,53 @@
 #' Build a Darwin Core Archive from a folder
 #' 
 #' @description
-#' A Darwin Core archive is a zip file with a specified combination of data
-#' and metadata. This function assumes that all of these file types have been
-#' pre-constructed, and can be found inside a single folder, with no additional
-#' or redundant information. This function is similar to `devtools::build()`,
-#' in the sense that it takes a repository and wraps it for publication, It 
-#' differs from `devtools::build()` in that it builds a Darwin Core Archive, 
-#' rather than an R package.
+#' A Darwin Core archive is a zip file containing a specified combination of data
+#' and metadata. `build_archive()` constructs this zip file. 
+#' `build_archive()` assumes that all necessary 
+#' files have been pre-constructed, and can be found inside a single folder 
+#' with no additional or redundant information. 
+#' 
+#' `build_archive()` is similar to `devtools::build()`,
+#' in the sense that it takes a repository and wraps it for publication.
 #' @details
 #' This function looks for three types of objects in the specified `directory`:
 #' 
-#'  * One or more `csv` files such as `occurrences.csv` &/or `events.csv`. 
-#'    These will be manipulated versions of the raw dataset, which have been
-#'    altered to use Darwin Core terms as column headers. See 
-#'    [corella::corella-package()] for details.
-#'  * A metadata statement, stored in `EML` using the filename `eml.xml`. The
-#'    function [use_metadata_template()] is a good starting point here, followed by 
-#'    [use_metadata()] once you have populated your metadata statement.
-#'  * A 'schema' document, also stored in xml, called `meta.xml`. This is 
-#'    usually constructed using [build_schema()].
+#'  * Data 
+#'    
+#'    One or more csv files named `occurrences.csv`, `events.csv` and/or 
+#'    `multimedia.csv`.
+#'    These csv files contain data standardised using Darwin Core Standard 
+#'    (see [corella::corella-package()] for details). A `data.frame`/`tibble` 
+#'    can be added to the correct folder using [use_data()].
+#'  
+#'  * Metadata
+#'  
+#'    A metadata statement in `EML` format with the file name `eml.xml`. 
+#'    Completed metadata statements written markdown as `.Rmd` or `qmd` files 
+#'    can be converted and saved to the correct folder using [use_metadata()]. 
+#'    Create a new template with `[use_metadata_template()]`.
+#'  
+#'  * Schema 
+#'  
+#'    A 'schema' document in xml format with the file name `meta.xml`. 
+#'    This file can be constructed using [build_schema()].
 #'
-#' You will get an error if these files are not present. The resulting file
-#' shares the name of the working directory (with a .zip file extension),
-#' and is placed in the parent directory.
+#' `build_archive()` will not build a Darwin Core Archive with these files 
+#' present in the source directory. The resulting Archive is saved as a zip 
+#' folder in the parent directory by default.
 #' @param source (string) A directory containing all the files to be stored in 
 #' the archive. Defaults to the `data-publish` folder within the current working 
 #' directory.
-#' @param destination (string) A file name to save the resulting zip file.
+#' @param destination (string) A file name to save the resulting zip file. 
+#' Defaults to `./dwc-archive.zip`.
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
+#' @seealso [use_data()], [use_metadata()], [build_schema()]
 #' @export
 build_archive <- function(source = "data-publish", 
                           destination = "dwc-archive.zip") {
+  
   cli::cli_alert_info("Building Darwin Core Archive")
   
   progress_update("Detecting files..."); wait(.1)
@@ -71,13 +85,13 @@ build_archive <- function(source = "data-publish",
   
   progress_update("Creating zip folder...")
   file_out <- get_default_file(destination)
+  browser()
   
-  progress_update("Constructing archive...")
+  progress_update("Writing {.file {file_out}}.")
   zip::zip(zipfile = file_out, 
            files = files_in,
            mode = "cherry-pick")
   
-  cli::cli_alert_success("Darwin Core Archive successfully built. \nSaved as {.file {file_out}}.")
   cli::cli_progress_done()
   
   invisible(file_out)
@@ -167,12 +181,13 @@ find_data <- function(directory,
                    call = call)
   }
   
-  # Data files
+  ## Data
   cli::cat_line("Data (minimum of one)")
   file_check_message(user_files, "occurrences.csv")
   file_check_message(user_files, "events.csv")
   file_check_message(user_files, "multimedia.csv")
   
+  # check number of files
   n_data_present <- user_files |>
     dplyr::filter(type == "data") |>
     dplyr::pull("present") |>
@@ -186,7 +201,7 @@ find_data <- function(directory,
                   call = call)
   }
   
-  # Metadata
+  ## Metadata
   cli::cat_line("Metadata")
   file_check_message(user_files, "eml.xml")
   
@@ -198,23 +213,15 @@ find_data <- function(directory,
                    call = call)
   }
   
-  # Schema
+  ## Schema
   cli::cat_line("Schema")
   file_check_message(user_files, "meta.xml")
+  # schema does not error if missing
 
-  
-  # if(!file.exists(glue::glue("{directory}/meta.xml"))){
-  #   bullets <- c("No schema file ({.file meta.xml}) is present in the specified directory.",
-  #                i = "Use `build_schema()` to create a schema file.")
-  #   cl::cli_abort(bullets,
-  #                 call = call)
-  # }
-
-  
+  # list of the files in the directory
   file_list <- user_files |>
     dplyr::filter(present == TRUE) |>
     dplyr::pull("file")
   
-  # list of the files in the directory
-  glue::glue("{directory}/{file_list}")
+  return(glue::glue("{directory}/{file_list}"))
 }
