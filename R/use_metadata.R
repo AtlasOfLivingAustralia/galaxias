@@ -29,7 +29,7 @@ use_metadata <- function(source = "metadata.Rmd",
   progress_update("Reading metadata statement...")
   metadata_tibble <- delma::read_md(source)
   
-  if(file.exists(file_path)){
+  if(file.exists(destination)){
     if(overwrite){
       cli::cli_progress_step("Overwriting {.file {destination}}.")        
       delma::write_eml(metadata_tibble, file = destination)
