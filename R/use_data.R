@@ -133,10 +133,7 @@ check_data_type <- function(data, error_call = rlang::caller_env()) {
 #' @noRd
 #' @keywords Internal
 switch_data_type <- function(user_data, type, overwrite) {
-  # browser()
-  
-  # dots(...) |> eval()
-  
+
   switch(type,
          "occurrence" = use_data_occurrences(user_data, overwrite = overwrite),
          "event" = use_data_events(user_data, overwrite = overwrite)

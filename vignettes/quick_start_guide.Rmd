@@ -24,7 +24,9 @@ library(dplyr)
 ```
 
 Here we have an existing R project with data we already collected as part of 
-an existing research project. Our existing project looks like this:
+an existing research project. This is a fairly standard project folder 
+structure, containing elements of a 
+complete analytic workflow.
 
 ```{r, eval=TRUE, echo=FALSE}
 devtools::load_all()
@@ -39,8 +41,7 @@ devtools::load_all()
 └── plots                            : Folder containing plots/dataviz
 ```
 
-This is a fairly standard project folder structure, containing elements of a 
-complete analytic workflow. Let's see how galaxias helps us to prepare our 
+Let's see how galaxias helps us to prepare our 
 data as a Darwin Core Archive.
 
 
@@ -170,10 +171,6 @@ occurrences_filtered |>
   galaxias::use_data()
 ```
 
-You can then use `build_schema()` to create a 'schema'
-file, which is an `xml` document that tells users what data is present in your 
-archive.
-
 ## Adding metadata
 
 A critical part of a Darwin Core archive is a metadata statement; this tells 
@@ -212,50 +209,23 @@ galaxias::use_metadata()
 At the end of the above process, you should have a folder named `data-publish` that 
 contains at least two files:
 
-- One or more `.csv` files containing data (e.g. `occurrences.csv`)
+- One or more `.csv` files containing data (e.g. `occurrences.csv`, `events.csv`, `multimedia.csv`)
 - An `eml.xml` file containing your metadata
 
 If that is true, then you can run `build_archive()` to zip your data into a 
-Darwin Core Archive:
+Darwin Core Archive!
+
+Running `build_archive()` also checks whether we have a 'schema' document (`meta.xml`) in our `data-publish` folder. This is a machine-readable `xml` document that describes the content of the archive's data files and their structure. The schema 
+document is a required file in a Darwin Core Archive. If it is missing, 
+it will build one. We can also build a schema document ourselves using `use_schema()`.
 
 ```{r eval=FALSE}
 build_archive()
 ```
 
+At the end of this process, you should have a Darwin Core Archive zip file. 
+You should also have `data-publish` folder containing 
+standardised data files (e.g., `occurrences.csv`), a metadata statement in EML 
+format (`eml.xml`) and a schema document (`meta.xml`). The files can be edited 
+or updated to edit your final Darwin Core Archive.
 
-## START HERE
-`build_archive()` will begin by constructing a **schema**, a required file that 
-provides information about the data's structure. 
-- A `meta.xml` file containing your schema
-
-
-#### schema
-A second piece of metadata required by the Darwin Core standard is the 'schema'
-document. This is a machine-readable `xml` document that describes the content
-of the archive's data files. You can generate one using:
-
-```{r, eval=FALSE}
-build_schema()
-```
-
-#### Start with a project
-
-```{r, eval=FALSE}
-library(galaxias)
-galaxias_project("my-project-name")
-```
-
-If you are using RStudio, this should launch a new RStudio instance for
-that project, which will have the following structure:
-
-```
-├── README.md                        : Description of the repository
-├── metadata.Rmd                     : Boilerplate metadata statement for this project
-├── my-project-name.Rproj            : RStudio project file
-├── data-raw                         : Folder to store source data
-└── data                             : Folder to store processed data
-```
-
-It is a good idea to write some basic information in your `README.Rmd` file
-first, as this provides guidance to your users as to what your package contains,
-as well as what they are allowed to use it for.

@@ -46,12 +46,12 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
-- Create a new RStudio project or package for storing biodiversity data
-  and data-processing scripts using `galaxias_project()`.
-- Create documents to describe the origin and structure of your data
-  using `build_metadata()` and `build_schema()`.
-- Zip up your data for sharing or publication using `build_archive()`.
-- Check data for consistency with the Darwin Core standard, either
+- Add standardised data to your archive with `use_data()`.
+- Convert a metadata statement in markdown (`.Rmd` or `.qmd`) to `EML` format and 
+  use it in your archive with `use_metadata()`.
+- Build a Darwin Core Archive with `build_archive()`, ready for sharing or 
+  publication.
+- Evaluate whether your data meets Darwin Core Standard, either
   locally using `check_archive()`, or via API using
   `validate_archive()`.
 
