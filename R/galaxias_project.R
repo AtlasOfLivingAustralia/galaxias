@@ -13,7 +13,8 @@
 #' side-effect of building a new project or package.
 #' @name galaxias_project
 #' @order 1
-#' @export
+#' @noRd
+#' @keywords Internal
 galaxias_project <- function(path, ...){
   usethis::create_project(path, ...)
   delma::use_metadata_template("metadata.Rmd")
@@ -24,7 +25,8 @@ galaxias_project <- function(path, ...){
 
 #' @rdname galaxias_project
 #' @order 2
-#' @export
+#' @noRd
+#' @keywords Internal
 galaxias_package <- function(path, ...){
   usethis::create_package(path, ...)
   usethis::use_directory("data-raw")

@@ -33,15 +33,19 @@ navbar:
       text: News
       href: news/index.html
 reference:
-- title: Set up a project
-  contents: 
-  - galaxias_project
-  - use_metadata
+- title: Prepare information for Darwin Core
+  contents:
+  - use_metadata_template
   - suggest_workflow
+- title: Add information to a folder
+  contents: 
+  - use_data
+  - use_data_events
+  - use_data_occurrences
+  - use_metadata
+  - use_schema
 - title: Construct an archive
   contents:
-  - build_metadata
-  - build_schema
   - build_archive
 - title: Validate via API
   contents:

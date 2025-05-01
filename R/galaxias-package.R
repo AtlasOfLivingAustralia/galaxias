@@ -14,17 +14,17 @@
 #' @references If you have any questions, comments or suggestions, please email
 #' [support@ala.org.au](mailto:support@ala.org.au).
 #' 
-#' **Set up a project**
-#'   * [galaxias_project()] Set up a project with the necessary folder structure
+#' **Prepare information for Darwin Core**
 #'   * [use_metadata_template()] Add a blank metadata statement template to the working directory
 #'   * [suggest_workflow()] Advice to standardise data using the Darwin Core Standard
 #'
-#'  **Construct an archive**
-#'  
+#' **Add information to a folder**
 #'   * [use_data()] Save standardised data for use in a Darwin Core Archive
 #'   * [use_metadata()] Convert a metadata file from markdown to EML (`eml.xml`) and save for use in a Darwin Core Archive
+#'   * [use_schema()] Build a schema file (`meta.xml`) for a given directory and save for use in a Darwin Core Archive
+#'   
+#' **Construct an archive**
 #'   * [build_archive()] Convert a directory to a Darwin Core Archive
-#'   * [build_schema()] Build a schema file (`meta.xml`) for a given directory and save for use in a Darwin Core Archive
 #'   
 #'  **Validate an archive**
 #'   * [check_archive()] Check your archive using the `delma` and `corella` packages

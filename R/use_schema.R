@@ -16,8 +16,8 @@
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file named `meta.xml` in the specified directory.
 #' @export
-build_schema <- function(source = "data-publish", 
-                         destination = "data-publish/meta.xml") {
+use_schema <- function(source = "data-publish", 
+                       destination = "data-publish/meta.xml") {
   cli::cli_alert_info("Building schema")
   
   dir <- get_default_directory(source)
