@@ -3,7 +3,7 @@
 #' Validation is a process of checking whether a specified archive is ready for
 #' sharing and publication, according to the Darwin Core standard. 
 #' @name validate_archive
-#' @param x (string) Either a directory containing all the files to be stored in 
+#' @param source (string) Either a directory containing all the files to be stored in 
 #' the archive, or a filename (ending in .zip) of the specified archive. 
 #' Defaults to the `data-publish` folder within the current working directory.
 #' @param provider (string) The institution to be queried for validation 
@@ -14,16 +14,16 @@
 #' @seealso `check_archive()` which runs checks locally, rather than via API.
 #' @order 1
 #' @export
-validate_archive <- function(x = "data-publish",
+validate_archive <- function(source = "data-publish",
                              provider = "GBIF"){
 
   # if this isn't a zip file, build one, and return the location
-  if(!grepl(".zip$", x)){
-    x <- build_archive(x)
+  if(!grepl(".zip$", source)){
+    source <- build_archive(source)
   }
   
   # POST query to GBIF validator API
-  post_response <- api_gbif_validator_post(x)
+  post_response <- api_gbif_validator_post(source)
   # if there is an error, this function should return `post_response`
   # to allow the user to retry later using the `key` arg, 
   # supplied to `get_validator_report()`
@@ -48,7 +48,7 @@ api_gbif_validator_post <- function(filename){
   email_string <- potions::pour("gbif", "email", .pkg = "galaxias")
   if(is.null(email_string)){
     c("No email supplied for GBIF.", 
-      i = "Try `galaxias_config(gbif = list(email = \"my_email\"))`") |>
+      i = "Use `galaxias_config(gbif = list(email = \"my_email\"))`") |>
     cli::cli_abort()
   }
   
