@@ -11,9 +11,15 @@ status](https://www.r-pkg.org/badges/version/galaxias)](https://CRAN.R-project.o
 
 ## Overview
 
-`galaxias` is an R package that helps users describe, package and share
+`galaxias` is an R package that helps users describe, bundle and share
 biodiversity information using the [‘Darwin Core’](https://dwc.tdwg.org)
-data standard. It was created by the [Science & Decision Support
+data standard. `galaxias` provides tools in R to build a [Darwin Core
+Archive](), a zip file containing standardised data and metadata
+accepted by global data infrastructures. The package mirrors
+functionality in [devtools](https://devtools.r-lib.org/),
+[usethis](https://usethis.r-lib.org/) and
+[dplyr](https://dplyr.tidyverse.org/) to manage data, files and folders.
+`galaxias` was created by the [Science & Decision Support
 Team](https://labs.ala.org.au) at the [Atlas of Living
 Australia](https://www.ala.org.au) (ALA).
 
@@ -46,22 +52,106 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
-- Create a new RStudio project or package for storing biodiversity data
-  and data-processing scripts using `galaxias_project()`.
-- Convert and save metadata statements written in markdown, Rmarkdown or
-  Quarto as EML files with `use_metadata()`.
-- Zip up your data for sharing or publication using `build_archive()`.
+- Standardise and save data with `use_data()`.
+- Convert and save metadata statements written in Rmarkdown or Quarto as
+  EML files with `use_metadata()`.
+- Build Darwin Core Archives for sharing or publication using
+  `build_archive()`.
 - Check data for consistency with the Darwin Core standard, either
   locally using `check_archive()`, or via API using
   `validate_archive()`.
 
 `galaxias` is part of a group of packages that help users publish data
-using the Darwin Core standard. The other packages are:
+using the Darwin Core standard. These packages are loaded with
+`galaxias`. The other packages are:
 
 - [`corella`](https://corella.ala.org.au) for converting tibbles to the
   required column names
 - [`delma`](https://delma.ala.org.au) for converting markdown files to
-  `xml`.
+  `xml`
+
+## Usage
+
+Here we have a small example dataset of species observations.
+
+``` r
+library(tibble)
+
+df <- tibble(
+  scientificName = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
+  latitude = c(-35.310, -35.273), 
+  longitude = c(149.125, 149.133),
+  eventDate = lubridate::dmy(c("14-01-2023", "15-01-2023")),
+  status = c("present", "present")
+)
+
+df
+#> # A tibble: 2 × 5
+#>   scientificName           latitude longitude eventDate  status 
+#>   <chr>                       <dbl>     <dbl> <date>     <chr>  
+#> 1 Callocephalon fimbriatum    -35.3      149. 2023-01-14 present
+#> 2 Eolophus roseicapilla       -35.3      149. 2023-01-15 present
+```
+
+We can standardise data to Darwin Core Standard.
+
+``` r
+df_dwc <- df |>
+   set_occurrences(occurrenceID = random_id(),
+                   basisOfRecord = "humanObservation",
+                   occurrenceStatus = status) |>
+   set_coordinates(decimalLatitude = latitude,
+                   decimalLongitude = longitude)
+
+df_dwc
+#> # A tibble: 2 × 7
+#>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
+#>   <chr>                   <date>     <chr>         <chr>        <chr>           
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… af0ac218-27… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… af0ac22c-27… present         
+#> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
+```
+
+Then specify we wish to use this data in a Darwin Core
+Archive.`use_data()` saves the `df_dwc`  
+with a valid csv file name and location.
+
+``` r
+use_data(df_dwc)
+```
+
+We can create a template metadata statement for our data.
+
+``` r
+use_metadata_template("metadata.Rmd")
+```
+
+After editing, we can specify that we wish to use this file.
+`use_metadata()` converts our metadata to
+[EML](https://eml.ecoinformatics.org/) format and saves it with a valid
+xml file name and location.
+
+``` r
+use_metadata("metadata.Rmd")
+```
+
+Finally, we can build our Darwin Core Archive and save it into our top
+folder directory as `dwc-archive.zip`.
+
+``` r
+build_archive()
+```
+
+Validate whether the constructed archive passes Darwin Core Standard
+criteria.
+
+``` r
+validate_archive("dwc-archive.zip")
+```
+
+See the [Quick Start
+Guide](https://galaxias.ala.org.au/articles/quick_start_guide.html) for
+an in-depth explanation of this process.
 
 ## Citing galaxias
 
