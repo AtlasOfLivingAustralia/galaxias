@@ -33,7 +33,7 @@ use_metadata <- function(source = "metadata.Rmd",
   metadata_tibble <- delma::read_md(source)
   
   # get directory
-  use_directory("data-publish")
+  usethis::use_directory("data-publish")
   destination <- file.path("data-publish", destination)
   
   # set writing behaviour

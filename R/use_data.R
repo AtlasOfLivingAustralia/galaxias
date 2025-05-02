@@ -161,7 +161,7 @@ use_data_occurrences <- function(df,
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
-  use_directory("data-publish") # add folder if it's not already there
+  usethis::use_directory("data-publish") # add folder if it's not already there
   file_path <- fs::path("data-publish", "occurrences.csv")
   write_data_file(file_path,
                   df,
@@ -189,7 +189,7 @@ use_data_events <- function(df,
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
-  use_directory("data-publish") # add folder if it's not already there
+  usethis::use_directory("data-publish") # add folder if it's not already there
   file_path <- fs::path("data-publish", "events.csv")
   write_data_file(file_path,
                   df, 

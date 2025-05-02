@@ -6,17 +6,36 @@ test_that("use_metadata() arguments work for R Markdown", {
   # fails when `input` doesn't exist
   use_metadata("something.file") |>
     expect_error()
+
+  # first check no file already present
+  file.exists("data-publish") |> # no file at first
+    expect_false()
   
-  # builds `./data-publish` and `eml.xml`
-  file.exists("data-publish") |>
-    expect_false() 
-  use_metadata("EXAMPLE.Rmd") |>
-    expect_no_error()
-  file.exists("data-publish") |>
-    expect_true() 
+  # now we have a problem, because `usethis` only puts information in the project directory
+  root_path <- usethis::proj_path() |> 
+    as.character() # where `usethis` places folders
+  current_path <- getwd() # where `testthat` is working
+  # these are likely to be different at all times, but hard to be sure
+  # where they *are* different, we need to add `data-publish` here
+  if(root_path != current_path){
+    dir.create("data-publish")
+    use_metadata("EXAMPLE.Rmd") |>
+      expect_no_error()
+    root_directory <- file.path(root_path, "data-publish")
+    root_directory |>
+      file.exists() |>
+      expect_true()
+  }else{
+    # this is how tests should actually work
+    use_metadata("EXAMPLE.Rmd") |>
+      expect_no_error()
+    file.exists("data-publish") |>
+      expect_true()
+  }
+  
+  # check file exists  
   file.exists("data-publish/eml.xml") |>
     expect_true()
-  unlink("data-publish", recursive = TRUE)
   
   # setting a file name generates a file with that name, which is valid EML
   use_metadata("EXAMPLE.Rmd", 
@@ -51,6 +70,7 @@ test_that("use_metadata() arguments work for R Markdown", {
   
   # clean up
   unlink("EXAMPLE.Rmd")
+  unlink(root_directory)
   unlink("data-publish", recursive = TRUE)
 })
 
@@ -63,16 +83,35 @@ test_that("use_metadata() arguments work for Quarto Markdown", {
   use_metadata("something.file") |>
     expect_error()
 
-  # builds `./data-publish` and `eml.xml`
-  file.exists("data-publish") |>
+  # first check no file already present
+  file.exists("data-publish") |> # no file at first
     expect_false()
-  use_metadata("EXAMPLE.Qmd") |>
-    expect_no_error()
-  file.exists("data-publish") |>
-    expect_true()
+  
+  # now we have a problem, because `usethis` only puts information in the project directory
+  root_path <- usethis::proj_path() |> 
+    as.character() # where `usethis` places folders
+  current_path <- getwd() # where `testthat` is working
+  # these are likely to be different at all times, but hard to be sure
+  # where they *are* different, we need to add `data-publish` here
+  if(root_path != current_path){
+    dir.create("data-publish")
+    use_metadata("EXAMPLE.Qmd") |>
+      expect_no_error()
+    root_directory <- file.path(root_path, "data-publish")
+    root_directory |>
+      file.exists() |>
+      expect_true()
+  }else{
+    # this is how tests should actually work
+    use_metadata("EXAMPLE.Qmd") |>
+      expect_no_error()
+    file.exists("data-publish") |>
+      expect_true()
+  }
+
+  # check file exists  
   file.exists("data-publish/eml.xml") |>
     expect_true()
-  unlink("data-publish", recursive = TRUE)
 
   # setting a file name generates a file with that name, which is valid EML
   use_metadata("EXAMPLE.Qmd",
@@ -107,5 +146,6 @@ test_that("use_metadata() arguments work for Quarto Markdown", {
 
   # clean up
   unlink("EXAMPLE.Qmd")
+  unlink(root_directory)
   unlink("data-publish", recursive = TRUE)
 })
