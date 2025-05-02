@@ -44,11 +44,11 @@ can be added to the correct folder using \code{\link[=use_data]{use_data()}}.
 A metadata statement in \code{EML} format with the file name \code{eml.xml}.
 Completed metadata statements written markdown as \code{.Rmd} or \code{qmd} files
 can be converted and saved to the correct folder using \code{\link[=use_metadata]{use_metadata()}}.
-Create a new template with \verb{[use_metadata_template()]}.
+Create a new template with \code{\link[=use_metadata_template]{use_metadata_template()}}.
 \item Schema
 
 A 'schema' document in xml format with the file name \code{meta.xml}.
-This file can be constructed using \code{\link[=build_schema]{build_schema()}}.
+This file can be constructed using \code{\link[=use_schema]{use_schema()}}.
 }
 
 \code{build_archive()} will not build a Darwin Core Archive with these files
@@ -56,5 +56,5 @@ present in the source directory. The resulting Archive is saved as a zip
 folder in the parent directory by default.
 }
 \seealso{
-\code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=build_schema]{build_schema()}}
+\code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=use_schema]{use_schema()}}
 }

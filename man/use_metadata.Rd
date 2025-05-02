@@ -6,28 +6,28 @@
 \usage{
 use_metadata(
   source = "metadata.Rmd",
-  destination = "data-publish/eml.xml",
+  destination = "eml.xml",
   overwrite = FALSE
 )
 }
 \arguments{
 \item{source}{A metadata file in markdown (\code{.md}), Rmarkdown (\code{.Rmd}) or
 Quarto markdown (\code{.qmd}). Defaults
-to \code{metadata.md}, which is the same as is created by \code{\link[=use_metdata_template]{use_metdata_template()}}}
+to \code{metadata.md}, which is the same as is created by \code{\link[=use_metadata_template]{use_metadata_template()}}}
 
 \item{destination}{A file name to save the resulting \code{.xml} file. Defaults to
-\code{data-publish/eml.xml}.}
+\code{eml.xml}. Note that the file is always saved to the \code{data-publish} directory.}
 
 \item{overwrite}{By default, \code{use_metadata()} will not
 overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 }
 \value{
 Does not return an object to the workspace; called for the side
-effect of building a file named \code{meta.xml} in the \code{data-publish} directory.
+effect of building a file in the \code{data-publish} directory.
 }
 \description{
 A metadata statement lists the owner of the dataset, how it was collected,
-and how it can be used (i.e. its licence). This function reads and
+and how it can be used (i.e. its' licence). This function reads and
 converts metadata saved in markdown (.md), Rmarkdown (.Rmd) or Quarto (.qmd)
 to xml, and saves it in the \code{destination} folder.
 
