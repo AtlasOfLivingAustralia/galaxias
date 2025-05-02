@@ -46,12 +46,12 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
-- Add standardised data to your archive with `use_data()`.
-- Convert a metadata statement in markdown (`.Rmd` or `.qmd`) to `EML` format and 
-  use it in your archive with `use_metadata()`.
-- Build a Darwin Core Archive with `build_archive()`, ready for sharing or 
-  publication.
-- Evaluate whether your data meets Darwin Core Standard, either
+- Create a new RStudio project or package for storing biodiversity data
+  and data-processing scripts using `galaxias_project()`.
+- Convert and save metadata statements written in markdown, Rmarkdown or
+  Quarto as EML files with `use_metadata()`.
+- Zip up your data for sharing or publication using `build_archive()`.
+- Check data for consistency with the Darwin Core standard, either
   locally using `check_archive()`, or via API using
   `validate_archive()`.
 
@@ -76,11 +76,11 @@ The current recommended citation is:
 
 > Westgate MJ, Balasubramaniam S & Kellie D (2024) galaxias:
 > Standardise, Document and Share Biodiversity Data. R Package version
-> 0.1.0.9999.
+> 0.1.0.
 
 ## Contributors
 
-Developers who have contributed to `galaxias` are listed here (in
+Developers who have contributed to `galaxias` are as follows (in
 alphabetical order by surname):
 
 Amanda Buyan ([@acbuyan](https://github.com/acbuyan)), Fonti Kar

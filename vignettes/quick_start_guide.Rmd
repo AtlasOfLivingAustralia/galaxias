@@ -119,7 +119,7 @@ occurrences |> print(n = 5)
 #| comment: "#>"
 library(lubridate)
 
-occurrences <- my_tbl |>
+occurrences <- my_data |>
   # basic requirements of Darwin Core
   set_occurrences(occurrenceID = sequential_id(),
                   basisOfRecord = "humanObservation") |> 

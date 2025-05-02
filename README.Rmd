@@ -80,10 +80,10 @@ citation(package = "galaxias")
 The current recommended citation is:
 
 > Westgate MJ, Balasubramaniam S & Kellie D (2024) galaxias: Standardise, 
-> Document and Share Biodiversity Data. R Package version 0.1.0.9999.
+> Document and Share Biodiversity Data. R Package version 0.1.0.
 
 ## Contributors
-Developers who have contributed to `galaxias` are listed here (in alphabetical 
+Developers who have contributed to `galaxias` are as follows (in alphabetical 
 order by surname):
 
 Amanda Buyan ([@acbuyan](https://github.com/acbuyan)), 
