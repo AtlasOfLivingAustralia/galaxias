@@ -8,14 +8,12 @@
 #' `use_data()` is an all-in-one function for accepted data types "occurrence", 
 #' "event" and "multimedia". `use_data()` attempts to detect and save the 
 #' correct data type based on the provided `tibble`/`data.frame`.
-#' 
-#' Users can use bespoke data functions [use_data_occurrences()], 
-#' [use_data_events()] and [use_data_multimedia()] to specify data type 
-#' manually.
+#' Alternatively, users can call the underlying functions 
+#' [use_data_occurrences()], [use_data_events()] and [use_data_multimedia()] to 
+#' specify data type manually.
 #' @details
-#' This function saves data in the `data-publish` folder, which is the default 
-#' folder that `galaxias` uses to build a Darwin Core Archive using 
-#' [build_archive()].
+#' By default, this function saves data in the `data-publish` folder. To change 
+#' this default, see [galaxias_config()].
 #' 
 #' Data type is determined by detecting type-specific column names in 
 #' supplied data. 
@@ -142,14 +140,9 @@ switch_data_type <- function(user_data, type, overwrite) {
 }
 
 #' Use occurrence-type data in a Darwin Core Archive
-#' @description
-#' Saves standardised data of occurrences in the correct folder for building 
-#' a Darwin Core Archive with [build_archive()]. Saves data in 
-#' `./data-publish/occurrences.csv`.
 #' @param df A `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data_occurrences()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
-#' @return Invisibly returns the location of the saved csv file.
 #' @seealso [use_data_events()],[use_metadata()]
 #' @rdname use_data
 #' @export
@@ -161,23 +154,19 @@ use_data_occurrences <- function(df,
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
-  usethis::use_directory("data-publish") # add folder if it's not already there
-  file_path <- fs::path("data-publish", "occurrences.csv")
+  directory <- potions::pour("directory",
+                             .pkg = "galaxias")
+  usethis::use_directory(directory)
+  file_path <- fs::path(directory, "occurrences.csv")
   write_data_file(file_path,
                   df,
                   overwrite)
-  
 }
 
 #' Use event-type data in a Darwin Core Archive
-#' @description
-#' Saves standardised data of events in the correct folder for building 
-#' a Darwin Core Archive with [build_archive()]. Saves data in 
-#' `./data-publish/events.csv`.
 #' @param df A `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data_events()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
-#' @return Invisibly returns the location of the saved csv file.
 #' @seealso [use_data_occurrences()], [use_metadata()]
 #' @rdname use_data
 #' @export
@@ -189,8 +178,10 @@ use_data_events <- function(df,
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
-  usethis::use_directory("data-publish") # add folder if it's not already there
-  file_path <- fs::path("data-publish", "events.csv")
+  directory <- potions::pour("directory",
+                             .pkg = "galaxias")
+  usethis::use_directory(directory)
+  file_path <- fs::path(directory, "events.csv")
   write_data_file(file_path,
                   df, 
                   overwrite)

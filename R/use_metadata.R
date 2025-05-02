@@ -12,7 +12,8 @@
 #' Quarto markdown (`.qmd`). Defaults
 #' to `metadata.md`, which is the same as is created by [use_metadata_template()]
 #' @param destination A file name to save the resulting `.xml` file. Defaults to 
-#' `eml.xml`. Note that the file is always saved to the `data-publish` directory.
+#' `eml.xml`. Note that the file is saved to the `data-publish` directory, 
+#' unless changed using the `directory` argument of [galaxias_config()].
 #' @param overwrite By default, `use_metadata()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
 #' @returns Does not return an object to the workspace; called for the side
@@ -32,9 +33,11 @@ use_metadata <- function(source = "metadata.Rmd",
   progress_update("Reading metadata statement...")
   metadata_tibble <- delma::read_md(source)
   
-  # get directory
-  usethis::use_directory("data-publish")
-  destination <- file.path("data-publish", destination)
+  # set up file paths, directories etc.
+  directory <- potions::pour("directory",
+                             .pkg = "galaxias")
+  usethis::use_directory(directory)
+  destination <- fs::path(directory, destination)
   
   # set writing behaviour
   if(file.exists(destination)){

@@ -16,7 +16,8 @@ Quarto markdown (\code{.qmd}). Defaults
 to \code{metadata.md}, which is the same as is created by \code{\link[=use_metadata_template]{use_metadata_template()}}}
 
 \item{destination}{A file name to save the resulting \code{.xml} file. Defaults to
-\code{eml.xml}. Note that the file is always saved to the \code{data-publish} directory.}
+\code{eml.xml}. Note that the file is saved to the \code{data-publish} directory,
+unless changed using the \code{directory} argument of \code{\link[=galaxias_config]{galaxias_config()}}.}
 
 \item{overwrite}{By default, \code{use_metadata()} will not
 overwrite existing files. If you really want to do so, set this to \code{TRUE}.}

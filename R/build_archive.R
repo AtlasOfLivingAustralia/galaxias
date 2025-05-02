@@ -1,14 +1,12 @@
 #' Build a Darwin Core Archive from a folder
 #' 
 #' @description
-#' A Darwin Core archive is a zip file containing a specified combination of data
-#' and metadata. `build_archive()` constructs this zip file. 
-#' `build_archive()` assumes that all necessary 
-#' files have been pre-constructed, and can be found inside a single folder 
-#' with no additional or redundant information. 
-#' 
-#' `build_archive()` is similar to `devtools::build()`,
-#' in the sense that it takes a repository and wraps it for publication.
+#' A Darwin Core archive is a zip file containing a specified combination of 
+#' data and metadata. `build_archive()` constructs this zip file. It assumes 
+#' that all necessary files have been pre-constructed, and can be found inside a 
+#' single folder with no additional or redundant information. Structurally, 
+#' `build_archive()` is similar to `devtools::build()`, in the sense that it 
+#' takes a repository and wraps it for publication.
 #' @details
 #' This function looks for three types of objects in the specified `directory`:
 #' 
@@ -35,9 +33,6 @@
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
 #' folder in the parent directory by default.
-#' @param source (string) A directory containing all the files to be stored in 
-#' the archive. Defaults to the `data-publish` folder within the current working 
-#' directory.
 #' @param destination (string) A file name to save the resulting zip file. 
 #' Defaults to `./dwc-archive.zip`.
 #' @return Invisibly returns the location of the built zip file; but typically
@@ -45,8 +40,7 @@
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
-build_archive <- function(source = "data-publish", 
-                          destination = "dwc-archive.zip") {
+build_archive <- function(destination = "dwc-archive.zip") {
   
   cli::cli_alert_info("Building Darwin Core Archive")
   
@@ -56,6 +50,8 @@ build_archive <- function(source = "data-publish",
   # Users will hit an error if they are 
   #  - missing all data files, or
   #  - missing an EML metadata statement
+  source <- potions::pour("directory", 
+                          .pkg = "galaxias")
   files_in <- get_default_directory(source) |>
     find_data()
   

@@ -3,27 +3,24 @@
 #' @description
 #' A schema is an xml document that maps the files and field names in a DwCA. 
 #' This map makes it easier to reconstruct one or more related datasets so that 
-#' information is matched correctly
-#' It works by detecting column names on csv files in a specified directory;
-#' these should all be Darwin Core terms for this function to produce reliable
-#' results.
-#' @param source A directory (**not** a file) containing files to be documented 
-#' in the schema document. Defaults to the `data-publish` folder within the current 
-#' working directory. Note that files that do not match the Darwin Core naming 
-#' convention and/or do not end in `.csv` are ignored.
+#' information is matched correctly. It works by detecting column names on csv 
+#' files in a specified directory; these should all be Darwin Core terms for 
+#' this function to produce reliable results.
 #' @param destination A file name for the resulting schema document. Defaults
-#' to `./data-publish/meta.xml` for consistency with the Darwin Core standard.
+#' to `meta.xml` for consistency with the Darwin Core standard. Note this
+#' file is placed within the working directory specified by [galaxias_config()].
 #' @returns Does not return an object to the workspace; called for the side
-#' effect of building a file named `meta.xml` in the specified directory.
+#' effect of building a schema file in the specified directory.
 #' @export
-use_schema <- function(source = "data-publish", 
-                       destination = "data-publish/meta.xml") {
+use_schema <- function(destination = "meta.xml") {
   cli::cli_alert_info("Building schema")
   
-  dir <- get_default_directory(source)
+  directory <- potions::pour("directory", 
+                             .pkg = "galaxias")
+  usethis::use_directory(directory)
   
   # detect files
-  files <- detect_dwc_files(dir)
+  files <- detect_dwc_files(directory)
   
   # build schema wireframe in a tibble 
   wireframe <- add_dwc_cols(files)
@@ -31,7 +28,6 @@ use_schema <- function(source = "data-publish",
   # front matter
   schema <- add_front_matter(wireframe)
   
-  usethis::use_directory("data-publish")
   cli::cli_alert_success("Writing {.file {destination}}.")
   schema |>
     delma::write_eml(file = destination)

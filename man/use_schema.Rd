@@ -4,26 +4,21 @@
 \alias{use_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-use_schema(source = "data-publish", destination = "data-publish/meta.xml")
+use_schema(destination = "meta.xml")
 }
 \arguments{
-\item{source}{A directory (\strong{not} a file) containing files to be documented
-in the schema document. Defaults to the \code{data-publish} folder within the current
-working directory. Note that files that do not match the Darwin Core naming
-convention and/or do not end in \code{.csv} are ignored.}
-
 \item{destination}{A file name for the resulting schema document. Defaults
-to \code{./data-publish/meta.xml} for consistency with the Darwin Core standard.}
+to \code{meta.xml} for consistency with the Darwin Core standard. Note this
+file is placed within the working directory specified by \code{\link[=galaxias_config]{galaxias_config()}}.}
 }
 \value{
 Does not return an object to the workspace; called for the side
-effect of building a file named \code{meta.xml} in the specified directory.
+effect of building a schema file in the specified directory.
 }
 \description{
 A schema is an xml document that maps the files and field names in a DwCA.
 This map makes it easier to reconstruct one or more related datasets so that
-information is matched correctly
-It works by detecting column names on csv files in a specified directory;
-these should all be Darwin Core terms for this function to produce reliable
-results.
+information is matched correctly. It works by detecting column names on csv
+files in a specified directory; these should all be Darwin Core terms for
+this function to produce reliable results.
 }

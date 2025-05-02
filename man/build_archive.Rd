@@ -4,13 +4,9 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(source = "data-publish", destination = "dwc-archive.zip")
+build_archive(destination = "dwc-archive.zip")
 }
 \arguments{
-\item{source}{(string) A directory containing all the files to be stored in
-the archive. Defaults to the \code{data-publish} folder within the current working
-directory.}
-
 \item{destination}{(string) A file name to save the resulting zip file.
 Defaults to \code{./dwc-archive.zip}.}
 }
@@ -20,14 +16,12 @@ called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip
 file).
 }
 \description{
-A Darwin Core archive is a zip file containing a specified combination of data
-and metadata. \code{build_archive()} constructs this zip file.
-\code{build_archive()} assumes that all necessary
-files have been pre-constructed, and can be found inside a single folder
-with no additional or redundant information.
-
-\code{build_archive()} is similar to \code{devtools::build()},
-in the sense that it takes a repository and wraps it for publication.
+A Darwin Core archive is a zip file containing a specified combination of
+data and metadata. \code{build_archive()} constructs this zip file. It assumes
+that all necessary files have been pre-constructed, and can be found inside a
+single folder with no additional or redundant information. Structurally,
+\code{build_archive()} is similar to \code{devtools::build()}, in the sense that it
+takes a repository and wraps it for publication.
 }
 \details{
 This function looks for three types of objects in the specified \code{directory}:

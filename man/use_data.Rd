@@ -22,10 +22,6 @@ overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 }
 \value{
 Invisibly returns the location of the saved csv file.
-
-Invisibly returns the location of the saved csv file.
-
-Invisibly returns the location of the saved csv file.
 }
 \description{
 Once data conform to Darwin Core Standard, \code{use_data()} makes it
@@ -35,23 +31,13 @@ with \code{\link[=build_archive]{build_archive()}}.
 \code{use_data()} is an all-in-one function for accepted data types "occurrence",
 "event" and "multimedia". \code{use_data()} attempts to detect and save the
 correct data type based on the provided \code{tibble}/\code{data.frame}.
-
-Users can use bespoke data functions \code{\link[=use_data_occurrences]{use_data_occurrences()}},
-\code{\link[=use_data_events]{use_data_events()}} and \code{\link[=use_data_multimedia]{use_data_multimedia()}} to specify data type
-manually.
-
-Saves standardised data of occurrences in the correct folder for building
-a Darwin Core Archive with \code{\link[=build_archive]{build_archive()}}. Saves data in
-\code{./data-publish/occurrences.csv}.
-
-Saves standardised data of events in the correct folder for building
-a Darwin Core Archive with \code{\link[=build_archive]{build_archive()}}. Saves data in
-\code{./data-publish/events.csv}.
+Alternatively, users can call the underlying functions
+\code{\link[=use_data_occurrences]{use_data_occurrences()}}, \code{\link[=use_data_events]{use_data_events()}} and \code{\link[=use_data_multimedia]{use_data_multimedia()}} to
+specify data type manually.
 }
 \details{
-This function saves data in the \code{data-publish} folder, which is the default
-folder that \code{galaxias} uses to build a Darwin Core Archive using
-\code{\link[=build_archive]{build_archive()}}.
+By default, this function saves data in the \code{data-publish} folder. To change
+this default, see \code{\link[=galaxias_config]{galaxias_config()}}.
 
 Data type is determined by detecting type-specific column names in
 supplied data.

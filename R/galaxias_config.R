@@ -2,21 +2,25 @@
 #' 
 #' To validate (or in future, to publish) your dataset, you need to provide
 #' credentials to the relevant web service. This function allows you to store
-#' that information for access by `galaxias` API functions.
+#' that information for access by `galaxias` API functions. This function 
+#' also enables you to change the directory where working documents are stored,
+#' which defaults to `data-publish`.
 #' @details
 #' Note that unlike `galah`, you cannot set a 'default' provider in `galaxias`;
 #' the organisation is always an argument to the function in question. Also 
 #' unlike `galah`, `galaxias_config()` enables you to store configuration 
-#' details for multiple organisations at once. Currently, this function is
-#' only useful to `validate_archive()`, and only then for validating
-#' via GBIF.
+#' details for multiple organisations at once.
 #' @name galaxias_config 
-#' @param gbif A list containing the entries `username`, `email` and `password`
+#' @param directory A string giving the name of the directory to be used for 
+#' storing working files. Defaults to `"data-publish"`.
+#' @param gbif A list containing the entries `username`, `email` and `password`.
 #' @export
-galaxias_config <- function(gbif){
+galaxias_config <- function(directory = NULL,
+                            gbif = NULL){
   # check if all arguments are missing
   all_missing <- c(
-    missing(gbif)
+    is.null(gbif),
+    is.null(directory)
     # missing(ala) # etc
   ) |>
     all()
@@ -73,6 +77,7 @@ check_gbif_credentials <- function(x){
 #' @keywords Internal
 galaxias_default_config <- function(){
   x <- list(
+    directory = "data-publish",
     gbif = list(username = "",
                 email = "",
                 password = "")
