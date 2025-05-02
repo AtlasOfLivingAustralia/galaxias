@@ -25,7 +25,7 @@
 #'    A metadata statement in `EML` format with the file name `eml.xml`. 
 #'    Completed metadata statements written markdown as `.Rmd` or `qmd` files 
 #'    can be converted and saved to the correct folder using [use_metadata()]. 
-#'    Create a new template with `[use_metadata_template()]`.
+#'    Create a new template with [use_metadata_template()].
 #'  
 #'  * Schema 
 #'  
