@@ -1,25 +1,36 @@
 #' Validate a Darwin Core Archive via API
 #' 
+#' @description
 #' Validation is a process of checking whether a specified archive is ready for
 #' sharing and publication, according to the Darwin Core standard. 
 #' @name validate_archive
-#' @param source (string) Either a directory containing all the files to be stored in 
-#' the archive, or a filename (ending in .zip) of the specified archive. 
-#' Defaults to the `data-publish` folder within the current working directory.
+#' @param source (string) A file name (ending in .zip) of the specified Darwin 
+#' Core Archive. 
+#' Defaults to the `dwc-archive.zip` within the top folder of the current 
+#' working directory.
 #' @param provider (string) The institution to be queried for validation 
 #' services. Currently only `"GBIF"` is supported.
 #' @returns Invisibly returns a tibble to the workspace containing validation 
 #' results; but primarily called for the side-effect of generating a report in 
 #' the console.
-#' @seealso `check_archive()` which runs checks locally, rather than via API.
+#' @seealso `check_archive()` which runs checks on a folder directory locally, 
+#' rather than via API.
 #' @order 1
 #' @export
-validate_archive <- function(source = "data-publish",
+validate_archive <- function(source = "dwc-archive.zip",
                              provider = "GBIF"){
-
-  # if this isn't a zip file, build one, and return the location
+  
+  if(!file.exists(source)){
+    c("File {.file {source}} not found.") |>
+      cli::cli_abort()
+  }
+  
+  # must supply a zip file
   if(!grepl(".zip$", source)){
-    source <- build_archive(source)
+    bullets <- c(
+      "Must supply a zip file.",
+      i = "`validate_archive()` only accepts a completed Darwin Core Archive saved as a zip file."
+    )
   }
   
   # POST query to GBIF validator API
@@ -116,12 +127,12 @@ gbif_username_string <- function(){
   }
   if(is.null(username)){
     c("No username supplied for GBIF.", 
-      i = "Try `galaxias_config(gbif = list(username = \"my_username\"))`.") |>
+      i = "Use `galaxias_config(gbif = list(username = \"my_username\"))`.") |>
     cli::cli_abort()
   }
   if(is.null(password)){
     c("No password supplied for GBIF.", 
-      i = "Try `galaxias_config(gbif = list(password = \"my_password\"))`.") |>
+      i = "Use `galaxias_config(gbif = list(password = \"my_password\"))`.") |>
     cli::cli_abort()
   }
   glue::glue("{username}:{password}") |>
