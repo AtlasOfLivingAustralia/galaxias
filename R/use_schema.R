@@ -6,13 +6,16 @@
 #' information is matched correctly. It works by detecting column names on csv 
 #' files in a specified directory; these should all be Darwin Core terms for 
 #' this function to produce reliable results.
+#' @param source A folder containing one or more data csv files 
+#' `occurrences.csv`, `events.csv` or `multimedia.csv`. Defaults to `data-publish/`.
 #' @param destination A file name for the resulting schema document. Defaults
 #' to `meta.xml` for consistency with the Darwin Core standard. Note this
 #' file is placed within the working directory specified by [galaxias_config()].
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a schema file in the specified directory.
 #' @export
-use_schema <- function(destination = "meta.xml") {
+use_schema <- function(source = "data-publish",
+                       destination = "meta.xml") {
   cli::cli_alert_info("Building schema")
   
   directory <- potions::pour("directory", 
