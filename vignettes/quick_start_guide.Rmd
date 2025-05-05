@@ -73,8 +73,10 @@ my_data
 
 First, we can standardise our data to conform to the Darwin Core Standard. We'll do this by using `set_` functions automatically loaded with galaxias(imported from the [corella package](https://corella.ala.org.au/)) <!-- I can't decide if it's worth mentioning corella at all at this point-->. 
 
-`set_` functions work a lot like `dplyr::mutate()`; we can use them to modify and create columns. 
-The suffix of each `set_` function gives an indication of the type of data they accept (e.g., `set_coordinates()`, `set_scientific_name`). Their arguments are valid Darwin Core terms to use as column names. 
+<!-- If the intention is that most users never interact directly with corella, I'd leave out any mention of it. It is, after all, a quick start guide. - SB-->
+
+`set_` functions work a lot like `dplyr::mutate()`: we can use them to modify and create columns. 
+The suffix of each `set_` function gives an indication of the type of data it accepts (e.g. `set_coordinates()`, `set_scientific_name`). Their arguments are valid Darwin Core terms to use as column names. 
 
 To see how to start standardising our data, we can use `suggest_workflow()` to summarise our data and suggest the steps we should take to prepare `my_data`.
 
@@ -85,8 +87,10 @@ To see how to start standardising our data, we can use `suggest_workflow()` to s
 my_data |> suggest_workflow()
 ```
 
-Following the advice of `suggest_workflow()` output, we can use `set_` functions 
+Following the advice of `suggest_workflow()`, we can use `set_` functions 
 to standardise `my_data`. In addition, each `set_` function checks to make sure that each column contains valid data according to Darwin Core Standard.
+
+<!-- Is there a reason why we use `sequentional_id()` in the example below? I ask because the function documentation recommends `composite_id()` in the first instance - SB-->
 
 ```{r}
 #| echo: true
@@ -145,7 +149,11 @@ data (`country`, `locality`, `taxonRank`, `kingdom`, `phylum`). We encourage
 users to specify additional information to avoid ambiguity once their data 
 are shared.
 
-To use our standardised data in a Darwin Core Archive, we can select columns that use valid Darwin Core terms as column names. Invalid columns won't be accepted when we try to build our Darwin Core Archive. Our data is an Occurrence-based data set (each row contains information at the observation level, as opposed to Site/Survey level), so we'll select columns that match names in `occurrence_terms()`.
+<!-- I don't think this is an essential change, but I'm putting it down for consideration. The ALA uses kingdom and family for namematching in cases of ambiguity (I think), so it may be worth including family in addition to/instead of phylum in the example above - SB-->
+
+To use our standardised data in a Darwin Core Archive, we can select columns that use valid Darwin Core terms as column names. Invalid columns won't be accepted when we try to build our Darwin Core Archive. Our data is an occurrence-based dataset (each row contains information at the observation level, as opposed to site/survey level), so we'll select columns that match names in `occurrence_terms()`.
+
+<!-- `occurrences` doesn't exist; is it supposed to be `my_data_dwc`? - SB-->
 
 ```{r}
 #| warning: false
@@ -158,7 +166,7 @@ my_data_dwc <- occurrences |>
 my_data_dwc
 ```
 
-Now we can specify that we with to use `my_data_dwc` in our Darwin Core Archive with `use_data()`, which saves this data in the 
+Now we can specify that we wish to use `my_data_dwc` in our Darwin Core Archive with `use_data()`, which saves this data in the 
 `data_publish` folder with the correct file name `occurrences.csv`.
 
 ```{r}
@@ -194,7 +202,7 @@ metadata_string <- as_eml_chr(metadata_example)[3:15]
 We can edit this template statement with information we wish to 
 convey about our data. 
 
-Once our metadata statement is complete, we can spefify that we wish use it in 
+Once our metadata statement is complete, we can specify that we wish to use it in 
 our Darwin Core Archive with `use_metadata()`. This converts our 
 markdown metadata statement to Ecological Meta Language (`EML`), the accepted 
 format of metadata for Darwin Core Archives, and saves it as `eml.xml` in the `data-publish` folder.
@@ -218,14 +226,12 @@ build_archive()
 ```
 
 Running `build_archive()` first checks whether we have a 'schema' document (`meta.xml`) in our `data-publish` folder. This is a machine-readable `xml` document that describes the content of the archive's data files and their structure. The schema 
-document is a required file in a Darwin Core Archive. If it is missing, 
-it will build one. We can also build a schema document ourselves using `use_schema()`.
+document is a required file in a Darwin Core Archive. If it is missing, `build_archive()` will build one. We can also build a schema document ourselves using `use_schema()`.
 
 At the end of this process, you should have a Darwin Core Archive zip file. 
-You should also have `data-publish` folder containing 
+You should also have a `data-publish` folder containing 
 standardised data files (e.g., `occurrences.csv`), a metadata statement in EML 
-format (`eml.xml`) and a schema document (`meta.xml`). The files can be edited 
-or updated to edit your final Darwin Core Archive.
+format (`eml.xml`), and a schema document (`meta.xml`). The files can be edited at any time to update your final Darwin Core Archive.
 
 ## Share your archive
 
