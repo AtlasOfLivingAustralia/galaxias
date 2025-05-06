@@ -1,4 +1,4 @@
-test_that("validate_archive() works", {
+test_that("check_archive() works", {
   skip("tests not ready")
   skip_if_offline()
   
@@ -8,7 +8,7 @@ test_that("validate_archive() works", {
     password = "galah-gbif-test-login"
   ))
   
-  # validate_archive(filename = "./tests/testthat/testdata/data/eml.xml")
+  # check_archive(filename = "./tests/testthat/testdata/data/eml.xml")
 })
 
 test_that("retrieving a processed query works", {

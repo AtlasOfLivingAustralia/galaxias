@@ -12,7 +12,7 @@
 #' details for multiple organisations at once.
 #' @name galaxias_config 
 #' @param directory A string giving the name of the directory to be used for 
-#' storing working files. Defaults to `"data-publish"`.
+#' storing working files. Defaults to `data-publish`.
 #' @param gbif A list containing the entries `username`, `email` and `password`.
 #' @export
 galaxias_config <- function(directory = NULL,

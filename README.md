@@ -57,9 +57,8 @@ library(galaxias)
   EML files with `use_metadata()`.
 - Build Darwin Core Archives for sharing or publication using
   `build_archive()`.
-- Check data for consistency with the Darwin Core standard, either
-  locally using `check_archive()`, or via API using
-  `validate_archive()`.
+- Check files for consistency with the Darwin Core Standard, either
+  locally using `check_directory()`, or via API using `check_archive()`.
 
 `galaxias` is part of a group of packages that help users publish data
 using the Darwin Core standard. These packages are loaded with
@@ -107,8 +106,8 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… af0ac218-27… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… af0ac22c-27… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 451fce1e-2a… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 451fce28-2a… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
@@ -146,7 +145,7 @@ Validate whether the constructed archive passes Darwin Core Standard
 criteria.
 
 ``` r
-validate_archive("dwc-archive.zip")
+check_archive("dwc-archive.zip")
 ```
 
 See the [Quick Start

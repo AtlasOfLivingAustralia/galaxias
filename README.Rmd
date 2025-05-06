@@ -67,8 +67,8 @@ library(corella)
  - Convert and save metadata statements written in Rmarkdown or 
    Quarto as EML files with `use_metadata()`.
  - Build Darwin Core Archives for sharing or publication using `build_archive()`.
- - Check data for consistency with the Darwin Core standard, either locally 
-   using `check_archive()`, or via API using `validate_archive()`.
+ - Check files for consistency with the Darwin Core Standard, either locally 
+   using `check_directory()`, or via API using `check_archive()`.
 
 `galaxias` is part of a group of packages that help users publish data using 
 the Darwin Core standard. These packages are loaded with `galaxias`. 
@@ -145,7 +145,7 @@ Validate whether the constructed archive passes Darwin Core Standard criteria.
 
 ```{r}
 #| eval: false
-validate_archive("dwc-archive.zip")
+check_archive("dwc-archive.zip")
 ```
 
 See the [Quick Start Guide](https://galaxias.ala.org.au/articles/quick_start_guide.html) for an in-depth explanation of this process.

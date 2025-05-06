@@ -47,10 +47,10 @@ reference:
 - title: Construct an archive
   contents:
   - build_archive
-- title: Validate via API
+- title: Verify an archive meets Darwin Core Standard
   contents:
+  - check_directory
   - check_archive
   - galaxias_config
-  - validate_archive
-  - print_validation
+  - print_report
 

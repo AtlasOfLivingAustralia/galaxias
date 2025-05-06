@@ -23,14 +23,14 @@
 #'   * [use_metadata()] Convert a metadata file from markdown to EML (`eml.xml`) and save for use in a Darwin Core Archive
 #'   * [use_schema()] Build a schema file (`meta.xml`) for a given directory and save for use in a Darwin Core Archive
 #'   
-#' **Construct an archive**
+#' **Build an archive**
 #'   * [build_archive()] Convert a directory to a Darwin Core Archive
 #'   
-#'  **Validate an archive**
-#'   * [check_archive()] Check your archive using the `delma` and `corella` packages
+#' **Verify an archive meets Darwin Core Standard**
+#'   * [check_directory()] Check files in your local Darwin Core directory
+#'   * [check_archive()] Check whether archive passes Darwin Core criteria via the GBIF API
 #'   * [galaxias_config()] Store credentials for your API call
-#'   * [validate_archive()] Check your archive using the GBIF 'validator' API
-#'   * [print_validation()] Methods for displaying API responses
+#'   * [print_report()] Methods for displaying API responses
 #'   
 #' @keywords internal
 "_PACKAGE"

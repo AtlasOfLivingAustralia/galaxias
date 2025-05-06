@@ -4,9 +4,12 @@
 \alias{use_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-use_schema(destination = "meta.xml")
+use_schema(source = "data-publish", destination = "meta.xml")
 }
 \arguments{
+\item{source}{A folder containing one or more data csv files
+\code{occurrences.csv}, \code{events.csv} or \code{multimedia.csv}. Defaults to \verb{data-publish/}.}
+
 \item{destination}{A file name for the resulting schema document. Defaults
 to \code{meta.xml} for consistency with the Darwin Core standard. Note this
 file is placed within the working directory specified by \code{\link[=galaxias_config]{galaxias_config()}}.}

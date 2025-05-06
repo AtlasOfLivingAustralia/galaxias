@@ -11,7 +11,7 @@ galaxias_config(directory = NULL, gbif = NULL)
 }
 \arguments{
 \item{directory}{A string giving the name of the directory to be used for
-storing working files. Defaults to \code{"data-publish"}.}
+storing working files. Defaults to \code{data-publish}.}
 
 \item{gbif}{A list containing the entries \code{username}, \code{email} and \code{password}.}
 
