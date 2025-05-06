@@ -65,15 +65,14 @@ my_data <- tibble(
   longitude = c(149.125, 149.133),
   date = c("14-01-2023", "15-01-2023"),
   time = c("10:23", "11:25"),
-  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla")
+  species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
+  location_id = c("ARD001", "ARD001")
   )
 
 my_data
 ```
 
-First, we can standardise our data to conform to the Darwin Core Standard. We'll do this by using `set_` functions automatically loaded with galaxias(imported from the [corella package](https://corella.ala.org.au/)) <!-- I can't decide if it's worth mentioning corella at all at this point-->. 
-
-<!-- If the intention is that most users never interact directly with corella, I'd leave out any mention of it. It is, after all, a quick start guide. - SB-->
+First, we can standardise our data to conform to the Darwin Core Standard. We'll do this by using `set_` functions automatically loaded with galaxias.
 
 `set_` functions work a lot like `dplyr::mutate()`: we can use them to modify and create columns. 
 The suffix of each `set_` function gives an indication of the type of data it accepts (e.g. `set_coordinates()`, `set_scientific_name`). Their arguments are valid Darwin Core terms to use as column names. 
@@ -90,8 +89,6 @@ my_data |> suggest_workflow()
 Following the advice of `suggest_workflow()`, we can use `set_` functions 
 to standardise `my_data`. In addition, each `set_` function checks to make sure that each column contains valid data according to Darwin Core Standard.
 
-<!-- Is there a reason why we use `sequentional_id()` in the example below? I ask because the function documentation recommends `composite_id()` in the first instance - SB-->
-
 ```{r}
 #| echo: true
 #| eval: false
@@ -99,7 +96,8 @@ library(lubridate)
 
 my_data_dwc <- df |>
   # basic requirements of Darwin Core
-  set_occurrences(occurrenceID = sequential_id(),
+  set_occurrences(occurrenceID = composite_id(location_id, 
+                                              sequential_id()),
                   basisOfRecord = "humanObservation") |> 
   # place and time
   set_coordinates(decimalLatitude = latitude, 
@@ -139,28 +137,24 @@ my_data_dwc <- my_data |>
   set_scientific_name(scientificName = species, 
                       taxonRank = "species") |>
   set_taxonomy(kingdom = "Animalia",
-               phylum = "Aves") 
+               family = "Cacatuidae") 
 
 my_data_dwc |> print(n = 5)
 ```
 
 Notice that we added several additional columns with more information to our 
-data (`country`, `locality`, `taxonRank`, `kingdom`, `phylum`). We encourage 
+data (`country`, `locality`, `taxonRank`, `kingdom`, `family`). We encourage 
 users to specify additional information to avoid ambiguity once their data 
 are shared.
 
-<!-- I don't think this is an essential change, but I'm putting it down for consideration. The ALA uses kingdom and family for namematching in cases of ambiguity (I think), so it may be worth including family in addition to/instead of phylum in the example above - SB-->
-
 To use our standardised data in a Darwin Core Archive, we can select columns that use valid Darwin Core terms as column names. Invalid columns won't be accepted when we try to build our Darwin Core Archive. Our data is an occurrence-based dataset (each row contains information at the observation level, as opposed to site/survey level), so we'll select columns that match names in `occurrence_terms()`.
-
-<!-- `occurrences` doesn't exist; is it supposed to be `my_data_dwc`? - SB-->
 
 ```{r}
 #| warning: false
 #| message: false
 library(dplyr)
 
-my_data_dwc <- occurrences |>
+my_data_dwc <- my_data_dwc |>
   select(any_of(occurrence_terms()))
 
 my_data_dwc
@@ -228,12 +222,38 @@ build_archive()
 Running `build_archive()` first checks whether we have a 'schema' document (`meta.xml`) in our `data-publish` folder. This is a machine-readable `xml` document that describes the content of the archive's data files and their structure. The schema 
 document is a required file in a Darwin Core Archive. If it is missing, `build_archive()` will build one. We can also build a schema document ourselves using `use_schema()`.
 
-At the end of this process, you should have a Darwin Core Archive zip file. 
+At the end of this process, you should have a Darwin Core Archive zip file (`dwc-archive.zip`). 
 You should also have a `data-publish` folder containing 
 standardised data files (e.g., `occurrences.csv`), a metadata statement in EML 
-format (`eml.xml`), and a schema document (`meta.xml`). The files can be edited at any time to update your final Darwin Core Archive.
+format (`eml.xml`), and a schema document (`meta.xml`). These files can be edited at any time to update your final Darwin Core Archive.
 
-## Share your archive
+## Check archive
+
+There are several ways to check whether the contents of your Darwin Core Archive meet the Darwin Core Standard.
+
+The first is to run local tests on the files inside a local folder directory that will be used to build a Darwin Core Archive. `check_directory()` allows us to check csv files and xml files in the directory against Darwin Core Standard criteria.
+
+```{r}
+#| eval: false
+check_directory("data-publish")
+```
+
+The second is to check whether a complete Darwin Core Archive meets institution's Darwin Core criteria via an API. For example, we can test an archive against GBIF's API tests. 
+
+```{r}
+#| eval: false
+
+# Add valid GBIF login details
+galaxias_config(GBIF = list(email = "your-email",
+                            username = "your-username",
+                            password = "your-password"))
+
+# Check against GBIF API
+check_archive("dwc-archive.zip")
+```
+
+
+## Publish/share your archive
 
 <!-- 
 This is incomplete. Do we want a separate vignette on this?  
