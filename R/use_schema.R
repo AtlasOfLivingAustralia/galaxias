@@ -11,30 +11,41 @@
 #' @param destination A file name for the resulting schema document. Defaults
 #' to `meta.xml` for consistency with the Darwin Core standard. Note this
 #' file is placed within the working directory specified by [galaxias_config()].
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a schema file in the specified directory.
 #' @export
 use_schema <- function(source = "data-publish",
-                       destination = "meta.xml") {
-  cli::cli_alert_info("Building schema")
+                       destination = "data-publish/meta.xml",
+                       quiet = FALSE) {
+  if(!quiet) {
+    cli::cli_alert_info("Building schema")
+  }
   
-  directory <- potions::pour("directory", 
-                             .pkg = "galaxias")
-  usethis::use_directory(directory)
+  # directory <- potions::pour("directory", 
+  #                            .pkg = "galaxias")
+  usethis::use_directory(source)
   
   # detect files
-  files <- detect_dwc_files(directory)
+  files <- detect_dwc_files(source, quiet)
   
   # build schema wireframe in a tibble 
-  wireframe <- add_dwc_cols(files)
+  wireframe <- add_dwc_cols(files, quiet)
   
   # front matter
-  schema <- add_front_matter(wireframe)
+  schema <- add_front_matter(wireframe, quiet)
   
-  cli::cli_alert_success("Writing {.file {destination}}.")
+  if(!quiet) {
+    cli::cli_alert_success("Writing {.file {destination}}.")
+  }
+  
   schema |>
     delma::write_eml(file = destination)
-  cli::cli_progress_done()
+  
+  if(!quiet) {
+    cli::cli_progress_done()
+  }
 }
 
 #' Function progress message
@@ -68,8 +79,11 @@ wait <- function(seconds = 1) {
 #' @importFrom rlang .data
 #' @noRd
 #' @keywords Internal
-detect_dwc_files <- function(directory){
-  progress_update("Detecting files..."); wait(.1)
+detect_dwc_files <- function(directory, 
+                             quiet = FALSE){
+  if(!quiet){
+    progress_update("Detecting files..."); wait(.1)
+  }
   available_exts <- dwc_extensions()
   supported_files <- available_exts |>
     dplyr::pull("file")
@@ -93,9 +107,11 @@ detect_dwc_files <- function(directory){
   available_exts$present |> purrr::map_lgl(isTRUE)
   
   # message
-  file_check_message(available_exts, "occurrences.csv")
-  file_check_message(available_exts, "events.csv")
-  file_check_message(available_exts, "multimedia.csv")
+  if(!quiet){
+    file_check_message(available_exts, "occurrences.csv")
+    file_check_message(available_exts, "events.csv")
+    file_check_message(available_exts, "multimedia.csv")
+  }
   
   # check whether there are no csvs, and if so, abort
   if(all(!available_exts$present)){
@@ -179,8 +195,12 @@ file_check_message <- function(file_df, file_name) {
 #' Internal function to add column names to tibble
 #' @noRd
 #' @keywords Internal
-add_dwc_cols <- function(df){
-  progress_update("Formatting Darwin Core terms...")
+add_dwc_cols <- function(df, 
+                         quiet = FALSE){
+  if(!quiet){
+    progress_update("Formatting Darwin Core terms...") 
+  }
+  
   split(df, seq_len(nrow(df))) |>
     purrr::map(\(x){
       dplyr::bind_rows(create_schema_row(x),
@@ -264,8 +284,12 @@ get_field_names <- function(file){
 #' Internal function to add `xml` and `archive` sections to tibble
 #' @noRd
 #' @keywords Internal
-add_front_matter <- function(df){
-  progress_update("Building xml components...")
+add_front_matter <- function(df, 
+                             quiet = FALSE){
+  if(!quiet) {
+    progress_update("Building xml components...")
+  }
+  
   front_row <- tibble::tibble(
     level = 1,
     label = "archive",

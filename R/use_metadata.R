@@ -16,13 +16,16 @@
 #' unless changed using the `directory` argument of [galaxias_config()].
 #' @param overwrite By default, `use_metadata()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file in the `data-publish` directory.
 #' @seealso [use_metadata_statement()] to create a metadata statement template.
 #' @export
 use_metadata <- function(source = "metadata.Rmd", 
-                         destination = "eml.xml",
-                         overwrite = FALSE){
+                         destination = "data-publish/eml.xml",
+                         overwrite = FALSE,
+                         quiet = FALSE){
   
   # check file existence
   if(!file.exists(source)){
@@ -30,29 +33,43 @@ use_metadata <- function(source = "metadata.Rmd",
   }
   
   # import file, ensure EML metadata is added, convert to XML
-  progress_update("Reading metadata statement...")
+  if (!quiet) {
+    progress_update("Reading metadata statement...")
+  }
   metadata_tibble <- delma::read_md(source)
   
   # set up file paths, directories etc.
-  directory <- potions::pour("directory",
-                             .pkg = "galaxias")
-  usethis::use_directory(directory)
-  destination <- fs::path(directory, destination)
+  # directory <- potions::pour("directory",
+  #                            .pkg = "galaxias")
+  usethis::use_directory("data-publish")
+  destination <- fs::path(destination)
   
   # set writing behaviour
   if(file.exists(destination)){
     if(overwrite){
-      cli::cli_progress_step("Overwriting {.file {destination}}.")        
+      if(!quiet){
+        cli::cli_progress_step("Overwriting {.file {destination}}.")
+      }
+      
       delma::write_eml(metadata_tibble, file = destination)
-      cli::cli_progress_done()
+      
+      if(!quiet){
+        cli::cli_progress_done()
+      }
     }else{
       c("{.file {destination}} already exists.",
         i = "Set `overwrite = TRUE` to overwrite existing file.") |>
         cli::cli_inform()     
     }
   }else{
-    cli::cli_progress_step("Writing {.file {destination}}.")
+    if(!quiet){
+      cli::cli_progress_step("Writing {.file {destination}}.")
+    }
+    
     delma::write_eml(metadata_tibble, file = destination)
-    cli::cli_progress_done()
+    
+    if(!quiet){
+      cli::cli_progress_done()
+      }
   }
 }

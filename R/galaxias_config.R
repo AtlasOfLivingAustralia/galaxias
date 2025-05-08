@@ -15,7 +15,7 @@
 #' storing working files. Defaults to `data-publish`.
 #' @param gbif A list containing the entries `username`, `email` and `password`.
 #' @export
-galaxias_config <- function(directory = NULL,
+galaxias_config <- function(directory = "data-publish",
                             gbif = NULL){
   # check if all arguments are missing
   all_missing <- c(
