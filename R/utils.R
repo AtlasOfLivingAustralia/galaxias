@@ -79,3 +79,16 @@ cli_readline <- function(prompt) {
     readline(prompt)
   }
 }
+
+local_user_input <- function(x, env = caller_env()) {
+  withr::local_options(
+    rlang_interactive = TRUE,
+    # trailing 0 prevents infinite loop if x only contains invalid choices
+    cli_input = c(x, "0"),
+    .local_envir = env
+  )
+}
+
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}
