@@ -28,7 +28,9 @@
 #'  * Schema 
 #'  
 #'    A 'schema' document in xml format with the file name `meta.xml`. 
-#'    This file can be constructed using [use_schema()].
+#'    `build_archive()` will detect whether this file is present and build a 
+#'    schema file if missing. This file can also be constructed 
+#'    separately using [use_schema()].
 #'
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
@@ -40,53 +42,77 @@
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
-build_archive <- function(destination = "dwc-archive.zip") {
+build_archive <- function(source = "data-publish",
+                          destination = "dwc-archive.zip",
+                          quiet = FALSE) {
   
-  cli::cli_alert_info("Building Darwin Core Archive")
+  if(!quiet){
+    cli::cli_alert_info("Building Darwin Core Archive")
+  }
   
-  progress_update("Detecting files..."); wait(.1)
+  if(!quiet){
+    progress_update("Detecting files..."); wait(.1)
+  }
   
   # Check for and display which files are in source folder
   # Users will hit an error if they are 
   #  - missing all data files, or
   #  - missing an EML metadata statement
-  source <- potions::pour("directory", 
-                          .pkg = "galaxias")
+  # source <- potions::pour("directory", 
+  #                         .pkg = "galaxias")
   files_in <- get_default_directory(source) |>
     find_data()
   
   # If schema file is missing, offer to build it
   if(!any(files_in %in% glue::glue("{source}/meta.xml"))){
-    choice <- cli_menu(
-      c(" ",
-        "No schema ({.file meta.xml}) file detected.", 
-        "This is a required file in a Darwin Core Archive.", 
-        " "),
-      "Do you want to build a schema file now? (0 to exit)",
-      choices = c("Yes", "No")
-    )
-    
-    if (choice == 1) {
-      use_schema(source = source, 
+    # offer user menu to confirm if not in batch run (testthat or knitr)
+    if(rlang::is_interactive()){ 
+      
+      choice <- cli_menu(
+        c(" ",
+          "No schema ({.file meta.xml}) file detected.", 
+          "This is a required file in a Darwin Core Archive.", 
+          " "),
+        "Do you want to build a schema file now? (0 to exit)",
+        choices = c("Yes", "No")
+      )
+      
+      if (choice == 1) {
+        use_schema(source = source, 
                    destination = glue::glue("{source}/meta.xml"))
-    } else {
-      cli::cli_inform(c(
-        i = "Exiting..."
-      ))
-      # exits process quietly
-      invokeRestart("abort")
-    }
-    invisible()
+      } else {
+        cli::cli_inform(c(
+          i = "Exiting..."
+        ))
+        # exits process quietly
+        invokeRestart("abort")
+      }
+      invisible()
+      
+    } 
+    else {
+      
+      use_schema(source,
+                 destination = glue::glue("{source}/meta.xml"))
+    
+      }
   }
   
-  progress_update("Creating zip folder...")
+  if(!quiet) {
+    progress_update("Creating zip folder...")
+  }
+  
   file_out <- get_default_file(destination)
   
-  cli::cli_progress_step("Writing {.file {file_out}}.")
+  if(!quiet){
+    cli::cli_progress_step("Writing {.file {file_out}}.")
+  }
+  
   zip::zip(zipfile = file_out, 
            files = files_in,
            mode = "cherry-pick")
-  cli::cli_progress_done()
+  
+  if(!quiet){cli::cli_progress_done()}
   
   invisible(file_out)
 }
@@ -112,16 +138,16 @@ get_default_file <- function(file){
 get_default_directory <- function(x, error_call = rlang::caller_env()){
   if(missing(x)){
     if(dir.exists("data-publish")){
-      cli::cli_inform("Missing `directory`. Defaulting to {.file data-publish/} folder.")
+      cli::cli_inform("Missing directory. Defaulting to {.file data-publish} folder.")
       x <- "data-publish"
     }else{
-      c("Missing `directory` and missing {.file data-publish/} folder.", 
+      c("Missing directory and missing {.file data-publish} folder.", 
         i = "Please specify a folder containing standardised data.") |>
       cli::cli_abort(call = error_call)
     }
   }else{
     if(!dir.exists(x)){
-      c("Specified folder {.file {x}} not found.") |>
+      c("Directory {.file {x}} not found.") |>
         cli::cli_abort(call = error_call)
     }else{
       x
@@ -142,34 +168,12 @@ find_data <- function(directory,
                    call = call)
   }
   
-  # Acceptable Darwin Core files
-  files <- tibble::tibble(
-    file = c("occurrences.csv", "events.csv", "multimedia.csv",
-                 "eml.xml",
-                 "meta.xml"),
-    type = c("data", "data", "data",
-             "metadata",
-             "schema")
-  )
-  
-  # determine which files are present, format for message
-  user_files <- files |>
-    dplyr::mutate(
-      present = glue::glue("{directory}/{files$file}") |>
-        purrr::map(\(file_name)
-                   file.exists(file_name)) |>
-        unlist(),
-      present_formatted = present |>
-        purrr::map_chr(\(file_exists) 
-                       ifelse(isTRUE(file_exists), 
-                              cli::symbol$tick |> cli::col_green(), 
-                              cli::symbol$cross |> cli::col_red()
-                       )
-        )
-    )
+  # determine which dwc files are present, format for message
+  files <- darwin_core_files()
+  user_files <- is_file_present(files, directory)
   
   if(sum(user_files$present) < 1){
-    bullets <- c("No files found in {.file {data-publish/}} to build Darwin Core Archive.",
+    bullets <- c("No files found in {.file {directory}} to build Darwin Core Archive.",
                  i =  "Use `use_data()` and `use_metadata()` to add data and metadata files to directory.")
     cli::cli_abort(bullets,
                    call = call)
@@ -218,4 +222,37 @@ find_data <- function(directory,
     dplyr::pull("file")
   
   return(glue::glue("{directory}/{file_list}"))
+}
+
+
+darwin_core_files <- function() {
+  x <- tibble::tibble(
+    file = c("occurrences.csv", "events.csv", "multimedia.csv",
+             "eml.xml",
+             "meta.xml"),
+    type = c("data", "data", "data",
+             "metadata",
+             "schema")
+  )
+  
+  return(x)
+}
+
+is_file_present <- function(files, directory) {
+  user_files <- files |>
+    dplyr::mutate(
+      present = glue::glue("{directory}/{files$file}") |>
+        purrr::map(\(file_name)
+                   file.exists(file_name)) |>
+        unlist(),
+      present_formatted = present |>
+        purrr::map_chr(\(file_exists) 
+                       ifelse(isTRUE(file_exists), 
+                              cli::symbol$tick |> cli::col_green(), 
+                              cli::symbol$cross |> cli::col_red()
+                       )
+        )
+    )
+  
+  return(user_files)
 }
