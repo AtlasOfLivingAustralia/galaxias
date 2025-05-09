@@ -80,7 +80,7 @@ cli_readline <- function(prompt) {
   }
 }
 
-local_user_input <- function(x, env = caller_env()) {
+local_user_input <- function(x, env = rlang::caller_env()) {
   withr::local_options(
     rlang_interactive = TRUE,
     # trailing 0 prevents infinite loop if x only contains invalid choices
