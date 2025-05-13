@@ -1,10 +1,12 @@
 #' Build a Darwin Core Archive from a folder
 #' 
 #' @description
-#' A Darwin Core archive is a zip file containing a specified combination of 
+#' A Darwin Core archive is a zip file containing a combination of 
 #' data and metadata. `build_archive()` constructs this zip file. It assumes 
 #' that all necessary files have been pre-constructed, and can be found inside a 
-#' single folder with no additional or redundant information. Structurally, 
+#' single folder with no additional or redundant information. 
+#' 
+#' Structurally, 
 #' `build_archive()` is similar to `devtools::build()`, in the sense that it 
 #' takes a repository and wraps it for publication.
 #' @details
@@ -35,15 +37,15 @@
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
 #' folder in the parent directory by default.
-#' @param destination (string) A file name to save the resulting zip file. 
-#' Defaults to `./dwc-archive.zip`.
+#' @param destination (string) A path in which to save the resulting zip file. 
+#' If `NULL`, defaults to the parent directory of the working directory.
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
 build_archive <- function(source = "data-publish",
-                          destination = "dwc-archive.zip",
+                          destination = NULL,
                           quiet = FALSE) {
   
   if(!quiet){
@@ -120,29 +122,37 @@ build_archive <- function(source = "data-publish",
 #' Simple function to specify a zip file if no arg given
 #' @noRd
 #' @keywords Internal
-get_default_file <- function(file){
-  if(missing(file)){
-    glue::glue("dwc-archive.zip")
+get_default_file <- function(file, error_call = rlang::caller_env()){
+  # browser()
+  
+  if(is.null(file)){
+    dir_path <- here::here()
+    dir_name <- basename(dir_path)
+    glue::glue("../{dir_name}.zip")
   }else{
     if(!grepl(".zip$", file)){
-      cli::cli_abort("File must end in `.zip`.")
+      cli::cli_abort("{.arg destination} must specify a file name ending with `.zip`.",
+                     call = error_call)
     }else{
       file
     }
   }
 }
 
-#' Simple function to check that a `data` directory exists if no arg given
+#' Simple function to check `source` directory
+#' @description
+#' Checks whether a `data-publish` directory exists if no arg given
 #' @noRd
 #' @keywords Internal
 get_default_directory <- function(x, error_call = rlang::caller_env()){
+  
   if(missing(x)){
     if(dir.exists("data-publish")){
-      cli::cli_inform("Missing directory. Defaulting to {.file data-publish} folder.")
+      cli::cli_inform("Missing {.arg source}. Defaulting to {.file data-publish} folder.")
       x <- "data-publish"
     }else{
-      c("Missing directory and missing {.file data-publish} folder.", 
-        i = "Please specify a folder containing standardised data.") |>
+      c("Missing {.arg source} and missing {.file data-publish} folder.", 
+        i = "Please specify a {.arg source} directory containing standardised data.") |>
       cli::cli_abort(call = error_call)
     }
   }else{
