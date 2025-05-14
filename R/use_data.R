@@ -22,22 +22,27 @@
 #' @param ... Unquoted name of `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @return Invisibly returns the location of the saved csv file.
 #' @seealso [use_metadata()]
 #' @export
 use_data <- function(...,
-                     overwrite = FALSE) {
+                     overwrite = FALSE,
+                     quiet = FALSE) {
   
   obj <- get_objs_from_dots(dots(...))
   user_data <- check_is_data(obj)
   
   # Check if data is dwc compliant here?
   
+  # check whether user dataframe contains occurrences, events or multimedia
   type <- check_data_type(user_data)
   
   switch_data_type(user_data,
                    type,
-                   overwrite)
+                   overwrite,
+                   quiet)
 }
 
 
@@ -91,40 +96,42 @@ check_is_data <- function(obj, error_call = rlang::caller_env()) {
 #' @keywords Internal
 check_data_type <- function(data, error_call = rlang::caller_env()) {
   
-  if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
-    # Event
-    type <- "event"
-    file_name <- "events.csv"
-    not <- "occurrence"
+  if (rlang::is_interactive()) {
+    if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
+      # Event
+      type <- "event"
+      file_name <- "events.csv"
+      not <- "occurrence"
+    } else {
+      # Occurrence
+      type <- "occurrence"
+      file_name <- "occurrences.csv"
+      not <- "event"
+    }
+
+    choice <- cli_menu(
+      "Data identified as type {.field {type}} and will be saved as {.file {file_name}}",
+      "Is this correct?",
+      choices = c("Yes", "No")
+    )
+
+    if (choice == 1) {
+      return(type)
+    } else {
+      cli::cli_inform(c(
+        i = "To specify data type, use bespoke data functions instead e.g. ",
+        " " = "{.fn use_data_occurrences}, {.fn use_data_events}."
+      ))
+      # exits process quietly
+      invokeRestart("abort")
+    }
+    invisible()
   } else {
-    # Occurrence
-    type <- "occurrence"
-    file_name <- "occurrences.csv"
-    not <- "event"
-  }
-  
-  choice <- cli_menu(
-    "Data identified as type {.field {type}} and will be saved as {.file {file_name}}",
-    "Is this correct?",
-    choices = c("Yes", "No")
-  )
-  
-  if (choice == 1) {
     return(type)
-  } else {
-    cli::cli_inform(c(
-      i = "To specify data type, use bespoke data functions instead e.g. ",
-      " " = "{.fn use_data_occurrences}, {.fn use_data_events}, {.fn use_data_multimedia}."
-    ))
-    # exits process quietly
-    invokeRestart("abort")
   }
-  invisible()
-  
   # bullets <- c("Data identified as type {.field {type}}.",
   #              i = cli::col_grey("If this is incorrect, use {.code use_data(type = \"{not}\")} instead."))
   # cli::cli_inform(bullets)
-  
 }
 
 #' Switch to occurrence, event or multimedia type `use_data()` functions
@@ -143,11 +150,13 @@ switch_data_type <- function(user_data, type, overwrite) {
 #' @param df A `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data_occurrences()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
-#' @seealso [use_data_events()],[use_metadata()]
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @rdname use_data
 #' @export
 use_data_occurrences <- function(df, 
-                                 overwrite = FALSE) {
+                                 overwrite = FALSE,
+                                 quiet = FALSE) {
   
   # check if it's a dataframe
   if (!tibble::is_tibble(df)) {
@@ -160,18 +169,21 @@ use_data_occurrences <- function(df,
   file_path <- fs::path(directory, "occurrences.csv")
   write_data_file(file_path,
                   df,
-                  overwrite)
+                  overwrite,
+                  quiet)
 }
 
 #' Use event-type data in a Darwin Core Archive
 #' @param df A `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data_events()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
-#' @seealso [use_data_occurrences()], [use_metadata()]
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @rdname use_data
 #' @export
 use_data_events <- function(df, 
-                            overwrite = FALSE) {
+                            overwrite = FALSE,
+                            quiet = FALSE) {
   
   # check if it's a dataframe
   if (!tibble::is_tibble(df)) {
@@ -184,7 +196,8 @@ use_data_events <- function(df,
   file_path <- fs::path(directory, "events.csv")
   write_data_file(file_path,
                   df, 
-                  overwrite)
+                  overwrite,
+                  quiet)
   
 }
 
@@ -194,22 +207,35 @@ use_data_events <- function(df,
 write_data_file <- function(file_path,
                             data, 
                             overwrite = FALSE,
+                            quiet = FALSE,
                             error_call = rlang::caller_env()) {
   
   if(file.exists(file_path)){
     if(overwrite){
-      cli::cli_progress_step("Overwriting {.file {file_path}}.")        
+      if(!quiet){
+        cli::cli_progress_step("Overwriting {.file {file_path}}.")
+      }
+      
       readr::write_csv(data, file = file_path)
-      cli::cli_progress_done()
+      
+      if(!quiet){
+        cli::cli_progress_done()
+      }
     }else{
       c("{.file {file_path}} already exists.",
         i = "Set `overwrite = TRUE` to overwrite existing file.") |>
         cli::cli_inform()     
     }
   }else{
-    cli::cli_progress_step("Writing {.file {file_path}}.")
+    if(!quiet){
+      cli::cli_progress_step("Writing {.file {file_path}}.")
+    }
+    
     readr::write_csv(data, file = file_path)
-    cli::cli_progress_done()
+    
+    if(!quiet){
+      cli::cli_progress_done()
+    }
   }
   
 }
