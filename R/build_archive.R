@@ -39,6 +39,8 @@
 #' folder in the parent directory by default.
 #' @param destination (string) A path in which to save the resulting zip file. 
 #' If `NULL`, defaults to the parent directory of the working directory.
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
@@ -63,7 +65,7 @@ build_archive <- function(source = "data-publish",
   # source <- potions::pour("directory", 
   #                         .pkg = "galaxias")
   files_in <- get_default_directory(source) |>
-    find_data()
+    find_data(quiet = quiet)
   
   # If schema file is missing, offer to build it
   if(!any(files_in %in% glue::glue("{source}/meta.xml"))){
@@ -160,6 +162,7 @@ get_default_directory <- function(x, error_call = rlang::caller_env()){
 #' @noRd
 #' @keywords Internal
 find_data <- function(directory,
+                      quiet,
                       call = rlang::caller_env()){
   
   # determine which dwc files are present, format for message
@@ -174,10 +177,12 @@ find_data <- function(directory,
   }
   
   ## Data
-  cli::cat_line("Data (minimum of one)")
-  file_check_message(user_files, "occurrences.csv")
-  file_check_message(user_files, "events.csv")
-  file_check_message(user_files, "multimedia.csv")
+  if(!quiet) {
+    cli::cat_line("Data (minimum of one)")
+    file_check_message(user_files, "occurrences.csv")
+    file_check_message(user_files, "events.csv")
+    file_check_message(user_files, "multimedia.csv")
+  }
   
   # check number of files
   n_data_present <- user_files |>
@@ -186,7 +191,7 @@ find_data <- function(directory,
     sum()
   
   if(n_data_present < 1){
-    bullets <- c("Didn't find data files in {.file {directory}/}.",
+    bullets <- c("Didn't find data files in {.file {directory}}.",
                  i = "{directory/} must contain at least one of `occurrences.csv`, `events.csv` or `multimedia.csv`.",
                  i = "See `use_data()`.")
     cl::cli_abort(bullets,
@@ -194,11 +199,13 @@ find_data <- function(directory,
   }
   
   ## Metadata
-  cli::cat_line("Metadata")
-  file_check_message(user_files, "eml.xml")
+  if(!quiet){
+    cli::cat_line("Metadata")
+    file_check_message(user_files, "eml.xml")
+  }
   
   if(!file.exists(glue::glue("{directory}/eml.xml"))){
-    bullets <- c("Didn't find metadata statement ({.file eml.xml}) in {.file {directory}/}.",
+    bullets <- c("Didn't find metadata statement ({.file eml.xml}) in {.file {directory}}.",
                  i = "Create a metadata template with `use_metadata_template()`.",
                  i = "Use `use_metadata()` to convert and save a metadata statement as an {.file eml.xml} file.")
     cli::cli_abort(bullets,
@@ -206,8 +213,10 @@ find_data <- function(directory,
   }
   
   ## Schema
-  cli::cat_line("Schema")
-  file_check_message(user_files, "meta.xml")
+  if(!quiet){
+    cli::cat_line("Schema")
+    file_check_message(user_files, "meta.xml")
+  }
   # schema does not error if missing
 
   # list of the files in the directory
