@@ -126,7 +126,7 @@ get_default_file <- function(file, error_call = rlang::caller_env()){
   # browser()
   
   if(is.null(file)){
-    dir_path <- here::here()
+    dir_path <- getwd()
     dir_name <- basename(dir_path)
     glue::glue("../{dir_name}.zip")
   }else{
