@@ -32,6 +32,14 @@ fix_times <- function(out) {
   out
 }
 
+fix_filenames <- function(out) {
+  out <- sub("(?<=file).*?(?=\\.zip)", "12345", out, perl = TRUE)
+  out
+}
+
+name <- "file234678236478.zip"
+
+fix_filenames(name)
 
 fix_emojis <- function(out) {
   out <- sub("(\U0001f600|\U0001f973|\U0001f638|\U0001f308|\U0001f947|\U0001f389|\U0001f38a)", "\U0001f600", out)

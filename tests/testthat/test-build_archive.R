@@ -10,11 +10,10 @@ test_that("build_archive() fails when can't find directory", {
     expect_error("Directory")
   
   # clean up
-  unlink("dwc-archive.zip")
   unlink(temp_dir)
 })
 
-test_that("build_archive() fails when missing all files in specified directory", {
+test_that("build_archive() fails when specified directory is missing all files", {
   # set up
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
@@ -28,7 +27,34 @@ test_that("build_archive() fails when missing all files in specified directory",
   
   # clean up
   unlink("data-publish")
-  unlink("dwc-archive.zip")
+  unlink(temp_dir)
+})
+
+test_that("build_archive() errors when `destination` is wrong", {
+  # set up
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  usethis::use_directory("data-publish")
+  use_metadata_template(quiet = TRUE)
+  use_metadata(quiet = TRUE)
+  df <- tibble::tibble(
+    decimalLatitude = c(44.4, 44.4)
+  ) |>
+    dplyr::mutate(
+      occurrenceID = random_id()
+    ) |>
+    write.csv("data-publish/occurrences.csv")
+  use_schema(quiet = TRUE)
+
+  #tests
+  build_archive(destination = "bork",
+                quiet = TRUE) |>
+    expect_error("`destination` must specify")
+
+  # clean up
+  unlink("data-publish")
+  unlink("metadata.Rmd")
   unlink(temp_dir)
 })
 
@@ -53,16 +79,18 @@ test_that("build_archive() works with no arguments", {
   #tests
   build_archive(quiet = TRUE) |>
     expect_no_error()
-  expect_in("dwc-archive.zip", list.files(temp_dir))
+  archive_name <- glue::glue("{basename(temp_dir)}.zip")
+  expect_in(archive_name, 
+            list.files(".."))
   
   # clean up
+  unlink(glue::glue("../{archive_name}"))
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwc-archive.zip")
   unlink(temp_dir)
 })
 
-test_that("build_archive() works messages work", {
+test_that("build_archive() messages work", {
   # set up
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
@@ -85,15 +113,16 @@ test_that("build_archive() works messages work", {
     local_user_input(x)
     build_archive()
   }
-  msgs <- fix_times(capture_cli_messages(build_archive_messages(1)))
+  msgs <- fix_filenames(fix_times(capture_cli_messages(build_archive_messages(1))))
   expect_snapshot(msgs)
   
   # clean up
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwc-archive.zip")
+  unlink(glue::glue("../{basename(temp_dir)}.zip"))
   unlink(temp_dir)
 })
+
 
 test_that("build_archive() menu appears", {
   # set up
@@ -117,13 +146,13 @@ test_that("build_archive() menu appears", {
     local_user_input(x)
     build_archive()
   }
-  msgs <- capture_cli_messages(build_archive_with_mock(1))
+  msgs <- fix_filenames(fix_times(capture_cli_messages(build_archive_with_mock(1))))
   expect_snapshot(msgs)
   
   # clean up
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwc-archive.zip")
+  unlink(glue::glue("../{basename(temp_dir)}.zip"))
   unlink(temp_dir)
 })
 
@@ -147,13 +176,14 @@ test_that("build_archive() builds schema when missing", {
   #tests
   build_archive(quiet = TRUE) |>
     expect_no_error()
-  expect_in("dwc-archive.zip", list.files(temp_dir))
+  archive_name <- glue::glue("{basename(temp_dir)}.zip")
+  expect_in(archive_name, list.files(".."))
   expect_in("meta.xml", list.files("data-publish"))
   
   # clean up
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwc-archive.zip")
+  unlink(glue::glue("../{archive_name}"))
   unlink(temp_dir)
 })
 
@@ -174,7 +204,7 @@ test_that("build_archive() fails when missing data", {
   # clean up
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwc-archive.zip")
+  # unlink("../{temp_dir}")
   unlink(temp_dir)
 })
 
@@ -184,8 +214,6 @@ test_that("build_archive() fails when missing metadata", {
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
-  # use_metadata_template(quiet = TRUE)
-  # use_metadata(quiet = TRUE)
   df <- tibble::tibble(
     decimalLatitude = c(44.4, 44.4)
   ) |>
@@ -201,6 +229,35 @@ test_that("build_archive() fails when missing metadata", {
   # clean up
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwc-archive.zip")
   unlink(temp_dir)
 })
+
+# test_that("build_archive() will use data-publish folder if it's there AND a named directory isn't found", {
+#   # set up
+#   current_wd <- here::here()
+#   temp_dir <- withr::local_tempdir()
+#   usethis::local_project(temp_dir, force = TRUE)
+#   usethis::use_directory("data-publish")
+#   use_metadata_template(quiet = TRUE)
+#   use_metadata(quiet = TRUE)
+#   df <- tibble::tibble(
+#     decimalLatitude = c(44.4, 44.4)
+#   ) |>
+#     dplyr::mutate(
+#       occurrenceID = random_id()
+#     ) |>
+#     write.csv("data-publish/occurrences.csv")
+#   use_schema(quiet = TRUE)
+#   
+#   
+#   #tests
+#   build_archive(quiet = TRUE) |>
+#     expect_no_error()
+#   expect_in("dwc-archive.zip", list.files(temp_dir))
+#   
+#   # clean up
+#   unlink("metadata.Rmd")
+#   unlink("data-publish")
+#   unlink("dwc-archive.zip")
+#   unlink(temp_dir)
+# })
