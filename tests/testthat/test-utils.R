@@ -33,7 +33,7 @@ test_that("cli_menu() can work through multiple valid mocked inputs", {
     local_user_input(x)
     header <- "Found multiple thingies."
     prompt <- "Which one do you want to use?"
-    choices <- glue("label {1:3}")
+    choices <- glue::glue("label {1:3}")
     first <- cli_menu(header, prompt, choices)
     second <- cli_menu(header, prompt, choices)
     c(first, second)
