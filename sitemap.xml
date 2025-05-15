@@ -1,21 +1,22 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://galaxias.ala.org.au/404.html</loc></url>
+<url><loc>https://galaxias.ala.org.au/articles/events-example.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/articles/index.html</loc></url>
+<url><loc>https://galaxias.ala.org.au/articles/occurrences-example.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/articles/quick_start_guide.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/authors.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/index.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/news/index.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/build_archive.html</loc></url>
-<url><loc>https://galaxias.ala.org.au/reference/build_metadata.html</loc></url>
-<url><loc>https://galaxias.ala.org.au/reference/build_schema.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/check_archive.html</loc></url>
+<url><loc>https://galaxias.ala.org.au/reference/check_directory.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/galaxias-package.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/galaxias_config.html</loc></url>
-<url><loc>https://galaxias.ala.org.au/reference/galaxias_project.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/index.html</loc></url>
-<url><loc>https://galaxias.ala.org.au/reference/print_validation.html</loc></url>
+<url><loc>https://galaxias.ala.org.au/reference/print_report.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/reexports.html</loc></url>
+<url><loc>https://galaxias.ala.org.au/reference/use_data.html</loc></url>
 <url><loc>https://galaxias.ala.org.au/reference/use_metadata.html</loc></url>
-<url><loc>https://galaxias.ala.org.au/reference/validate_archive.html</loc></url>
+<url><loc>https://galaxias.ala.org.au/reference/use_schema.html</loc></url>
 </urlset>
 

@@ -6,15 +6,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Quick start guide • galaxias</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
@@ -60,9 +59,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Quick start guide</h1>
                         <h4 data-toc-skip class="author">Martin
-Westgate</h4>
+Westgate, Dax Kellie, Shandiya Balasubramaniam</h4>
             
-            <h4 data-toc-skip class="date">2024-12-12</h4>
+            <h4 data-toc-skip class="date">2025-05-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/main/vignettes/quick_start_guide.Rmd" class="external-link"><code>vignettes/quick_start_guide.Rmd</code></a></small>
       <div class="d-none name"><code>quick_start_guide.Rmd</code></div>
@@ -70,152 +69,237 @@ Westgate</h4>
 
     
     
-<p><code>galaxias</code> is an R package to help users build
-repositories that are optimised for storing, documenting and sharing
-biodiversity data. These repositories can be seamlessly converted into a
-<strong>Darwin Core Archive</strong>, the data standard used by the <a href="https://gbif.org" class="external-link">Global Biodiversity Information Facility
-(GBIF)</a> and it’s partner nodes.</p>
-<pre><code><span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre>
+<p><code>galaxias</code> is an R package to help users bundle their data
+into a standardised format optimised for storing, documenting and
+sharing biodiversity data. This standardised format is called a <a href="https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a" class="external-link"><strong>Darwin
+Core Archive</strong></a>—a zip file containing data and metadata that
+conform to the <a href="https://dwc.tdwg.org/" class="external-link">Darwin Core Standard</a>,
+the accepted data standard of the <a href="https://gbif.org" class="external-link">Global
+Biodiversity Information Facility (GBIF)</a> and its partner nodes
+(e.g. the Atlas of Living Australia).</p>
+<p>Sharing Darwin Core Archives with data infrastructures allows data to
+be reconstructed and aggregated accurately. Let’s see how to prepare a
+Darwin Core Archive using galaxias.</p>
 <div class="section level2">
-<h2 id="start-a-new-project">Start a new project<a class="anchor" aria-label="anchor" href="#start-a-new-project"></a>
+<h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>To start a new data project using galaxias, call:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au">galaxias</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/galaxias_project.html">galaxias_project</a></span><span class="op">(</span><span class="st">"myprojectname"</span><span class="op">)</span></span></code></pre></div>
-<p>If you are using RStudio, this should launch a new RStudio instance
-for that project, which will have the following structure:</p>
+<p>Here we have an existing R project containing data collected over the
+course of a research project. Our project uses a fairly standard folder
+structure.</p>
 <pre><code>├── README.md                        : Description of the repository
-├── metadata.md                      : Boilerplate metadata statement for this project
-├── projectname.Rproj                : RStudio project file
-├── data-raw                         : Folder to store source data
-└── data                             : Folder to store processed data</code></pre>
-<p>It is a good idea to write some basic information in your
-<code>README.Rmd</code> file first, as this provides guidance to your
-users as to what your package contains, as well as what they are allowed
-to use it for.</p>
+├── my-project-name.Rproj            : RStudio project file
+├── data-raw                         : Folder to store original/source data
+├── data                             : Folder to store cleaned data
+├── scripts                          : Folder with analytic coding scripts
+└── plots                            : Folder containing plots/dataviz</code></pre>
+<p>Let’s see how galaxias helps us to prepare our data as a Darwin Core
+Archive.</p>
 </div>
 <div class="section level2">
-<h2 id="adding-data-to-your-project">Adding data to your project<a class="anchor" aria-label="anchor" href="#adding-data-to-your-project"></a>
+<h2 id="use-standardised-data-in-an-archive">Use standardised data in an archive<a class="anchor" aria-label="anchor" href="#use-standardised-data-in-an-archive"></a>
 </h2>
-<p>We recommend that you first add your data to the
-<code>data-raw</code> folder, then use a script within that folder to
-manipulate it to Darwin Core format. Let’s assume, for example, that
-your data is looks like this:</p>
+<p>Data that we wish to share are in the <code>data</code> folder. They
+look something like this.</p>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
+<span><span class="co">##   latitude longitude date       time  species                  location_id</span></span>
+<span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span>    -<span style="color: #BB0000;">35.3</span>      149. 14-01-2023 10:23 Callocephalon fimbriatum ARD001     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span>    -<span style="color: #BB0000;">35.3</span>      149. 15-01-2023 11:25 Eolophus roseicapilla    ARD001</span></span></code></pre>
+<p>First, we can standardise our data to conform to the Darwin Core
+Standard. We’ll do this by using <code>set_</code> functions
+automatically loaded with galaxias.</p>
+<p><code>set_</code> functions work a lot like
+<code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>: we can use them to modify and create
+columns. The suffix of each <code>set_</code> function gives an
+indication of the type of data it accepts
+(e.g. <code><a href="https://corella.ala.org.au/reference/set_coordinates.html" class="external-link">set_coordinates()</a></code>, <code>set_scientific_name</code>).
+Their arguments are valid Darwin Core terms to use as column names.</p>
+<p>To see how to start standardising our data, we can use
+<code><a href="https://corella.ala.org.au/reference/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> to summarise our data and suggest the
+steps we should take to prepare <code>my_data</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_data</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://corella.ala.org.au/reference/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Matching Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; Matched 0 of 6 column names to DwC terms:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Matched:</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Unmatched: <span style="color: #BB0000;">date, latitude, location_id, longitude, species, time</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Minimum required Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">Type</span>                      <span style="color: #0000BB;">Matched term(s)</span>  <span style="color: #0000BB;">Missing term(s)</span>                                                                </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Identifier (at least one) <span style="color: #00BB00;">-               </span> <span style="color: #BB0000;">occurrenceID, catalogNumber, recordNumber</span>                                       </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Record type               <span style="color: #00BB00;">-               </span> <span style="color: #BB0000;">basisOfRecord</span>                                                                   </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Scientific name           <span style="color: #00BB00;">-               </span> <span style="color: #BB0000;">scientificName</span>                                                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Location                  <span style="color: #00BB00;">-               </span> <span style="color: #BB0000;">decimalLatitude, decimalLongitude, geodeticDatum, coordinateUncertaintyInMeters</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Date/Time                 <span style="color: #00BB00;">-               </span> <span style="color: #BB0000;">eventDate</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Suggested workflow</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co"><span style="font-style: italic;">#&gt; To make your data Darwin Core compliant, use the following workflow:</span></span></span>
+<span><span class="co"><span style="font-style: italic;">#&gt; </span></span></span>
+<span><span class="co">#&gt; df |&gt;</span></span>
+<span><span class="co">#&gt;   set_occurrences() |&gt;</span></span>
+<span><span class="co">#&gt;   set_datetime() |&gt;</span></span>
+<span><span class="co">#&gt;   set_coordinates() |&gt;</span></span>
+<span><span class="co">#&gt;   set_scientific_name()</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="color: #555555;">Additional functions</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">See all `set_` functions at</span></span></span>
+<span><span class="co">#&gt;   <span style="color: #555555;">http://corella.ala.org.au/reference/index.html#add-rename-or-edit-columns-to-match-darwin-core-terms</span></span></span></code></pre></div>
+<p>Following the advice of <code><a href="https://corella.ala.org.au/reference/suggest_workflow.html" class="external-link">suggest_workflow()</a></code>, we can use
+<code>set_</code> functions to standardise <code>my_data</code>. In
+addition, each <code>set_</code> function checks to make sure that each
+column contains valid data according to Darwin Core Standard.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  latitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">35.310</span>, <span class="op">-</span><span class="fl">35.273</span><span class="op">)</span>,</span>
-<span>  longitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">149.125</span>, <span class="fl">149.133</span><span class="op">)</span>,</span>
-<span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"14-01-2023"</span>, <span class="st">"15-01-2023"</span><span class="op">)</span>,</span>
-<span>  time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"10:23"</span>, <span class="st">"11:25"</span><span class="op">)</span>,</span>
-<span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Callocephalon fimbriatum"</span>, <span class="st">"Eolophus roseicapilla"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>(Note that normally you’d import your data from an external file
-(e.g. using <code><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">readr::read_csv()</a></code>), but we’ve constructed one
-here for example purposes.)</p>
-<p>We recommend using functions from the <code>corella</code> package
-for converting tibbles to Darwin Core. <code>corella</code> is
-automatically loaded when you load <code>galaxias</code>. A minimally
-complete set of formatted observations might look like this:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">occurrences</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
+<span><span class="va">my_data_dwc</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># basic requirements of Darwin Core</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_occurrences.html" class="external-link">use_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="va">location_id</span>, </span>
+<span>                                              <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                  basisOfRecord <span class="op">=</span> <span class="st">"humanObservation"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># place and time</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_coordinates.html" class="external-link">use_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>, </span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>, </span>
 <span>                  decimalLongitude <span class="op">=</span> <span class="va">longitude</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_locality.html" class="external-link">use_locality</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Australia"</span>, </span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_locality.html" class="external-link">set_locality</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"Australia"</span>, </span>
 <span>               locality <span class="op">=</span> <span class="st">"Canberra"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_datetime.html" class="external-link">use_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">dmy</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_datetime.html" class="external-link">set_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">dmy</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>,</span>
 <span>               eventTime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/hms.html" class="external-link">hm</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># taxonomy</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_scientific_name.html" class="external-link">use_scientific_name</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">species</span>, </span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_scientific_name.html" class="external-link">set_scientific_name</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">species</span>, </span>
 <span>                      taxonRank <span class="op">=</span> <span class="st">"species"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/use_taxonomy.html" class="external-link">use_taxonomy</a></span><span class="op">(</span>kingdom <span class="op">=</span> <span class="st">"Animalia"</span>, </span>
-<span>               phylum <span class="op">=</span> <span class="st">"Aves"</span><span class="op">)</span> </span></code></pre></div>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_taxonomy.html" class="external-link">set_taxonomy</a></span><span class="op">(</span>kingdom <span class="op">=</span> <span class="st">"Animalia"</span>, </span>
+<span>               phylum <span class="op">=</span> <span class="st">"Aves"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">my_data_dwc</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 13</span></span></span>
+<span><span class="co">#&gt;   location_id basisOfRecord    occurrenceID decimalLatitude decimalLongitude</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ARD001      humanObservation 01                     -<span style="color: #BB0000;">35.3</span>             149.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ARD001      humanObservation 02                     -<span style="color: #BB0000;">35.3</span>             149.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more variables: country &lt;chr&gt;, locality &lt;chr&gt;, eventDate &lt;date&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   eventTime &lt;Period&gt;, scientificName &lt;chr&gt;, taxonRank &lt;chr&gt;, family &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   kingdom &lt;chr&gt;</span></span></span></code></pre>
+<p>Notice that we added several additional columns with more information
+to our data (<code>country</code>, <code>locality</code>,
+<code>taxonRank</code>, <code>kingdom</code>, <code>family</code>). We
+encourage users to specify additional information to avoid ambiguity
+once their data are shared.</p>
+<p>To use our standardised data in a Darwin Core Archive, we can select
+columns that use valid Darwin Core terms as column names. Invalid
+columns won’t be accepted when we try to build our Darwin Core Archive.
+Our data is an occurrence-based dataset (each row contains information
+at the observation level, as opposed to site/survey level), so we’ll
+select columns that match names in <code><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">occurrence_terms()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">occurrences</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_data_dwc</span> <span class="op">&lt;-</span> <span class="va">my_data_dwc</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_data_dwc</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 12</span></span></span>
-<span><span class="co">##   basisOfRecord   occurrenceID decimalLatitude decimalLongitude country locality</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> humanObservati… 01                     -<span style="color: #BB0000;">35.3</span>             149. Austra… Canberra</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> humanObservati… 02                     -<span style="color: #BB0000;">35.3</span>             149. Austra… Canberra</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 6 more variables: eventDate &lt;date&gt;, eventTime &lt;Period&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   scientificName &lt;chr&gt;, taxonRank &lt;chr&gt;, kingdom &lt;chr&gt;, phylum &lt;chr&gt;</span></span></span></code></pre>
-<p>Note that this deliberately includes some redundancy. The coordinate
-data are useful by themselves, for example, but in case of ambiguity it
-is useful to specify a text string given some information on location.
-Similarly, the <code>scientificName</code> field should be sufficient to
-identify the taxon in question, but adding higher taxonomic information
-makes the identification less ambiguous.</p>
-<p>We have saved our tibble as an object with a Darwin Core-specific
-name, so we can subset to only Darwin Core terms, and save it out using
-<code><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv()</a></code></p>
+<span><span class="co">##   basisOfRecord    occurrenceID eventDate  eventTime  country   locality</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;Period&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> humanObservation 01           2023-01-14 10H 23M 0S Australia Canberra</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> humanObservation 02           2023-01-15 11H 25M 0S Australia Canberra</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 6 more variables: decimalLatitude &lt;dbl&gt;, decimalLongitude &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   scientificName &lt;chr&gt;, kingdom &lt;chr&gt;, family &lt;chr&gt;, taxonRank &lt;chr&gt;</span></span></span></code></pre>
+<p>Now we can specify that we wish to use <code>my_data_dwc</code> in
+our Darwin Core Archive with <code><a href="../reference/use_data.html">use_data()</a></code>, which saves this
+data in the <code>data_publish</code> folder with the correct file name
+<code>occurrences.csv</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
-<span><span class="va">occurrences</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="st">".data/occurrences.csv"</span><span class="op">)</span></span></code></pre></div>
-<p>If your data are <em>already</em> in Darwin Core format, you can
-simply place them in the <code>data</code> folder. You can then use
-<code><a href="../reference/build_schema.html">build_schema()</a></code> to create a ‘schema’ file, which is an
-<code>xml</code> document that tells users what data is present in your
-archive.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_data.html">use_data</a></span><span class="op">(</span><span class="va">my_data_dwc</span><span class="op">)</span> </span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="adding-package-metadata">Adding package metadata<a class="anchor" aria-label="anchor" href="#adding-package-metadata"></a>
+<h2 id="adding-metadata">Adding metadata<a class="anchor" aria-label="anchor" href="#adding-metadata"></a>
 </h2>
 <p>A critical part of a Darwin Core archive is a metadata statement;
 this tells users who owns the data, what the data were collected for,
 and what uses they can be put to (i.e. a data licence). To get an
-example statement, call <code><a href="../reference/use_metadata.html">use_metadata()</a></code></p>
+example statement, call <code><a href="https://delma.ala.org.au/reference/use_metadata_template.html" class="external-link">use_metadata_template()</a></code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_metadata.html">use_metadata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>This creates a blank statement called ‘metadata.md’, which looks like
-this:</p>
-<pre><code><span><span class="co">## ## Dataset</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  ### Title</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  A Sentence Giving Your Dataset Title In Title Case</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  ### Abstract</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  A paragraph outlining the content of the dataset</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  ### Creator</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  #### Individual name</span></span></code></pre>
-<p>Once you have editted the statement to reflect the information you
-want to convey, you can convert it to <code>EML</code> using:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_metadata.html">build_metadata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>A second piece of metadata required by the Darwin Core standard is
-the ‘schema’ document. This is a machine-readable <code>xml</code>
-document that describes the content of the archive’s data files. You can
-generate one using:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_schema.html">build_schema</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://delma.ala.org.au/reference/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>By default, this creates an R Markdown template named
+<code>metadata.Rmd</code> in your top working directory. Here’s a small
+example of what <code>metadata.Rmd</code> looks like.</p>
+<p>We can edit this template statement with information we wish to
+convey about our data.</p>
+<p>Once our metadata statement is complete, we can specify that we wish
+to use it in our Darwin Core Archive with <code><a href="../reference/use_metadata.html">use_metadata()</a></code>.
+This converts our markdown metadata statement to Ecological Meta
+Language (<code>EML</code>), the accepted format of metadata for Darwin
+Core Archives, and saves it as <code>eml.xml</code> in the
+<code>data-publish</code> folder.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_metadata.html">use_metadata</a></span><span class="op">(</span><span class="st">"metadata.Rmd"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="build-an-archive">Build an archive<a class="anchor" aria-label="anchor" href="#build-an-archive"></a>
 </h2>
-<p>At the end of the above process, you should have a folder named
-<code>data</code> that contains at least three files:</p>
+<p>At the end of the above process, we should have a folder named
+<code>data-publish</code> that contains at least two files:</p>
 <ul>
-<li>One or more <code>.csv</code> files containing data</li>
-<li>a <code>meta.xml</code> file containing your schema</li>
-<li>an <code>eml.xml</code> file containing your metadata</li>
+<li>One or more <code>.csv</code> files containing data
+(e.g. <code>occurrences.csv</code>, <code>events.csv</code>,
+<code>multimedia.csv</code>)</li>
+<li>An <code>eml.xml</code> file containing your metadata</li>
 </ul>
-<p>If that is true, then you can run <code><a href="../reference/build_archive.html">build_archive()</a></code> to zip
-your data into a Darwin Core Archive:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p>We can now run <code><a href="../reference/build_archive.html">build_archive()</a></code> to build our Darwin Core
+Archive!</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Running <code><a href="../reference/build_archive.html">build_archive()</a></code> first checks whether we have a
+‘schema’ document (<code>meta.xml</code>) in our
+<code>data-publish</code> folder. This is a machine-readable
+<code>xml</code> document that describes the content of the archive’s
+data files and their structure. The schema document is a required file
+in a Darwin Core Archive. If it is missing, <code><a href="../reference/build_archive.html">build_archive()</a></code>
+will build one. We can also build a schema document ourselves using
+<code><a href="../reference/use_schema.html">use_schema()</a></code>.</p>
+<p>At the end of this process, you should have a Darwin Core Archive zip
+file (<code>dwc-archive.zip</code>). You should also have a
+<code>data-publish</code> folder containing standardised data files
+(e.g., <code>occurrences.csv</code>), a metadata statement in EML format
+(<code>eml.xml</code>), and a schema document (<code>meta.xml</code>).
+These files can be edited at any time to update your final Darwin Core
+Archive.</p>
+</div>
+<div class="section level2">
+<h2 id="check-archive">Check archive<a class="anchor" aria-label="anchor" href="#check-archive"></a>
+</h2>
+<p>There are several ways to check whether the contents of your Darwin
+Core Archive meet the Darwin Core Standard.</p>
+<p>The first is to run local tests on the files inside a local folder
+directory that will be used to build a Darwin Core Archive.
+<code><a href="../reference/check_directory.html">check_directory()</a></code> allows us to check csv files and xml
+files in the directory against Darwin Core Standard criteria.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_directory.html">check_directory</a></span><span class="op">(</span><span class="st">"data-publish"</span><span class="op">)</span></span></code></pre></div>
+<p>The second is to check whether a complete Darwin Core Archive meets
+institution’s Darwin Core criteria via an API. For example, we can test
+an archive against GBIF’s API tests.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Add valid GBIF login details</span></span>
+<span><span class="fu"><a href="../reference/galaxias_config.html">galaxias_config</a></span><span class="op">(</span>GBIF <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"your-email"</span>,</span>
+<span>                            username <span class="op">=</span> <span class="st">"your-username"</span>,</span>
+<span>                            password <span class="op">=</span> <span class="st">"your-password"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Check against GBIF API</span></span>
+<span><span class="fu"><a href="../reference/check_archive.html">check_archive</a></span><span class="op">(</span><span class="st">"dwc-archive.zip"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="publishshare-your-archive">Publish/share your archive<a class="anchor" aria-label="anchor" href="#publishshare-your-archive"></a>
+</h2>
+<!-- 
+This is incomplete. Do we want a separate vignette on this?  
+Will there be a place on GitHub to share data?
+-->
+<p>The final step is to share your completed Darwin Core Archive with a
+data infrastructure like the Atlas of Living Australia. To share with
+the ALA, send your file and a brief description to <a href="mailto:support@ala.org.au">support@ala.org.au</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -224,11 +308,11 @@ your data into a Darwin Core Archive:</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Martin Westgate, Shandiya Balasubramanium, Dax Kellie.</p>
+  <p>Developed by Martin Westgate, Shandiya Balasubramaniam, Dax Kellie.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>
