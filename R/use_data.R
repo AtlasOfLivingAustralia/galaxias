@@ -111,7 +111,7 @@ check_data_type <- function(data, error_call = rlang::caller_env()) {
 
     choice <- cli_menu(
       "Data identified as type {.field {type}} and will be saved as {.file {file_name}}",
-      "Is this correct?",
+      "Is this correct? (or 0 to exit)",
       choices = c("Yes", "No")
     )
 
