@@ -1,30 +1,51 @@
 #' Create a `schema` for a Darwin Core Archive
 #' 
-#' A schema is an xml document that maps the files and field names in a DwCA.
-#' It works by detecting column names on csv files in a specified directory;
-#' these should all be Darwin Core terms for this function to produce reliable
-#' results.
-#' @param source A directory (**not** a file) containing files to be documented 
-#' in the schema document. Defaults to the `data-publish` folder within the current 
-#' working directory. Note that files that do not match the Darwin Core naming 
-#' convention and/or do not end in `.csv` are ignored.
+#' @description
+#' A schema is an xml document that maps the files and field names in a DwCA. 
+#' This map makes it easier to reconstruct one or more related datasets so that 
+#' information is matched correctly. It works by detecting column names on csv 
+#' files in a specified directory; these should all be Darwin Core terms for 
+#' this function to produce reliable results.
+#' @param source A folder containing one or more data csv files 
+#' `occurrences.csv`, `events.csv` or `multimedia.csv`. Defaults to `data-publish/`.
 #' @param destination A file name for the resulting schema document. Defaults
-#' to `./data-publish/meta.xml` for consistency with the Darwin Core standard.
+#' to `meta.xml` for consistency with the Darwin Core standard. Note this
+#' file is placed within the working directory specified by [galaxias_config()].
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
 #' @returns Does not return an object to the workspace; called for the side
-#' effect of building a file named `meta.xml` in the specified directory.
+#' effect of building a schema file in the specified directory.
 #' @export
-build_schema <- function(source = "data-publish", 
-                         destination = "./data-publish/meta.xml") {
-  schema <- get_default_directory(source) |>
-    detect_dwc_files() |>
-    detect_dwc_fields() |>
-    add_front_matter()
+use_schema <- function(source = "data-publish",
+                       destination = "data-publish/meta.xml",
+                       quiet = FALSE) {
+  if(!quiet) {
+    cli::cli_alert_info("Building schema")
+  }
   
-  usethis::use_directory("data-publish")
+  # directory <- potions::pour("directory", 
+  #                            .pkg = "galaxias")
+  usethis::use_directory(source)
+  
+  # detect files
+  files <- detect_dwc_files(source, quiet)
+  
+  # build schema wireframe in a tibble 
+  wireframe <- add_dwc_cols(files, quiet)
+  
+  # front matter
+  schema <- add_front_matter(wireframe, quiet)
+  
+  if(!quiet) {
+    cli::cli_alert_success("Writing {.file {destination}}.")
+  }
+  
   schema |>
     delma::write_eml(file = destination)
-  cli::cli_alert_success("Schema successfully built. Saved as {.file destination}.")
-  cli::cli_progress_done()
+  
+  if(!quiet) {
+    cli::cli_progress_done()
+  }
 }
 
 #' Function progress message
@@ -58,23 +79,51 @@ wait <- function(seconds = 1) {
 #' @importFrom rlang .data
 #' @noRd
 #' @keywords Internal
-detect_dwc_files <- function(directory){
-  progress_update("Detecting Darwin Core files...")
+detect_dwc_files <- function(directory, 
+                             quiet = FALSE){
+  if(!quiet){
+    progress_update("Detecting files..."); wait(.1)
+  }
   available_exts <- dwc_extensions()
   supported_files <- available_exts |>
-    pull("file")
-  available_exts$present <- supported_files |>
-    purrr::map(\(x) {glue::glue("{directory}/{x}") |> 
-        file.exists()}) |> 
-    unlist()
+    dplyr::pull("file")
+  
+  # check if files exist, format result
+  available_exts <- available_exts |>
+    dplyr::mutate(
+      present = glue::glue("{directory}/{supported_files}") |>
+        purrr::map(\(file_name)
+                   file.exists(file_name)) |>
+        unlist(),
+      present_formatted = present |>
+        purrr::map_chr(\(file_exists) 
+                       ifelse(isTRUE(file_exists), 
+               cli::symbol$tick |> cli::col_green(), 
+               cli::symbol$cross |> cli::col_red()
+               )
+      )
+    )
+  
+  available_exts$present |> purrr::map_lgl(isTRUE)
+  
+  # message
+  if(!quiet){
+    file_check_message(available_exts, "occurrences.csv")
+    file_check_message(available_exts, "events.csv")
+    file_check_message(available_exts, "multimedia.csv")
+  }
+  
   # check whether there are no csvs, and if so, abort
   if(all(!available_exts$present)){
-    file_names <- glue::glue_collapse(available_exts$file,
+    file_names <- cli::ansi_collapse(available_exts$file,
                                 sep = ", ",
                                 last = " or ")
     bullets <- c(
-      glue::glue("Specified directory ({.file directory}) does not contain any Darwin Core-compliant csv files."),
-      i = glue::glue("Accepted names are {file_names}."))
+      "Must include at least one Darwin Core-compliant csv file in {.file {directory}}.",
+      i = "Accepted files are {.file {file_names}}.",
+      i = "Use `use_data()` to save standardised data in the correct file location.") |>
+      cli::cli_bullets() |>
+      cli::cli_fmt()
     cli::cli_abort(bullets)
   }
   available_exts |>
@@ -121,11 +170,37 @@ dwc_extensions <- function(){
   )
 }
 
-#' Internal function to add field names to tibble
+#' Format message for detecting if a file is present or not
 #' @noRd
 #' @keywords Internal
-detect_dwc_fields <- function(df){
-  progress_update("Detecting Darwin Core fields in dataset...")
+file_check_message <- function(file_df, file_name) {
+  
+  # length of longest file name
+  files_nchar <- file_df |>
+    dplyr::pull("file") |>
+    cli::ansi_nchar() |>
+    max()
+  
+  # build message
+  paste0("  ", cli::col_cyan(cli::symbol$bullet), " ", 
+         cli::ansi_align(cli::col_blue(glue::glue("{file_df[file_df$file == file_name,]$file }")), files_nchar), " ",
+         cli::ansi_align(glue::glue("{file_df[file_df$file == file_name,]$present_formatted}"), cli::ansi_nchar(4))
+  ) |>
+    cli::cat_line()
+  
+  wait(.2) # delay next message
+  
+}
+
+#' Internal function to add column names to tibble
+#' @noRd
+#' @keywords Internal
+add_dwc_cols <- function(df, 
+                         quiet = FALSE){
+  if(!quiet){
+    progress_update("Formatting Darwin Core terms...") 
+  }
+  
   split(df, seq_len(nrow(df))) |>
     purrr::map(\(x){
       dplyr::bind_rows(create_schema_row(x),
@@ -180,7 +255,7 @@ create_field_rows <- function(x){
   names(index_list) <- rep("index", n_fields)
   # get sequence of urls
   dwc_df <- corella::darwin_core_terms
-  term_list <- map(field_names, 
+  term_list <- purrr::map(field_names, 
       .f = \(a){
         term_lookup <- dwc_df$term == a
         if(any(term_lookup)){
@@ -209,8 +284,12 @@ get_field_names <- function(file){
 #' Internal function to add `xml` and `archive` sections to tibble
 #' @noRd
 #' @keywords Internal
-add_front_matter <- function(df){
-  progress_update("Building xml components...")
+add_front_matter <- function(df, 
+                             quiet = FALSE){
+  if(!quiet) {
+    progress_update("Building xml components...")
+  }
+  
   front_row <- tibble::tibble(
     level = 1,
     label = "archive",

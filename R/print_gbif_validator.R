@@ -1,10 +1,10 @@
 #' Print objects returned by APIs
 #' 
-#' Currently only `validate_archive()` and `get_validator_report()`, where the 
+#' Currently only `check_archive()` and `get_report()`, where the 
 #' latter is called by the former.
 #' @param x An object to print.
 #' @param \dots Additional arguments, currently ignored.
-#' @name print_validation
+#' @name print_report
 #' @export
 print.gbif_validator_post <- function(x, ...){
   utils::str(x)
@@ -12,7 +12,7 @@ print.gbif_validator_post <- function(x, ...){
 }
 
 
-#' @rdname print_validation
+#' @rdname print_report
 #' @param n Number of entries to print
 #' @export
 print.gbif_validator_response <- function(x, n = 5, ...){

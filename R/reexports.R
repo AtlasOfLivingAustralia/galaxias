@@ -2,6 +2,6 @@
 #' @export
 corella::suggest_workflow
 
-#' @importFrom delma use_metadata
+#' @importFrom delma use_metadata_template
 #' @export
-delma::use_metadata
+delma::use_metadata_template

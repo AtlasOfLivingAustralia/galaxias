@@ -4,7 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{suggest_workflow}
-\alias{use_metadata}
+\alias{use_metadata_template}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -14,6 +14,6 @@ below to see their documentation.
 \describe{
   \item{corella}{\code{\link[corella]{suggest_workflow}}}
 
-  \item{delma}{\code{\link[delma]{use_metadata}}}
+  \item{delma}{\code{\link[delma]{use_metadata_template}}}
 }}
 

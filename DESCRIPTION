@@ -1,6 +1,6 @@
 Package: galaxias
 Type: Package
-Title: Describe, Package and Share Biodiversity Data
+Title: Describe, Package, and Share Biodiversity Data
 Version: 0.1.0
 Authors@R:
     c(person(given = "Martin",
@@ -8,16 +8,16 @@ Authors@R:
              email = "martin.westgate@csiro.au",
              role = c("aut", "cre")),
       person(given = "Shandiya",
-             family = "Balasubramanium",
+             family = "Balasubramaniam",
              email = "shandiya.balasubramaniam@csiro.au",
              role = c("aut")),
       person(given = "Dax",
              family = "Kellie",
              email = "dax.kellie@csiro.au",
              role = c("aut")))
-Description: galaxias helps users describe, package and share biodiversity 
+Description: `galaxias` helps users describe, package, and share biodiversity 
   information using the 'Darwin Core' data standard, which is the format used
-  and accepted by the Global Biodiversity Information Facility (GBIF) and its'
+  and accepted by the Global Biodiversity Information Facility (GBIF) and its
   partner nodes. It is functionally similar to `devtools`, but with a focus on
   building 'Darwin Core Archives' rather than R packages.
 Depends: 
@@ -26,6 +26,7 @@ Depends:
 Imports:
   cli,
   curl,
+  delma,
   dplyr,
   glue,
   httr2,
@@ -43,9 +44,8 @@ Suggests:
   lubridate,
   rmarkdown,
   testthat (>= 3.0.0),
-  xml2
-Remotes:
-  AtlasOfLivingAustralia/delma
+  xml2,
+  readxl
 License: MPL-2.0
 URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues

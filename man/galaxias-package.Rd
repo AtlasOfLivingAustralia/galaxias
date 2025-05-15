@@ -9,7 +9,7 @@
 \code{galaxias} helps users describe, package and share biodiversity
 information using the 'Darwin Core' data standard, which is the format used
 and accepted by the Global Biodiversity Information Facility (GBIF) and its'
-partner nodes. It is functionally similar to \code{devtools}, but with a focus on
+partner nodes. \code{galaxias} is functionally similar to \code{devtools}, but with a focus on
 building Darwin Core Archives rather than R packages.
 
 The package is named for a genus of freshwater fish.
@@ -18,26 +18,30 @@ The package is named for a genus of freshwater fish.
 If you have any questions, comments or suggestions, please email
 \href{mailto:support@ala.org.au}{support@ala.org.au}.
 
-\strong{Set up a project}
+\strong{Prepare information for Darwin Core}
 \itemize{
-\item \code{\link[=galaxias_project]{galaxias_project()}} Set up a project with the necessary folder structure
-\item \code{\link[=use_metadata]{use_metadata()}} Add a blank metadata statement to the working directory
-\item \code{\link[=suggest_workflow]{suggest_workflow()}} Advise on configuring a tibble for the Darwin Core standard
+\item \code{\link[=use_metadata_template]{use_metadata_template()}} Add a blank metadata statement template to the working directory
+\item \code{\link[=suggest_workflow]{suggest_workflow()}} Advice to standardise data using the Darwin Core Standard
 }
 
-\strong{Construct an archive}
+\strong{Add information to a folder}
 \itemize{
-\item \code{\link[=build_schema]{build_schema()}} Build a schema file (\code{meta.xml}) for a given directory
-\item \code{\link[=build_metadata]{build_metadata()}} Convert a metadata file from markdown to EML (\code{eml.xml})
+\item \code{\link[=use_data]{use_data()}} Save standardised data for use in a Darwin Core Archive
+\item \code{\link[=use_metadata]{use_metadata()}} Convert a metadata file from markdown to EML (\code{eml.xml}) and save for use in a Darwin Core Archive
+\item \code{\link[=use_schema]{use_schema()}} Build a schema file (\code{meta.xml}) for a given directory and save for use in a Darwin Core Archive
+}
+
+\strong{Build an archive}
+\itemize{
 \item \code{\link[=build_archive]{build_archive()}} Convert a directory to a Darwin Core Archive
 }
 
-\strong{Validate an archive}
+\strong{Verify an archive meets Darwin Core Standard}
 \itemize{
-\item \code{\link[=check_archive]{check_archive()}} Check your archive using the \code{delma} and \code{corella} packages
+\item \code{\link[=check_directory]{check_directory()}} Check files in your local Darwin Core directory
+\item \code{\link[=check_archive]{check_archive()}} Check whether archive passes Darwin Core criteria via the GBIF API
 \item \code{\link[=galaxias_config]{galaxias_config()}} Store credentials for your API call
-\item \code{\link[=validate_archive]{validate_archive()}} Check your archive using the GBIF 'validator' API
-\item \code{\link[=print_validation]{print_validation()}} Methods for displaying API responses
+\item \code{\link[=print_report]{print_report()}} Methods for displaying API responses
 }
 }
 \seealso{
@@ -53,7 +57,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Shandiya Balasubramanium \email{shandiya.balasubramaniam@csiro.au}
+  \item Shandiya Balasubramaniam \email{shandiya.balasubramaniam@csiro.au}
   \item Dax Kellie \email{dax.kellie@csiro.au}
 }
 

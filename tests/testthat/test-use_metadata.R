@@ -1,0 +1,113 @@
+
+test_that("use_metadata() works with no arguments", {
+  # set up
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  use_metadata_template(quiet = TRUE) # add metadata.Rmd
+  
+  #tests
+  use_metadata()
+  expect_length(list.files("data-publish"), 1)
+  expect_in("eml.xml", list.files("data-publish"))
+  
+  # clean up
+  unlink("metadata.Rmd")
+  unlink(temp_dir)
+})
+
+test_that("use_metadata() fails when input doesn't exist", {
+  # set up
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  use_metadata_template(quiet = TRUE) # add metadata.Rmd
+  
+  #tests
+  expect_error(
+    use_metadata("something.file")
+  )
+  
+  # clean up
+  unlink("metadata.Rmd")
+  unlink(temp_dir)
+})
+
+# test_that("use_metadata() saves xml file using provided filename", {
+#   # set up
+#   current_wd <- here::here()
+#   temp_dir <- withr::local_tempdir()
+#   usethis::local_project(temp_dir, force = TRUE)
+#   use_metadata_template(quiet = TRUE) # add metadata.Rmd
+#   
+#   #tests
+#   use_metadata("metadata.Rmd", 
+#                destination = "EXAMPLE.xml")
+#   expect_true(
+#     file.exists("data-publish/EXAMPLE.xml")
+#     )
+#   
+#   # clean up
+#   unlink("metadata.Rmd")
+#   unlink(temp_dir)
+# })
+
+test_that("use_metadata() does not overwrite existing file by default", {
+  # set up
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  use_metadata_template(quiet = TRUE) # add metadata.Rmd
+  
+  #tests
+  use_metadata()
+  timestamp_1 <- file.info("data-publish/eml.xml")$ctime
+  expect_message(use_metadata())
+  timestamp_2 <- file.info("data-publish/eml.xml")$ctime
+  expect_equal(timestamp_1, timestamp_2)
+  
+  # clean up
+  unlink("metadata.Rmd")
+  unlink(temp_dir)
+})
+
+#FIXME: This test fails but it seems to overwrite correctly
+test_that("use_metadata() overwrites file when overwrite = TRUE", {
+  # set up
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  use_metadata_template(quiet = TRUE) # add metadata.Rmd
+  
+  #tests
+  use_metadata()
+  timestamp_1 <- file.info("data-publish/eml.xml")$ctime
+  Sys.sleep(2)
+  expect_message(use_metadata(overwrite = TRUE))
+  timestamp_2 <- file.info("data-publish/eml.xml")$ctime
+  expect_true(timestamp_2 > timestamp_1)
+  
+  # clean up
+  unlink("metadata.Rmd")
+  unlink(temp_dir)
+})
+
+test_that("use_metadata() reads quarto doc", {
+  # set up
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  use_metadata_template("metadata.qmd", quiet = TRUE) # add metadata.qmd
+  
+  #tests
+  use_metadata("metadata.qmd", 
+               destination = "data-publish/EXAMPLE.xml")
+  expect_true(
+    file.exists("data-publish/EXAMPLE.xml")
+  )
+  
+  # clean up
+  unlink("metadata.qmd")
+  unlink(temp_dir)
+})
+
