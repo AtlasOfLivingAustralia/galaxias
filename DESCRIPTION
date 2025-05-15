@@ -46,7 +46,8 @@ Suggests:
   testthat (>= 3.0.0),
   xml2,
   readxl,
-  janitor
+  janitor,
+  gt
 License: MPL-2.0
 URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues
