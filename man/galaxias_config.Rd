@@ -5,7 +5,7 @@
 \alias{print.galaxias_config}
 \title{Provide configuration information to \code{galaxias}}
 \usage{
-galaxias_config(directory = "data-publish", gbif = NULL)
+galaxias_config(directory = NULL, gbif = NULL)
 
 \method{print}{galaxias_config}(x, ...)
 }

@@ -1,7 +1,51 @@
-test_that("galaxias_config() correctly stores information onload", {
+test_that("potions::pour creates the correct object", {
   default_obj <- options("potions-pkg")
   expect_true(length(default_obj) > 0)
-  # option to add further tests
+})
+
+test_that("galaxias_config() creates default object onload", {
+  obj <- potions::pour(.pkg = "galaxias")
+  expect_equal(obj, 
+               galaxias_default_config(directory = "data-publish"))  
+})
+
+test_that("galaxias_config() returns an object if all args are missing", {
+  result <- galaxias_config()
+  expect_equal(result, 
+               galaxias_default_config(directory = "data-publish"))  
+})
+
+test_that("galaxias_config() rejects non-character directories", {
+  expect_error(galaxias_config(directory = 100L))
+})
+
+test_that("galaxias_config() rejects non-list GBIF entries", {
+  expect_error(galaxias_config(gbif = data.frame(username = "hi",
+                                                 email = "there",
+                                                 password = "!")))
+})
+
+test_that("galaxias_config() rejects missing GBIF entries", {
+  expect_error(galaxias_config(gbif = list(username = "hi",
+                                           password = "!")))
+})
+
+test_that("galaxias_config() rejects misnamed GBIF entries", {
+  expect_error(galaxias_config(gbif = list(username = "hi",
+                                           emil = "there",
+                                           password = "!")))
+})
+
+test_that("galaxias_config() rejects GBIF entries with length > 1", {
+  expect_error(galaxias_config(gbif = list(username = "hi",
+                                           email = c("there", "there"),
+                                           password = "!")))
+})
+
+test_that("galaxias_config() rejects non-character GBIF entries", {
+  expect_error(galaxias_config(gbif = list(username = "hi",
+                                           email = 22L,
+                                           password = "!")))
 })
 
 test_that("galaxias_config object is correctly stored", {

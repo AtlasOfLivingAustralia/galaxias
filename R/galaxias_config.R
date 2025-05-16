@@ -53,7 +53,7 @@ galaxias_config <- function(directory = NULL,
 check_gbif_credentials <- function(x){
   
   # check is a list
-  if(!is.list(x)){
+  if(!inherits(x, "list")){
     cli::cli_abort("GBIF credentials should be supplied as a `list`.")
   }
   
