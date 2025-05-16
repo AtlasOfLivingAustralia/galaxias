@@ -92,3 +92,57 @@ local_user_input <- function(x, env = rlang::caller_env()) {
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
+
+
+#' Check a `file` argument is 1. not null, 2. a character, 3. (optionally) exists
+#' @noRd
+#' @keywords Internal
+check_file_argument <- function(file,
+                                must_exist = TRUE){
+  # check `file` argument
+  if(is.null(file)){
+    cli::cli_abort("Argument `file` is missing, with no default")
+  }
+  if(!inherits(file, "character")){
+    cli::cli_abort("Argument `file` must be of class `character`")
+  }
+  if(!file.exists(file) & must_exist){
+    c("File {.file {file}} not found.") |>
+      cli::cli_abort()
+  }
+}
+
+
+#' Check whether publish directory exists, and if not, build it,
+#' depending on quiet and interactive
+#' @noRd
+#' @keywords Internal
+check_publish_directory <- function(quiet,
+                                   error_call = rlang::caller_env()){
+  directory <- potions::pour("directory",
+                             .pkg = "galaxias")
+  if(!file.exists(directory)){
+    if(rlang::is_interactive() & !quiet){ 
+      
+      choice <- cli_menu(
+        c(" ",
+          "Your working directory for data publication is set to `{directory}`, which does not exist", 
+          " "),
+        "Would you like to create it? (0 to exit)",
+        choices = c("Yes", "No")
+      )
+      
+      if (choice == 1) {
+        usethis::use_directory(directory)
+      } else {
+        cli::cli_abort(c("Unable to build working directory", 
+                         i = "To change the default directory, see `galaxias_config()`",
+                         i = "To avoid seeing this message in future, use `quiet = TRUE`"),
+                       call = error_call)
+      }
+    }else{
+      usethis::use_directory(directory)
+    } 
+  }
+  directory
+}

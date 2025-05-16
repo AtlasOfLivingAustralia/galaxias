@@ -4,8 +4,8 @@
       msgs
     Output
        [1] "i Building Darwin Core Archive\n" "\\ Detecting files...\n"         
-       [3] "| Detecting files...\n"           "v Detecting files... [1s]\n"     
-       [5] "\n"                               "\\ Creating zip folder...\n"     
+       [3] "v Detecting files... [1s]\n"      "\n"                              
+       [5] "\\ Creating zip folder...\n"      "| Creating zip folder...\n"      
        [7] "v Creating zip folder... [1s]\n"  "\n"                              
        [9] "i Writing 'dwca.zip'.\n"          "v Writing 'dwca.zip'. [1s]\n"    
       [11] "\n"                              

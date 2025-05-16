@@ -37,18 +37,25 @@
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
 #' folder in the parent directory by default.
-#' @param destination (string) A path in which to save the resulting zip file. 
-#' If `NULL`, defaults to the parent directory of the working directory.
-#' @param quiet Whether to message about what is happening. Default is set to 
-#'  `FALSE`. 
+#' @param file (string) A file name to save the resulting `.zip` file.
+#' @param overwrite (logical) Should existing files be overwritten? Defaults to 
+#' `FALSE`.
+#' @param quiet (logical) Whether to suppress messages about what is happening. 
+#' Default is set to `FALSE`; i.e. messages are shown.
 #' @return Invisibly returns the location of the built zip file; but typically
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
-build_archive <- function(source = "data-publish",
-                          destination = NULL,
+build_archive <- function(file = NULL,
+                          overwrite = FALSE,
                           quiet = FALSE) {
+  
+  # run checks on `file`
+  check_file_argument(file, must_exist = FALSE)
+  if(!grepl(".zip$", file)){
+    cli::cli_abort("{.arg file} must specify a file name ending with `.zip`.")
+  }
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -62,99 +69,80 @@ build_archive <- function(source = "data-publish",
   # Users will hit an error if they are 
   #  - missing all data files, or
   #  - missing an EML metadata statement
-  # source <- potions::pour("directory", 
-  #                         .pkg = "galaxias")
-  files_in <- get_default_directory(source) |>
-    find_data(quiet = quiet)
+  source <- potions::pour("directory",
+                          .pkg = "galaxias")
+  if(!dir.exists(source)){
+    cli::cli_abort(c("Directory {.file {source}} not found."))
+  }
+  
+  files_in <- find_data(source, quiet = quiet)
   
   # If schema file is missing, offer to build it
   if(!any(files_in %in% glue::glue("{source}/meta.xml"))){
-    # offer user menu to confirm if not in batch run (testthat or knitr)
-    if(rlang::is_interactive()){ 
-      
-      choice <- cli_menu(
-        c(" ",
-          "No schema ({.file meta.xml}) file detected.", 
-          "This is a required file in a Darwin Core Archive.", 
-          " "),
-        "Do you want to build a schema file now? (0 to exit)",
-        choices = c("Yes", "No")
-      )
-      
-      if (choice == 1) {
-        use_schema(source = source, 
-                   destination = glue::glue("{source}/meta.xml"))
-      } else {
-        cli::cli_inform(c(
-          i = "Exiting..."
-        ))
-        # exits process quietly
-        invokeRestart("abort")
-      }
-      invisible()
-      
-    } 
-    else {
-      
-      use_schema(source,
-                 destination = glue::glue("{source}/meta.xml"))
-    
-      }
+    build_schema_internal(source = source, 
+                          quiet = quiet)
   }
   
   if(!quiet) {
     progress_update("Creating zip folder...")
   }
   
-  file_out <- get_default_file(destination)
-  
-  if(!quiet){
-    cli::cli_progress_step("Writing {.file {file_out}}.")
+  if(file.exists(file)){
+    if(overwrite){
+      if(!quiet){
+        cli::cli_progress_step("Overwriting {.file {file}}.")
+      }
+      zip::zip(zipfile = file, 
+               files = files_in,
+               mode = "cherry-pick")
+    }else{
+      cli::cli_abort(c("{.file {file}} already exists and has not been overwritten",
+                       i = "set `overwrite = TRUE` to change this behaviour"))
+    }
+  }else{
+    if(!quiet){
+      cli::cli_progress_step("Writing {.file {file}}.")
+    }
+    zip::zip(zipfile = file, 
+             files = files_in,
+             mode = "cherry-pick")
   }
-  
-  zip::zip(zipfile = file_out, 
-           files = files_in,
-           mode = "cherry-pick")
-  
+
   if(!quiet){cli::cli_progress_done()}
   
-  invisible(file_out)
+  invisible(file)
 }
 
-#' Simple function to specify a zip file if no arg given
+#' Internal function to automatically build_schema() inside build_archive()
 #' @noRd
 #' @keywords Internal
-get_default_file <- function(file, error_call = rlang::caller_env()){
-  # browser()
-  
-  if(is.null(file)){
-    dir_path <- getwd()
-    dir_name <- basename(dir_path)
-    glue::glue("../{dir_name}.zip")
-  }else{
-    if(!grepl(".zip$", file)){
-      cli::cli_abort("{.arg destination} must specify a file name ending with `.zip`.",
-                     call = error_call)
-    }else{
-      file
+build_schema_internal <- function(source, quiet){
+  # offer user menu to confirm if not in batch run (testthat or knitr)
+  if(rlang::is_interactive() & !quiet){ 
+    
+    choice <- cli_menu(
+      c(" ",
+        "No schema ({.file meta.xml}) file detected.", 
+        "This is a required file in a Darwin Core Archive.", 
+        " "),
+      "Do you want to build a schema file now? (0 to exit)",
+      choices = c("Yes", "No")
+    )
+    
+    if (choice == 1) {
+      use_schema(quiet = quiet)
+    } else {
+      cli::cli_inform(c(
+        i = "Exiting..."
+      ))
+      # exits process quietly
+      invokeRestart("abort")
     }
-  }
-}
-
-#' Simple function to check `source` directory
-#' @description
-#' Checks whether a `data-publish` directory exists if no arg given
-#' @noRd
-#' @keywords Internal
-get_default_directory <- function(x, error_call = rlang::caller_env()){
-  
-  if(!missing(x)){
-    if(!dir.exists(x)){ # NOTE: Users will hit a `dir.exists(x)` error otherwise
-      c("Directory {.file {x}} not found.") |>
-        cli::cli_abort(call = error_call)
-    }else{
-      x
-    }
+    invisible()
+    
+  } 
+  else {
+    use_schema(quiet = quiet)
   }
 }
 

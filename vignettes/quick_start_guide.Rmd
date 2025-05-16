@@ -216,7 +216,7 @@ contains at least two files:
 We can now run `build_archive()` to build our Darwin Core Archive!
 
 ```{r eval=FALSE}
-build_archive()
+build_archive(file = "dwc-archive.zip")
 ```
 
 Running `build_archive()` first checks whether we have a 'schema' document (`meta.xml`) in our `data-publish` folder. This is a machine-readable `xml` document that describes the content of the archive's data files and their structure. The schema 
@@ -255,12 +255,14 @@ check_archive("dwc-archive.zip")
 
 ## Publish/share your archive
 
-<!-- 
-This is incomplete. Do we want a separate vignette on this?  
-Will there be a place on GitHub to share data?
--->
+The final step is to share your completed Darwin Core Archive with a data infrastructure like the Atlas of Living Australia. To share with the ALA, you can launch our data submission process in your browser by calling:
 
-The final step is to share your completed Darwin Core Archive with a 
-data infrastructure like the Atlas of Living Australia. To share with the 
-ALA, send your file and a brief description to [support@ala.org.au](mailto:support@ala.org.au).
+```{r}
+#| eval: false
+submit_archive()
+```
+
+This function will encourage you to open a GitHub Issue where you can attach your archive. We will run the galaxias test suite on your dataset and respond as soon as we can.
+
+If you'd prefer not to use GitHub, you can send your file and a brief description to [support@ala.org.au](mailto:support@ala.org.au).
 

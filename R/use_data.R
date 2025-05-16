@@ -163,9 +163,7 @@ use_data_occurrences <- function(df,
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
-  directory <- potions::pour("directory",
-                             .pkg = "galaxias")
-  usethis::use_directory(directory)
+  directory <- check_publish_directory(quiet = quiet)
   file_path <- fs::path(directory, "occurrences.csv")
   write_data_file(file_path,
                   df,
@@ -190,9 +188,7 @@ use_data_events <- function(df,
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
-  directory <- potions::pour("directory",
-                             .pkg = "galaxias")
-  usethis::use_directory(directory)
+  directory <- check_publish_directory(quiet = quiet)
   file_path <- fs::path(directory, "events.csv")
   write_data_file(file_path,
                   df, 

@@ -4,69 +4,73 @@
 #' A metadata statement lists the owner of the dataset, how it was collected,
 #' and how it can be used (i.e. its' licence). This function reads and
 #' converts metadata saved in markdown (.md), Rmarkdown (.Rmd) or Quarto (.qmd) 
-#' to xml, and saves it in the `destination` folder.
+#' to xml, and saves it in the publishing directory. This directory is 
+#' set using [galaxias_config()] and defaults to `"data-publish"`. folder.
 #' 
 #' This function is a convenience wrapper function of [delma::read_md()] and 
 #' [delma::write_eml()]. 
-#' @param source A metadata file in markdown (`.md`), Rmarkdown (`.Rmd`) or 
-#' Quarto markdown (`.qmd`). Defaults
-#' to `metadata.md`, which is the same as is created by [use_metadata_template()]
-#' @param destination A file name to save the resulting `.xml` file. Defaults to 
-#' `eml.xml`. Note that the file is saved to the `data-publish` directory, 
-#' unless changed using the `directory` argument of [galaxias_config()].
+#' @param file A metadata file in Rmarkdown (`.Rmd`) or Quarto markdown (`.qmd`)
+#' format.
 #' @param overwrite By default, `use_metadata()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
 #' @param quiet Whether to message about what is happening. Default is set to 
 #'  `FALSE`. 
+#' @details
+#' To be compliant with the Darwin Core Standard, the schema file **must** be
+#' called `eml.xml`, and this function enforces that.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file in the `data-publish` directory.
 #' @seealso [use_metadata_statement()] to create a metadata statement template.
+#' @examples
+#' \dontshow{
+#' .old_wd <- setwd(tempdir())
+#' }
+#' use_metadata_template(quiet = TRUE)
+#' use_metadata()
+#' \dontshow{
+#' setwd(.old_wd)
+#' }
 #' @export
-use_metadata <- function(source = "metadata.Rmd", 
-                         destination = "data-publish/eml.xml",
+use_metadata <- function(file = NULL, 
                          overwrite = FALSE,
                          quiet = FALSE){
   
-  # check file existence
-  if(!file.exists(source)){
-    cli::cli_abort("File {.file {source}} doesn't exist.")
-  }
+  # run checks on `file`
+  check_file_argument(file)
   
   # import file, ensure EML metadata is added, convert to XML
   if (!quiet) {
     progress_update("Reading metadata statement...")
   }
-  metadata_tibble <- delma::read_md(source)
+  metadata_tibble <- delma::read_md(file)
   
   # set up file paths, directories etc.
-  # directory <- potions::pour("directory",
-  #                            .pkg = "galaxias")
-  usethis::use_directory("data-publish")
-  destination <- fs::path(destination)
+  directory <- check_publish_directory(quiet = quiet)
+  file_path <- fs::path(directory, "eml.xml")
   
   # set writing behaviour
-  if(file.exists(destination)){
+  if(file.exists(file_path)){
     if(overwrite){
       if(!quiet){
-        cli::cli_progress_step("Overwriting {.file {destination}}.")
+        cli::cli_progress_step("Overwriting {.file {file_path}}.")
       }
       
-      delma::write_eml(metadata_tibble, file = destination)
+      delma::write_eml(metadata_tibble, file = file_path)
       
       if(!quiet){
         cli::cli_progress_done()
       }
     }else{
-      c("{.file {destination}} already exists.",
+      c("{.file {file_path}} already exists.",
         i = "Set `overwrite = TRUE` to overwrite existing file.") |>
         cli::cli_inform()     
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step("Writing {.file {destination}}.")
+      cli::cli_progress_step("Writing {.file {file_path}}.")
     }
     
-    delma::write_eml(metadata_tibble, file = destination)
+    delma::write_eml(metadata_tibble, file = file_path)
     
     if(!quiet){
       cli::cli_progress_done()

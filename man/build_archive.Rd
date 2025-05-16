@@ -4,14 +4,16 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(source = "data-publish", destination = NULL, quiet = FALSE)
+build_archive(file = NULL, overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{destination}{(string) A path in which to save the resulting zip file.
-If \code{NULL}, defaults to the parent directory of the working directory.}
+\item{file}{(string) A file name to save the resulting \code{.zip} file.}
 
-\item{quiet}{Whether to message about what is happening. Default is set to
+\item{overwrite}{(logical) Should existing files be overwritten? Defaults to
 \code{FALSE}.}
+
+\item{quiet}{(logical) Whether to suppress messages about what is happening.
+Default is set to \code{FALSE}; i.e. messages are shown.}
 }
 \value{
 Invisibly returns the location of the built zip file; but typically

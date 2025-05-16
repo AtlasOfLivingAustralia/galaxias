@@ -19,6 +19,14 @@ test_that("galaxias_config() rejects non-character directories", {
   expect_error(galaxias_config(directory = 100L))
 })
 
+test_that("galaxias_config() accepts non-default directories, but DOES NOT build them", {
+  dirname <- "MY-NEW-DIRECTORY"
+  galaxias_config(directory = dirname)
+  result <- galaxias_config()$directory
+  expect_equal(dirname, result)
+  expect_false(file.exists(result))
+})
+
 test_that("galaxias_config() rejects non-list GBIF entries", {
   expect_error(galaxias_config(gbif = data.frame(username = "hi",
                                                  email = "there",
