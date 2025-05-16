@@ -92,7 +92,7 @@ df
 #> 2 Eolophus roseicapilla       -35.3      149. 2023-01-15 present
 ```
 
-We can standardise data to Darwin Core Standard.
+We can standardise data according to Darwin Core Standard.
 
 ``` r
 df_dwc <- df |>
@@ -106,27 +106,27 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 451fce1e-2a… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 451fce28-2a… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 075b4280-31… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 075b4294-31… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
-Then specify we wish to use this data in a Darwin Core
-Archive.`use_data()` saves the `df_dwc`  
+Once standardised, we can specify that we wish to use these standardised
+data in a Darwin Core Archive.`use_data()` saves the `df_dwc`  
 with a valid csv file name and location.
 
 ``` r
 use_data(df_dwc)
 ```
 
-We can create a template metadata statement for our data.
+Create a template metadata statement for our data.
 
 ``` r
 use_metadata_template("metadata.Rmd")
 ```
 
-After editing, we can specify that we wish to use this file.
-`use_metadata()` converts our metadata to
+After editing, we can specify that we wish to use this metadata in a
+Darwin Core Archive. `use_metadata()` converts our metadata to
 [EML](https://eml.ecoinformatics.org/) format and saves it with a valid
 xml file name and location.
 
@@ -134,8 +134,8 @@ xml file name and location.
 use_metadata("metadata.Rmd")
 ```
 
-Finally, we can build our Darwin Core Archive and save it into our top
-folder directory as `dwc-archive.zip`.
+Build a Darwin Core Archive and save it to the parent directory of our
+working directory.
 
 ``` r
 build_archive()
@@ -145,12 +145,12 @@ Validate whether the constructed archive passes Darwin Core Standard
 criteria.
 
 ``` r
-check_archive("dwc-archive.zip")
+check_archive()
 ```
 
 See the [Quick Start
 Guide](https://galaxias.ala.org.au/articles/quick_start_guide.html) for
-an in-depth explanation of this process.
+an in-depth explanation of building Darwin Core Archives.
 
 ## Citing galaxias
 
