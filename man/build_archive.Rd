@@ -4,11 +4,14 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(destination = "dwc-archive.zip")
+build_archive(source = "data-publish", destination = NULL, quiet = FALSE)
 }
 \arguments{
-\item{destination}{(string) A file name to save the resulting zip file.
-Defaults to \code{./dwc-archive.zip}.}
+\item{destination}{(string) A path in which to save the resulting zip file.
+If \code{NULL}, defaults to the parent directory of the working directory.}
+
+\item{quiet}{Whether to message about what is happening. Default is set to
+\code{FALSE}.}
 }
 \value{
 Invisibly returns the location of the built zip file; but typically
@@ -16,10 +19,12 @@ called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip
 file).
 }
 \description{
-A Darwin Core archive is a zip file containing a specified combination of
+A Darwin Core archive is a zip file containing a combination of
 data and metadata. \code{build_archive()} constructs this zip file. It assumes
 that all necessary files have been pre-constructed, and can be found inside a
-single folder with no additional or redundant information. Structurally,
+single folder with no additional or redundant information.
+
+Structurally,
 \code{build_archive()} is similar to \code{devtools::build()}, in the sense that it
 takes a repository and wraps it for publication.
 }
@@ -42,7 +47,9 @@ Create a new template with \code{\link[=use_metadata_template]{use_metadata_temp
 \item Schema
 
 A 'schema' document in xml format with the file name \code{meta.xml}.
-This file can be constructed using \code{\link[=use_schema]{use_schema()}}.
+\code{build_archive()} will detect whether this file is present and build a
+schema file if missing. This file can also be constructed
+separately using \code{\link[=use_schema]{use_schema()}}.
 }
 
 \code{build_archive()} will not build a Darwin Core Archive with these files

@@ -44,13 +44,14 @@ reference:
   - use_data_occurrences
   - use_metadata
   - use_schema
-- title: Construct an archive
+- title: Archive management
   contents:
   - build_archive
-- title: Verify an archive meets Darwin Core Standard
-  contents:
   - check_directory
   - check_archive
+  - submit_archive
+- title: Package management
+  contents:
   - galaxias_config
   - print_report
 

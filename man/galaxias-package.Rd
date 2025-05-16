@@ -31,15 +31,16 @@ If you have any questions, comments or suggestions, please email
 \item \code{\link[=use_schema]{use_schema()}} Build a schema file (\code{meta.xml}) for a given directory and save for use in a Darwin Core Archive
 }
 
-\strong{Build an archive}
-\itemize{
-\item \code{\link[=build_archive]{build_archive()}} Convert a directory to a Darwin Core Archive
-}
-
-\strong{Verify an archive meets Darwin Core Standard}
+\strong{Archive management}
 \itemize{
 \item \code{\link[=check_directory]{check_directory()}} Check files in your local Darwin Core directory
+\item \code{\link[=build_archive]{build_archive()}} Convert a directory to a Darwin Core Archive
 \item \code{\link[=check_archive]{check_archive()}} Check whether archive passes Darwin Core criteria via the GBIF API
+\item \code{\link[=submit_archive]{submit_archive()}} Open a browser to submit your data to the ALA
+}
+
+\strong{Package management}
+\itemize{
 \item \code{\link[=galaxias_config]{galaxias_config()}} Store credentials for your API call
 \item \code{\link[=print_report]{print_report()}} Methods for displaying API responses
 }

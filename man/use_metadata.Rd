@@ -6,8 +6,9 @@
 \usage{
 use_metadata(
   source = "metadata.Rmd",
-  destination = "eml.xml",
-  overwrite = FALSE
+  destination = "data-publish/eml.xml",
+  overwrite = FALSE,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ unless changed using the \code{directory} argument of \code{\link[=galaxias_conf
 
 \item{overwrite}{By default, \code{use_metadata()} will not
 overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
+
+\item{quiet}{Whether to message about what is happening. Default is set to
+\code{FALSE}.}
 }
 \value{
 Does not return an object to the workspace; called for the side
