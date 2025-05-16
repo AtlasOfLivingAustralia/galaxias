@@ -19,12 +19,12 @@ print.gbif_validator_response <- function(x, n = 5, ...){
   
   # summary information first  
   cli::cli_h2("Validation report")
-  cli::cat_line(glue("Report from \'api.gbif.org.au/v1/validation\' for \'{x$username}\'"))
-  cli::cat_line(glue("File: {x$file}"))
-  cli::cat_line(glue("Date: {x$created}"))
-  cli::cat_line(glue("Key: {x$key}"))
+  cli::cat_line(glue::glue("Report from \'api.gbif.org.au/v1/validation\' for \'{x$username}\'"))
+  cli::cat_line(glue::glue("File: {x$file}"))
+  cli::cat_line(glue::glue("Date: {x$created}"))
+  cli::cat_line(glue::glue("Key: {x$key}"))
   if(x$status != "FAILED"){
-    cli::cat_line(glue("Status: {col_green(x$status)}"))
+    cli::cat_line(glue::glue("Status: {col_green(x$status)}"))
   }else{
     print_validator_issues(x, n = n)
   }

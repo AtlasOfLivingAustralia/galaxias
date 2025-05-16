@@ -7,7 +7,7 @@ test_that("galaxias_config() correctly stores information onload", {
 test_that("galaxias_config object is correctly stored", {
   obj <- potions::pour(.pkg = "galaxias")
   expect_true(inherits(obj, "galaxias_config"))
-  expect_equal(length(obj), 1)
+  expect_equal(length(obj), 2)
   expect_equal(length(obj$gbif), 3)
   expect_setequal(names(obj$gbif), 
                   c("username", "email", "password"))
@@ -22,4 +22,12 @@ test_that("galaxias_config() accepts a correctly-formatted list", {
   galaxias_config(gbif = credentials_obj)
   result <- potions::pour(.pkg = "galaxias")
   expect_identical(credentials_obj, result$gbif)
+  
+  # reset so that later runs of `test()` don't break
+  galaxias_config(directory = "data-publish",
+                  gbif = list(
+                    username = "",
+                    email = "",
+                    password = ""
+                  ))
 })

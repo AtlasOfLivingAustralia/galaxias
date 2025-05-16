@@ -21,7 +21,7 @@ test_that("cli_menu() does not infinite loop with invalid mocked input", {
     cli_menu(
       "Found multiple thingies.",
       "Which one do you want to use?",
-      glue("label {head(letters, 3)}")
+      glue::glue("label {head(letters, 3)}")
     )
   }
   
@@ -51,7 +51,7 @@ test_that("cli_menu(), request exit via 0", {
     cli_menu(
       "Found multiple thingies.",
       "Which one do you want to use?",
-      glue("label {head(letters, 3)}")
+      glue::glue("label {head(letters, 3)}")
     )
   }
   
