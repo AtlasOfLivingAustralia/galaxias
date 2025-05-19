@@ -15,29 +15,35 @@
 #' storing working files. Defaults to `data-publish`.
 #' @param gbif A list containing the entries `username`, `email` and `password`.
 #' @export
-galaxias_config <- function(directory = "data-publish",
+galaxias_config <- function(directory = NULL,
                             gbif = NULL){
   # check if all arguments are missing
   all_missing <- c(
     is.null(gbif),
     is.null(directory)
-    # missing(ala) # etc
   ) |>
     all()
   if(all_missing){ # if so, see whether data are already cached
-    if(length(potions::pour()) < 1) { # if no caching, set defaults
-      galaxias_default_config() |>
-        potions::brew()
-      potions::pour()
+    if(length(potions::pour(.pkg = "galaxias")) < 1) { # if no caching, set defaults
+      galaxias_default_config(directory = "data-publish") |>
+        potions::brew(.pkg = "galaxias")
+      potions::pour() # for display reasons; i.e. called for `print()`
     }else{ # if something is cached, return it
       potions::pour()
     }
   }else{ # if arguments are supplied, store them
-    if(!missing(gbif)){
+    # first directory
+    if(!is.null(directory)){
+      if(!inherits(directory, "character")){
+        cli::cli_abort("Argument `directory` should be of class `character`")
+      }
+      potions::brew(directory = directory)
+    }
+    # then gbif
+    if(!is.null(gbif)){
       check_gbif_credentials(gbif)
-      potions::brew(gbif = gbif, method = "leaves")
-    } # NOTE: no `else` required here, as that is handled above
-    # that will change once >1 service/organisation added
+    } 
+    potions::brew(gbif = gbif, method = "leaves")
   }
 }
 
@@ -47,7 +53,7 @@ galaxias_config <- function(directory = "data-publish",
 check_gbif_credentials <- function(x){
   
   # check is a list
-  if(!is.list(x)){
+  if(!inherits(x, "list")){
     cli::cli_abort("GBIF credentials should be supplied as a `list`.")
   }
   
@@ -58,7 +64,7 @@ check_gbif_credentials <- function(x){
   }
   
   # check list only contains characters
-  character_check <- map(x, is.character) |>
+  character_check <- purrr::map(x, is.character) |>
     unlist() |>
     all()
   if(!character_check){
@@ -75,9 +81,9 @@ check_gbif_credentials <- function(x){
 #' Set a 'default' object for storing config in `galah`
 #' @noRd
 #' @keywords Internal
-galaxias_default_config <- function(){
+galaxias_default_config <- function(directory){
   x <- list(
-    directory = "data-publish",
+    directory = directory,
     gbif = list(username = "",
                 email = "",
                 password = "")

@@ -27,7 +27,8 @@ The package is named for a genus of freshwater fish that is found only
 in the Southern Hemisphere, and predominantly in Australia and New
 Zealand. The logo shows a [Spotted
 Galaxias](https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec)
-(*Galaxias truttaceus*) drawn by Ian Brennan.
+(*Galaxias truttaceus*) drawn by [Ian
+Brennan](http://www.iangbrennan.org).
 
 If you have any comments, questions or suggestions, please [contact
 us](mailto:support@ala.org.au).
@@ -106,8 +107,8 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 075b4280-31… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 075b4294-31… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 88a46072-34… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 88a4607c-34… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
@@ -134,18 +135,17 @@ xml file name and location.
 use_metadata("metadata.Rmd")
 ```
 
-Build a Darwin Core Archive and save it to the parent directory of our
-working directory.
+Build a Darwin Core Archive and save it to the working directory.
 
 ``` r
-build_archive()
+build_archive("dwca.zip")
 ```
 
 Validate whether the constructed archive passes Darwin Core Standard
 criteria.
 
 ``` r
-check_archive()
+check_archive("dwca.zip")
 ```
 
 See the [Quick Start
@@ -163,9 +163,8 @@ citation(package = "galaxias")
 
 The current recommended citation is:
 
-> Westgate MJ, Balasubramaniam S & Kellie D (2024) galaxias:
-> Standardise, Document and Share Biodiversity Data. R Package version
-> 0.1.0.
+> Westgate MJ, Balasubramaniam S & Kellie D (2025) galaxias: Describe,
+> Package, and Share Biodiversity Data. R Package version 0.1.0.
 
 ## Contributors
 

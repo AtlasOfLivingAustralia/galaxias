@@ -5,43 +5,52 @@
 #' This map makes it easier to reconstruct one or more related datasets so that 
 #' information is matched correctly. It works by detecting column names on csv 
 #' files in a specified directory; these should all be Darwin Core terms for 
-#' this function to produce reliable results.
-#' @param source A folder containing one or more data csv files 
-#' `occurrences.csv`, `events.csv` or `multimedia.csv`. Defaults to `data-publish/`.
-#' @param destination A file name for the resulting schema document. Defaults
-#' to `meta.xml` for consistency with the Darwin Core standard. Note this
-#' file is placed within the working directory specified by [galaxias_config()].
-#' @param quiet Whether to message about what is happening. Default is set to 
-#'  `FALSE`. 
+#' this function to produce reliable results. The publishing directory is 
+#' set using [galaxias_config()] and defaults to `"data-publish"`.
+#' @param overwrite By default, `use_schema()` will not 
+#'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
+#' @param quiet (logical) Should progress messages be suppressed? Default is 
+#' set to `FALSE`; i.e. messages are shown. 
+#' @details
+#' To be compliant with the Darwin Core Standard, the schema file **must** be
+#' called `meta.xml`, and this function enforces that.
 #' @returns Does not return an object to the workspace; called for the side
-#' effect of building a schema file in the specified directory.
+#' effect of building a schema file in the publication directory.
+#' @examples
+#' \dontshow{
+#' .old_wd <- setwd(tempdir())
+#' }
+#' use_schema()
+#' \dontshow{
+#' setwd(.old_wd)
+#' }
 #' @export
-use_schema <- function(source = "data-publish",
-                       destination = "data-publish/meta.xml",
+use_schema <- function(overwrite = FALSE, 
                        quiet = FALSE) {
   if(!quiet) {
     cli::cli_alert_info("Building schema")
   }
   
-  # directory <- potions::pour("directory", 
-  #                            .pkg = "galaxias")
-  usethis::use_directory(source)
-  
-  # detect files
-  files <- detect_dwc_files(source, quiet)
-  
-  # build schema wireframe in a tibble 
-  wireframe <- add_dwc_cols(files, quiet)
-  
-  # front matter
-  schema <- add_front_matter(wireframe, quiet)
+  directory <- check_publish_directory(quiet = quiet)
+  file_path <- fs::path(directory, "meta.xml")
+
+  if(file.exists(file_path) & !overwrite){
+    cli::cli_abort(c("File {.file {file_path}} already exists and has not been overwritten",
+                   i = "To change this, set `overwrite = TRUE`"))
+  }
+
+  # build schema
+  schema <- directory |>
+    detect_dwc_files(quiet = quiet) |>  # detect files
+    add_dwc_cols(quiet = quiet) |>      # build schema wireframe in a tibble 
+    add_front_matter(quiet = quiet)     # convert into a schema
   
   if(!quiet) {
-    cli::cli_alert_success("Writing {.file {destination}}.")
+    cli::cli_alert_success("Writing {.file {file_path}}.")
   }
   
   schema |>
-    delma::write_eml(file = destination)
+    delma::write_eml(file = file_path)
   
   if(!quiet) {
     cli::cli_progress_done()
@@ -104,7 +113,8 @@ detect_dwc_files <- function(directory,
       )
     )
   
-  available_exts$present |> purrr::map_lgl(isTRUE)
+  # available_exts$present |> purrr::map_lgl(isTRUE) 
+  # this code doesn't appear to do anything?!
   
   # message
   if(!quiet){

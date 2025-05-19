@@ -1,0 +1,13 @@
+year <- format(Sys.Date(), "%Y")
+note <- sprintf("R package version %s", meta$Version)
+
+citHeader("To cite galaxias in publications use:")
+
+bibentry(bibtype = "Manual",
+    "title" = "galaxias: Describe, Package, and Share Biodiversity Data",
+    author = c(person("Martin", "Westgate"),
+               person("Shandiya", "Balasubramaniam"),
+               person("Dax", "Kellie")),
+     year = year,
+     note = note,
+     url = "https://galaxias.ala.org.au")

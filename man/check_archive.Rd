@@ -5,15 +5,13 @@
 \alias{get_report}
 \title{Check whether a Darwin Core Archive meets Darwin Core Standard via API}
 \usage{
-check_archive(source = "dwc-archive.zip", provider = "GBIF")
+check_archive(file = NULL, provider = "GBIF")
 
 get_report(key)
 }
 \arguments{
-\item{source}{(string) A file name (ending in .zip) of the specified Darwin
-Core Archive.
-Defaults to the \code{dwc-archive.zip} within the top folder of the current
-working directory.}
+\item{file}{(string) A file name (ending in .zip) of the specified Darwin
+Core Archive.}
 
 \item{provider}{(string) The institution to be queried for validation
 services. Currently only \code{"GBIF"} is supported.}

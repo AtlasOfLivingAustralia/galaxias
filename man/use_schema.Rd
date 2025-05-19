@@ -4,24 +4,37 @@
 \alias{use_schema}
 \title{Create a \code{schema} for a Darwin Core Archive}
 \usage{
-use_schema(source = "data-publish", destination = "meta.xml")
+use_schema(overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{source}{A folder containing one or more data csv files
-\code{occurrences.csv}, \code{events.csv} or \code{multimedia.csv}. Defaults to \verb{data-publish/}.}
+\item{overwrite}{By default, \code{use_schema()} will not
+overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 
-\item{destination}{A file name for the resulting schema document. Defaults
-to \code{meta.xml} for consistency with the Darwin Core standard. Note this
-file is placed within the working directory specified by \code{\link[=galaxias_config]{galaxias_config()}}.}
+\item{quiet}{(logical) Should progress messages be suppressed? Default is
+set to \code{FALSE}; i.e. messages are shown.}
 }
 \value{
 Does not return an object to the workspace; called for the side
-effect of building a schema file in the specified directory.
+effect of building a schema file in the publication directory.
 }
 \description{
 A schema is an xml document that maps the files and field names in a DwCA.
 This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
-this function to produce reliable results.
+this function to produce reliable results. The publishing directory is
+set using \code{\link[=galaxias_config]{galaxias_config()}} and defaults to \code{"data-publish"}.
+}
+\details{
+To be compliant with the Darwin Core Standard, the schema file \strong{must} be
+called \code{meta.xml}, and this function enforces that.
+}
+\examples{
+\dontshow{
+.old_wd <- setwd(tempdir())
+}
+use_schema()
+\dontshow{
+setwd(.old_wd)
+}
 }

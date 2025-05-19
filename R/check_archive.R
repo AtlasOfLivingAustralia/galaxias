@@ -6,10 +6,8 @@
 #' `check_archive()` tests the specified archive using an online validation 
 #' service by sending the archive via an API and returning the results. 
 #' Currently only supports validation using GBIF.
-#' @param source (string) A file name (ending in .zip) of the specified Darwin 
-#' Core Archive. 
-#' Defaults to the `dwc-archive.zip` within the top folder of the current 
-#' working directory.
+#' @param file (string) A file name (ending in .zip) of the specified Darwin 
+#' Core Archive.
 #' @param provider (string) The institution to be queried for validation 
 #' services. Currently only `"GBIF"` is supported.
 #' @returns Invisibly returns a tibble to the workspace containing validation 
@@ -31,16 +29,12 @@
 #' rather than via API.
 #' @order 1
 #' @export
-check_archive <- function(source = "dwc-archive.zip",
+check_archive <- function(file = NULL,
                           provider = "GBIF"){
   
-  if(!file.exists(source)){
-    c("File {.file {source}} not found.") |>
-      cli::cli_abort()
-  }
-  
-  # must supply a zip file
-  if(!grepl(".zip$", source)){
+  # run checks on `file`
+  check_file_argument(file)
+  if(!grepl(".zip$", file)){
     bullets <- c(
       "Must supply a zip file.",
       i = "`check_archive()` only accepts a completed Darwin Core Archive saved as a zip file."

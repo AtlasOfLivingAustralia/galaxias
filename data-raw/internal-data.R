@@ -25,8 +25,8 @@ library(dplyr)
 ## Processing for DwC terms - rerun only when updates needed
 dwc_terms <- read_csv("https://raw.githubusercontent.com/tdwg/rs.tdwg.org/master/terms/terms.csv")
 dwc_terms <- dwc_terms |>
-  mutate(url = glue("{term_isDefinedBy}{term_localName}"),
-         description = sub(" NA$", "", glue("{rdfs_comment} {dcterms_description}")),
+  mutate(url = glue::glue("{term_isDefinedBy}{term_localName}"),
+         description = sub(" NA$", "", glue::glue("{rdfs_comment} {dcterms_description}")),
          class = sub("^http://rs.tdwg.org/dwc/terms/|http://purl.org/dc/terms/", "", tdwgutility_organizedInClass)) |>
   filter(is.na(term_deprecated),
          grepl("Property$", rdf_type)) |>
