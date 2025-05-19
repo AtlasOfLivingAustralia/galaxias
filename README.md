@@ -107,8 +107,8 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… ec8db6c4-31… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… ec8db6ce-31… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 88a46072-34… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 88a4607c-34… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
@@ -135,18 +135,17 @@ xml file name and location.
 use_metadata("metadata.Rmd")
 ```
 
-Build a Darwin Core Archive and save it to the parent directory of our
-working directory.
+Build a Darwin Core Archive and save it to the working directory.
 
 ``` r
-build_archive()
+build_archive("dwca.zip")
 ```
 
 Validate whether the constructed archive passes Darwin Core Standard
 criteria.
 
 ``` r
-check_archive()
+check_archive("dwca.zip")
 ```
 
 See the [Quick Start
@@ -164,9 +163,8 @@ citation(package = "galaxias")
 
 The current recommended citation is:
 
-> Westgate MJ, Balasubramaniam S & Kellie D (2024) galaxias:
-> Standardise, Document and Share Biodiversity Data. R Package version
-> 0.1.0.
+> Westgate MJ, Balasubramaniam S & Kellie D (2025) galaxias: Describe,
+> Package, and Share Biodiversity Data. R Package version 0.1.0.
 
 ## Contributors
 

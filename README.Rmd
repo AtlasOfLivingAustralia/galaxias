@@ -133,18 +133,18 @@ metadata to [EML](https://eml.ecoinformatics.org/) format and saves it with a va
 use_metadata("metadata.Rmd")
 ```
 
-Build a Darwin Core Archive and save it to the parent directory of our working directory.
+Build a Darwin Core Archive and save it to the working directory.
 
 ```{r}
 #| eval: false
-build_archive()
+build_archive("dwca.zip")
 ```
 
 Validate whether the constructed archive passes Darwin Core Standard criteria.
 
 ```{r}
 #| eval: false
-check_archive()
+check_archive("dwca.zip")
 ```
 
 See the [Quick Start Guide](https://galaxias.ala.org.au/articles/quick_start_guide.html) for an in-depth explanation of building Darwin Core Archives.
@@ -159,8 +159,8 @@ citation(package = "galaxias")
 
 The current recommended citation is:
 
-> Westgate MJ, Balasubramaniam S & Kellie D (2024) galaxias: Standardise, 
-> Document and Share Biodiversity Data. R Package version 0.1.0.
+> Westgate MJ, Balasubramaniam S & Kellie D (2025) galaxias: Describe, Package, 
+> and Share Biodiversity Data. R Package version 0.1.0.
 
 ## Contributors
 Developers who have contributed to `galaxias` are as follows (in alphabetical 
