@@ -219,9 +219,9 @@ data in the <code>data_publish</code> folder with the correct file name
 <p>A critical part of a Darwin Core archive is a metadata statement;
 this tells users who owns the data, what the data were collected for,
 and what uses they can be put to (i.e. a data licence). To get an
-example statement, call <code><a href="https://delma.ala.org.au/reference/use_metadata_template.html" class="external-link">use_metadata_template()</a></code>.</p>
+example statement, call <code><a href="https://rdrr.io/pkg/delma/man/use_metadata_template.html" class="external-link">use_metadata_template()</a></code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://delma.ala.org.au/reference/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/delma/man/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>By default, this creates an R Markdown template named
 <code>metadata.Rmd</code> in your top working directory. Here’s a small
 example of what <code>metadata.Rmd</code> looks like.</p>
@@ -250,7 +250,7 @@ Core Archives, and saves it as <code>eml.xml</code> in the
 <p>We can now run <code><a href="../reference/build_archive.html">build_archive()</a></code> to build our Darwin Core
 Archive!</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/build_archive.html">build_archive</a></span><span class="op">(</span>file <span class="op">=</span> <span class="st">"dwc-archive.zip"</span><span class="op">)</span></span></code></pre></div>
 <p>Running <code><a href="../reference/build_archive.html">build_archive()</a></code> first checks whether we have a
 ‘schema’ document (<code>meta.xml</code>) in our
 <code>data-publish</code> folder. This is a machine-readable
@@ -293,13 +293,17 @@ an archive against GBIF’s API tests.</p>
 <div class="section level2">
 <h2 id="publishshare-your-archive">Publish/share your archive<a class="anchor" aria-label="anchor" href="#publishshare-your-archive"></a>
 </h2>
-<!-- 
-This is incomplete. Do we want a separate vignette on this?  
-Will there be a place on GitHub to share data?
--->
 <p>The final step is to share your completed Darwin Core Archive with a
 data infrastructure like the Atlas of Living Australia. To share with
-the ALA, send your file and a brief description to <a href="mailto:support@ala.org.au">support@ala.org.au</a>.</p>
+the ALA, you can launch our data submission process in your browser by
+calling:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/submit_archive.html">submit_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>This function will encourage you to open a GitHub Issue where you can
+attach your archive. We will run the galaxias test suite on your dataset
+and respond as soon as we can.</p>
+<p>If you’d prefer not to use GitHub, you can send your file and a brief
+description to <a href="mailto:support@ala.org.au">support@ala.org.au</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

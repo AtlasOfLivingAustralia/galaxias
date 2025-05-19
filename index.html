@@ -66,7 +66,7 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p><code>galaxias</code> is an R package that helps users describe, bundle and share biodiversity information using the <a href="https://dwc.tdwg.org" class="external-link">‘Darwin Core’</a> data standard. <code>galaxias</code> provides tools in R to build a <a href="">Darwin Core Archive</a>, a zip file containing standardised data and metadata accepted by global data infrastructures. The package mirrors functionality in <a href="https://devtools.r-lib.org/" class="external-link">devtools</a>, <a href="https://usethis.r-lib.org/" class="external-link">usethis</a> and <a href="https://dplyr.tidyverse.org/" class="external-link">dplyr</a> to manage data, files and folders. <code>galaxias</code> was created by the <a href="https://labs.ala.org.au" class="external-link">Science &amp; Decision Support Team</a> at the <a href="https://www.ala.org.au" class="external-link">Atlas of Living Australia</a> (ALA).</p>
-<p>The package is named for a genus of freshwater fish that is found only in the Southern Hemisphere, and predominantly in Australia and New Zealand. The logo shows a <a href="https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec" class="external-link">Spotted Galaxias</a> (<em>Galaxias truttaceus</em>) drawn by Ian Brennan.</p>
+<p>The package is named for a genus of freshwater fish that is found only in the Southern Hemisphere, and predominantly in Australia and New Zealand. The logo shows a <a href="https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec" class="external-link">Spotted Galaxias</a> (<em>Galaxias truttaceus</em>) drawn by <a href="http://www.iangbrennan.org" class="external-link">Ian Brennan</a>.</p>
 <p>If you have any comments, questions or suggestions, please <a href="mailto:support@ala.org.au">contact us</a>.</p>
 </div>
 <div class="section level2">
@@ -133,8 +133,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
 <span><span class="co">#&gt;   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;                   &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;        &lt;chr&gt;           </span></span>
-<span><span class="co">#&gt; 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 075b4280-31… present         </span></span>
-<span><span class="co">#&gt; 2 Eolophus roseicapilla   2023-01-15 humanObserva… 075b4294-31… present         </span></span>
+<span><span class="co">#&gt; 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 88a46072-34… present         </span></span>
+<span><span class="co">#&gt; 2 Eolophus roseicapilla   2023-01-15 humanObserva… 88a4607c-34… present         </span></span>
 <span><span class="co">#&gt; # ℹ 2 more variables: decimalLatitude &lt;dbl&gt;, decimalLongitude &lt;dbl&gt;</span></span></code></pre></div>
 <p>Once standardised, we can specify that we wish to use these standardised data in a Darwin Core Archive.<code><a href="reference/use_data.html">use_data()</a></code> saves the <code>df_dwc</code><br>
 with a valid csv file name and location.</p>
@@ -142,16 +142,16 @@ with a valid csv file name and location.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="reference/use_data.html">use_data</a></span><span class="op">(</span><span class="va">df_dwc</span><span class="op">)</span></span></code></pre></div>
 <p>Create a template metadata statement for our data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://delma.ala.org.au/reference/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="st">"metadata.Rmd"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/delma/man/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="st">"metadata.Rmd"</span><span class="op">)</span></span></code></pre></div>
 <p>After editing, we can specify that we wish to use this metadata in a Darwin Core Archive. <code><a href="reference/use_metadata.html">use_metadata()</a></code> converts our metadata to <a href="https://eml.ecoinformatics.org/" class="external-link">EML</a> format and saves it with a valid xml file name and location.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/use_metadata.html">use_metadata</a></span><span class="op">(</span><span class="st">"metadata.Rmd"</span><span class="op">)</span></span></code></pre></div>
-<p>Build a Darwin Core Archive and save it to the parent directory of our working directory.</p>
+<p>Build a Darwin Core Archive and save it to the working directory.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="st">"dwca.zip"</span><span class="op">)</span></span></code></pre></div>
 <p>Validate whether the constructed archive passes Darwin Core Standard criteria.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/check_archive.html">check_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/check_archive.html">check_archive</a></span><span class="op">(</span><span class="st">"dwca.zip"</span><span class="op">)</span></span></code></pre></div>
 <p>See the <a href="https://galaxias.ala.org.au/articles/quick_start_guide.html">Quick Start Guide</a> for an in-depth explanation of building Darwin Core Archives.</p>
 </div>
 <div class="section level2">
@@ -162,7 +162,7 @@ with a valid csv file name and location.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"galaxias"</span><span class="op">)</span></span></code></pre></div>
 <p>The current recommended citation is:</p>
 <blockquote>
-<p>Westgate MJ, Balasubramaniam S &amp; Kellie D (2024) galaxias: Standardise, Document and Share Biodiversity Data. R Package version 0.1.0.</p>
+<p>Westgate MJ, Balasubramaniam S &amp; Kellie D (2025) galaxias: Describe, Package, and Share Biodiversity Data. R Package version 0.1.0.</p>
 </blockquote>
 </div>
 <div class="section level2">
