@@ -1,4 +1,4 @@
-#' Check whether contents of folder directory meet Darwin Core Standard
+#' Check whether contents of directory comply with the Darwin Core Standard
 #' 
 #' @description
 #' Supply a folder containing files for a Darwin Core Archive to check whether 

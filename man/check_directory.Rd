@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_directory.R
 \name{check_directory}
 \alias{check_directory}
-\title{Check whether contents of folder directory meet Darwin Core Standard}
+\title{Check whether contents of directory comply with the Darwin Core Standard}
 \usage{
 check_directory(source = "data-publish")
 }

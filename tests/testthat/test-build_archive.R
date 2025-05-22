@@ -1,45 +1,3 @@
-test_that("build_archive() fails when file name not given", {
-  # set up
-  current_wd <- here::here()
-  temp_dir <- withr::local_tempdir()
-  usethis::local_project(temp_dir, force = TRUE)
-  
-  # tests
-  build_archive() |>
-    expect_error("Argument `file` is missing")
-  
-  # clean up
-  unlink(temp_dir)  
-})
-
-test_that("build_archive() fails when file name doesn't end in `.zip`", {
-  # set up
-  current_wd <- here::here()
-  temp_dir <- withr::local_tempdir()
-  usethis::local_project(temp_dir, force = TRUE)
-  
-  # tests
-  build_archive(file = "dwca.csv") |>
-    expect_error("`file` must specify a file name ending with")
-  
-  # clean up
-  unlink(temp_dir)  
-})
-
-test_that("build_archive() fails when can't find directory", {
-  # set up
-  current_wd <- here::here()
-  temp_dir <- withr::local_tempdir()
-  usethis::local_project(temp_dir, force = TRUE)
-
-  # tests
-  build_archive(file = "dwca.zip", quiet = TRUE) |>
-    expect_error("Directory")
-  
-  # clean up
-  unlink(temp_dir)
-})
-
 test_that("build_archive() fails when specified directory is missing all files", {
   # set up
   current_wd <- here::here()
@@ -48,23 +6,23 @@ test_that("build_archive() fails when specified directory is missing all files",
   usethis::use_directory("data-publish")
   
   # tests
-  build_archive(file = "dwca.zip", quiet = TRUE) |>
-    expect_error("No files found")
+  build_archive(quiet = TRUE) |>
+    expect_error("No files found in")
   
   # clean up
   unlink("data-publish")
   unlink(temp_dir)
 })
 
-test_that("build_archive() works, respecting `overwrite`", {
+test_that("build_archive() works with no arguments", {
   # set up
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
+  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
-  use_metadata(file = "metadata.Rmd",
-               quiet = TRUE)
+  use_metadata("metadata.Rmd", quiet = TRUE)
   df <- tibble::tibble(
     decimalLatitude = c(44.4, 44.4)
   ) |>
@@ -74,23 +32,17 @@ test_that("build_archive() works, respecting `overwrite`", {
     write.csv("data-publish/occurrences.csv")
   use_schema(quiet = TRUE)
   
-  # test building first time works
-  file_out <- "dwca.zip"
-  build_archive(file = file_out, quiet = TRUE) |>
+  # tests
+  build_archive(quiet = TRUE) |>
     expect_no_error()
-  file.exists(file_out) |>
-    expect_true()
-  
-  # overwrite should fail
-  build_archive(file = file_out, quiet = TRUE) |>
-    expect_error()
-  
-  # this can be overidden 
-  build_archive(file = file_out, overwrite = TRUE, quiet = TRUE) |>
-    expect_no_error()
+
+  archive_name <- glue::glue("{basename(temp_dir)}.zip")
+  expect_in(archive_name, 
+            list.files(".."))
   
   # clean up
-  unlink(file_out)
+  galaxias_config(archive = glue::glue("{here::here()}.zip"))
+  unlink(glue::glue("../{archive_name}"))
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
@@ -101,10 +53,10 @@ test_that("build_archive() messages work", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
+  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
-  use_metadata(file = "metadata.Rmd",
-               quiet = TRUE)
+  use_metadata("metadata.Rmd", quiet = TRUE)
   df <- tibble::tibble(
     decimalLatitude = c(44.4, 44.4)
   ) |>
@@ -117,15 +69,16 @@ test_that("build_archive() messages work", {
   # tests
   build_archive_messages <- function(x) {
     local_user_input(x)
-    build_archive(file = "dwca.zip")
+    build_archive()
   }
   msgs <- fix_filenames(fix_times(capture_cli_messages(build_archive_messages(1))))
   expect_snapshot(msgs)
   
   # clean up
+  galaxias_config(archive = glue::glue("{here::here()}.zip"))
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwca.zip")
+  unlink(glue::glue("../{basename(temp_dir)}.zip"))
   unlink(temp_dir)
 })
 
@@ -135,10 +88,10 @@ test_that("build_archive() menu appears", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
+  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
-  use_metadata(file = "metadata.Rmd",
-               quiet = TRUE)
+  use_metadata("metadata.Rmd", quiet = TRUE)
   df <- tibble::tibble(
     decimalLatitude = c(44.4, 44.4)
   ) |>
@@ -150,15 +103,16 @@ test_that("build_archive() menu appears", {
   # tests
   build_archive_with_mock <- function(x) {
     local_user_input(x)
-    build_archive(file = "dwca.zip")
+    build_archive()
   }
   msgs <- fix_filenames(fix_times(capture_cli_messages(build_archive_with_mock(1))))
   expect_snapshot(msgs)
   
   # clean up
+  galaxias_config(archive = glue::glue("{here::here()}.zip"))
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink("dwca.zip")
+  unlink(glue::glue("../{basename(temp_dir)}.zip"))
   unlink(temp_dir)
 })
 
@@ -167,10 +121,10 @@ test_that("build_archive() builds schema when missing", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
+  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
-  use_metadata(file = "metadata.Rmd",
-               quiet = TRUE)
+  use_metadata("metadata.Rmd", quiet = TRUE)
   df <- tibble::tibble(
     decimalLatitude = c(44.4, 44.4)
   ) |>
@@ -180,17 +134,17 @@ test_that("build_archive() builds schema when missing", {
     write.csv("data-publish/occurrences.csv")
   
   # tests
-  archive_name <- "dwca.zip"
-  build_archive(file = archive_name, 
-                quiet = TRUE) |>
+  build_archive(quiet = TRUE) |>
     expect_no_error()
-  expect_in(archive_name, list.files())
+  archive_name <- glue::glue("{basename(temp_dir)}.zip")
+  expect_in(archive_name, list.files(".."))
   expect_in("meta.xml", list.files("data-publish"))
   
   # clean up
+  galaxias_config(archive = glue::glue("{here::here()}.zip"))
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink(archive_name)
+  unlink(glue::glue("../{archive_name}"))
   unlink(temp_dir)
 })
 
@@ -202,12 +156,10 @@ test_that("build_archive() fails when missing data", {
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
-  use_metadata(file = "metadata.Rmd",
-               quiet = TRUE)
+  use_metadata("metadata.Rmd", quiet = TRUE)
   
   # tests
-  build_archive(file = "dwca.zip", 
-                quiet = TRUE) |>
+  build_archive(quiet = TRUE) |>
     expect_error()
   
   # clean up
@@ -231,7 +183,7 @@ test_that("build_archive() fails when missing metadata", {
     write.csv("data-publish/occurrences.csv")
   
   # tests
-  build_archive(file = "dwca.zip", quiet = TRUE) |>
+  build_archive(quiet = TRUE) |>
     expect_error()
   
   # clean up

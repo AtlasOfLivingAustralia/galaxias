@@ -4,7 +4,9 @@
 #' A Darwin Core archive is a zip file containing a combination of 
 #' data and metadata. `build_archive()` constructs this zip file. It assumes 
 #' that all necessary files have been pre-constructed, and can be found inside a 
-#' single folder with no additional or redundant information. 
+#' single folder with no additional or redundant information. Both the source
+#' folder and the name of the destination `.zip` file are set using 
+#' [galaxias_config()].
 #' 
 #' Structurally, 
 #' `build_archive()` is similar to `devtools::build()`, in the sense that it 
@@ -37,7 +39,6 @@
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
 #' folder in the parent directory by default.
-#' @param file (string) A file name to save the resulting `.zip` file.
 #' @param overwrite (logical) Should existing files be overwritten? Defaults to 
 #' `FALSE`.
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
@@ -47,15 +48,16 @@
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
-build_archive <- function(file = NULL,
-                          overwrite = FALSE,
+build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {
   
-  # run checks on `file`
-  check_file_argument(file, must_exist = FALSE)
-  if(!grepl(".zip$", file)){
-    cli::cli_abort("{.arg file} must specify a file name ending with `.zip`.")
-  }
+  # run checks on `archive`
+  destination <- potions::pour("archive",
+                               .pkg = "galaxias")
+  check_file_argument(destination, 
+                      must_exist = FALSE) 
+  # This check is probably redundant given behaviour of `galaxias_config()`,
+  # but kept for safety reasons.
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -87,30 +89,30 @@ build_archive <- function(file = NULL,
     progress_update("Creating zip folder...")
   }
   
-  if(file.exists(file)){
+  if(file.exists(destination)){
     if(overwrite){
       if(!quiet){
-        cli::cli_progress_step("Overwriting {.file {file}}.")
+        cli::cli_progress_step("Overwriting {.file {destination}}.")
       }
-      zip::zip(zipfile = file, 
+      zip::zip(zipfile = destination, 
                files = files_in,
                mode = "cherry-pick")
     }else{
-      cli::cli_abort(c("{.file {file}} already exists and has not been overwritten",
+      cli::cli_abort(c("{.file {destination}} already exists and has not been overwritten",
                        i = "set `overwrite = TRUE` to change this behaviour"))
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step("Writing {.file {file}}.")
+      cli::cli_progress_step("Writing {.file {destination}}.")
     }
-    zip::zip(zipfile = file, 
+    zip::zip(zipfile = destination, 
              files = files_in,
              mode = "cherry-pick")
   }
 
   if(!quiet){cli::cli_progress_done()}
   
-  invisible(file)
+  invisible(destination)
 }
 
 #' Internal function to automatically build_schema() inside build_archive()

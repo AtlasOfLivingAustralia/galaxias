@@ -5,15 +5,24 @@
 \alias{print.galaxias_config}
 \title{Provide configuration information to \code{galaxias}}
 \usage{
-galaxias_config(directory = NULL, gbif = NULL)
+galaxias_config(
+  directory = "data-publish",
+  archive = glue::glue("{here::here()}.zip"),
+  gbif = NULL
+)
 
 \method{print}{galaxias_config}(x, ...)
 }
 \arguments{
-\item{directory}{A string giving the name of the directory to be used for
-storing working files. Defaults to \code{data-publish}.}
+\item{directory}{A string giving the name of the directory that will contain
+working files. Defaults to \code{data-publish}.}
 
-\item{gbif}{A list containing the entries \code{username}, \code{email} and \code{password}.}
+\item{archive}{A string giving the name of the archive file, created using
+\code{\link[=build_archive]{build_archive()}} and checked with \code{\link[=check_archive]{check_archive()}}. Must include the
+full file path; see details for more information.}
+
+\item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
+\code{password}. Only required if you intend to call \code{\link[=check_archive]{check_archive()}}.}
 
 \item{x}{An object of class \code{galaxias_config}, created with
 \code{galaxias_config()}.}
@@ -28,8 +37,13 @@ also enables you to change the directory where working documents are stored,
 which defaults to \code{data-publish}.
 }
 \details{
-Note that unlike \code{galah}, you cannot set a 'default' provider in \code{galaxias};
-the organisation is always an argument to the function in question. Also
-unlike \code{galah}, \code{galaxias_config()} enables you to store configuration
-details for multiple organisations at once.
+The \code{archive} argument must be a full file name including path. The default
+is \code{glue::glue("{here::here()}.zip")} which places it adjacent to the working
+directory, with the same name, mimicking \code{devtools::build()}. Sensible
+alternatives might include:
+\itemize{
+\item \code{here::here("my-archive.zip")} for placing \emph{within} the working directory.
+\item \code{glue::glue("{here::here() |> dirname()}/my-archive.zip")} for placing your file
+in the same \emph{directory} as the default, but with a different file name.
+}
 }

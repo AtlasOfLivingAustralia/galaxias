@@ -31,7 +31,7 @@
 #' setwd(.old_wd)
 #' }
 #' @export
-use_metadata <- function(file = NULL, 
+use_metadata <- function(file = NULL,
                          overwrite = FALSE,
                          quiet = FALSE){
   

@@ -4,15 +4,19 @@ test_that("potions::pour creates the correct object", {
 })
 
 test_that("galaxias_config() creates default object onload", {
-  obj <- potions::pour(.pkg = "galaxias")
-  expect_equal(obj, 
-               galaxias_default_config(directory = "data-publish"))  
+  cached_obj <- potions::pour(.pkg = "galaxias")
+  comparison_obj <- galaxias_default_config(
+    directory = "data-publish",
+    archive = glue::glue("{here::here()}.zip"))
+  expect_identical(cached_obj, comparison_obj)  
 })
 
 test_that("galaxias_config() returns an object if all args are missing", {
-  result <- galaxias_config()
-  expect_equal(result, 
-               galaxias_default_config(directory = "data-publish"))  
+  cached_obj <- galaxias_config()
+  comparison_obj <- galaxias_default_config(
+    directory = "data-publish",
+    archive = glue::glue("{here::here()}.zip"))
+  expect_identical(cached_obj, comparison_obj) 
 })
 
 test_that("galaxias_config() rejects non-character directories", {
@@ -25,6 +29,24 @@ test_that("galaxias_config() accepts non-default directories, but DOES NOT build
   result <- galaxias_config()$directory
   expect_equal(dirname, result)
   expect_false(file.exists(result))
+  # restore defaults
+  galaxias_config(directory = "data-publish",
+                  archive = glue::glue("{here::here()}.zip"))
+})
+
+test_that("galaxias_config() rejects non-character archives", {
+  expect_error(galaxias_config(archive = 100L),
+               label = "`archive` should be of class `character`")
+})
+
+test_that("galaxias_config() rejects archives that do not end in `.zip`", {
+  expect_error(galaxias_config(archive = "a/destination/ending/in/archive.csv"),
+               label = "`archive` must specify a file name ending with `.zip`.")
+})
+
+test_that("galaxias_config() rejects archive paths that don't exist", {
+  expect_error(galaxias_config(archive = "a/destination/ending/in/archive.zip"),
+               label = "`archive` must specify a valid path")
 })
 
 test_that("galaxias_config() rejects non-list GBIF entries", {
@@ -59,7 +81,7 @@ test_that("galaxias_config() rejects non-character GBIF entries", {
 test_that("galaxias_config object is correctly stored", {
   obj <- potions::pour(.pkg = "galaxias")
   expect_true(inherits(obj, "galaxias_config"))
-  expect_equal(length(obj), 2)
+  expect_equal(length(obj), 3)
   expect_equal(length(obj$gbif), 3)
   expect_setequal(names(obj$gbif), 
                   c("username", "email", "password"))

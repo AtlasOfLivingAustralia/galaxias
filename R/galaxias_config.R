@@ -5,45 +5,87 @@
 #' that information for access by `galaxias` API functions. This function 
 #' also enables you to change the directory where working documents are stored,
 #' which defaults to `data-publish`.
-#' @details
-#' Note that unlike `galah`, you cannot set a 'default' provider in `galaxias`;
-#' the organisation is always an argument to the function in question. Also 
-#' unlike `galah`, `galaxias_config()` enables you to store configuration 
-#' details for multiple organisations at once.
 #' @name galaxias_config 
-#' @param directory A string giving the name of the directory to be used for 
-#' storing working files. Defaults to `data-publish`.
-#' @param gbif A list containing the entries `username`, `email` and `password`.
+#' @order 1
+#' @param directory A string giving the name of the directory that will contain
+#' working files. Defaults to `data-publish`.
+#' @param archive A string giving the name of the archive file, created using
+#' [build_archive()] and checked with [check_archive()]. Must include the 
+#' full file path; see details for more information.
+#' @param gbif An (optional) list containing the entries `username`, `email` and 
+#' `password`. Only required if you intend to call [check_archive()].
+#' @details
+#' The `archive` argument must be a full file name including path. The default
+#' is `glue::glue("{here::here()}.zip")` which places it adjacent to the working 
+#' directory, with the same name, mimicking `devtools::build()`. Sensible
+#' alternatives might include:
+#' 
+#'   - `here::here("my-archive.zip")` for placing _within_ the working directory. 
+#'   - `glue::glue("{here::here() |> dirname()}/my-archive.zip")` for placing your file 
+#' in the same _directory_ as the default, but with a different file name.
 #' @export
-galaxias_config <- function(directory = NULL,
+galaxias_config <- function(directory = "data-publish",
+                            archive = glue::glue("{here::here()}.zip"),
                             gbif = NULL){
-  # check if all arguments are missing
-  all_missing <- c(
-    is.null(gbif),
-    is.null(directory)
-  ) |>
-    all()
-  if(all_missing){ # if so, see whether data are already cached
+  
+  # save supplied environment
+  x <- environment() |> as.list()
+
+  # check if all arguments have not been updated (formerly NULL)
+  all_default <- directory == "data-publish" &
+    archive == glue::glue("{here::here()}.zip") &
+    is.null(gbif)
+
+  if(all_default){ # if so, see whether data are already cached
     if(length(potions::pour(.pkg = "galaxias")) < 1) { # if no caching, set defaults
-      galaxias_default_config(directory = "data-publish") |>
+      galaxias_default_config(directory = directory,
+                              archive = archive) |>
         potions::brew(.pkg = "galaxias")
       potions::pour() # for display reasons; i.e. called for `print()`
     }else{ # if something is cached, return it
       potions::pour()
     }
   }else{ # if arguments are supplied, store them
-    # first directory
-    if(!is.null(directory)){
-      if(!inherits(directory, "character")){
-        cli::cli_abort("Argument `directory` should be of class `character`")
-      }
-      potions::brew(directory = directory)
+    # get cached values
+    cached_config <- potions::pour(.pkg = "galaxias")
+
+    # check supplied values
+    # GBIF
+    x <- x[unlist(purrr::map(x, .f = \(a){!is.null(a)}))] # prevent defaults being overwritten with NULL
+    if(!is.null(x$gbif)){
+      check_gbif_credentials(x$gbif)
     }
-    # then gbif
-    if(!is.null(gbif)){
-      check_gbif_credentials(gbif)
-    } 
-    potions::brew(gbif = gbif, method = "leaves")
+    # directory
+    if(!is.null(x$directory)){
+      if(!inherits(x$directory, "character")){
+        cli::cli_abort("{.arg directory} should be of class `character`.")
+      }
+    }
+    # archive
+    if(!is.null(x$archive)){
+      if(!inherits(x$archive, "character")){
+        cli::cli_abort("{.arg archive} should be of class `character`.")
+      }
+      if(!grepl(".zip$", x$archive)){
+        cli::cli_abort("{.arg archive} must specify a file name ending with `.zip`.")
+      }
+      if(!file.exists(dirname(x$archive))){
+        cli::cli_abort(c("{.arg archive} must specify a valid path.",
+                       i = "Specified path: {.file {x$archive}}"))
+      }
+    }
+    
+    # overwrite ONLY novel content
+    new_config <- cached_config # ensure all structures are preserved
+    for(i in seq_along(x)){
+      j <- names(x)[i]
+      if(!identical(x[[j]], new_config[[j]])){
+        new_config[[j]] <- x[[j]]
+      }
+    }
+    
+    # cache
+    potions::brew(new_config, method = "modify")
   }
 }
 
@@ -81,9 +123,11 @@ check_gbif_credentials <- function(x){
 #' Set a 'default' object for storing config in `galah`
 #' @noRd
 #' @keywords Internal
-galaxias_default_config <- function(directory){
+galaxias_default_config <- function(directory,
+                                    archive){
   x <- list(
     directory = directory,
+    archive = archive,
     gbif = list(username = "",
                 email = "",
                 password = "")

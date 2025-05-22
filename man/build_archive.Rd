@@ -4,11 +4,9 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(file = NULL, overwrite = FALSE, quiet = FALSE)
+build_archive(overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{file}{(string) A file name to save the resulting \code{.zip} file.}
-
 \item{overwrite}{(logical) Should existing files be overwritten? Defaults to
 \code{FALSE}.}
 
@@ -24,7 +22,9 @@ file).
 A Darwin Core archive is a zip file containing a combination of
 data and metadata. \code{build_archive()} constructs this zip file. It assumes
 that all necessary files have been pre-constructed, and can be found inside a
-single folder with no additional or redundant information.
+single folder with no additional or redundant information. Both the source
+folder and the name of the destination \code{.zip} file are set using
+\code{\link[=galaxias_config]{galaxias_config()}}.
 
 Structurally,
 \code{build_archive()} is similar to \code{devtools::build()}, in the sense that it

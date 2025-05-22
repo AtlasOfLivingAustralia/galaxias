@@ -3,19 +3,13 @@
 \name{check_archive}
 \alias{check_archive}
 \alias{get_report}
-\title{Check whether a Darwin Core Archive meets Darwin Core Standard via API}
+\title{Check whether an archive meets the Darwin Core Standard via API}
 \usage{
-check_archive(file = NULL, provider = "GBIF")
+check_archive()
 
 get_report(key)
 }
 \arguments{
-\item{file}{(string) A file name (ending in .zip) of the specified Darwin
-Core Archive.}
-
-\item{provider}{(string) The institution to be queried for validation
-services. Currently only \code{"GBIF"} is supported.}
-
 \item{key}{A unique identifier key from GBIF}
 }
 \value{

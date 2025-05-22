@@ -1,4 +1,4 @@
-#' Check whether a Darwin Core Archive meets Darwin Core Standard via API
+#' Check whether an archive meets the Darwin Core Standard via API
 #' 
 #' @description
 #' Check whether a specified Darwin Core Archive is ready for
@@ -6,10 +6,6 @@
 #' `check_archive()` tests the specified archive using an online validation 
 #' service by sending the archive via an API and returning the results. 
 #' Currently only supports validation using GBIF.
-#' @param file (string) A file name (ending in .zip) of the specified Darwin 
-#' Core Archive.
-#' @param provider (string) The institution to be queried for validation 
-#' services. Currently only `"GBIF"` is supported.
 #' @returns Invisibly returns a tibble to the workspace containing validation 
 #' results; but primarily called for the side-effect of generating a report in 
 #' the console.
@@ -29,10 +25,11 @@
 #' rather than via API.
 #' @order 1
 #' @export
-check_archive <- function(file = NULL,
-                          provider = "GBIF"){
+check_archive <- function(){
   
   # run checks on `file`
+  file <- potions::pour("archive",
+                        .pkg = "galaxias")
   check_file_argument(file)
   if(!grepl(".zip$", file)){
     bullets <- c(
@@ -50,9 +47,10 @@ check_archive <- function(file = NULL,
   # GET status of query
   # NOTE: This will require a loop with rate-limiting to ensure success
   # see galah-R/R/check_queue.R
-  # note also that `get_report()` is also an exported function
+  # NOTE: `get_report()` is also an exported function
   status_response <- get_report(post_response$key)
   
+  # Q: Should there be an invisible() here to return a tibble?
 }
 
 #' Internal function to post content to the GBIF `validator` API

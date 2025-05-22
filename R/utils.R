@@ -99,16 +99,17 @@ is_testing <- function() {
 #' @keywords Internal
 check_file_argument <- function(file,
                                 must_exist = TRUE){
-  # check `file` argument
   if(is.null(file)){
     cli::cli_abort("Argument `file` is missing, with no default")
   }
   if(!inherits(file, "character")){
     cli::cli_abort("Argument `file` must be of class `character`")
   }
-  if(!file.exists(file) & must_exist){
-    c("File {.file {file}} not found.") |>
-      cli::cli_abort()
+  if(must_exist){
+    if(!file.exists(file)){
+      c("File {.file {file}} not found.") |>
+        cli::cli_abort()
+    }
   }
 }
 
