@@ -96,19 +96,19 @@ check_is_data <- function(obj, error_call = rlang::caller_env()) {
 #' @keywords Internal
 check_data_type <- function(data, error_call = rlang::caller_env()) {
   
+  if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
+    # Event
+    type <- "event"
+    file_name <- "events.csv"
+    not <- "occurrence"
+  } else {
+    # Occurrence
+    type <- "occurrence"
+    file_name <- "occurrences.csv"
+    not <- "event"
+  }
+  
   if (rlang::is_interactive()) {
-    if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
-      # Event
-      type <- "event"
-      file_name <- "events.csv"
-      not <- "occurrence"
-    } else {
-      # Occurrence
-      type <- "occurrence"
-      file_name <- "occurrences.csv"
-      not <- "event"
-    }
-
     choice <- cli_menu(
       "Data identified as type {.field {type}} and will be saved as {.file {file_name}}",
       "Is this correct? (or 0 to exit)",
@@ -129,19 +129,16 @@ check_data_type <- function(data, error_call = rlang::caller_env()) {
   } else {
     return(type)
   }
-  # bullets <- c("Data identified as type {.field {type}}.",
-  #              i = cli::col_grey("If this is incorrect, use {.code use_data(type = \"{not}\")} instead."))
-  # cli::cli_inform(bullets)
 }
 
 #' Switch to occurrence, event or multimedia type `use_data()` functions
 #' @noRd
 #' @keywords Internal
-switch_data_type <- function(user_data, type, overwrite) {
+switch_data_type <- function(user_data, type, overwrite, quiet) {
 
   switch(type,
-         "occurrence" = use_data_occurrences(user_data, overwrite = overwrite),
-         "event" = use_data_events(user_data, overwrite = overwrite)
+         "occurrence" = use_data_occurrences(user_data, overwrite = overwrite, quiet = quiet),
+         "event" = use_data_events(user_data, overwrite = overwrite, quiet = quiet)
          # "multimedia" = {use_data_multimedia(data)} # multimedia not yet supported
          )
 }
