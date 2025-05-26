@@ -8,7 +8,7 @@ test_that("galaxias_config() creates default object onload", {
   comparison_obj <- galaxias_default_config(
     directory = "data-publish",
     archive = glue::glue("{here::here()}.zip"))
-  expect_identical(cached_obj, comparison_obj)  
+  expect_identical(cached_obj, comparison_obj)
 })
 
 test_that("galaxias_config() returns an object if all args are missing", {
@@ -19,16 +19,28 @@ test_that("galaxias_config() returns an object if all args are missing", {
   expect_identical(cached_obj, comparison_obj) 
 })
 
+test_that("galaxias_config() accepts changes back to default names", {
+  # i.e. once we have changed directory, ensure it can be changed back to the default
+  # this was a bug in earlier versions
+  default_cache <- galaxias_config(quiet = TRUE)
+  updated_cache <- galaxias_config(
+    archive = glue::glue("{here::here()}/TESTARCHIVE.zip"),
+    quiet = TRUE)
+  expect_false(updated_cache$archive == default_cache$archive)
+  restored_cache <- galaxias_config(archive = glue::glue("{here::here()}.zip"))
+  expect_equal(restored_cache, default_cache)
+  # check default is restored
+})
+
 test_that("galaxias_config() rejects non-character directories", {
   expect_error(galaxias_config(directory = 100L))
 })
 
 test_that("galaxias_config() accepts non-default directories, but DOES NOT build them", {
   dirname <- "MY-NEW-DIRECTORY"
-  galaxias_config(directory = dirname)
-  result <- galaxias_config()$directory
-  expect_equal(dirname, result)
-  expect_false(file.exists(result))
+  result <- galaxias_config(directory = dirname)
+  expect_equal(dirname, result$directory)
+  expect_false(file.exists(result$directory))
   # restore defaults
   galaxias_config(directory = "data-publish",
                   archive = glue::glue("{here::here()}.zip"))
@@ -93,8 +105,7 @@ test_that("galaxias_config() accepts a correctly-formatted list", {
     username = "something",
     email = "my_email@email.com",
     password = "a-safe-password")
-  galaxias_config(gbif = credentials_obj)
-  result <- potions::pour(.pkg = "galaxias")
+  result <- galaxias_config(gbif = credentials_obj)
   expect_identical(credentials_obj, result$gbif)
   
   # reset so that later runs of `test()` don't break

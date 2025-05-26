@@ -8,7 +8,8 @@
 galaxias_config(
   directory = "data-publish",
   archive = glue::glue("{here::here()}.zip"),
-  gbif = NULL
+  gbif = NULL,
+  quiet = FALSE
 )
 
 \method{print}{galaxias_config}(x, ...)
@@ -24,10 +25,18 @@ full file path; see details for more information.}
 \item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
 \code{password}. Only required if you intend to call \code{\link[=check_archive]{check_archive()}}.}
 
+\item{quiet}{(logical) Whether to suppress messages about what is happening.
+Default is set to \code{FALSE}; i.e. messages are shown.}
+
 \item{x}{An object of class \code{galaxias_config}, created with
 \code{galaxias_config()}.}
 
 \item{\dots}{Additional arguments, currently ignored.}
+}
+\value{
+An object of class \code{galaxias_config}, which is a list containing
+the cached values. If \code{galaxias_config()} is used to update (rather than
+view) the cache, this is returned invisibly.
 }
 \description{
 To validate (or in future, to publish) your dataset, you need to provide
