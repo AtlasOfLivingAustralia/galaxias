@@ -85,7 +85,6 @@ test_that("use_metadata() does not overwrite existing file by default", {
   unlink(temp_dir)
 })
 
-#FIXME: This test fails but it seems to overwrite correctly
 test_that("use_metadata() overwrites file when overwrite = TRUE", {
   # set up
   current_wd <- here::here()
@@ -95,11 +94,11 @@ test_that("use_metadata() overwrites file when overwrite = TRUE", {
   
   # tests
   use_metadata(file = "metadata.Rmd")
-  timestamp_1 <- file.info("data-publish/eml.xml")$ctime
+  timestamp_1 <- R.utils::lastModified("data-publish/eml.xml")
   Sys.sleep(2)
   expect_message(use_metadata(file = "metadata.Rmd", 
                               overwrite = TRUE))
-  timestamp_2 <- file.info("data-publish/eml.xml")$ctime
+  timestamp_2 <- R.utils::lastModified("data-publish/eml.xml")
   expect_true(timestamp_2 > timestamp_1)
   
   # clean up
