@@ -31,12 +31,19 @@ use_data <- function(...,
                      overwrite = FALSE,
                      quiet = FALSE) {
   
-  obj <- get_objs_from_dots(dots(...))
-  user_data <- check_is_data(obj)
+  # try a simpler syntax for testing reasons
+  user_data <- list(...)
+  
+  if(length(user_data) < 1L){
+    cli::cli_abort("Nothing to save.")
+  }
+  
+  # apply rules to number & classes of objects
+  user_data <- check_is_data(user_data)
   
   # Check if data is dwc compliant here?
   
-  # check whether user dataframe contains occurrences, events or multimedia
+  # check whether user data.frame contains occurrences, events or multimedia
   type <- check_data_type(user_data)
   
   switch_data_type(user_data,
@@ -45,50 +52,30 @@ use_data <- function(...,
                    quiet)
 }
 
-
-get_objs_from_dots <- function(.dots, error_call = rlang::caller_env()) {
-  if (length(.dots) == 0L) {
-    cli::cli_abort("Nothing to save.",
-                   call = error_call)
-  }
-
-  is_name <- vapply(.dots, is.symbol, logical(1))
-  if (!all(is_name)) {
-    cli::cli_abort("Can only save existing named objects.",
-                   call = error_call)
-  }
-
-  return(.dots)
-}
-
+#' Internal function to check for tibbles
+#' @noRd
+#' @keywords Internal
 check_is_data <- function(obj, error_call = rlang::caller_env()) {
   
   # check whether more than one data.frame/tibble is supplied
-  classes <- obj |> 
+  tibble_check <- obj |> 
     purrr::map(
       \(elements)
-      elements |> eval() |> tibble::is_tibble()
-      )
+      inherits(elements, "data.frame")
+      ) |>
+    unlist()
+  n_tibbles <- sum(tibble_check)
   
-  if(sum(unlist(classes)) > 1) {
+  # apply rules
+  if(n_tibbles > 1) {
     cli::cli_abort("Can only supply one `tibble`/`data.frame` to save.",
                    call = error_call)
-  }
-  
-  # if (length(obj) > 1 ) {
-  #   cli::cli_abort("Can only supply one object to save.",
-  #                  call = error_call)
-  # }
-  
-  obj <- obj[[1]] |> eval()
-  
-  if(!any(inherits(obj, c("tbl_df", "tbl", "data.frame")))) {
+  }else if(n_tibbles < 1){
     cli::cli_abort("Must supply a `tibble`/`data.frame` to save.",
-                   call = error_call)
+                   call = error_call)    
+  }else{
+    obj[[which(tibble_check)]]
   }
-  
-  obj
-  
 }
 
 #' Identifies data type based on column names, then checks with user
@@ -137,8 +124,12 @@ check_data_type <- function(data, error_call = rlang::caller_env()) {
 switch_data_type <- function(user_data, type, overwrite, quiet) {
 
   switch(type,
-         "occurrence" = use_data_occurrences(user_data, overwrite = overwrite, quiet = quiet),
-         "event" = use_data_events(user_data, overwrite = overwrite, quiet = quiet)
+         "occurrence" = use_data_occurrences(user_data, 
+                                             overwrite = overwrite, 
+                                             quiet = quiet),
+         "event" = use_data_events(user_data, 
+                                   overwrite = overwrite, 
+                                   quiet = quiet)
          # "multimedia" = {use_data_multimedia(data)} # multimedia not yet supported
          )
 }
@@ -176,7 +167,7 @@ use_data_occurrences <- function(df,
 #'  `FALSE`. 
 #' @rdname use_data
 #' @export
-use_data_events <- function(df, 
+use_data_events <- function(df,
                             overwrite = FALSE,
                             quiet = FALSE) {
   
