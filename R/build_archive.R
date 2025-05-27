@@ -59,6 +59,10 @@ build_archive <- function(overwrite = FALSE,
   # This check is probably redundant given behaviour of `galaxias_config()`,
   # but kept for safety reasons.
   
+  # prettier versions of `destination` for printing reasons
+  file_name <- basename(destination)
+  file_path <- dirname(destination)
+  
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
   }
@@ -92,19 +96,21 @@ build_archive <- function(overwrite = FALSE,
   if(file.exists(destination)){
     if(overwrite){
       if(!quiet){
-        cli::cli_progress_step("Overwriting {.file {destination}}.")
+        cli::cli_progress_step(c("Overwriting {.file {file_name}}.",
+                                 i = "Path: {.path {file_path}}"))
       }
       zip::zip(zipfile = destination, 
                files = files_in,
                mode = "cherry-pick")
     }else{
-      cli::cli_abort(c("{.file {destination}} already exists and has not been overwritten",
-                       i = "set `overwrite = TRUE` to change this behaviour"))
+      cli::cli_abort(c("{.file {file_name}} already exists and has not been overwritten.",
+                       i = "Path: {.path {file_path}}",
+                       i = "Set `overwrite = TRUE` to change this behaviour"))
     }
   }else{
     if(!quiet){
-      file_name <- basename(destination)
-      cli::cli_progress_step("Writing {.href [`{file_name}`](file:{destination})}.")
+      cli::cli_progress_step(c("Writing {.file {file_name}}.",
+                               i = "Path: {.path {file_path}}"))
     }
     zip::zip(zipfile = destination, 
              files = files_in,

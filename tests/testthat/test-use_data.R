@@ -5,7 +5,7 @@ test_that("use_data() fails when no data is supplied", {
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   
-  #tests
+  # tests
   use_data(quiet = TRUE) |>
     expect_error()
   
@@ -20,7 +20,7 @@ test_that("use_data() fails when supplied object isn't a data.frame/tibble", {
   usethis::local_project(temp_dir, force = TRUE)
   string <- "how ya doin'"
   
-  #tests
+  # tests
   use_data(string, quiet = TRUE) |>
     expect_error()
   
@@ -42,11 +42,15 @@ test_that("use_data() fails when supplied object isn't real", {
     decimalLatitude = c(-25, -25)
   )
   
-  #tests
+  # tests
   use_data(non_existant_object, quiet = TRUE) |>
     expect_error()
+  # supplying object as a vector doesn't work
   use_data(c(df_occ, df_events), quiet = TRUE) |>
-    expect_error("Can only save existing") # uncertain whether this should be expected behaviour
+    expect_error("Must supply a `tibble`/`data.frame` to save.") 
+  # supplying multiple objects doesn't work
+  use_data(df_occ, df_events, quiet = TRUE) |>
+    expect_error("Can only supply one `tibble`/`data.frame` to save.") 
   
   # clean up
   unlink(temp_dir)
@@ -66,7 +70,7 @@ test_that("use_data() fails when supplied more than one data.frame/tibble", {
     decimalLatitude = c(-25, -25)
   )
   
-  #tests
+  # tests
   use_data(df_occ, df_events, quiet = TRUE) |>
     expect_error()
   
@@ -89,7 +93,7 @@ test_that("check_data_type() identifies occurrences/events correctly", {
     decimalLatitude = c(-25, -25)
   )
   
-  #tests
+  # tests
   type <- check_data_type(df_occ)
   expect_equal(type, "occurrence")
   type <- check_data_type(df_events1)
@@ -116,7 +120,7 @@ test_that("use_data() works with no arguments", {
       eventID = random_id()
     )
   
-  #tests
+  # tests
   df_occ |> use_data(quiet = TRUE)
   expect_length(list.files("data-publish"), 1)
   expect_in("occurrences.csv", list.files("data-publish"))
@@ -141,7 +145,7 @@ test_that("use_data() messages work", {
       occurrenceID = random_id()
     )
   
-  #tests
+  # tests
   use_data_messages <- function(x, y, df) {
     local_user_input(c(x, y))
     df |> use_data()
@@ -188,7 +192,7 @@ test_that("use_data_occurrences() works with no arguments", {
       occurrenceID = random_id()
     )
   
-  #tests
+  # tests
   df |> use_data_occurrences(quiet = TRUE)
   expect_length(list.files("data-publish"), 1)
   expect_in("occurrences.csv", list.files("data-publish"))
@@ -209,7 +213,7 @@ test_that("use_data_events() works with no arguments", {
       eventID = random_id()
     )
   
-  #tests
+  # tests
   df |> use_data_events(quiet = TRUE)
   expect_length(list.files("data-publish"), 1)
   expect_in("events.csv", list.files("data-publish"))
