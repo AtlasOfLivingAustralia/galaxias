@@ -1,10 +1,10 @@
 #' Provide configuration information to `galaxias`
 #' 
-#' To validate (or in future, to publish) your dataset, you need to provide
-#' credentials to the relevant web service. This function allows you to store
-#' that information for access by `galaxias` API functions. This function 
-#' also enables you to change the directory where working documents are stored,
-#' which defaults to `data-publish`.
+#' To validate your dataset, you need to provide credentials to the relevant web 
+#' service. This function allows you to store that information for access by 
+#' `galaxias` API functions. This function also enables you to change the 
+#' `directory` where working documents are stored, and the path to the `archive` 
+#' file where the resulting zip file will be placed.
 #' @name galaxias_config 
 #' @order 1
 #' @param directory A string giving the name of the directory that will contain
@@ -22,21 +22,19 @@
 #' directory, with the same name, mimicking `devtools::build()`. Sensible
 #' alternatives might include:
 #' 
-#'   - `here::here("my-archive.zip")` for placing _within_ the working directory. 
-#'   - `glue::glue("{here::here() |> dirname()}/my-archive.zip")` for placing your file 
+#'   - `here::here("my-archive.zip")` for placing a file _within_ the working directory. 
+#'   - `glue::glue("{dirname(here::here())}/my-archive.zip")` for placing your file 
 #' in the same _directory_ as the default, but with a different file name.
 #' @returns An object of class `galaxias_config`, which is a list containing 
 #' the cached values. If `galaxias_config()` is used to update (rather than 
 #' view) the cache, this is returned invisibly.
 #' 
 #' @export
-galaxias_config <- function(directory = "data-publish",
-                            archive = glue::glue("{here::here()}.zip"),
+galaxias_config <- function(directory = NULL,
+                            archive = NULL,
                             gbif = NULL,
                             quiet = FALSE){
   
-  # save supplied environment
-  x <- as.list(environment())[1:3]
   # see what values are already cached
   cached_config <- potions::pour(.pkg = "galaxias")
   
@@ -47,112 +45,28 @@ galaxias_config <- function(directory = "data-publish",
       potions::brew(default_config,
                     .pkg = "galaxias")
       invisible(default_config)
-  }else{ # i.e. something has been cached
+  }else{ # i.e. something has been cached previously
     
-    # retrieve cached values and check for updates
-    if(!quiet){
-      progress_update("Checking configuration")  
-    }
+    # check whether all data-related arguments are null
+    all_null <- is.null(directory) &
+                is.null(archive) &
+                is.null(gbif)
     
-    # run checks on all objects in environment
-    # prevent defaults being overwritten with NULL
-    not_null <- purrr::map(x, .f = \(a){!is.null(a)}) |>
-      unlist()
-    if(all(!not_null)){
-      if(!quiet){
-        cli::cli_progress_step("All supplied objects are `NULL`; exitting") 
-        cli::cli_progress_done()
-      }
-      return(cached_config)      
-    }else{
-      x <- x[not_null]
-    }
-    
-    # check remaining arguments
-    check_config_args(x)
-    
-    # overwrite ONLY novel content in cached values
-    new_config <- cached_config # ensure all structures are preserved
-    update <- FALSE
-    for(i in seq_along(x)){
-      j <- names(x)[i]
-      if(!identical(x[[j]], new_config[[j]])){
-        if(!quiet){
-          cli::cli_progress_step("Updating {.arg {j}} to {x[[j]]}")
-        }
-        new_config[[j]] <- x[[j]]
-        update <- TRUE
-      }
-    }
-    
-    # if new information is given, update cached values
-    if(update){
+    # if so, display cached results without updating
+    if(all_null){
+      return(cached_config)
+    }else{ # otherwise, update
+      final_config <- cached_config |>
+        check_config_directory(directory, quiet = quiet) |>
+        check_config_archive(archive, quiet = quiet) |>
+        check_config_gbif(gbif, quiet = quiet)
+      
       if(!quiet){
         cli::cli_progress_step("Caching")
         cli::cli_progress_done()
       }
-      potions::brew(new_config, method = "modify")
-      invisible(new_config)
-    }else{ # otherwise view current settings
-      if(!quiet){
-        cli::cli_progress_step("No changes found")
-        cli::cli_progress_done() 
-      }
-      return(cached_config)
-    }
-  }
-}
-
-#' Internal function to check whether supplied arguments to galaxias_config() are ok
-#' @param x a list returned by `environment() |> as.list()`
-#' @noRd
-#' @keywords Internal
-check_config_args <- function(x){
-  
-  # gbif
-  if(!is.null(x$gbif)){
-    # check is a list
-    if(!inherits(x, "list")){
-      cli::cli_abort("GBIF credentials should be supplied as a `list`.")
-    }
-    
-    # check all names are supplied, and only those names
-    if(!(all(names(x) %in% c("username", "email", "password")) &
-         all(c("username", "email", "password") %in% names(x)))){
-      cli::cli_abort("GBIF credentials should be named `username`, `email` and `password`.")
-    }
-    
-    # check list only contains characters
-    character_check <- purrr::map(x, is.character) |>
-      unlist() |>
-      all()
-    if(!character_check){
-      cli::cli_abort("All GBIF credentials should be supplied as strings.")
-    }
-    
-    # check all entries are length 1
-    length_check <- all(lengths(x) == 1L)
-    if(!length_check){
-      cli::cli_abort("All GBIF credentials should be length-1.")
-    }
-  }
-  # directory
-  if(!is.null(x$directory)){
-    if(!inherits(x$directory, "character")){
-      cli::cli_abort("{.arg directory} should be of class `character`.")
-    }
-  }
-  # archive
-  if(!is.null(x$archive)){
-    if(!inherits(x$archive, "character")){
-      cli::cli_abort("{.arg archive} should be of class `character`.")
-    }
-    if(!grepl(".zip$", x$archive)){
-      cli::cli_abort("{.arg archive} must specify a file name ending with `.zip`.")
-    }
-    if(!file.exists(dirname(x$archive))){
-      cli::cli_abort(c("{.arg archive} must specify a valid path.",
-                       i = "Specified path: {.file {x$archive}}"))
+      potions::brew(final_config, method = "modify")
+      invisible(final_config)
     }
   }
 }
@@ -162,14 +76,125 @@ check_config_args <- function(x){
 #' @keywords Internal
 galaxias_default_config <- function(directory,
                                     archive){
+  if(is.null(directory)){
+    directory <- "data-publish"
+  }
+  if(is.null(archive)){
+    archive <- glue::glue("{here::here()}.zip")
+  }
   x <- list(
     directory = directory,
     archive = archive,
     gbif = list(username = "",
                 email = "",
-                password = "")
-    # ala = list()
-  )
+                password = ""))
   class(x) <- c("galaxias_config", "list")
   x
+}
+
+#' Internal function to update directory arg
+#' @param x a list object
+#' @noRd
+#' @keywords Internal
+check_config_directory <- function(x, 
+                                   directory, 
+                                   quiet,
+                                   error_call = rlang::caller_env()){
+  if(is.null(directory)){
+    x
+  }else{
+    if(!inherits(directory, "character")){
+      cli::cli_abort("{.arg directory} should be of class `character`.",
+                     call = error_call)
+    }
+    
+    if(!quiet){
+      cli::cli_progress_step("Updating {.arg directory} to {directory}")
+    }
+    x$directory <- directory
+    x
+  }
+}
+
+#' Internal function to update archive arg
+#' @param x a list object
+#' @noRd
+#' @keywords Internal
+check_config_archive <- function(x, 
+                                 archive, 
+                                 quiet,
+                                 error_call = rlang::caller_env()){
+  if(is.null(archive)){
+    x
+  }else{
+    if(!inherits(archive, "character")){
+      cli::cli_abort("{.arg archive} should be of class `character`.",
+                     call = error_call)
+    }
+    if(!grepl(".zip$", archive)){
+      cli::cli_abort("{.arg archive} must specify a file name ending with `.zip`.",
+                     call = error_call)
+    }
+    if(!file.exists(dirname(archive))){
+      cli::cli_abort(c("{.arg archive} must specify a valid path.",
+                       i = "Specified path: {.file {archive}}"),
+                     call = error_call)
+    }
+    
+    if(!quiet){
+      cli::cli_progress_step("Updating {.arg archive} to {archive}")
+    }
+    x$archive <- archive
+    x
+  }
+}
+
+#' Internal function to update GBIF arg
+#' @param x a list object
+#' @noRd
+#' @keywords Internal
+check_config_gbif <- function(x, 
+                              gbif, 
+                              quiet,
+                              error_call = rlang::caller_env()){
+  if(is.null(gbif)){
+    x
+  }else{
+    # check is a list
+    if(!inherits(gbif, "list")){
+      cli::cli_abort("GBIF credentials should be supplied as a `list`.",
+                     call = error_call)
+    }
+    
+    # check all names are supplied, and only those names
+    required_names <- c("username", "email", "password")
+    if(!all(names(gbif) %in% required_names) |
+       !all(required_names %in% names(gbif))
+      ){
+      cli::cli_abort("GBIF credentials should be named `username`, `email` and `password`.",
+                     call = error_call)
+    }
+    
+    # check list only contains characters
+    character_check <- purrr::map(gbif, is.character) |>
+      unlist() |>
+      all()
+    if(!character_check){
+      cli::cli_abort("All GBIF credentials should be supplied as strings.",
+                     call = error_call)
+    }
+    
+    # check all entries are length 1
+    length_check <- all(lengths(gbif) == 1L)
+    if(!length_check){
+      cli::cli_abort("All GBIF credentials should be length-1.",
+                     call = error_call)
+    }
+    
+    if(!quiet){
+      cli::cli_progress_step("Updating GBIF credentials")
+    }
+    x$gbif <- gbif
+    x
+  }
 }
