@@ -1,4 +1,4 @@
-url: https://galaxias.ala.org.au
+url: https://galaxias.ala.org.au/R
 template:
   bootstrap: 5
   bslib:
@@ -15,6 +15,7 @@ navbar:
     left:
     - home
     - quickstart
+    - articles
     - reference
     right:
     - search
@@ -28,7 +29,9 @@ navbar:
       text: Examples
       menu:
       - text: Standardise occurrence-based data
-        href: articles/occurrence-example.html
+        href: articles/occurrences-example.html
+      - text: Standardise monitoring data
+        href: articles/events-example.html
     news:
       text: News
       href: news/index.html

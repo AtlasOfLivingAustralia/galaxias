@@ -115,10 +115,12 @@ obs_dwc |>
   gt::opt_interactive(page_size_default = 5)
 ```
 
+Our final step is to save this to our 'publishing' directory:
+
 ```{r}
 #| eval: false
 # Save in ./data-processed
-write_csv(obs_dwc, file = "./data-processed/occurrences.csv")
+use_data_occurrences(obs_dwc)
 ```
 
 All done! See the [Quick start guide vignette](quick_start_guide.html) for how to build a Darwin Core Archive.
