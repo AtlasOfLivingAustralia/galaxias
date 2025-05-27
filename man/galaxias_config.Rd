@@ -5,11 +5,7 @@
 \alias{print.galaxias_config}
 \title{Provide configuration information to \code{galaxias}}
 \usage{
-galaxias_config(
-  directory = "data-publish",
-  archive = glue::glue("{here::here()}.zip"),
-  gbif = NULL
-)
+galaxias_config(directory = NULL, archive = NULL, gbif = NULL, quiet = FALSE)
 
 \method{print}{galaxias_config}(x, ...)
 }
@@ -24,17 +20,25 @@ full file path; see details for more information.}
 \item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
 \code{password}. Only required if you intend to call \code{\link[=check_archive]{check_archive()}}.}
 
+\item{quiet}{(logical) Whether to suppress messages about what is happening.
+Default is set to \code{FALSE}; i.e. messages are shown.}
+
 \item{x}{An object of class \code{galaxias_config}, created with
 \code{galaxias_config()}.}
 
 \item{\dots}{Additional arguments, currently ignored.}
 }
+\value{
+An object of class \code{galaxias_config}, which is a list containing
+the cached values. If \code{galaxias_config()} is used to update (rather than
+view) the cache, this is returned invisibly.
+}
 \description{
-To validate (or in future, to publish) your dataset, you need to provide
-credentials to the relevant web service. This function allows you to store
-that information for access by \code{galaxias} API functions. This function
-also enables you to change the directory where working documents are stored,
-which defaults to \code{data-publish}.
+To validate your dataset, you need to provide credentials to the relevant web
+service. This function allows you to store that information for access by
+\code{galaxias} API functions. This function also enables you to change the
+\code{directory} where working documents are stored, and the path to the \code{archive}
+file where the resulting zip file will be placed.
 }
 \details{
 The \code{archive} argument must be a full file name including path. The default
@@ -42,8 +46,8 @@ is \code{glue::glue("{here::here()}.zip")} which places it adjacent to the worki
 directory, with the same name, mimicking \code{devtools::build()}. Sensible
 alternatives might include:
 \itemize{
-\item \code{here::here("my-archive.zip")} for placing \emph{within} the working directory.
-\item \code{glue::glue("{here::here() |> dirname()}/my-archive.zip")} for placing your file
+\item \code{here::here("my-archive.zip")} for placing a file \emph{within} the working directory.
+\item \code{glue::glue("{dirname(here::here())}/my-archive.zip")} for placing your file
 in the same \emph{directory} as the default, but with a different file name.
 }
 }

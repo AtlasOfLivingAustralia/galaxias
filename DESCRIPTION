@@ -41,14 +41,14 @@ Imports:
   usethis,
   zip
 Suggests:
+  gt,
+  janitor,
   knitr,
   lubridate,
+  readxl,
   rmarkdown,
   testthat (>= 3.0.0),
-  xml2,
-  readxl,
-  janitor,
-  gt
+  xml2
 License: MPL-2.0
 URL: https://galaxias.ala.org.au
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues

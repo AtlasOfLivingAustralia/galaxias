@@ -103,7 +103,8 @@ build_archive <- function(overwrite = FALSE,
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step("Writing {.file {destination}}.")
+      file_name <- basename(destination)
+      cli::cli_progress_step("Writing {.href [`{file_name}`](file:{destination})}.")
     }
     zip::zip(zipfile = destination, 
              files = files_in,
