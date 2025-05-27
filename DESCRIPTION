@@ -28,6 +28,7 @@ Imports:
   curl,
   delma,
   dplyr,
+  fs,
   glue,
   here,
   httr2,
@@ -39,6 +40,7 @@ Imports:
   stringr,
   tibble,
   usethis,
+  withr,
   zip
 Suggests:
   gt,
@@ -49,6 +51,7 @@ Suggests:
   rmarkdown,
   R.utils,
   testthat (>= 3.0.0),
+  tidyr,
   xml2
 License: MPL-2.0
 URL: https://galaxias.ala.org.au/R

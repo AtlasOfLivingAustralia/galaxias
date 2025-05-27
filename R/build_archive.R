@@ -183,7 +183,7 @@ find_data <- function(directory,
   
   # check number of files
   n_data_present <- user_files |>
-    dplyr::filter(type == "data") |>
+    dplyr::filter(.data$type == "data") |>
     dplyr::pull("present") |>
     sum()
   
@@ -191,8 +191,8 @@ find_data <- function(directory,
     bullets <- c("Didn't find data files in {.file {directory}}.",
                  i = "{directory/} must contain at least one of `occurrences.csv`, `events.csv` or `multimedia.csv`.",
                  i = "See `use_data()`.")
-    cl::cli_abort(bullets,
-                  call = call)
+    cli::cli_abort(bullets,
+                   call = call)
   }
   
   ## Metadata
@@ -218,7 +218,7 @@ find_data <- function(directory,
 
   # list of the files in the directory
   file_list <- user_files |>
-    dplyr::filter(present == TRUE) |>
+    dplyr::filter(.data$present == TRUE) |>
     dplyr::pull("file")
   
   return(glue::glue("{directory}/{file_list}"))
@@ -244,8 +244,11 @@ is_file_present <- function(files, directory) {
       present = glue::glue("{directory}/{files$file}") |>
         purrr::map(\(file_name)
                    file.exists(file_name)) |>
-        unlist(),
-      present_formatted = present |>
+        unlist())
+  
+  user_files <- user_files |>
+    dplyr::mutate(
+      present_formatted = .data$present |>
         purrr::map_chr(\(file_exists) 
                        ifelse(isTRUE(file_exists), 
                               cli::symbol$tick |> cli::col_green(), 

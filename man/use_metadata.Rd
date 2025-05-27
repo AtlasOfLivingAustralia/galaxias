@@ -45,5 +45,5 @@ setwd(.old_wd)
 }
 }
 \seealso{
-\code{\link[=use_metadata_statement]{use_metadata_statement()}} to create a metadata statement template.
+\code{\link[=use_metadata_template]{use_metadata_template()}} to create a metadata statement template.
 }

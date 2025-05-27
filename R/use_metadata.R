@@ -20,7 +20,7 @@
 #' called `eml.xml`, and this function enforces that.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file in the `data-publish` directory.
-#' @seealso [use_metadata_statement()] to create a metadata statement template.
+#' @seealso [use_metadata_template()] to create a metadata statement template.
 #' @examples
 #' \dontshow{
 #' .old_wd <- setwd(tempdir())

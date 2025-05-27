@@ -104,7 +104,7 @@ detect_dwc_files <- function(directory,
         purrr::map(\(file_name)
                    file.exists(file_name)) |>
         unlist(),
-      present_formatted = present |>
+      present_formatted = .data$present |>
         purrr::map_chr(\(file_exists) 
                        ifelse(isTRUE(file_exists), 
                cli::symbol$tick |> cli::col_green(), 

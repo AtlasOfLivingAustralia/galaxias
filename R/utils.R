@@ -98,17 +98,20 @@ is_testing <- function() {
 #' @noRd
 #' @keywords Internal
 check_file_argument <- function(file,
-                                must_exist = TRUE){
+                                must_exist = TRUE,
+                                error_call = rlang::caller_env()){
   if(is.null(file)){
-    cli::cli_abort("Argument `file` is missing, with no default")
+    cli::cli_abort("Argument `file` is missing, with no default",
+                   call = error_call)
   }
   if(!inherits(file, "character")){
-    cli::cli_abort("Argument `file` must be of class `character`")
+    cli::cli_abort("Argument `file` must be of class `character`",
+                   call = error_call)
   }
   if(must_exist){
     if(!file.exists(file)){
       c("File {.file {file}} not found.") |>
-        cli::cli_abort()
+        cli::cli_abort(call = error_call)
     }
   }
 }

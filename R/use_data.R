@@ -9,7 +9,7 @@
 #' "event" and "multimedia". `use_data()` attempts to detect and save the 
 #' correct data type based on the provided `tibble`/`data.frame`.
 #' Alternatively, users can call the underlying functions 
-#' [use_data_occurrences()], [use_data_events()] and [use_data_multimedia()] to 
+#' [use_data_occurrences()] or [use_data_events()] to 
 #' specify data type manually.
 #' @details
 #' By default, this function saves data in the `data-publish` folder. To change 
