@@ -71,7 +71,11 @@ test_that("build_archive() messages work", {
     local_user_input(x)
     build_archive()
   }
-  msgs <- fix_filenames(fix_times(capture_cli_messages(build_archive_messages(1))))
+  msgs <- build_archive_messages(1) |>
+    capture_cli_messages() |>
+    fix_times() |>
+    fix_filenames() |>
+    fix_duplicates()
   expect_snapshot(msgs)
   
   # clean up
@@ -105,9 +109,14 @@ test_that("build_archive() menu appears", {
     local_user_input(x)
     build_archive()
   }
-  msgs <- fix_filenames(fix_times(capture_cli_messages(build_archive_with_mock(1))))
-  expect_snapshot(msgs)
   
+  msgs <- build_archive_with_mock(1) |>
+    capture_cli_messages() |>
+    fix_times() |>
+    fix_filenames() |>
+    fix_duplicates()
+  expect_snapshot(msgs)
+
   # clean up
   galaxias_config(archive = glue::glue("{here::here()}.zip"))
   unlink("metadata.Rmd")
