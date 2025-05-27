@@ -100,12 +100,15 @@ is_testing <- function() {
 check_file_argument <- function(file,
                                 must_exist = TRUE,
                                 error_call = rlang::caller_env()){
+  #TODO: `file` in error message doesn't make sense because it can also be a folder path, 
+  #      and `file` differs from argument name that must be changed to fix
   if(is.null(file)){
-    cli::cli_abort("Argument `file` is missing, with no default",
+    cli::cli_abort("Argument `file` is missing, with no default.",
                    call = error_call)
   }
   if(!inherits(file, "character")){
-    cli::cli_abort("Argument `file` must be of class `character`",
+    class_file <- class(file)
+    cli::cli_abort("Argument `file` must be of class `character`, not `{class_file}`.",
                    call = error_call)
   }
   if(must_exist){
@@ -130,7 +133,7 @@ check_publish_directory <- function(quiet,
       
       choice <- cli_menu(
         c(" ",
-          "Your working directory for data publication is set to `{directory}`, which does not exist", 
+          "Your working directory for data publication is set to {.file {directory}}, which does not exist.", 
           " "),
         "Would you like to create it? (0 to exit)",
         choices = c("Yes", "No")
@@ -139,9 +142,9 @@ check_publish_directory <- function(quiet,
       if (choice == 1) {
         usethis::use_directory(directory)
       } else {
-        cli::cli_abort(c("Unable to build working directory", 
-                         i = "To change the default directory, see `galaxias_config()`",
-                         i = "To avoid seeing this message in future, use `quiet = TRUE`"),
+        cli::cli_abort(c("Unable to build working directory.", 
+                         i = "To change the default directory, see `galaxias_config()`.",
+                         i = "To avoid seeing this message in future, use `quiet = TRUE`."),
                        call = error_call)
       }
     }else{

@@ -22,27 +22,37 @@
 #' @seealso `check_archive()` checks a Darwin Core Archive via a GBIF API, 
 #' rather than locally.
 #' @export
-check_directory <- function(source = "data-publish"){ 
-
-  if(!file.exists(source)){
-    c("File or directory {.file {source}} not found.") |>
-      cli::cli_abort()
-  }else{
-    if(grepl(".zip$", source)){
-      bullets <- c(
-        "Must supply a source folder name.",
-        i = "`check_archive()` only accepts a folder name, not a zip file."
-        ) |>
-        cli::cli_bullets() |>
-        cli::cli_fmt()
-      cli::cli_abort(bullets)
-      # file_list <- utils::unzip(source, list = TRUE) |>
-      #   dplyr::pull(Name)
-    }else{
-      file_list <- list.files(source)
-    }
-  }
+check_directory <- function(quiet = FALSE){ 
   
+  # run checks on `directory`
+  source <- potions::pour("directory",
+                          .pkg = "galaxias")
+  # check_file_argument(destination, 
+  #                     must_exist = FALSE) 
+  check_file_argument(source, 
+                      must_exist = TRUE) 
+  
+  # if(!file.exists(source)){
+  #   c("File or directory {.file {source}} not found.") |>
+  #     cli::cli_abort()
+  # }else{
+  #   if(grepl(".zip$", source)){
+  #     bullets <- c(
+  #       "Must supply a source folder name.",
+  #       i = "`check_archive()` only accepts a folder name, not a zip file."
+  #       )
+  #     cli::cli_abort(bullets)
+  #     # file_list <- utils::unzip(source, list = TRUE) |>
+  #     #   dplyr::pull(Name)
+  #   }else{
+      file_list <- list.files(source)
+  #   }
+  # }
+  
+  if(!quiet){
+    cli::cli_alert_info("Testing files in {.file {source}}")
+    wait(0.8)
+  }
   check_files(source, file_list)
 }
 
