@@ -31,7 +31,6 @@ use_data <- function(...,
                      overwrite = FALSE,
                      quiet = FALSE) {
   
-  # try a simpler syntax for testing reasons
   user_data <- list(...)
   
   if(length(user_data) < 1L){

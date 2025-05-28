@@ -7,9 +7,9 @@
 #' file where the resulting zip file will be placed.
 #' @name galaxias_config 
 #' @order 1
-#' @param directory A string giving the name of the directory that will contain
-#' working files. Defaults to `data-publish`.
-#' @param archive A string giving the name of the archive file, created using
+#' @param directory Path of the directory that will 
+#' contain working files. Defaults to `data-publish`.
+#' @param archive Path and file name the archive file, created using
 #' [build_archive()] and checked with [check_archive()]. Must include the 
 #' full file path; see details for more information.
 #' @param gbif An (optional) list containing the entries `username`, `email` and 
@@ -129,7 +129,8 @@ check_config_archive <- function(x,
     x
   }else{
     if(!inherits(archive, "character")){
-      cli::cli_abort("{.arg archive} should be of class `character`.",
+      wrong_class <- class(archive)
+      cli::cli_abort("{.arg archive} should be of class character, not {wrong_class}.",
                      call = error_call)
     }
     if(!grepl(".zip$", archive)){
@@ -138,7 +139,7 @@ check_config_archive <- function(x,
     }
     if(!file.exists(dirname(archive))){
       cli::cli_abort(c("{.arg archive} must specify a valid path.",
-                       i = "Specified path: {.file {archive}}"),
+                       x = "Invalid path: {.file {archive}}"),
                      call = error_call)
     }
     
