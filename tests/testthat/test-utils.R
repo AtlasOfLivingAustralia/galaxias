@@ -78,7 +78,7 @@ test_that("cli_menu(exit =) works", {
 
 test_that("check_config_path() errors when `NULL`", {
   check_config_path(file = NULL) |>
-    expect_error("Missing path or filename")
+    expect_error("Can only use existing named objects")
 })
 
 test_that("check_config_path() errors when `file` is not a character", {
