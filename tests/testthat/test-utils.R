@@ -76,23 +76,30 @@ test_that("cli_menu(exit =) works", {
   expect_snapshot(cli_menu_with_mock(2))
 })
 
-test_that("check_file_argument() errors when `file` is `NULL`", {
-  check_file_argument(file = NULL) |>
-    expect_error("Argument `file` is missing")
+test_that("check_config_path() errors when `NULL`", {
+  check_config_path(file = NULL) |>
+    expect_error("Missing path or filename")
 })
 
-test_that("check_file_argument() errors when `file` is not a character", {
-  check_file_argument(file = 3L) |>
-    expect_error("Argument `file` must be of class `character`")
+test_that("check_config_path() errors when `file` is not a character", {
+  check_config_path(3L) |>
+    expect_error("Can only use existing named objects")
 })
 
-test_that("check_file_argument() errors when `file` does not exist", {
-  check_file_argument(file = "nothing.xlsx") |>
-    expect_error("File")
+test_that("check_config_path() errors when `file` does not exist", {
+  arg <- 3
+  check_config_path(arg) |>
+    expect_error("`arg` must be of class character")
 })
 
-test_that("check_file_argument() does not error when `must_exist` = FALSE", {
-  check_file_argument(file = "nothing.xlsx",
+test_that("check_config_path() errors when object does not exist", {
+  check_config_path(barg) |>
+    expect_error("object 'barg' not found")
+})
+
+test_that("check_config_path() does not error when `must_exist` = FALSE", {
+  path <- "a-folder"
+  check_config_path(path,
                       must_exist = FALSE) |>
     expect_no_error()
 })

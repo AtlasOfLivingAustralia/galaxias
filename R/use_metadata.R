@@ -36,7 +36,12 @@ use_metadata <- function(file = NULL,
                          quiet = FALSE){
   
   # run checks on `file`
-  check_file_argument(file)
+  if(is.null(file)){
+    cli::cli_abort(c("Missing {.arg `file`}, with no default.",
+                     i = "Must supply path to existing metadata statement file."),
+                   call = error_call)
+  }
+  # check_config_path(file)
   
   # import file, ensure EML metadata is added, convert to XML
   if (!quiet) {
