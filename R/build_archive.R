@@ -5,7 +5,7 @@
 #' data and metadata. `build_archive()` constructs this zip file. It assumes 
 #' that all necessary files have been pre-constructed, and can be found inside a 
 #' single folder with no additional or redundant information. Both the source
-#' folder and the name of the destination `.zip` file are set using 
+#' folder and the file name and path of the archive `.zip` file are set using 
 #' [galaxias_config()].
 #' 
 #' Structurally, 
@@ -61,16 +61,16 @@ build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {
   
   # run checks on `archive`
-  destination <- potions::pour("archive",
+  archive <- potions::pour("archive",
                                .pkg = "galaxias")
-  check_file_argument(destination, 
+  check_config_path(archive, 
                       must_exist = FALSE) 
   # This check is probably redundant given behaviour of `galaxias_config()`,
   # but kept for safety reasons.
   
-  # prettier versions of `destination` for printing reasons
-  file_name <- basename(destination)
-  file_path <- dirname(destination)
+  # prettier versions of `archive` for printing reasons
+  file_name <- basename(archive)
+  file_path <- dirname(archive)
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -102,13 +102,13 @@ build_archive <- function(overwrite = FALSE,
     progress_update("Creating zip folder...")
   }
   
-  if(file.exists(destination)){
+  if(file.exists(archive)){
     if(overwrite){
       if(!quiet){
         cli::cli_progress_step(c("Overwriting {.file {file_name}}.",
                                  i = "Path: {.path {file_path}}"))
       }
-      zip::zip(zipfile = destination, 
+      zip::zip(zipfile = archive, 
                files = files_in,
                mode = "cherry-pick")
     }else{
@@ -121,14 +121,14 @@ build_archive <- function(overwrite = FALSE,
       cli::cli_progress_step(c("Writing {.file {file_name}}.",
                                i = "Path: {.path {file_path}}"))
     }
-    zip::zip(zipfile = destination, 
+    zip::zip(zipfile = archive, 
              files = files_in,
              mode = "cherry-pick")
   }
 
   if(!quiet){cli::cli_progress_done()}
   
-  invisible(destination)
+  invisible(archive)
 }
 
 #' Internal function to automatically build_schema() inside build_archive()

@@ -8,7 +8,7 @@ test_that("check_directory() fails when galaxias_config does not contain an exis
   
   # tests
   check_directory() |>
-    expect_error("Must supply a source folder name") # this error message will change
+    expect_error("Specified `directory` does not exist") # this error message will change
   
   # clean up
   galaxias_config(directory = "data-publish")

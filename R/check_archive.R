@@ -30,7 +30,7 @@ check_archive <- function(){
   # run checks on `file`
   file <- potions::pour("archive",
                         .pkg = "galaxias")
-  check_file_argument(file)
+  check_config_path(file)
   if(!grepl(".zip$", file)){
     bullets <- c(
       "Must supply a zip file.",
