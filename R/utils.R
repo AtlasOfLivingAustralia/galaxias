@@ -1,10 +1,4 @@
-
-#' Evaluate dots
-#' @noRd
-#' @keywords Internal
-dots <- function(...) {
-  eval(substitute(alist(...)))
-}
+## -- {cli} functions -- ##
 
 #' Interactive menu function
 #' @description
@@ -80,6 +74,12 @@ cli_readline <- function(prompt) {
   }
 }
 
+
+## -- testing -- ##
+
+#' Mimic supplying user input to a menu
+#' @noRd
+#' @keywords Internal
 local_user_input <- function(x, env = rlang::caller_env()) {
   withr::local_options(
     rlang_interactive = TRUE,
@@ -89,10 +89,15 @@ local_user_input <- function(x, env = rlang::caller_env()) {
   )
 }
 
+#' Check whether function is being called by testthat
+#' @noRd
+#' @keywords Internal
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
 
+
+## -- checks -- ##
 
 #' Check a `file` argument is 1. not null, 2. a character, 3. (optionally) exists
 #' @noRd

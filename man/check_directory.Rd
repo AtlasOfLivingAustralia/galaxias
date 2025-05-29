@@ -4,7 +4,7 @@
 \alias{check_directory}
 \title{Check whether contents of directory comply with the Darwin Core Standard}
 \usage{
-check_directory(source = "data-publish")
+check_directory(quiet = FALSE)
 }
 \arguments{
 \item{source}{(string) A directory containing the files to be published, or

@@ -47,6 +47,15 @@
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
+#' @examples
+#' \dontshow{
+#' .old_wd <- setwd(tempdir())
+#' }
+#' # set up an archive somehow?
+#' build_archive()
+#' \dontshow{
+#' setwd(.old_wd)
+#' }
 #' @export
 build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {

@@ -58,6 +58,16 @@ separately using \code{\link[=use_schema]{use_schema()}}.
 present in the source directory. The resulting Archive is saved as a zip
 folder in the parent directory by default.
 }
+\examples{
+\dontshow{
+.old_wd <- setwd(tempdir())
+}
+# set up an archive somehow?
+build_archive()
+\dontshow{
+setwd(.old_wd)
+}
+}
 \seealso{
 \code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=use_schema]{use_schema()}}
 }

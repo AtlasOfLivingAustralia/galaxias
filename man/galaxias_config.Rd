@@ -42,7 +42,7 @@ file where the resulting zip file will be placed.
 }
 \details{
 The \code{archive} argument must be a full file name including path. The default
-is \code{glue::glue("{here::here()}.zip")} which places it adjacent to the working
+is \code{glue::glue("{getwd()}.zip")} which places it adjacent to the working
 directory, with the same name, mimicking \code{devtools::build()}. Sensible
 alternatives might include:
 \itemize{

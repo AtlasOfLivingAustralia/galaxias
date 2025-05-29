@@ -25,25 +25,23 @@ Depends:
   corella
 Imports:
   cli,
-  curl,
   delma,
   dplyr,
   fs,
   glue,
-  here,
   httr2,
   jsonlite,
   potions,
   purrr,
   readr,
   rlang,
-  stringr,
   tibble,
   usethis,
   withr,
   zip
 Suggests:
   gt,
+  here,
   janitor,
   knitr,
   lubridate,
