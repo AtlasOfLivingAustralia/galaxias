@@ -1,18 +1,26 @@
 test_that("check_archive() works", {
-  skip("tests not ready")
   skip_if_offline()
+  skip("Tests not ready")
   
-  galaxias_config(gbif = list(
-    username = "atlasoflivingaustralia",
-    email = "ala4r@ala.org.au",
-    password = "galah-gbif-test-login"
-  ))
+  # use default credentials and localled cached zip file
+  galaxias_config(
+    archive = "testdata/simple_dwca.zip",
+    gbif = list(
+      username = "atlasoflivingaustralia",
+      email = "ala4r@ala.org.au",
+      password = "galah-gbif-test-login"
+    ))
   
-  # check_archive(filename = "./tests/testthat/testdata/data/eml.xml")
+  result <- check_archive()
+  # check printing etc
+  
+  ## Sys.sleep(60) 
+  # this is a poor solution. Need to have repeated checking with cooldown
+  # can get code from galah for that
 })
 
 test_that("retrieving a processed query works", {
-  skip("tests_not_ready")
-  result <- api_gbif_validator_status_get(
-    key = "73253337-8fa2-466f-a78f-4c212c981fb7")
+  skip_if_offline()
+  skip("Tests not ready")
+  result <- get_report("73253337-8fa2-466f-a78f-4c212c981fb7")
 })

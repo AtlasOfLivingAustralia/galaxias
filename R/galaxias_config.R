@@ -18,7 +18,7 @@
 #' Default is set to `FALSE`; i.e. messages are shown.
 #' @details
 #' The `archive` argument must be a full file name including path. The default
-#' is `glue::glue("{here::here()}.zip")` which places it adjacent to the working 
+#' is `glue::glue("{getwd()}.zip")` which places it adjacent to the working 
 #' directory, with the same name, mimicking `devtools::build()`. Sensible
 #' alternatives might include:
 #' 
@@ -80,7 +80,7 @@ galaxias_default_config <- function(directory,
     directory <- "data-publish"
   }
   if(is.null(archive)){
-    archive <- glue::glue("{here::here()}.zip")
+    archive <- glue::glue("{getwd()}.zip")
   }
   x <- list(
     directory = directory,

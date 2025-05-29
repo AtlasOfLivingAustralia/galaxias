@@ -39,7 +39,7 @@ check_archive <- function(){
   }
   
   # POST query to GBIF validator API
-  post_response <- api_gbif_validator_post(source)
+  post_response <- api_gbif_validator_post(file)
   # if there is an error, this function should return `post_response`
   # to allow the user to retry later using the `key` arg, 
   # supplied to `get_report()`
@@ -74,10 +74,9 @@ api_gbif_validator_post <- function(filename){
     sourceId = jsonlite::unbox(version_string),
     notificationEmail = email_string) |>
     jsonlite::toJSON() |>
-    curl::form_data(type = "application/json")
-  validation_request_file <- curl::form_file(filename, 
-                                             type = "application/zip")
-  
+    form_json()
+  validation_request_file <- form_zip(file_path = filename)
+
   # build query
   query <- httr2::request("https://api.gbif.org/v1/validation") |>
     httr2::req_headers(
@@ -91,7 +90,7 @@ api_gbif_validator_post <- function(filename){
     httr2::req_body_multipart(
       file = validation_request_file,
       validationRequest = validation_request_json)
-  
+
   # perform query
   result <- httr2::req_perform(query) |>
     httr2::resp_body_json()
@@ -143,4 +142,39 @@ gbif_username_string <- function(){
   }
   glue::glue("{username}:{password}") |>
     as.character()
+}
+
+#' Internal function to create a JSON form
+#' modified from `curl::form_data()`
+#' @noRd
+#' @keywords Internal
+form_json <- function (value) 
+{
+  if(is.character(value)){
+    value <- enc2utf8(value) |>
+      glue::glue_collapse(sep = "\n") |>
+      as.character() |>
+      charToRaw()    
+  }
+  if(!is.raw(value)){
+    cli::cli_abort("Argument 'value' must be string or raw vector")
+  }
+  list(value = value, 
+       type = "application/json") |>
+    structure(class = "form_data")
+}
+
+#' Internal function to create a file addon
+#' modified from `curl::form_file()`
+#' @noRd
+#' @keywords Internal
+form_zip <- function(file_path){
+  x <- normalizePath(file_path[1], 
+                     mustWork = TRUE) |>
+    enc2native()
+
+  list(path = x, 
+       type = "application/zip",
+       name = NULL) |>
+    structure(class = "form_file")
 }
