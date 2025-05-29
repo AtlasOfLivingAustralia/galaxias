@@ -95,27 +95,25 @@ build_archive <- function(overwrite = FALSE,
   }
   
   if(!quiet) {
-    progress_update("Creating zip folder...")
+    progress_update("Creating zip file...")
   }
   
   if(file.exists(archive)){
     if(overwrite){
       if(!quiet){
-        cli::cli_progress_step(c("Overwriting {.file {file_name}}.",
-                                 i = "Path: {.path {file_path}}"))
+        cli::cli_progress_step(c("Overwriting {.file {file_path}/{file_name}}."))
       }
       zip::zip(zipfile = archive, 
                files = files_in,
                mode = "cherry-pick")
     }else{
-      cli::cli_abort(c("{.file {file_name}} already exists and has not been overwritten.",
-                       i = "Path: {.path {file_path}}",
+      cli::cli_abort(c("Darwin Core Archive already exists and has not been overwritten.",
+                       i = "Existing archive found at {.path {file_path}/{file_name}}",
                        i = "Set `overwrite = TRUE` to change this behaviour"))
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step(c("Writing {.file {file_name}}.",
-                               i = "Path: {.path {file_path}}"))
+      cli::cli_progress_step(c("Writing {.file {file_path}/{file_name}}"))
     }
     zip::zip(zipfile = archive, 
              files = files_in,

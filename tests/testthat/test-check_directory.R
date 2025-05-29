@@ -53,7 +53,7 @@ test_that("check_directory() works with no arguments", {
   expect_snapshot(msgs)
 
   # clean up
-  unlink("../darwin_core_archive.zip")
+  unlink("../dwc-archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)

@@ -10,7 +10,7 @@
 #' @param directory Path of the directory that will store working files. 
 #' Defaults to `data-publish`.
 #' @param archive Name of the zip file where the completed archive will be
-#' built. Defaults to `darwin_core_archive.zip`. Note this file will always be
+#' built. Defaults to `dwc-archive.zip`. Note this file will always be
 #' saved in the parent directory as per behaviour of `devtools::build()`.
 #' @param gbif An (optional) list containing the entries `username`, `email` and 
 #' `password`. Only required if you intend to call [check_archive()].
@@ -71,7 +71,7 @@ galaxias_default_config <- function(directory,
     directory <- "data-publish"
   }
   if(is.null(archive)){
-    archive <- "darwin_core_archive.zip"
+    archive <- "dwc-archive.zip"
   }
   x <- list(
     directory = directory,

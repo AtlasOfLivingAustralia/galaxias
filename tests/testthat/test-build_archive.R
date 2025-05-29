@@ -12,7 +12,6 @@ test_that("build_archive() fails when specified directory is missing all files",
   # clean up
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 test_that("build_archive() works with no arguments", {
@@ -35,15 +34,14 @@ test_that("build_archive() works with no arguments", {
   # tests
   build_archive(quiet = TRUE) |>
     expect_no_error()
-  expect_in("darwin_core_archive.zip", 
+  expect_in("dwc-archive.zip", 
             list.files(".."))
   
   # clean up
-  unlink("../darwin_core_archive.zip")
+  unlink("../dwc-archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 test_that("build_archive() messages work", {
@@ -76,11 +74,10 @@ test_that("build_archive() messages work", {
   expect_snapshot(msgs)
   
   # clean up
-  unlink("../darwin_core_archive.zip")
+  unlink("../dwc-archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 
@@ -114,11 +111,10 @@ test_that("build_archive() menu appears", {
   expect_snapshot(msgs)
 
   # clean up
-  unlink("../darwin_core_archive.zip")
+  unlink("../dwc-archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 test_that("build_archive() builds schema when missing", {
@@ -140,15 +136,14 @@ test_that("build_archive() builds schema when missing", {
   # tests
   build_archive(quiet = TRUE) |>
     expect_no_error()
-  expect_in("darwin_core_archive.zip", list.files(".."))
+  expect_in("dwc-archive.zip", list.files(".."))
   expect_in("meta.xml", list.files("data-publish"))
   
   # clean up
-  unlink("../darwin_core_archive.zip")
+  unlink("../dwc-archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 
@@ -169,7 +164,6 @@ test_that("build_archive() fails when missing data", {
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 test_that("build_archive() fails when missing metadata", {
@@ -194,7 +188,6 @@ test_that("build_archive() fails when missing metadata", {
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
-  setwd(current_wd)
 })
 
 # test_that("build_archive() will use data-publish folder if it's there AND a named directory isn't found", {

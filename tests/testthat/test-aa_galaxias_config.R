@@ -10,7 +10,7 @@ test_that("galaxias_config() creates default object onload", {
   cached_obj <- potions::pour(.pkg = "galaxias")
   comparison_obj <- galaxias_default_config(
     directory = "data-publish",
-    archive = "darwin_core_archive.zip")
+    archive = "dwc-archive.zip")
   expect_identical(cached_obj, comparison_obj)
 })
 
@@ -18,7 +18,7 @@ test_that("galaxias_config() returns an object if all args are missing", {
   cached_obj <- galaxias_config(quiet = TRUE)
   comparison_obj <- galaxias_default_config(
     directory = "data-publish",
-    archive = "darwin_core_archive.zip")
+    archive = "dwc-archive.zip")
   expect_identical(cached_obj, comparison_obj) 
 })
 
@@ -30,7 +30,7 @@ test_that("galaxias_config() accepts changes back to default names", {
     archive = glue::glue("TESTARCHIVE.zip"),
     quiet = TRUE)
   expect_false(updated_cache$archive == default_cache$archive)
-  restored_cache <- galaxias_config(archive = "darwin_core_archive.zip",
+  restored_cache <- galaxias_config(archive = "dwc-archive.zip",
                                     quiet = TRUE)
   expect_equal(restored_cache, default_cache)
   # check default is restored
