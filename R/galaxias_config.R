@@ -96,7 +96,7 @@ check_config_directory <- function(x,
   }else{
     if(!inherits(directory, "character")){
       wrong_class <- class(directory)
-      cli::cli_abort("{.arg directory} should be of class `character`, not `{wrong_class}`.",
+      cli::cli_abort("{.arg directory} should be of class character, not {wrong_class}.",
                      call = error_call)
     }
     
@@ -130,7 +130,7 @@ check_config_archive <- function(x,
     }
     
     if(!quiet){
-      cli::cli_progress_step("Updating {.arg archive} to {archive}")
+      cli::cli_progress_step("Updating {.arg archive} to {.file {archive}}")
     }
     x$archive <- archive
     x

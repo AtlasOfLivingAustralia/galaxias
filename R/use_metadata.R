@@ -35,13 +35,11 @@ use_metadata <- function(file = NULL,
                          overwrite = FALSE,
                          quiet = FALSE){
   
-  # run checks on `file`
   if(is.null(file)){
-    cli::cli_abort(c("Missing {.arg `file`}, with no default.",
-                     i = "Must supply path to existing metadata statement file."),
-                   call = error_call)
+    cli::cli_abort(c("Missing {.arg file}, with no default.",
+                     i = "Must supply path to existing metadata statement file."))
   }
-  # check_config_path(file)
+  # `delma::read_md()` runs checks on whether file exists
   
   # import file, ensure EML metadata is added, convert to XML
   if (!quiet) {

@@ -27,8 +27,9 @@ check_directory <- function(){
   # run checks on `directory`
   directory <- potions::pour("directory",
                           .pkg = "galaxias")
-  check_config_path(directory, 
-                      must_exist = TRUE) 
+  if(!dir.exists(directory)){
+    cli::cli_abort(c("Directory {.file {directory}} not found."))
+  }
   
   file_list <- list.files(directory)
   

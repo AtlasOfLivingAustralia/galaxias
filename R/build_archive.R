@@ -63,10 +63,11 @@ build_archive <- function(overwrite = FALSE,
   # run checks on `archive`
   file_name <- potions::pour("archive",
                              .pkg = "galaxias")
-  file_path <- get_archive_path()
-  archive <- glue::glue("{file_path}/{file_name}")
-  check_config_path(archive, 
-                    must_exist = FALSE)
+  archive_path <- fs::path_abs(glue::glue("../{file_name}"))
+  if(!dir.exists(archive)){
+    cli::cli_abort(c("Specified archive {.file {file_name}} does not exist.",
+                     x = "Can't find {.path {archive}."))
+  }
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -108,7 +109,7 @@ build_archive <- function(overwrite = FALSE,
                mode = "cherry-pick")
     }else{
       cli::cli_abort(c("Darwin Core Archive already exists and has not been overwritten.",
-                       i = "Existing archive found at {.path {file_path}/{file_name}}",
+                       i = "Found existing archive {.path {file_path}/{file_name}}",
                        i = "Set `overwrite = TRUE` to change this behaviour"))
     }
   }else{
