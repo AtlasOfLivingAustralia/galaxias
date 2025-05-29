@@ -10,12 +10,12 @@ galaxias_config(directory = NULL, archive = NULL, gbif = NULL, quiet = FALSE)
 \method{print}{galaxias_config}(x, ...)
 }
 \arguments{
-\item{directory}{A string giving the name of the directory that will contain
-working files. Defaults to \code{data-publish}.}
+\item{directory}{Path of the directory that will store working files.
+Defaults to \code{data-publish}.}
 
-\item{archive}{A string giving the name of the archive file, created using
-\code{\link[=build_archive]{build_archive()}} and checked with \code{\link[=check_archive]{check_archive()}}. Must include the
-full file path; see details for more information.}
+\item{archive}{Name of the zip file where the completed archive will be
+built. Defaults to \code{darwin_core_archive.zip}. Note this file will always be
+saved in the parent directory as per behaviour of \code{devtools::build()}.}
 
 \item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
 \code{password}. Only required if you intend to call \code{\link[=check_archive]{check_archive()}}.}
@@ -37,17 +37,6 @@ view) the cache, this is returned invisibly.
 To validate your dataset, you need to provide credentials to the relevant web
 service. This function allows you to store that information for access by
 \code{galaxias} API functions. This function also enables you to change the
-\code{directory} where working documents are stored, and the path to the \code{archive}
+\code{directory} where working documents are stored, and the name of the \code{archive}
 file where the resulting zip file will be placed.
-}
-\details{
-The \code{archive} argument must be a full file name including path. The default
-is \code{glue::glue("{getwd()}.zip")} which places it adjacent to the working
-directory, with the same name, mimicking \code{devtools::build()}. Sensible
-alternatives might include:
-\itemize{
-\item \code{here::here("my-archive.zip")} for placing a file \emph{within} the working directory.
-\item \code{glue::glue("{dirname(here::here())}/my-archive.zip")} for placing your file
-in the same \emph{directory} as the default, but with a different file name.
-}
 }

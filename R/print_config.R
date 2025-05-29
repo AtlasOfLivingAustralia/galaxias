@@ -6,20 +6,11 @@
 #' @export
 print.galaxias_config <- function(x, ...){
   cli::cli_h3("{.pkg galaxias} configuration")
-  
   cli::cli_text("{.strong File configuration}")
-  
-  file_config <- purrr::map(c(1, 2),
-                            .f = \(a){
-                              glue::glue("{names(x)[a]}: {x[[a]]}")
-                            }) |>
-    unlist()
-  names(file_config) <- rep("*", 2)
-  cli::cli_bullets(file_config)
-  
+  cli::cli_bullets(c("*" = "directory: {x$directory}"))
+  cli::cli_bullets(c("*" = "archive: {x$archive}"))
   if(!is.null(x$gbif)){
     cli::cli_text("{.strong GBIF API credentials}")
-    
     api_config <- purrr::map(c(1:3),
                               .f = \(a){
                                 glue::glue("{names(x$gbif)[a]}: {x$gbif[[a]]}")

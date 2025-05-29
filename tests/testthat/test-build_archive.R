@@ -12,6 +12,7 @@ test_that("build_archive() fails when specified directory is missing all files",
   # clean up
   unlink("data-publish")
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 test_that("build_archive() works with no arguments", {
@@ -19,7 +20,6 @@ test_that("build_archive() works with no arguments", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
@@ -35,17 +35,15 @@ test_that("build_archive() works with no arguments", {
   # tests
   build_archive(quiet = TRUE) |>
     expect_no_error()
-
-  archive_name <- glue::glue("{basename(temp_dir)}.zip")
-  expect_in(archive_name, 
+  expect_in("darwin_core_archive.zip", 
             list.files(".."))
   
   # clean up
-  galaxias_config(archive = glue::glue("{here::here()}.zip"))
-  unlink(glue::glue("../{archive_name}"))
+  unlink("../darwin_core_archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 test_that("build_archive() messages work", {
@@ -53,7 +51,6 @@ test_that("build_archive() messages work", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
@@ -79,11 +76,11 @@ test_that("build_archive() messages work", {
   expect_snapshot(msgs)
   
   # clean up
-  galaxias_config(archive = glue::glue("{here::here()}.zip"))
+  unlink("../darwin_core_archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink(glue::glue("../{basename(temp_dir)}.zip"))
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 
@@ -92,7 +89,6 @@ test_that("build_archive() menu appears", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
@@ -118,11 +114,11 @@ test_that("build_archive() menu appears", {
   expect_snapshot(msgs)
 
   # clean up
-  galaxias_config(archive = glue::glue("{here::here()}.zip"))
+  unlink("../darwin_core_archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink(glue::glue("../{basename(temp_dir)}.zip"))
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 test_that("build_archive() builds schema when missing", {
@@ -130,7 +126,6 @@ test_that("build_archive() builds schema when missing", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
@@ -145,16 +140,15 @@ test_that("build_archive() builds schema when missing", {
   # tests
   build_archive(quiet = TRUE) |>
     expect_no_error()
-  archive_name <- glue::glue("{basename(temp_dir)}.zip")
-  expect_in(archive_name, list.files(".."))
+  expect_in("darwin_core_archive.zip", list.files(".."))
   expect_in("meta.xml", list.files("data-publish"))
   
   # clean up
-  galaxias_config(archive = glue::glue("{here::here()}.zip"))
+  unlink("../darwin_core_archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
-  unlink(glue::glue("../{archive_name}"))
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 
@@ -175,6 +169,7 @@ test_that("build_archive() fails when missing data", {
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 test_that("build_archive() fails when missing metadata", {
@@ -199,6 +194,7 @@ test_that("build_archive() fails when missing metadata", {
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 # test_that("build_archive() will use data-publish folder if it's there AND a named directory isn't found", {

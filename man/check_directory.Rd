@@ -4,12 +4,7 @@
 \alias{check_directory}
 \title{Check whether contents of directory comply with the Darwin Core Standard}
 \usage{
-check_directory(quiet = FALSE)
-}
-\arguments{
-\item{source}{(string) A directory containing the files to be published, or
-optionally a \code{.zip} file built from the same (i.e. with \code{build_archive()}).
-Defaults to the \code{data-publish} folder within the current working directory.}
+check_directory()
 }
 \value{
 Invisibly returns a tibble to the workspace containing check
@@ -17,12 +12,15 @@ results; but primarily called for the side-effect of generating a report in
 the console.
 }
 \description{
-Supply a folder containing files for a Darwin Core Archive to check whether
-files meet Darwin Core Standard. \code{check_archive()} runs
+Checks that files in a directory meet Darwin Core Standard. The path of the
+directory is set to the \code{directory} specified in \verb{[galaxias_config()]}.
+Users can run \code{galaxias_config()} to print the current specified \code{directory}.
+
+\code{check_archive()} runs
 \code{\link[corella:check_dataset]{corella::check_dataset()}} on \code{occurrences.csv} and \code{events.csv} files, and
-\code{\link[delma:check_metadata]{delma::check_metadata()}} on \code{eml.xml} and \code{meta.xml} files. These
-functions run tests to determine whether data and metadata pass
-Darwin Core Standard criteria.
+\code{\link[delma:check_metadata]{delma::check_metadata()}} on \code{eml.xml} and \code{meta.xml} files, if they are
+present. These \code{check_} functions run tests to determine whether data and
+metadata pass Darwin Core Standard criteria.
 }
 \examples{
 \donttest{

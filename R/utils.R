@@ -1,3 +1,10 @@
+#' Evaluate dots
+#' @noRd
+#' @keywords Internal
+dots <- function(...) {
+  eval(substitute(alist(...)))
+}
+
 ## -- {cli} functions -- ##
 
 #' Interactive menu function
@@ -178,4 +185,13 @@ check_publish_directory <- function(quiet,
     } 
   }
   directory
+}
+
+
+#' Get a path to the parent directory for use with archive functions
+#' @noRd
+#' @keywords Internal
+get_archive_path <- function(){
+  getwd() |> 
+    dirname()
 }

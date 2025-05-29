@@ -1,5 +1,5 @@
-## NOTE: This file is prefixed with `aa_` so that it is run before other tests. 
-## This is useful to test galaxias_config() defaults.
+# NOTE: This file is prefixed with `aa_` so that it is run
+# before other tests. This is useful to test galaxias_config() defaults.
 
 test_that("potions::pour creates the correct object", {
   default_obj <- options("potions-pkg")

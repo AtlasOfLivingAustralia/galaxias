@@ -4,7 +4,7 @@ test_that("check_directory() fails when galaxias_config does not contain an exis
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(directory = glue::glue("a-random-name"))
+  galaxias_config(directory = "a-random-name")
   
   # tests
   check_directory() |>
@@ -13,6 +13,7 @@ test_that("check_directory() fails when galaxias_config does not contain an exis
   # clean up
   galaxias_config(directory = "data-publish")
   unlink(temp_dir)
+  setwd(current_wd)
 })
 
 test_that("check_directory() works with no arguments", {
@@ -20,7 +21,6 @@ test_that("check_directory() works with no arguments", {
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(archive = glue::glue("{temp_dir}.zip"))
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
@@ -51,12 +51,11 @@ test_that("check_directory() works with no arguments", {
     fix_filenames() |>
     fix_duplicates()
   expect_snapshot(msgs)
-  archive_name <- glue::glue("{basename(temp_dir)}.zip")
-  
+
   # clean up
-  galaxias_config(archive = glue::glue("{here::here()}.zip"))
-  unlink(glue::glue("../{archive_name}"))
+  unlink("../darwin_core_archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
+  setwd(current_wd)
 })

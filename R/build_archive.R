@@ -61,16 +61,12 @@ build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {
   
   # run checks on `archive`
-  archive <- potions::pour("archive",
-                               .pkg = "galaxias")
+  file_name <- potions::pour("archive",
+                             .pkg = "galaxias")
+  file_path <- get_archive_path()
+  archive <- glue::glue("{file_path}/{file_name}")
   check_config_path(archive, 
-                      must_exist = FALSE) 
-  # This check is probably redundant given behaviour of `galaxias_config()`,
-  # but kept for safety reasons.
-  
-  # prettier versions of `archive` for printing reasons
-  file_name <- basename(archive)
-  file_path <- dirname(archive)
+                    must_exist = FALSE)
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -233,7 +229,9 @@ find_data <- function(directory,
   return(glue::glue("{directory}/{file_list}"))
 }
 
-
+#' Accepted file names and their types
+#' @noRd
+#' @keywords Internal
 darwin_core_files <- function() {
   x <- tibble::tibble(
     file = c("occurrences.csv", "events.csv", "multimedia.csv",
@@ -247,6 +245,9 @@ darwin_core_files <- function() {
   return(x)
 }
 
+#' Find data in a repository
+#' @noRd
+#' @keywords Internal
 is_file_present <- function(files, directory) {
   user_files <- files |>
     dplyr::mutate(

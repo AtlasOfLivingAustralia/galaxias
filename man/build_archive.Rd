@@ -23,7 +23,7 @@ A Darwin Core archive is a zip file containing a combination of
 data and metadata. \code{build_archive()} constructs this zip file. It assumes
 that all necessary files have been pre-constructed, and can be found inside a
 single folder with no additional or redundant information. Both the source
-folder and the name of the destination \code{.zip} file are set using
+folder and the file name and path of the archive \code{.zip} file are set using
 \code{\link[=galaxias_config]{galaxias_config()}}.
 
 Structurally,

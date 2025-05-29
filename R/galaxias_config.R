@@ -3,28 +3,19 @@
 #' To validate your dataset, you need to provide credentials to the relevant web 
 #' service. This function allows you to store that information for access by 
 #' `galaxias` API functions. This function also enables you to change the 
-#' `directory` where working documents are stored, and the path to the `archive` 
+#' `directory` where working documents are stored, and the name of the `archive` 
 #' file where the resulting zip file will be placed.
 #' @name galaxias_config 
 #' @order 1
-#' @param directory Path of the directory that will 
-#' contain working files. Defaults to `data-publish`.
-#' @param archive Path and file name the archive file, created using
-#' [build_archive()] and checked with [check_archive()]. Must include the 
-#' full file path; see details for more information.
+#' @param directory Path of the directory that will store working files. 
+#' Defaults to `data-publish`.
+#' @param archive Name of the zip file where the completed archive will be
+#' built. Defaults to `darwin_core_archive.zip`. Note this file will always be
+#' saved in the parent directory as per behaviour of `devtools::build()`.
 #' @param gbif An (optional) list containing the entries `username`, `email` and 
 #' `password`. Only required if you intend to call [check_archive()].
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
 #' Default is set to `FALSE`; i.e. messages are shown.
-#' @details
-#' The `archive` argument must be a full file name including path. The default
-#' is `glue::glue("{getwd()}.zip")` which places it adjacent to the working 
-#' directory, with the same name, mimicking `devtools::build()`. Sensible
-#' alternatives might include:
-#' 
-#'   - `here::here("my-archive.zip")` for placing a file _within_ the working directory. 
-#'   - `glue::glue("{dirname(here::here())}/my-archive.zip")` for placing your file 
-#' in the same _directory_ as the default, but with a different file name.
 #' @returns An object of class `galaxias_config`, which is a list containing 
 #' the cached values. If `galaxias_config()` is used to update (rather than 
 #' view) the cache, this is returned invisibly.
@@ -80,7 +71,7 @@ galaxias_default_config <- function(directory,
     directory <- "data-publish"
   }
   if(is.null(archive)){
-    archive <- glue::glue("{getwd()}.zip")
+    archive <- "darwin_core_archive.zip"
   }
   x <- list(
     directory = directory,
@@ -135,11 +126,6 @@ check_config_archive <- function(x,
     }
     if(!grepl(".zip$", archive)){
       cli::cli_abort("{.arg archive} must specify a file name ending with `.zip`.",
-                     call = error_call)
-    }
-    if(!file.exists(dirname(archive))){
-      cli::cli_abort(c("{.arg archive} must specify a valid path.",
-                       x = "Invalid path: {.file {archive}}"),
                      call = error_call)
     }
     
