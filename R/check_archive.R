@@ -3,12 +3,34 @@
 #' @description
 #' Check whether a specified Darwin Core Archive is ready for
 #' sharing and publication, according to the Darwin Core Standard. 
-#' `check_archive()` tests the specified archive using an online validation 
+#' [check_archive()] tests the specified archive using an online validation 
 #' service by sending the archive via an API and returning the results. 
 #' Currently only supports validation using GBIF.
-#' @returns Invisibly returns a tibble to the workspace containing validation 
-#' results; but primarily called for the side-effect of generating a report in 
-#' the console.
+#' @param wait (logical) Whether to wait for a completed report from the API
+#' before exiting (`TRUE`, the default), or try the API once and return the
+#' result regardless (`FALSE`).
+#' @param quiet (logical) Whether to suppress messages about what is happening. 
+#' Default is set to `FALSE`; i.e. messages are shown.
+#' @details
+#' Note that there is no `file` argument to `check_archive()`; instead, the
+#' location where files will be built and checked is set using the
+#' `archive` argument to [galaxias_config].
+#' 
+#' Internally, [check_archive()] both `POST`s the specified archive to the GBIF 
+#' validator API and then calls [get_report()] to retrieve (`GET`) the result. 
+#' [get_report()] is exported to allow the user to download results at a later 
+#' time should they wish; this is more efficient than repeatedly generating 
+#' queries with [check_archive()] if the underlying data are unchanged. A third 
+#' option is simply to assign the outcome of [check_archive()] or [get_report()] 
+#' to an object, then call [view_report()] to format the result nicely. This 
+#' approach doesn't require any further API calls and is considerably faster.
+#' 
+#' Note that information returned by these functions is provided verbatim from 
+#' the institution API, not from galaxias.
+#' @returns Both [check_archive()] and [get_report()] return an object of class
+#' `gbif_validator` to the workspace. [view_report()] and 
+#' [print.gbif_validator()] don't return anything, and are called for the
+#' side-effect of printing useful information to the console.
 #' @examples \dontrun{
 #' # add GBIF login details
 #' galaxias_config(gbif = list(username = "your-gbif-username",
@@ -18,38 +40,39 @@
 #' # Check archive against Darwin Core Standard criteria
 #' check_archive("dwc-archive.zip")
 #' }
-#' @details
-#' Results returned by `check_archive()` are directly from the institution API, 
-#' not from galaxias.
-#' @seealso `check_directory()` which runs checks on a folder directory locally, 
+#' @seealso [check_directory()] which runs checks on a folder directory locally, 
 #' rather than via API.
 #' @order 1
 #' @export
-check_archive <- function(){
+check_archive <- function(wait = TRUE,
+                          quiet = FALSE){
   
+
   # run checks on `archive`
   file_name <- potions::pour("archive",
                              .pkg = "galaxias")
-  archive_path <- fs::path_abs(glue::glue("../{file_name}"))
+  archive <- fs::path_abs(glue::glue("../{file_name}"))
   if(!dir.exists(archive)){
     cli::cli_abort(c("Specified archive {.file {file_name}} does not exist.",
                      x = "Can't find {.path {archive}}."))
-  }
   
   # POST query to GBIF validator API
-  post_response <- api_gbif_validator_post(file)
-  # if there is an error, this function should return `post_response`
-  # to allow the user to retry later using the `key` arg, 
-  # supplied to `get_report()`
+  post_response <- api_gbif_validator_post(archive)
+  if(!quiet){
+    print_archive_POST(post_response)
+  }
   
-  # GET status of query
-  # NOTE: This will require a loop with rate-limiting to ensure success
-  # see galah-R/R/check_queue.R
-  # NOTE: `get_report()` is also an exported function
-  status_response <- get_report(post_response$key)
-  
-  # Q: Should there be an invisible() here to return a tibble?
+  if(wait){
+    # GET status of query
+    # NOTE: `get_report()` is also an exported function and should behave sensibly
+    get_report(post_response$key,
+               wait = wait,
+               quiet = quiet)    
+  }else{
+    post_response
+  }
 }
+
 
 #' Internal function to post content to the GBIF `validator` API
 #' https://techdocs.gbif.org/en/openapi/v1/validator#/validation-resource/submitFile
@@ -95,11 +118,7 @@ api_gbif_validator_post <- function(filename){
   
   # return useful messages and objects to the user
   if(is.list(result)){
-    required_names <- c("key", "created", "modified", "status", "metrics")
-    if(all(required_names %in% names(result))){
-      cli::cli_inform("GBIF validator API returned an unexpected result.")
-    }
-    class(result) <- c("gbif_validator_post", "list")
+    class(result) <- c("gbif_validator", "list")
     result
   }else{
     cli::cli_abort("GBIF validator API did not return a result.")
