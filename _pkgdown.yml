@@ -52,9 +52,11 @@ reference:
   - build_archive
   - check_directory
   - check_archive
+  - get_report
+  - view_report
+  - print.gbif_validator
   - submit_archive
 - title: Package management
   contents:
   - galaxias_config
-  - print_report
 

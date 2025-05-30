@@ -12,8 +12,12 @@
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
 #' Default is set to `FALSE`; i.e. messages are shown.
 #' @details
-#' [check_archive()] both `POST`s the specified archive to the GBIF validator
-#' API and then calls [get_report()] to retrieve (`GET`) the result. 
+#' Note that there is no `file` argument to `check_archive()`; instead, the
+#' location where files will be built and checked is set using the
+#' `archive` argument to [galaxias_config].
+#' 
+#' Internally, [check_archive()] both `POST`s the specified archive to the GBIF 
+#' validator API and then calls [get_report()] to retrieve (`GET`) the result. 
 #' [get_report()] is exported to allow the user to download results at a later 
 #' time should they wish; this is more efficient than repeatedly generating 
 #' queries with [check_archive()] if the underlying data are unchanged. A third 

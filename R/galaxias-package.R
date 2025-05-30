@@ -31,7 +31,6 @@
 #'   
 #' **Package management**
 #'   * [galaxias_config()] Store credentials for your API call
-#'   * [print_report()] Methods for displaying API responses
 #'   
 #' @keywords internal
 "_PACKAGE"

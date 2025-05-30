@@ -48,8 +48,12 @@ service by sending the archive via an API and returning the results.
 Currently only supports validation using GBIF.
 }
 \details{
-\code{\link[=check_archive]{check_archive()}} both \code{POST}s the specified archive to the GBIF validator
-API and then calls \code{\link[=get_report]{get_report()}} to retrieve (\code{GET}) the result.
+Note that there is no \code{file} argument to \code{check_archive()}; instead, the
+location where files will be built and checked is set using the
+\code{archive} argument to \link{galaxias_config}.
+
+Internally, \code{\link[=check_archive]{check_archive()}} both \code{POST}s the specified archive to the GBIF
+validator API and then calls \code{\link[=get_report]{get_report()}} to retrieve (\code{GET}) the result.
 \code{\link[=get_report]{get_report()}} is exported to allow the user to download results at a later
 time should they wish; this is more efficient than repeatedly generating
 queries with \code{\link[=check_archive]{check_archive()}} if the underlying data are unchanged. A third
