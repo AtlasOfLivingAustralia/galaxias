@@ -3,12 +3,24 @@
 #' @description
 #' Check whether a specified Darwin Core Archive is ready for
 #' sharing and publication, according to the Darwin Core Standard. 
-#' `check_archive()` tests the specified archive using an online validation 
+#' [check_archive()] tests the specified archive using an online validation 
 #' service by sending the archive via an API and returning the results. 
 #' Currently only supports validation using GBIF.
-#' @returns Invisibly returns a tibble to the workspace containing validation 
-#' results; but primarily called for the side-effect of generating a report in 
-#' the console.
+#' @details
+#' [check_archive()] both `POST`s the specified archive to the GBIF validator
+#' API and then calls [get_report()] to retrieve (`GET`) the result. 
+#' [get_report()] is exported to allow the user to download results at a later 
+#' time should they wish; this is more efficient than repeatedly generating 
+#' queries with [check_archive()] if the underlying data are unchanged. A third 
+#' option is simply to assign the outcome of [check_archive()] or [get_report()] 
+#' to an object then call it again, which uses [print.gbif_validator()] to 
+#' format the result nicely. This approach doesn't require any further API calls 
+#' and as such is considerably faster.
+#' 
+#' Note that information returned by these functions is provided verbatim from 
+#' the institution API, not from galaxias.
+#' @returns Both [check_archive()] and [get_report()] return an object of class
+#' `gbif_validator` to the workspace, invisibly if `quiet = TRUE`. 
 #' @examples \dontrun{
 #' # add GBIF login details
 #' galaxias_config(gbif = list(username = "your-gbif-username",
@@ -18,40 +30,47 @@
 #' # Check archive against Darwin Core Standard criteria
 #' check_archive("dwc-archive.zip")
 #' }
-#' @details
-#' Results returned by `check_archive()` are directly from the institution API, 
-#' not from galaxias.
-#' @seealso `check_directory()` which runs checks on a folder directory locally, 
+#' @seealso [check_directory()] which runs checks on a folder directory locally, 
 #' rather than via API.
 #' @order 1
 #' @export
-check_archive <- function(){
+check_archive <- function(wait = TRUE,
+                          quiet = FALSE){
   
-  # run checks on `file`
-  file <- potions::pour("archive",
-                        .pkg = "galaxias")
-  check_config_path(file)
-  if(!grepl(".zip$", file)){
-    bullets <- c(
+  # run checks on `archive`
+  file_name <- potions::pour("archive",
+                             .pkg = "galaxias")
+  file_path <- get_archive_path()
+  archive <- glue::glue("{file_path}/{file_name}")
+  check_config_path(archive, 
+                    must_exist = TRUE)
+  
+  # ensure file ends in `.zip` (Q: necessary?)
+  if(!grepl(".zip$", file_name)){
+    cli::cli_abort(c(
       "Must supply a zip file.",
       i = "`check_archive()` only accepts a completed Darwin Core Archive saved as a zip file."
-    )
+    ))
   }
   
   # POST query to GBIF validator API
-  post_response <- api_gbif_validator_post(file)
-  # if there is an error, this function should return `post_response`
-  # to allow the user to retry later using the `key` arg, 
-  # supplied to `get_report()`
+  post_response <- api_gbif_validator_post(archive)
   
-  # GET status of query
-  # NOTE: This will require a loop with rate-limiting to ensure success
-  # see galah-R/R/check_queue.R
-  # NOTE: `get_report()` is also an exported function
-  status_response <- get_report(post_response$key)
-  
-  # Q: Should there be an invisible() here to return a tibble?
+  if(wait){
+    # GET status of query
+    # NOTE: `get_report()` is also an exported function and should behave sensibly
+    get_report(post_response$key,
+               wait = wait,
+               quiet = quiet)    
+  }else{
+    if(quiet){
+      invisible(post_response) # returns object quietly
+    }else{
+      post_response # calls `print.gbif_validator`
+    }
+  }
 }
+
 
 #' Internal function to post content to the GBIF `validator` API
 #' https://techdocs.gbif.org/en/openapi/v1/validator#/validation-resource/submitFile

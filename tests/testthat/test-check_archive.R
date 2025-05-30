@@ -1,15 +1,39 @@
 test_that("check_archive() works", {
   skip_if_offline()
-  skip("Tests not ready")
   
-  # use default credentials and localled cached zip file
+  # set up directory
+  current_wd <- here::here()
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  
+  # set gbif credentials
   galaxias_config(
-    archive = "testdata/simple_dwca.zip",
     gbif = list(
       username = "atlasoflivingaustralia",
       email = "ala4r@ala.org.au",
       password = "galah-gbif-test-login"
     ))
+  
+  # build galaxias-specific content
+  usethis::use_directory("data-publish")
+  use_metadata_template(quiet = TRUE)
+  use_metadata("metadata.Rmd", quiet = TRUE)
+  tibble::tibble(
+    occurrenceID = random_id(),
+    decimalLatitude = c(44.4, 44.4)) |>
+    write.csv("data-publish/occurrences.csv")
+  use_schema(quiet = TRUE)
+  build_archive(quiet = TRUE)
+  
+  # tests
+  
+  
+  # clean up
+  unlink("../dwc-archive.zip")
+  unlink("metadata.Rmd")
+  unlink("data-publish")
+  unlink(temp_dir)
+  
   
   result <- check_archive()
   # check printing etc

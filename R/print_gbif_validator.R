@@ -1,27 +1,33 @@
-#' Print objects returned by APIs
-#' 
-#' Currently only `check_archive()` and `get_report()`, where the 
-#' latter is called by the former.
 #' @param x An object to print.
+#' @param n Number of entries to print per file
 #' @param \dots Additional arguments, currently ignored.
-#' @name print_report
+#' @rdname check_archive
+#' @order 3
 #' @export
-print.gbif_validator_post <- function(x, ...){
+print.gbif_validator <- function(x, 
+                                 n = 5,
+                                 ...){
+  # submission information
   default_gbif_print(x)
-  cli::cli_text("Status: {cli::col_blue(tolower(x$status)})")
-}
-
-#' @rdname print_report
-#' @param n Number of entries to print
-#' @export
-print.gbif_validator_response <- function(x, n = 5, ...){
-  default_gbif_print(x)
+  
+  # status
+  status <- tolower(x)
+  if(status %in% c("downloading", "submitted", "running", "queued")){
+    cli::cli_text("Status: {cli::col_blue(status)}")
+  }else if(status %in% c("aborted", "failed")){
+    cli::cli_text("Status: {cli::col_red(status)}")
+  }else if(status == "finished"){
+    cli::cli_text("Status: {cli::col_green(status)}")
+  }else{
+    cli::cli_text("Status: {status}") # shouldn't ever happen
+  }
+  
+  # if issues returned, print them
+  # option to integrate this with above
   files <- purrr::pluck(x, "metrics", "files")
   if(!is.null(files)){
-    cli::cli_text("Status: {cli::col_red(tolower(x$status))}")
     print_validator_issues(files, n = n)  
   }else{ # this could be no issues OR not finished; check
-    cli::cli_text("Status: {cli::col_green(tolower(x$status))}")
     cli::cli_text("No issues found!")
   }
 }

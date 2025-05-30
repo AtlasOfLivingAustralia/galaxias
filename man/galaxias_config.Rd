@@ -14,7 +14,7 @@ galaxias_config(directory = NULL, archive = NULL, gbif = NULL, quiet = FALSE)
 Defaults to \code{data-publish}.}
 
 \item{archive}{Name of the zip file where the completed archive will be
-built. Defaults to \code{darwin_core_archive.zip}. Note this file will always be
+built. Defaults to \code{dwc-archive.zip}. Note this file will always be
 saved in the parent directory as per behaviour of \code{devtools::build()}.}
 
 \item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
