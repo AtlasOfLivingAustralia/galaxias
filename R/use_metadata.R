@@ -52,7 +52,7 @@ use_metadata <- function(file = NULL,
   file_path <- fs::path(directory, "eml.xml")
   
   # set writing behaviour
-  if(file.exists(file_path)){
+  if(fs::file_exists(file_path)){
     if(overwrite){
       if(!quiet){
         cli::cli_progress_step("Overwriting {.file {file_path}}.")
@@ -65,7 +65,7 @@ use_metadata <- function(file = NULL,
       }
     }else{
       c("{.file {file_path}} already exists.",
-        i = "Set `overwrite = TRUE` to overwrite existing file.") |>
+        i = "Use `overwrite = TRUE` to overwrite.") |>
         cli::cli_inform()     
     }
   }else{

@@ -9,6 +9,7 @@ print.galaxias_config <- function(x, ...){
   cli::cli_text("{.strong File configuration}")
   cli::cli_bullets(c("*" = "directory: {x$directory}"))
   cli::cli_bullets(c("*" = "archive: {x$archive}"))
+  cli::cli_bullets(c(" " = cli::col_green("path: {fs::path_abs(glue::glue('../{x$archive}'))}")))
   if(!is.null(x$gbif)){
     cli::cli_text("{.strong GBIF API credentials}")
     api_config <- purrr::map(c(1:3),

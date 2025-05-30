@@ -60,15 +60,6 @@
 build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {
   
-  # run checks on `archive`
-  file_name <- potions::pour("archive",
-                             .pkg = "galaxias")
-  archive_path <- fs::path_abs(glue::glue("../{file_name}"))
-  if(!dir.exists(archive)){
-    cli::cli_abort(c("Specified archive {.file {file_name}} does not exist.",
-                     x = "Can't find {.path {archive}."))
-  }
-  
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
   }
@@ -84,7 +75,8 @@ build_archive <- function(overwrite = FALSE,
   source <- potions::pour("directory",
                           .pkg = "galaxias")
   if(!dir.exists(source)){
-    cli::cli_abort(c("Directory {.file {source}} not found."))
+    cli::cli_abort(c("Directory {.file {source}} does not exist.",
+                     i = "See {.code ?galaxias_config()}."))
   }
   
   files_in <- find_data(source, quiet = quiet)
@@ -99,22 +91,27 @@ build_archive <- function(overwrite = FALSE,
     progress_update("Creating zip file...")
   }
   
-  if(file.exists(archive)){
+  # run checks on `archive`
+  file_name <- potions::pour("archive",
+                             .pkg = "galaxias")
+  archive <- fs::path_abs(glue::glue("../{file_name}"))
+  
+  if(fs::file_exists(archive)){
     if(overwrite){
       if(!quiet){
-        cli::cli_progress_step(c("Overwriting {.file {file_path}/{file_name}}."))
+        cli::cli_progress_step(c("Overwriting {.file {archive}}."))
       }
       zip::zip(zipfile = archive, 
                files = files_in,
                mode = "cherry-pick")
     }else{
       cli::cli_abort(c("Darwin Core Archive already exists and has not been overwritten.",
-                       i = "Found existing archive {.path {file_path}/{file_name}}",
-                       i = "Set `overwrite = TRUE` to change this behaviour"))
+                       i = "Found existing archive {.path {archive}}",
+                       i = "Use `overwrite = TRUE` to overwrite."))
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step(c("Writing {.file {file_path}/{file_name}}"))
+      cli::cli_progress_step(c("Writing {.file {archive}}"))
     }
     zip::zip(zipfile = archive, 
              files = files_in,
@@ -123,7 +120,7 @@ build_archive <- function(overwrite = FALSE,
 
   if(!quiet){cli::cli_progress_done()}
   
-  invisible(archive)
+  # invisible(archive)
 }
 
 #' Internal function to automatically build_schema() inside build_archive()
@@ -205,7 +202,7 @@ find_data <- function(directory,
     file_check_message(user_files, "eml.xml")
   }
   
-  if(!file.exists(glue::glue("{directory}/eml.xml"))){
+  if(!fs::file_exists(glue::glue("{directory}/eml.xml"))){
     bullets <- c("Didn't find metadata statement ({.file eml.xml}) in {.file {directory}}.",
                  i = "Create a metadata template with `use_metadata_template()`.",
                  i = "Use `use_metadata()` to convert and save a metadata statement as an {.file eml.xml} file.")
@@ -252,7 +249,7 @@ is_file_present <- function(files, directory) {
     dplyr::mutate(
       present = glue::glue("{directory}/{files$file}") |>
         purrr::map(\(file_name)
-                   file.exists(file_name)) |>
+                   fs::file_exists(file_name)) |>
         unlist())
   
   user_files <- user_files |>

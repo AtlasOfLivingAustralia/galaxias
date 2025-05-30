@@ -193,7 +193,7 @@ write_data_file <- function(file_path,
                             quiet = FALSE,
                             error_call = rlang::caller_env()) {
   
-  if(file.exists(file_path)){
+  if(fs::file_exists(file_path)){
     if(overwrite){
       if(!quiet){
         cli::cli_progress_step("Overwriting {.file {file_path}}.")
@@ -206,7 +206,7 @@ write_data_file <- function(file_path,
       }
     }else{
       c("{.file {file_path}} already exists.",
-        i = "Set `overwrite = TRUE` to overwrite existing file.") |>
+        i = "Use `overwrite = TRUE` to overwrite.") |>
         cli::cli_inform()     
     }
   }else{

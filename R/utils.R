@@ -115,7 +115,7 @@ check_publish_directory <- function(quiet,
                                     error_call = rlang::caller_env()){
   directory <- potions::pour("directory",
                              .pkg = "galaxias")
-  if(!file.exists(directory)){
+  if(!fs::file_exists(directory)){
     if(rlang::is_interactive() & !quiet){ 
       
       choice <- cli_menu(

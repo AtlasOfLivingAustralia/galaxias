@@ -116,7 +116,7 @@ test_that("use_metadata() reads quarto doc", {
   # tests
   use_metadata(file = "metadata.qmd")
   expect_true(
-    file.exists("data-publish/eml.xml")
+    fs::file_exists("data-publish/eml.xml")
   )
   
   # clean up
