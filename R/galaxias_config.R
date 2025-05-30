@@ -70,13 +70,13 @@ galaxias_config <- function(directory = NULL,
 galaxias_default_config <- function(directory,
                                     archive){
   if(is.null(directory)){
-    directory <- fs::path("data-publish")
+    directory <- "data-publish"
   }
   if(is.null(archive)){
     archive <- "dwc-archive.zip"
   }
   x <- list(
-    directory = directory,
+    directory = directory |> fs::path(),
     archive = archive,
     gbif = list(username = "",
                 email = "",
