@@ -42,13 +42,12 @@ If you have any questions, comments or suggestions, please email
 \strong{Package management}
 \itemize{
 \item \code{\link[=galaxias_config]{galaxias_config()}} Store credentials for your API call
-\item \code{\link[=print_report]{print_report()}} Methods for displaying API responses
 }
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://galaxias.ala.org.au}
+  \item \url{https://galaxias.ala.org.au/R}
   \item Report bugs at \url{https://github.com/AtlasOfLivingAustralia/galaxias/issues}
 }
 

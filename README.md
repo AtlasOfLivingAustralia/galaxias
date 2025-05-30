@@ -107,8 +107,8 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 88a46072-34… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 88a4607c-34… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 1881b588-36… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 1881b592-36… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
@@ -138,14 +138,14 @@ use_metadata("metadata.Rmd")
 Build a Darwin Core Archive and save it to the working directory.
 
 ``` r
-build_archive("dwca.zip")
+build_archive()
 ```
 
 Validate whether the constructed archive passes Darwin Core Standard
 criteria.
 
 ``` r
-check_archive("dwca.zip")
+check_archive()
 ```
 
 See the [Quick Start

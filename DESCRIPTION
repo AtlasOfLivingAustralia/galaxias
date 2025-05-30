@@ -25,9 +25,9 @@ Depends:
   corella
 Imports:
   cli,
-  curl,
   delma,
   dplyr,
+  fs,
   glue,
   httr2,
   jsonlite,
@@ -35,21 +35,24 @@ Imports:
   purrr,
   readr,
   rlang,
-  stringr,
   tibble,
   usethis,
+  withr,
   zip
 Suggests:
+  gt,
+  here,
+  janitor,
   knitr,
   lubridate,
-  rmarkdown,
-  testthat (>= 3.0.0),
-  xml2,
   readxl,
-  janitor,
-  gt
+  rmarkdown,
+  R.utils,
+  testthat (>= 3.0.0),
+  tidyr,
+  xml2
 License: MPL-2.0
-URL: https://galaxias.ala.org.au
+URL: https://galaxias.ala.org.au/R
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues
 Maintainer: Martin Westgate <martin.westgate@csiro.au>
 Encoding: UTF-8

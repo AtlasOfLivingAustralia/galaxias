@@ -76,26 +76,6 @@ test_that("cli_menu(exit =) works", {
   expect_snapshot(cli_menu_with_mock(2))
 })
 
-test_that("check_file_argument() errors when `file` is `NULL`", {
-  check_file_argument(file = NULL) |>
-    expect_error("Argument `file` is missing")
-})
-
-test_that("check_file_argument() errors when `file` is not a character", {
-  check_file_argument(file = 3L) |>
-    expect_error("Argument `file` must be of class `character`")
-})
-
-test_that("check_file_argument() errors when `file` does not exist", {
-  check_file_argument(file = "nothing.xlsx") |>
-    expect_error("File")
-})
-
-test_that("check_file_argument() does not error when `must_exist` = FALSE", {
-  check_file_argument(file = "nothing.xlsx",
-                      must_exist = FALSE) |>
-    expect_no_error()
-})
 
 test_that("check_publish_directory() performs correctly", {
   skip("Tests not ready")

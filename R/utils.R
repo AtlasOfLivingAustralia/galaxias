@@ -1,10 +1,11 @@
-
 #' Evaluate dots
 #' @noRd
 #' @keywords Internal
 dots <- function(...) {
   eval(substitute(alist(...)))
 }
+
+## -- {cli} functions -- ##
 
 #' Interactive menu function
 #' @description
@@ -80,6 +81,12 @@ cli_readline <- function(prompt) {
   }
 }
 
+
+## -- testing -- ##
+
+#' Mimic supplying user input to a menu
+#' @noRd
+#' @keywords Internal
 local_user_input <- function(x, env = rlang::caller_env()) {
   withr::local_options(
     rlang_interactive = TRUE,
@@ -89,28 +96,15 @@ local_user_input <- function(x, env = rlang::caller_env()) {
   )
 }
 
+#' Check whether function is being called by testthat
+#' @noRd
+#' @keywords Internal
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
 
 
-#' Check a `file` argument is 1. not null, 2. a character, 3. (optionally) exists
-#' @noRd
-#' @keywords Internal
-check_file_argument <- function(file,
-                                must_exist = TRUE){
-  # check `file` argument
-  if(is.null(file)){
-    cli::cli_abort("Argument `file` is missing, with no default")
-  }
-  if(!inherits(file, "character")){
-    cli::cli_abort("Argument `file` must be of class `character`")
-  }
-  if(!file.exists(file) & must_exist){
-    c("File {.file {file}} not found.") |>
-      cli::cli_abort()
-  }
-}
+## -- checks -- ##
 
 
 #' Check whether publish directory exists, and if not, build it,
@@ -118,15 +112,15 @@ check_file_argument <- function(file,
 #' @noRd
 #' @keywords Internal
 check_publish_directory <- function(quiet,
-                                   error_call = rlang::caller_env()){
+                                    error_call = rlang::caller_env()){
   directory <- potions::pour("directory",
                              .pkg = "galaxias")
-  if(!file.exists(directory)){
+  if(!fs::file_exists(directory)){
     if(rlang::is_interactive() & !quiet){ 
       
       choice <- cli_menu(
         c(" ",
-          "Your working directory for data publication is set to `{directory}`, which does not exist", 
+          "Your working directory for data publication is set to {.file {directory}}, which does not exist.", 
           " "),
         "Would you like to create it? (0 to exit)",
         choices = c("Yes", "No")
@@ -135,9 +129,8 @@ check_publish_directory <- function(quiet,
       if (choice == 1) {
         usethis::use_directory(directory)
       } else {
-        cli::cli_abort(c("Unable to build working directory", 
-                         i = "To change the default directory, see `galaxias_config()`",
-                         i = "To avoid seeing this message in future, use `quiet = TRUE`"),
+        cli::cli_abort(c("Unable to build working directory.", 
+                         i = "To change the default directory, see `galaxias_config()`."),
                        call = error_call)
       }
     }else{
@@ -146,3 +139,12 @@ check_publish_directory <- function(quiet,
   }
   directory
 }
+
+
+#' Get a path to the parent directory for use with archive functions
+#' @noRd
+#' @keywords Internal
+# get_archive_path <- function(){
+#   getwd() |> 
+#     dirname()
+# }

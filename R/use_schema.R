@@ -34,9 +34,9 @@ use_schema <- function(overwrite = FALSE,
   directory <- check_publish_directory(quiet = quiet)
   file_path <- fs::path(directory, "meta.xml")
 
-  if(file.exists(file_path) & !overwrite){
+  if(fs::file_exists(file_path) & !overwrite){
     cli::cli_abort(c("File {.file {file_path}} already exists and has not been overwritten",
-                   i = "To change this, set `overwrite = TRUE`"))
+                   i = "Use `overwrite = TRUE` to overwrite."))
   }
 
   # build schema
@@ -102,9 +102,9 @@ detect_dwc_files <- function(directory,
     dplyr::mutate(
       present = glue::glue("{directory}/{supported_files}") |>
         purrr::map(\(file_name)
-                   file.exists(file_name)) |>
+                   fs::file_exists(file_name)) |>
         unlist(),
-      present_formatted = present |>
+      present_formatted = .data$present |>
         purrr::map_chr(\(file_exists) 
                        ifelse(isTRUE(file_exists), 
                cli::symbol$tick |> cli::col_green(), 

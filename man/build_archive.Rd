@@ -4,11 +4,9 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(file = NULL, overwrite = FALSE, quiet = FALSE)
+build_archive(overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{file}{(string) A file name to save the resulting \code{.zip} file.}
-
 \item{overwrite}{(logical) Should existing files be overwritten? Defaults to
 \code{FALSE}.}
 
@@ -24,7 +22,9 @@ file).
 A Darwin Core archive is a zip file containing a combination of
 data and metadata. \code{build_archive()} constructs this zip file. It assumes
 that all necessary files have been pre-constructed, and can be found inside a
-single folder with no additional or redundant information.
+single folder with no additional or redundant information. Both the source
+folder and the file name and path of the archive \code{.zip} file are set using
+\code{\link[=galaxias_config]{galaxias_config()}}.
 
 Structurally,
 \code{build_archive()} is similar to \code{devtools::build()}, in the sense that it
@@ -57,6 +57,16 @@ separately using \code{\link[=use_schema]{use_schema()}}.
 \code{build_archive()} will not build a Darwin Core Archive with these files
 present in the source directory. The resulting Archive is saved as a zip
 folder in the parent directory by default.
+}
+\examples{
+\dontshow{
+.old_wd <- setwd(tempdir())
+}
+# set up an archive somehow?
+build_archive()
+\dontshow{
+setwd(.old_wd)
+}
 }
 \seealso{
 \code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=use_schema]{use_schema()}}

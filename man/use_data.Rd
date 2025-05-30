@@ -35,7 +35,7 @@ with \code{\link[=build_archive]{build_archive()}}.
 "event" and "multimedia". \code{use_data()} attempts to detect and save the
 correct data type based on the provided \code{tibble}/\code{data.frame}.
 Alternatively, users can call the underlying functions
-\code{\link[=use_data_occurrences]{use_data_occurrences()}}, \code{\link[=use_data_events]{use_data_events()}} and \code{\link[=use_data_multimedia]{use_data_multimedia()}} to
+\code{\link[=use_data_occurrences]{use_data_occurrences()}} or \code{\link[=use_data_events]{use_data_events()}} to
 specify data type manually.
 }
 \details{

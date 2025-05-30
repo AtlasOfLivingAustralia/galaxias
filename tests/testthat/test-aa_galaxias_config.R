@@ -1,5 +1,5 @@
-## NOTE: This file is prefixed with `aa_` so that it is run before other tests. 
-## This is useful to test galaxias_config() defaults.
+# NOTE: This file is prefixed with `aa_` so that it is run
+# before other tests. This is useful to test galaxias_config() defaults.
 
 test_that("potions::pour creates the correct object", {
   default_obj <- options("potions-pkg")
@@ -42,7 +42,7 @@ test_that("galaxias_config() rejects non-character directories", {
 })
 
 test_that("galaxias_config() accepts non-default directories, but DOES NOT build them", {
-  dirname <- "MY-NEW-DIRECTORY"
+  dirname <- "MY-NEW-DIRECTORY" |> fs::path()
   result <- galaxias_config(directory = dirname,
                             quiet = TRUE)
   expect_equal(dirname, result$directory)

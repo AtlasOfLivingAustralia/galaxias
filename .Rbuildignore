@@ -9,4 +9,4 @@
 README.Rmd
 ^doc$
 ^\.github$
-^inst$
+^tests/testthat/testdata/build_example_zip_file.R

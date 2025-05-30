@@ -4,7 +4,9 @@
 #' A Darwin Core archive is a zip file containing a combination of 
 #' data and metadata. `build_archive()` constructs this zip file. It assumes 
 #' that all necessary files have been pre-constructed, and can be found inside a 
-#' single folder with no additional or redundant information. 
+#' single folder with no additional or redundant information. Both the source
+#' folder and the file name and path of the archive `.zip` file are set using 
+#' [galaxias_config()].
 #' 
 #' Structurally, 
 #' `build_archive()` is similar to `devtools::build()`, in the sense that it 
@@ -37,7 +39,6 @@
 #' `build_archive()` will not build a Darwin Core Archive with these files 
 #' present in the source directory. The resulting Archive is saved as a zip 
 #' folder in the parent directory by default.
-#' @param file (string) A file name to save the resulting `.zip` file.
 #' @param overwrite (logical) Should existing files be overwritten? Defaults to 
 #' `FALSE`.
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
@@ -46,16 +47,18 @@
 #' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
 #' file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
+#' @examples
+#' \dontshow{
+#' .old_wd <- setwd(tempdir())
+#' }
+#' # set up an archive somehow?
+#' build_archive()
+#' \dontshow{
+#' setwd(.old_wd)
+#' }
 #' @export
-build_archive <- function(file = NULL,
-                          overwrite = FALSE,
+build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {
-  
-  # run checks on `file`
-  check_file_argument(file, must_exist = FALSE)
-  if(!grepl(".zip$", file)){
-    cli::cli_abort("{.arg file} must specify a file name ending with `.zip`.")
-  }
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -72,7 +75,8 @@ build_archive <- function(file = NULL,
   source <- potions::pour("directory",
                           .pkg = "galaxias")
   if(!dir.exists(source)){
-    cli::cli_abort(c("Directory {.file {source}} not found."))
+    cli::cli_abort(c("Directory {.file {source}} does not exist.",
+                     i = "See {.code ?galaxias_config()}."))
   }
   
   files_in <- find_data(source, quiet = quiet)
@@ -84,33 +88,39 @@ build_archive <- function(file = NULL,
   }
   
   if(!quiet) {
-    progress_update("Creating zip folder...")
+    progress_update("Creating zip file...")
   }
   
-  if(file.exists(file)){
+  # run checks on `archive`
+  file_name <- potions::pour("archive",
+                             .pkg = "galaxias")
+  archive <- fs::path_abs(glue::glue("../{file_name}"))
+  
+  if(fs::file_exists(archive)){
     if(overwrite){
       if(!quiet){
-        cli::cli_progress_step("Overwriting {.file {file}}.")
+        cli::cli_progress_step(c("Overwriting {.file {archive}}."))
       }
-      zip::zip(zipfile = file, 
+      zip::zip(zipfile = archive, 
                files = files_in,
                mode = "cherry-pick")
     }else{
-      cli::cli_abort(c("{.file {file}} already exists and has not been overwritten",
-                       i = "set `overwrite = TRUE` to change this behaviour"))
+      cli::cli_abort(c("Darwin Core Archive already exists and has not been overwritten.",
+                       i = "Found existing archive {.path {archive}}",
+                       i = "Use `overwrite = TRUE` to overwrite."))
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step("Writing {.file {file}}.")
+      cli::cli_progress_step(c("Writing {.file {archive}}"))
     }
-    zip::zip(zipfile = file, 
+    zip::zip(zipfile = archive, 
              files = files_in,
              mode = "cherry-pick")
   }
 
   if(!quiet){cli::cli_progress_done()}
   
-  invisible(file)
+  # invisible(archive)
 }
 
 #' Internal function to automatically build_schema() inside build_archive()
@@ -174,7 +184,7 @@ find_data <- function(directory,
   
   # check number of files
   n_data_present <- user_files |>
-    dplyr::filter(type == "data") |>
+    dplyr::filter(.data$type == "data") |>
     dplyr::pull("present") |>
     sum()
   
@@ -182,8 +192,8 @@ find_data <- function(directory,
     bullets <- c("Didn't find data files in {.file {directory}}.",
                  i = "{directory/} must contain at least one of `occurrences.csv`, `events.csv` or `multimedia.csv`.",
                  i = "See `use_data()`.")
-    cl::cli_abort(bullets,
-                  call = call)
+    cli::cli_abort(bullets,
+                   call = call)
   }
   
   ## Metadata
@@ -192,7 +202,7 @@ find_data <- function(directory,
     file_check_message(user_files, "eml.xml")
   }
   
-  if(!file.exists(glue::glue("{directory}/eml.xml"))){
+  if(!fs::file_exists(glue::glue("{directory}/eml.xml"))){
     bullets <- c("Didn't find metadata statement ({.file eml.xml}) in {.file {directory}}.",
                  i = "Create a metadata template with `use_metadata_template()`.",
                  i = "Use `use_metadata()` to convert and save a metadata statement as an {.file eml.xml} file.")
@@ -209,13 +219,15 @@ find_data <- function(directory,
 
   # list of the files in the directory
   file_list <- user_files |>
-    dplyr::filter(present == TRUE) |>
+    dplyr::filter(.data$present == TRUE) |>
     dplyr::pull("file")
   
   return(glue::glue("{directory}/{file_list}"))
 }
 
-
+#' Accepted file names and their types
+#' @noRd
+#' @keywords Internal
 darwin_core_files <- function() {
   x <- tibble::tibble(
     file = c("occurrences.csv", "events.csv", "multimedia.csv",
@@ -229,14 +241,20 @@ darwin_core_files <- function() {
   return(x)
 }
 
+#' Find data in a repository
+#' @noRd
+#' @keywords Internal
 is_file_present <- function(files, directory) {
   user_files <- files |>
     dplyr::mutate(
       present = glue::glue("{directory}/{files$file}") |>
         purrr::map(\(file_name)
-                   file.exists(file_name)) |>
-        unlist(),
-      present_formatted = present |>
+                   fs::file_exists(file_name)) |>
+        unlist())
+  
+  user_files <- user_files |>
+    dplyr::mutate(
+      present_formatted = .data$present |>
         purrr::map_chr(\(file_exists) 
                        ifelse(isTRUE(file_exists), 
                               cli::symbol$tick |> cli::col_green(), 

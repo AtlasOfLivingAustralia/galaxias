@@ -5,31 +5,38 @@
 \alias{print.galaxias_config}
 \title{Provide configuration information to \code{galaxias}}
 \usage{
-galaxias_config(directory = NULL, gbif = NULL)
+galaxias_config(directory = NULL, archive = NULL, gbif = NULL, quiet = FALSE)
 
 \method{print}{galaxias_config}(x, ...)
 }
 \arguments{
-\item{directory}{A string giving the name of the directory to be used for
-storing working files. Defaults to \code{data-publish}.}
+\item{directory}{Path of the directory that will store working files.
+Defaults to \code{data-publish}.}
 
-\item{gbif}{A list containing the entries \code{username}, \code{email} and \code{password}.}
+\item{archive}{Name of the zip file where the completed archive will be
+built. Defaults to \code{dwc-archive.zip}. Note this file will always be
+saved in the parent directory as per behaviour of \code{devtools::build()}.}
+
+\item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
+\code{password}. Only required if you intend to call \code{\link[=check_archive]{check_archive()}}.}
+
+\item{quiet}{(logical) Whether to suppress messages about what is happening.
+Default is set to \code{FALSE}; i.e. messages are shown.}
 
 \item{x}{An object of class \code{galaxias_config}, created with
 \code{galaxias_config()}.}
 
 \item{\dots}{Additional arguments, currently ignored.}
 }
-\description{
-To validate (or in future, to publish) your dataset, you need to provide
-credentials to the relevant web service. This function allows you to store
-that information for access by \code{galaxias} API functions. This function
-also enables you to change the directory where working documents are stored,
-which defaults to \code{data-publish}.
+\value{
+An object of class \code{galaxias_config}, which is a list containing
+the cached values. If \code{galaxias_config()} is used to update (rather than
+view) the cache, this is returned invisibly.
 }
-\details{
-Note that unlike \code{galah}, you cannot set a 'default' provider in \code{galaxias};
-the organisation is always an argument to the function in question. Also
-unlike \code{galah}, \code{galaxias_config()} enables you to store configuration
-details for multiple organisations at once.
+\description{
+To validate your dataset, you need to provide credentials to the relevant web
+service. This function allows you to store that information for access by
+\code{galaxias} API functions. This function also enables you to change the
+\code{directory} where working documents are stored, and the name of the \code{archive}
+file where the resulting zip file will be placed.
 }

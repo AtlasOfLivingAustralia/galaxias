@@ -9,7 +9,7 @@
 #' "event" and "multimedia". `use_data()` attempts to detect and save the 
 #' correct data type based on the provided `tibble`/`data.frame`.
 #' Alternatively, users can call the underlying functions 
-#' [use_data_occurrences()], [use_data_events()] and [use_data_multimedia()] to 
+#' [use_data_occurrences()] or [use_data_events()] to 
 #' specify data type manually.
 #' @details
 #' By default, this function saves data in the `data-publish` folder. To change 
@@ -31,12 +31,18 @@ use_data <- function(...,
                      overwrite = FALSE,
                      quiet = FALSE) {
   
-  obj <- get_objs_from_dots(dots(...))
-  user_data <- check_is_data(obj)
+  user_data <- list(...)
+  
+  if(length(user_data) < 1L){
+    cli::cli_abort("Nothing to save.")
+  }
+  
+  # apply rules to number & classes of objects
+  user_data <- check_is_data(user_data)
   
   # Check if data is dwc compliant here?
   
-  # check whether user dataframe contains occurrences, events or multimedia
+  # check whether user data.frame contains occurrences, events or multimedia
   type <- check_data_type(user_data)
   
   switch_data_type(user_data,
@@ -45,50 +51,30 @@ use_data <- function(...,
                    quiet)
 }
 
-
-get_objs_from_dots <- function(.dots, error_call = rlang::caller_env()) {
-  if (length(.dots) == 0L) {
-    cli::cli_abort("Nothing to save.",
-                   call = error_call)
-  }
-
-  is_name <- vapply(.dots, is.symbol, logical(1))
-  if (!all(is_name)) {
-    cli::cli_abort("Can only save existing named objects.",
-                   call = error_call)
-  }
-
-  return(.dots)
-}
-
+#' Internal function to check for tibbles
+#' @noRd
+#' @keywords Internal
 check_is_data <- function(obj, error_call = rlang::caller_env()) {
   
   # check whether more than one data.frame/tibble is supplied
-  classes <- obj |> 
+  tibble_check <- obj |> 
     purrr::map(
       \(elements)
-      elements |> eval() |> tibble::is_tibble()
-      )
+      inherits(elements, "data.frame")
+      ) |>
+    unlist()
+  n_tibbles <- sum(tibble_check)
   
-  if(sum(unlist(classes)) > 1) {
+  # apply rules
+  if(n_tibbles > 1) {
     cli::cli_abort("Can only supply one `tibble`/`data.frame` to save.",
                    call = error_call)
-  }
-  
-  # if (length(obj) > 1 ) {
-  #   cli::cli_abort("Can only supply one object to save.",
-  #                  call = error_call)
-  # }
-  
-  obj <- obj[[1]] |> eval()
-  
-  if(!any(inherits(obj, c("tbl_df", "tbl", "data.frame")))) {
+  }else if(n_tibbles < 1){
     cli::cli_abort("Must supply a `tibble`/`data.frame` to save.",
-                   call = error_call)
+                   call = error_call)    
+  }else{
+    obj[[which(tibble_check)]]
   }
-  
-  obj
-  
 }
 
 #' Identifies data type based on column names, then checks with user
@@ -96,19 +82,19 @@ check_is_data <- function(obj, error_call = rlang::caller_env()) {
 #' @keywords Internal
 check_data_type <- function(data, error_call = rlang::caller_env()) {
   
+  if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
+    # Event
+    type <- "event"
+    file_name <- "events.csv"
+    not <- "occurrence"
+  } else {
+    # Occurrence
+    type <- "occurrence"
+    file_name <- "occurrences.csv"
+    not <- "event"
+  }
+  
   if (rlang::is_interactive()) {
-    if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
-      # Event
-      type <- "event"
-      file_name <- "events.csv"
-      not <- "occurrence"
-    } else {
-      # Occurrence
-      type <- "occurrence"
-      file_name <- "occurrences.csv"
-      not <- "event"
-    }
-
     choice <- cli_menu(
       "Data identified as type {.field {type}} and will be saved as {.file {file_name}}",
       "Is this correct? (or 0 to exit)",
@@ -129,19 +115,20 @@ check_data_type <- function(data, error_call = rlang::caller_env()) {
   } else {
     return(type)
   }
-  # bullets <- c("Data identified as type {.field {type}}.",
-  #              i = cli::col_grey("If this is incorrect, use {.code use_data(type = \"{not}\")} instead."))
-  # cli::cli_inform(bullets)
 }
 
 #' Switch to occurrence, event or multimedia type `use_data()` functions
 #' @noRd
 #' @keywords Internal
-switch_data_type <- function(user_data, type, overwrite) {
+switch_data_type <- function(user_data, type, overwrite, quiet) {
 
   switch(type,
-         "occurrence" = use_data_occurrences(user_data, overwrite = overwrite),
-         "event" = use_data_events(user_data, overwrite = overwrite)
+         "occurrence" = use_data_occurrences(user_data, 
+                                             overwrite = overwrite, 
+                                             quiet = quiet),
+         "event" = use_data_events(user_data, 
+                                   overwrite = overwrite, 
+                                   quiet = quiet)
          # "multimedia" = {use_data_multimedia(data)} # multimedia not yet supported
          )
 }
@@ -179,7 +166,7 @@ use_data_occurrences <- function(df,
 #'  `FALSE`. 
 #' @rdname use_data
 #' @export
-use_data_events <- function(df, 
+use_data_events <- function(df,
                             overwrite = FALSE,
                             quiet = FALSE) {
   
@@ -206,7 +193,7 @@ write_data_file <- function(file_path,
                             quiet = FALSE,
                             error_call = rlang::caller_env()) {
   
-  if(file.exists(file_path)){
+  if(fs::file_exists(file_path)){
     if(overwrite){
       if(!quiet){
         cli::cli_progress_step("Overwriting {.file {file_path}}.")
@@ -219,7 +206,7 @@ write_data_file <- function(file_path,
       }
     }else{
       c("{.file {file_path}} already exists.",
-        i = "Set `overwrite = TRUE` to overwrite existing file.") |>
+        i = "Use `overwrite = TRUE` to overwrite.") |>
         cli::cli_inform()     
     }
   }else{
