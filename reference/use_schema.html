@@ -9,7 +9,7 @@ This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
 this function to produce reliable results. The publishing directory is
-set using galaxias_config() and defaults to "data-publish".'><meta property="og:image" content="https://galaxias.ala.org.au/logo.png"></head><body>
+set using galaxias_config() and defaults to "data-publish".'><meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -26,6 +26,11 @@ set using galaxias_config() and defaults to "data-publish".'><meta property="og:
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/quick_start_guide.html">Quick start guide</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/occurrences-example.html">Standardise occurrence-based data</a></li>
+    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise monitoring data</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -86,7 +91,7 @@ called <code>meta.xml</code>, and this function enforces that.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">use_schema</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Building schema</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in proj_set("."):</span> <span style="color: #BB0000;">✖</span> Path <span style="color: #0000BB;">/tmp/Rtmp9YEqun/</span> does not appear to be inside a project or</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in proj_set("."):</span> <span style="color: #BB0000;">✖</span> Path <span style="color: #0000BB;">/tmp/RtmpSXBh1I/</span> does not appear to be inside a project or</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span>   package.</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Read more in the help for `usethis::proj_get()`.</span>
 </code></pre></div>
@@ -100,7 +105,7 @@ called <code>meta.xml</code>, and this function enforces that.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

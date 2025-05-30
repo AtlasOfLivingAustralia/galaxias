@@ -20,7 +20,7 @@
 <meta property="og:title" content="Describe, Package, and Share Biodiversity Data">
 <meta name="description" content="`galaxias` helps users describe, package, and share biodiversity information using the Darwin Core data standard, which is the format used and accepted by the Global Biodiversity Information Facility (GBIF) and its partner nodes. It is functionally similar to `devtools`, but with a focus on building Darwin Core Archives rather than R packages.">
 <meta property="og:description" content="`galaxias` helps users describe, package, and share biodiversity information using the Darwin Core data standard, which is the format used and accepted by the Global Biodiversity Information Facility (GBIF) and its partner nodes. It is functionally similar to `devtools`, but with a focus on building Darwin Core Archives rather than R packages.">
-<meta property="og:image" content="https://galaxias.ala.org.au/logo.png">
+<meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -40,6 +40,13 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/quick_start_guide.html">Quick start guide</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
+<li><a class="dropdown-item" href="articles/occurrences-example.html">Standardise occurrence-based data</a></li>
+    <li><a class="dropdown-item" href="articles/events-example.html">Standardise monitoring data</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -78,7 +85,7 @@
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"atlasoflivingaustralia/galaxias"</span><span class="op">)</span></span></code></pre></div>
 <p>Load the package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au">galaxias</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au/R">galaxias</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
@@ -133,8 +140,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
 <span><span class="co">#&gt;   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;                   &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;        &lt;chr&gt;           </span></span>
-<span><span class="co">#&gt; 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 88a46072-34… present         </span></span>
-<span><span class="co">#&gt; 2 Eolophus roseicapilla   2023-01-15 humanObserva… 88a4607c-34… present         </span></span>
+<span><span class="co">#&gt; 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 1881b588-36… present         </span></span>
+<span><span class="co">#&gt; 2 Eolophus roseicapilla   2023-01-15 humanObserva… 1881b592-36… present         </span></span>
 <span><span class="co">#&gt; # ℹ 2 more variables: decimalLatitude &lt;dbl&gt;, decimalLongitude &lt;dbl&gt;</span></span></code></pre></div>
 <p>Once standardised, we can specify that we wish to use these standardised data in a Darwin Core Archive.<code><a href="reference/use_data.html">use_data()</a></code> saves the <code>df_dwc</code><br>
 with a valid csv file name and location.</p>
@@ -148,11 +155,11 @@ with a valid csv file name and location.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="reference/use_metadata.html">use_metadata</a></span><span class="op">(</span><span class="st">"metadata.Rmd"</span><span class="op">)</span></span></code></pre></div>
 <p>Build a Darwin Core Archive and save it to the working directory.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="st">"dwca.zip"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/build_archive.html">build_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Validate whether the constructed archive passes Darwin Core Standard criteria.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/check_archive.html">check_archive</a></span><span class="op">(</span><span class="st">"dwca.zip"</span><span class="op">)</span></span></code></pre></div>
-<p>See the <a href="https://galaxias.ala.org.au/articles/quick_start_guide.html">Quick Start Guide</a> for an in-depth explanation of building Darwin Core Archives.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/check_archive.html">check_archive</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>See the <a href="https://galaxias.ala.org.au/articles/quick_start_guide.html" class="external-link">Quick Start Guide</a> for an in-depth explanation of building Darwin Core Archives.</p>
 </div>
 <div class="section level2">
 <h2 id="citing-galaxias">Citing galaxias<a class="anchor" aria-label="anchor" href="#citing-galaxias"></a>
@@ -215,7 +222,7 @@ with a valid csv file name and location.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

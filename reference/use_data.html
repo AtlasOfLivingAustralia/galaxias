@@ -6,7 +6,7 @@ use_data() is an all-in-one function for accepted data types "occurrence",
 "event" and "multimedia". use_data() attempts to detect and save the
 correct data type based on the provided tibble/data.frame.
 Alternatively, users can call the underlying functions
-use_data_occurrences(), use_data_events() and use_data_multimedia() to
+use_data_occurrences() or use_data_events() to
 specify data type manually.'><meta property="og:description" content='Once data conform to Darwin Core Standard, use_data() makes it
 easy to save data in the correct place for building a Darwin Core Archive
 with build_archive().
@@ -14,8 +14,8 @@ use_data() is an all-in-one function for accepted data types "occurrence",
 "event" and "multimedia". use_data() attempts to detect and save the
 correct data type based on the provided tibble/data.frame.
 Alternatively, users can call the underlying functions
-use_data_occurrences(), use_data_events() and use_data_multimedia() to
-specify data type manually.'><meta property="og:image" content="https://galaxias.ala.org.au/logo.png"></head><body>
+use_data_occurrences() or use_data_events() to
+specify data type manually.'><meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -32,6 +32,11 @@ specify data type manually.'><meta property="og:image" content="https://galaxias
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/quick_start_guide.html">Quick start guide</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/occurrences-example.html">Standardise occurrence-based data</a></li>
+    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise monitoring data</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -57,7 +62,7 @@ with <code><a href="build_archive.html">build_archive()</a></code>.</p>
 "event" and "multimedia". <code>use_data()</code> attempts to detect and save the
 correct data type based on the provided <code>tibble</code>/<code>data.frame</code>.
 Alternatively, users can call the underlying functions
-<code>use_data_occurrences()</code>, <code>use_data_events()</code> and <code>use_data_multimedia()</code> to
+<code>use_data_occurrences()</code> or <code>use_data_events()</code> to
 specify data type manually.</p>
     </div>
 
@@ -118,7 +123,7 @@ supplied data.</p><ul><li><p>Event: (<code>eventID</code>, <code>parentEventID</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

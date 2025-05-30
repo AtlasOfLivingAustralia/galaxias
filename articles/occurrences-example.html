@@ -37,6 +37,13 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/quick_start_guide.html">Quick start guide</a></li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
+<li><a class="dropdown-item" href="../articles/occurrences-example.html">Standardise occurrence-based data</a></li>
+    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise monitoring data</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -89,7 +96,7 @@ Darwin Core, this dataset contains the scientific name
 (<code>species</code>), coordinate location (<code>lat</code> &amp;
 <code>lon</code>) and date of observation (<code>date</code>).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au">galaxias</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au/R">galaxias</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org" class="external-link">readxl</a></span><span class="op">)</span></span>
 <span></span>
@@ -616,7 +623,7 @@ column is correctly formatted. We’ll save our modified dataframe as
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span></span></span>
 <span><span class="co">#&gt; ⠹ Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[634ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[631ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">eventDate</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventDate</span> <span style="color: #B2B2B2;">[310ms]</span></span></span>
@@ -703,7 +710,7 @@ format.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">sex</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">sex</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">sex</span> <span style="color: #B2B2B2;">[310ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Running <code><a href="https://corella.ala.org.au/reference/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> once more will confirm that
 our dataset is ready to be used in a Darwin Core Archive!</p>
@@ -1206,9 +1213,10 @@ automatically when building a Darwin Core Archive.</p>
 <div id="xombwkkeul" class="reactable html-widget" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="xombwkkeul">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"basisOfRecord":["humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation"],"occurrenceID":["001-KKNP-01-KKNP","002-KKNP-01-KKNP","003-KKNP-02-KKNP","004-KKNP-02-KKNP","005-KKNP-03-KKNP","006-KKNP-03-KKNP","007-PRSP-01-PRSP","008-PRSP-01-PRSP","009-PRSP-02-PRSP","010-PRSP-02-PRSP","011-PRSP-03-PRSP","012-PRSP-03-PRSP","013-MBRP-01-MBRP","014-MBRP-01-MBRP","015-MBRP-02-MBRP","016-MBRP-02-MBRP","017-RSNC-01-RSNC","018-RSNC-01-RSNC","019-RSNC-02-RSNC","020-RSNC-02-RSNC"],"sex":["F","F","F","F","?","M","?","M","M","M","M","F","?","?","?","?","F","?","F","F"],"eventDate":["2008-02-05","2008-08-22","2008-02-05","2008-08-22","2008-02-06","2008-08-22","2008-08-21","2008-02-06","2008-02-06","2008-02-06","2008-02-05","2008-02-06","2008-02-06","2008-02-06","2008-02-06","2008-08-22","2008-08-21","2008-02-06","2008-02-06","2008-02-06"],"decimalLatitude":[-36.8675362264472,-36.8777668754608,-36.8501615830513,-36.8525310851436,-36.8811653450491,-36.8912225552657,-37.0692007059069,-37.0770075937647,-37.0847109714953,-37.087244355769,-37.1049414487726,-37.1085009061024,-37.0696629783545,-37.0704890691019,-37.06709048265,-37.0677796289795,-37.1775541820532,-37.1622339334012,-37.2326540206329,-37.2867575930277],"decimalLongitude":[143.258585925926,143.254637714374,143.293905254121,143.313388819823,143.306694026994,143.311886783492,143.690593236511,143.693082326403,143.701536649314,143.696343892816,143.691580289605,143.689777845201,143.720473045002,143.721127503982,143.725064986763,143.727296584597,144.070257231299,144.063390776426,144.046911286452,144.066480682841],"geodeticDatum":["WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84"],"coordinateUncertaintyInMeters":[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],"scientificName":["Climacteris picumnus","Climacteris picumnus","Climacteris picumnus","Climacteris picumnus","Artamus cyanopterus","Acanthiza lineata","Artamus cyanopterus","Acanthiza reguloides","Malurus cyaneus","Malurus cyaneus","Acanthiza reguloides","Acanthiza lineata","Ptilotula fusca","Ptilotula fusca","Melithreptus brevirostris","Melithreptus brevirostris","Malurus cyaneus","Ptilotula fusca","Pardalotus punctatus","Pardalotus punctatus"]},"columns":[{"id":"basisOfRecord","name":"basisOfRecord","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"occurrenceID","name":"occurrenceID","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"sex","name":"sex","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"eventDate","name":"eventDate","type":"Date","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"decimalLatitude","name":"decimalLatitude","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"decimalLongitude","name":"decimalLongitude","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"geodeticDatum","name":"geodeticDatum","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"coordinateUncertaintyInMeters","name":"coordinateUncertaintyInMeters","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"scientificName","name":"scientificName","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"}],"defaultPageSize":5,"showPageSizeOptions":false,"pageSizeOptions":[10,25,50,100],"paginationType":"numbers","showPagination":true,"showPageInfo":true,"minRows":1,"height":"auto","theme":{"color":"#333333","backgroundColor":"#FFFFFF","stripedColor":"rgba(128,128,128,0.05)","style":{"font-family":"system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif","fontSize":"16px"},"tableStyle":{"borderTopStyle":"solid","borderTopWidth":"2px","borderTopColor":"#D3D3D3"},"headerStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"groupHeaderStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"cellStyle":{"fontWeight":"normal"}},"elementId":"xombwkkeul","dataKey":"dbf86a638f973daf70d5fdef5ea8a705"},"children":[]},"class":"reactR_markup"},"evals":["tag.attribs.columns.0.style","tag.attribs.columns.1.style","tag.attribs.columns.2.style","tag.attribs.columns.3.style","tag.attribs.columns.4.style","tag.attribs.columns.5.style","tag.attribs.columns.6.style","tag.attribs.columns.7.style","tag.attribs.columns.8.style"],"jsHooks":[]}</script>
 </div>
+<p>Our final step is to save this to our ‘publishing’ directory:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save in ./data-processed</span></span>
-<span><span class="fu">write_csv</span><span class="op">(</span><span class="va">obs_dwc</span>, file <span class="op">=</span> <span class="st">"./data-processed/occurrences.csv"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/use_data.html">use_data_occurrences</a></span><span class="op">(</span><span class="va">obs_dwc</span><span class="op">)</span></span></code></pre></div>
 <p>All done! See the <a href="quick_start_guide.html">Quick start guide
 vignette</a> for how to build a Darwin Core Archive.</p>
 </div>
@@ -1223,7 +1231,7 @@ vignette</a> for how to build a Darwin Core Archive.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
