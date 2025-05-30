@@ -6,6 +6,11 @@
 #' [check_archive()] tests the specified archive using an online validation 
 #' service by sending the archive via an API and returning the results. 
 #' Currently only supports validation using GBIF.
+#' @param wait (logical) Whether to wait for a completed report from the API
+#' before exiting (`TRUE`, the default), or try the API once and return the
+#' result regardless (`FALSE`).
+#' @param quiet (logical) Whether to suppress messages about what is happening. 
+#' Default is set to `FALSE`; i.e. messages are shown.
 #' @details
 #' [check_archive()] both `POST`s the specified archive to the GBIF validator
 #' API and then calls [get_report()] to retrieve (`GET`) the result. 
@@ -13,14 +18,15 @@
 #' time should they wish; this is more efficient than repeatedly generating 
 #' queries with [check_archive()] if the underlying data are unchanged. A third 
 #' option is simply to assign the outcome of [check_archive()] or [get_report()] 
-#' to an object then call it again, which uses [print.gbif_validator()] to 
-#' format the result nicely. This approach doesn't require any further API calls 
-#' and as such is considerably faster.
+#' to an object, then call [view_report()] to format the result nicely. This 
+#' approach doesn't require any further API calls and is considerably faster.
 #' 
 #' Note that information returned by these functions is provided verbatim from 
 #' the institution API, not from galaxias.
 #' @returns Both [check_archive()] and [get_report()] return an object of class
-#' `gbif_validator` to the workspace, invisibly if `quiet = TRUE`. 
+#' `gbif_validator` to the workspace. [view_report()] and 
+#' [print.gbif_validator()] don't return anything, and are called for the
+#' side-effect of printing useful information to the console.
 #' @examples \dontrun{
 #' # add GBIF login details
 #' galaxias_config(gbif = list(username = "your-gbif-username",
@@ -55,6 +61,9 @@ check_archive <- function(wait = TRUE,
   
   # POST query to GBIF validator API
   post_response <- api_gbif_validator_post(archive)
+  if(!quiet){
+    print_archive_POST(post_response)
+  }
   
   if(wait){
     # GET status of query
@@ -63,11 +72,7 @@ check_archive <- function(wait = TRUE,
                wait = wait,
                quiet = quiet)    
   }else{
-    if(quiet){
-      invisible(post_response) # returns object quietly
-    }else{
-      post_response # calls `print.gbif_validator`
-    }
+    post_response
   }
 }
 
@@ -116,11 +121,7 @@ api_gbif_validator_post <- function(filename){
   
   # return useful messages and objects to the user
   if(is.list(result)){
-    required_names <- c("key", "created", "modified", "status", "metrics")
-    if(all(required_names %in% names(result))){
-      cli::cli_inform("GBIF validator API returned an unexpected result.")
-    }
-    class(result) <- c("gbif_validator_post", "list")
+    class(result) <- c("gbif_validator", "list")
     result
   }else{
     cli::cli_abort("GBIF validator API did not return a result.")
