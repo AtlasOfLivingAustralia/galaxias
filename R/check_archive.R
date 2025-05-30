@@ -46,7 +46,6 @@
 #' @export
 check_archive <- function(wait = TRUE,
                           quiet = FALSE){
-  
 
   # run checks on `archive`
   file_name <- potions::pour("archive",
@@ -55,6 +54,7 @@ check_archive <- function(wait = TRUE,
   if(!dir.exists(archive)){
     cli::cli_abort(c("Specified archive {.file {file_name}} does not exist.",
                      x = "Can't find {.path {archive}}."))
+  }
   
   # POST query to GBIF validator API
   post_response <- api_gbif_validator_post(archive)
