@@ -106,53 +106,6 @@ is_testing <- function() {
 
 ## -- checks -- ##
 
-#' Check an argument path in `galaxias_config()`
-#' @description
-#' Checks that argument is 
-#'   1. not null 
-#'   2. a character 
-#'   3. exists (optional)
-#' @noRd
-#' @keywords Internal
-check_config_path <- function(...,
-                              must_exist = TRUE,
-                              error_call = rlang::caller_env()){
-  
-  
-  is_name <- vapply((dots(...)), is.symbol, logical(1))
-  if (!all(is_name)) {
-    cli::cli_abort("Can only use existing named objects.",
-                   call = error_call)
-  }
-  
-  # save name
-  obj_name <- dots(...)[[1]]
-  
-  if(is.null(obj_name)){
-    cli::cli_abort(c("Missing path or filename, with no default."),
-                   call = error_call)
-  }
-  
-  # save obj contents (probably containing a path to a file or folder)
-  path <- rlang::eval_tidy(...)
-  
-  if(!inherits(path, "character")){
-    class_file <- class(path)
-    cli::cli_abort(c("{.arg {obj_name}} must be of class character, not {class_file}.",
-                     i = "See {.code ?galaxias_config()}."),
-                   call = error_call)
-  }
-  
-  if(must_exist){
-    if(!file.exists(path)){
-      c("Specified {.arg {obj_name}} does not exist.",
-        x = "Can't find {.file {path}}.",
-        i = "See {.code ?galaxias_config()}.") |>
-        cli::cli_abort(call = error_call)
-    }
-  }
-}
-
 
 #' Check whether publish directory exists, and if not, build it,
 #' depending on quiet and interactive
@@ -162,7 +115,7 @@ check_publish_directory <- function(quiet,
                                     error_call = rlang::caller_env()){
   directory <- potions::pour("directory",
                              .pkg = "galaxias")
-  if(!file.exists(directory)){
+  if(!fs::file_exists(directory)){
     if(rlang::is_interactive() & !quiet){ 
       
       choice <- cli_menu(
@@ -191,7 +144,7 @@ check_publish_directory <- function(quiet,
 #' Get a path to the parent directory for use with archive functions
 #' @noRd
 #' @keywords Internal
-get_archive_path <- function(){
-  getwd() |> 
-    dirname()
-}
+# get_archive_path <- function(){
+#   getwd() |> 
+#     dirname()
+# }

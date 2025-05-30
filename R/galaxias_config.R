@@ -11,7 +11,9 @@
 #' Defaults to `data-publish`.
 #' @param archive Name of the zip file where the completed archive will be
 #' built. Defaults to `dwc-archive.zip`. Note this file will always be
-#' saved in the parent directory as per behaviour of `devtools::build()`.
+#' saved in the parent directory as per behaviour of `devtools::build()`. The 
+#' complete path is automatically generated, and can be viewed in the output of 
+#' `galaxias_config()`.
 #' @param gbif An (optional) list containing the entries `username`, `email` and 
 #' `password`. Only required if you intend to call [check_archive()].
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
@@ -74,7 +76,7 @@ galaxias_default_config <- function(directory,
     archive <- "dwc-archive.zip"
   }
   x <- list(
-    directory = directory,
+    directory = directory |> fs::path(),
     archive = archive,
     gbif = list(username = "",
                 email = "",
@@ -96,14 +98,14 @@ check_config_directory <- function(x,
   }else{
     if(!inherits(directory, "character")){
       wrong_class <- class(directory)
-      cli::cli_abort("{.arg directory} should be of class `character`, not `{wrong_class}`.",
+      cli::cli_abort("{.arg directory} should be of class character, not {wrong_class}.",
                      call = error_call)
     }
     
     if(!quiet){
       cli::cli_progress_step("Updating {.arg directory} to {.file {directory}}")
     }
-    x$directory <- directory
+    x$directory <- fs::path(directory)
     x
   }
 }
@@ -130,7 +132,7 @@ check_config_archive <- function(x,
     }
     
     if(!quiet){
-      cli::cli_progress_step("Updating {.arg archive} to {archive}")
+      cli::cli_progress_step("Updating {.arg archive} to {.file {archive}}")
     }
     x$archive <- archive
     x

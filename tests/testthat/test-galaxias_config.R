@@ -46,7 +46,7 @@ test_that("galaxias_config() accepts non-default directories, but DOES NOT build
   result <- galaxias_config(directory = dirname,
                             quiet = TRUE)
   expect_equal(dirname, result$directory)
-  expect_false(file.exists(result$directory))
+  expect_false(fs::file_exists(result$directory))
   # restore defaults
   galaxias_config(directory = "data-publish",
                   archive = glue::glue("{here::here()}.zip"),

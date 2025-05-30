@@ -47,21 +47,14 @@
 check_archive <- function(wait = TRUE,
                           quiet = FALSE){
   
+
   # run checks on `archive`
   file_name <- potions::pour("archive",
                              .pkg = "galaxias")
-  file_path <- get_archive_path()
-  archive <- glue::glue("{file_path}/{file_name}")
-  check_config_path(archive, 
-                    must_exist = TRUE)
-  
-  # ensure file ends in `.zip` (Q: necessary?)
-  if(!grepl(".zip$", file_name)){
-    cli::cli_abort(c(
-      "Must supply a zip file.",
-      i = "`check_archive()` only accepts a completed Darwin Core Archive saved as a zip file."
-    ))
-  }
+  archive <- fs::path_abs(glue::glue("../{file_name}"))
+  if(!dir.exists(archive)){
+    cli::cli_abort(c("Specified archive {.file {file_name}} does not exist.",
+                     x = "Can't find {.path {archive}}."))
   
   # POST query to GBIF validator API
   post_response <- api_gbif_validator_post(archive)

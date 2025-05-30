@@ -35,13 +35,11 @@ use_metadata <- function(file = NULL,
                          overwrite = FALSE,
                          quiet = FALSE){
   
-  # run checks on `file`
   if(is.null(file)){
-    cli::cli_abort(c("Missing {.arg `file`}, with no default.",
-                     i = "Must supply path to existing metadata statement file."),
-                   call = error_call)
+    cli::cli_abort(c("Missing {.arg file}, with no default.",
+                     i = "Must supply path to existing metadata statement file."))
   }
-  # check_config_path(file)
+  # `delma::read_md()` runs checks on whether file exists
   
   # import file, ensure EML metadata is added, convert to XML
   if (!quiet) {
@@ -54,7 +52,7 @@ use_metadata <- function(file = NULL,
   file_path <- fs::path(directory, "eml.xml")
   
   # set writing behaviour
-  if(file.exists(file_path)){
+  if(fs::file_exists(file_path)){
     if(overwrite){
       if(!quiet){
         cli::cli_progress_step("Overwriting {.file {file_path}}.")
@@ -67,7 +65,7 @@ use_metadata <- function(file = NULL,
       }
     }else{
       c("{.file {file_path}} already exists.",
-        i = "Set `overwrite = TRUE` to overwrite existing file.") |>
+        i = "Use `overwrite = TRUE` to overwrite.") |>
         cli::cli_inform()     
     }
   }else{
