@@ -47,11 +47,11 @@
 check_archive <- function(wait = TRUE,
                           quiet = FALSE){
 
-  # run checks on `archive`
+  # check if `archive` exists
   file_name <- potions::pour("archive",
                              .pkg = "galaxias")
   archive <- fs::path_abs(glue::glue("../{file_name}"))
-  if(!dir.exists(archive)){
+  if(!fs::file_exists(archive)){
     cli::cli_abort(c("Specified archive {.file {file_name}} does not exist.",
                      x = "Can't find {.path {archive}}."))
   }

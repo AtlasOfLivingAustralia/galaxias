@@ -32,10 +32,15 @@ fix_times <- function(out) {
     gsub("\\[[.0-9]+m?s\\]", "[1s]", x = _)
 }
 
+# fix_filenames <- function(out) {
+#   out |>
+#     sub("(?<=file).*?(?=\\.zip)", "12345", x = _, perl = TRUE) %>%
+#     gsub("Path:\\s[[:graph:]]+$", "Path: temp path replaced", x = _, perl = TRUE)
+# }
+
 fix_filenames <- function(out) {
   out |>
-    sub("(?<=file).*?(?=\\.zip)", "12345", x = _, perl = TRUE) |>
-    gsub("Path:\\s[[:graph:]]+$", "Path: temp path replaced", x = _, perl = TRUE)
+    sub("(['\"]).*?\\.zip", "\\112345.zip", x = _, perl = TRUE)
 }
 
 fix_emojis <- function(out) {

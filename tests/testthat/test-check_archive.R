@@ -33,14 +33,14 @@ test_that("check_archive() works", {
   usethis::use_directory("data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
-  tibble::tibble(
+  df <- tibble::tibble(
     decimalLatitude = c(35.307, 35.307),
     decimalLongitude = c(149.125, 149.125)) |>
     dplyr::mutate(occurrenceID = random_id(),
                   .before = 1) |>
     write.csv("data-publish/occurrences.csv")
   use_schema(quiet = TRUE)
-  build_archive(quiet = TRUE)
+  build_archive(quiet = TRUE, overwrite = TRUE)
   
   # test `check_archive()`
   # check archive returns an object

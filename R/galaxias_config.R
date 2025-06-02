@@ -70,13 +70,13 @@ galaxias_config <- function(directory = NULL,
 galaxias_default_config <- function(directory,
                                     archive){
   if(is.null(directory)){
-    directory <- "data-publish"
+    directory <- fs::path("data-publish")
   }
   if(is.null(archive)){
-    archive <- "dwc-archive.zip"
+    archive <- fs::path("dwc-archive.zip")
   }
   x <- list(
-    directory = directory |> fs::path(),
+    directory = directory,
     archive = archive,
     gbif = list(username = "",
                 email = "",
@@ -129,6 +129,13 @@ check_config_archive <- function(x,
     if(!grepl(".zip$", archive)){
       cli::cli_abort("{.arg archive} must specify a file name ending with `.zip`.",
                      call = error_call)
+    }
+    
+    # convert absolute paths to relative paths
+    if(fs::is_absolute_path(archive)) {
+      archive <- fs::path_rel(archive, fs::path_wd())
+    } else {
+      archive <- fs::path(archive)
     }
     
     if(!quiet){

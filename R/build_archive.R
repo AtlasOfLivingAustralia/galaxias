@@ -74,7 +74,7 @@ build_archive <- function(overwrite = FALSE,
   #  - missing an EML metadata statement
   source <- potions::pour("directory",
                           .pkg = "galaxias")
-  if(!dir.exists(source)){
+  if(!fs::dir_exists(source)){
     cli::cli_abort(c("Directory {.file {source}} does not exist.",
                      i = "See {.code ?galaxias_config()}."))
   }

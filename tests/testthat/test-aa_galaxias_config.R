@@ -9,16 +9,16 @@ test_that("potions::pour creates the correct object", {
 test_that("galaxias_config() creates default object onload", {
   cached_obj <- potions::pour(.pkg = "galaxias")
   comparison_obj <- galaxias_default_config(
-    directory = "data-publish",
-    archive = "dwc-archive.zip")
+    directory = fs::path("data-publish"),
+    archive = fs::path("dwc-archive.zip"))
   expect_identical(cached_obj, comparison_obj)
 })
 
 test_that("galaxias_config() returns an object if all args are missing", {
   cached_obj <- galaxias_config(quiet = TRUE)
   comparison_obj <- galaxias_default_config(
-    directory = "data-publish",
-    archive = "dwc-archive.zip")
+    directory = fs::path("data-publish"),
+    archive = fs::path("dwc-archive.zip"))
   expect_identical(cached_obj, comparison_obj) 
 })
 
@@ -63,6 +63,22 @@ test_that("galaxias_config() rejects archives that do not end in `.zip`", {
   expect_error(galaxias_config(archive = "archive.csv",
                                quiet = TRUE),
                label = "`archive` must specify a file name ending with `.zip`.")
+})
+
+test_that("galaxias_config() converts absolute paths to relative paths", {
+  expect_no_error(
+    galaxias_config(
+      archive = fs::path_abs("../test.zip"), 
+      quiet = TRUE)
+    )
+  expect_match(galaxias_config()$archive, fs::path("test.zip"))
+  
+  expect_no_error(
+    galaxias_config(
+      archive = glue::glue("{here::here()}/test.zip"), 
+      quiet = TRUE)
+    )
+  expect_match(galaxias_config()$archive, fs::path("test.zip"))
 })
 
 test_that("galaxias_config() rejects non-list GBIF entries", {
@@ -132,3 +148,10 @@ test_that("galaxias_config() accepts a correctly-formatted list", {
                   ),
                   quiet = TRUE)
 })
+
+# reset galaxias_config() to defaults
+galaxias_config(
+  directory = "data-publish",
+  archive = "dwc-archive.zip",
+  quiet = TRUE
+)
