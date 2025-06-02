@@ -95,7 +95,7 @@ df <- tibble(
 df
 ```
 
-We can standardise data according to Darwin Core Standard.
+Standardise data according to Darwin Core Standard using `set_` functions.
 
 ```{r}
 #| warning: false
@@ -110,8 +110,7 @@ df_dwc <- df |>
 df_dwc
 ```
 
-Once standardised, we can specify that we wish to use these standardised data in a Darwin Core Archive.`use_data()` saves the `df_dwc`  
-with a valid csv file name and location.
+Once standardised, specify that we wish to use `df_dwc` in a Darwin Core Archive with `use_data()`. This saves `df_dwc` with a valid csv file name and location.
 
 ```{r}
 #| eval: false
@@ -125,7 +124,7 @@ Create a template metadata statement for our data.
 use_metadata_template("metadata.Rmd")
 ```
 
-After editing, we can specify that we wish to use this metadata in a Darwin Core Archive. `use_metadata()` converts our 
+After editing, specify that we wish to use "metadata.Rmd" in a Darwin Core Archive with `use_metadata()`. THis converts our 
 metadata to [EML](https://eml.ecoinformatics.org/) format and saves it with a valid xml file name and location.
 
 ```{r}
@@ -133,7 +132,7 @@ metadata to [EML](https://eml.ecoinformatics.org/) format and saves it with a va
 use_metadata("metadata.Rmd")
 ```
 
-Build a Darwin Core Archive and save it to the working directory.
+Build a Darwin Core Archive and save it to the parent directory of your working directory.
 
 ```{r}
 #| eval: false
