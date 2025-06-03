@@ -3,9 +3,9 @@
 #' @description
 #' Check whether a specified Darwin Core Archive is ready for
 #' sharing and publication, according to the Darwin Core Standard. 
-#' `check_archive()` tests the specified archive using an online validation 
-#' service by sending the archive via an API and returning the results. 
-#' Currently only supports validation using GBIF.
+#' `check_archive()` tests an archive - defaulting to `"dwc_archive.zip"` in
+#' the users' parent directory - using an online validation service. Currently 
+#' only supports validation using GBIF.
 #' @param wait (logical) Whether to wait for a completed report from the API
 #' before exiting (`TRUE`, the default), or try the API once and return the
 #' result regardless (`FALSE`).

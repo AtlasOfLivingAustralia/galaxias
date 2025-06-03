@@ -43,9 +43,9 @@ side-effect of printing useful information to the console.
 \description{
 Check whether a specified Darwin Core Archive is ready for
 sharing and publication, according to the Darwin Core Standard.
-\code{check_archive()} tests the specified archive using an online validation
-service by sending the archive via an API and returning the results.
-Currently only supports validation using GBIF.
+\code{check_archive()} tests an archive - defaulting to \code{"dwc_archive.zip"} in
+the users' parent directory - using an online validation service. Currently
+only supports validation using GBIF.
 }
 \details{
 Note that there is no \code{file} argument to \code{check_archive()}; instead, the
