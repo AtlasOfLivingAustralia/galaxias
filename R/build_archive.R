@@ -102,7 +102,7 @@ build_archive <- function(overwrite = FALSE,
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step(c("Writing {.file {archive}}"))
+      cli::cli_progress_step(c("Writing {.file {file_name}}"))
     }
     zip::zip(zipfile = archive, 
              files = files_in,
@@ -110,6 +110,10 @@ build_archive <- function(overwrite = FALSE,
   }
 
   if(!quiet){cli::cli_progress_done()}
+
+  cli::cli_inform(c("Saved {.file {file_name}} to the parent directory of the working directory.",
+                    "*" = cli::col_grey("Path: {.file {fs::path(archive)}}")))
+  
   return(invisible())
 }
 
