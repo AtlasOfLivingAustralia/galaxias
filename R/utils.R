@@ -115,13 +115,14 @@ check_publish_directory <- function(quiet,
                                     error_call = rlang::caller_env()){
   directory <- potions::pour("directory",
                              .pkg = "galaxias")
-  if(!fs::file_exists(directory)){
+  
+  if(!fs::dir_exists(directory)){
     if(rlang::is_interactive() & !quiet){ 
       
       choice <- cli_menu(
         c(" ",
-          "Your working directory for data publication is set to {.file {directory}}, which does not exist.", 
-          " "),
+          "Your working directory for data publication is set to {.file {directory}}, which does not exist."
+          ),
         "Would you like to create it? (0 to exit)",
         choices = c("Yes", "No")
       )
