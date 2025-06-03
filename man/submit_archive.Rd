@@ -4,7 +4,11 @@
 \alias{submit_archive}
 \title{Submit a Darwin Core Archive to the ALA}
 \usage{
-submit_archive()
+submit_archive(quiet = FALSE)
+}
+\arguments{
+\item{quiet}{Whether to suppress messages about what is happening.
+Default is set to \code{FALSE}; i.e. messages are shown.}
 }
 \value{
 Does not return anything to the workspace; called for the side-effect
@@ -25,4 +29,13 @@ this function will initiate an evaluation process, and will not result in
 your data being instantly visible on the ALA. Nor does submission guarantee
 acceptance, as ALA reserves the right to refuse to publish data that reveals
 the locations of threatened or at-risk species.
+
+This mechanism is \strong{entirely public}; your data will be visible to others
+from the point you put it on this webpage. If your data contains sensitive
+information, contact us to arrange a different delivery mechanism.
+}
+\examples{
+if(interactive()){
+  submit_archive()
+}
 }

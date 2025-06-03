@@ -35,13 +35,12 @@ To be compliant with the Darwin Core Standard, the schema file \strong{must} be
 called \code{eml.xml}, and this function enforces that.
 }
 \examples{
-\dontshow{
-.old_wd <- setwd(tempdir())
-}
-use_metadata_template(quiet = TRUE)
-use_metadata()
-\dontshow{
-setwd(.old_wd)
+\dontrun{
+# get a boilerplate metadata statement
+use_metadata_template(file = "my_metadata.Rmd", quiet = TRUE)
+
+# once editting is complete, call `use_metadata()` to format it
+use_metadata("my_metadata.Rmd")
 }
 }
 \seealso{

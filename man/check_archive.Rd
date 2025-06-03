@@ -35,15 +35,15 @@ returned by \code{\link[=check_archive]{check_archive()}} or \code{\link[=get_re
 \item{\dots}{Additional arguments, currently ignored.}
 }
 \value{
-Both \code{\link[=check_archive]{check_archive()}} and \code{\link[=get_report]{get_report()}} return an object of class
-\code{gbif_validator} to the workspace. \code{\link[=view_report]{view_report()}} and
-\code{\link[=print.gbif_validator]{print.gbif_validator()}} don't return anything, and are called for the
+Both \code{check_archive()} and \code{get_report()} return an object of class
+\code{gbif_validator} to the workspace. \code{view_report()} and
+\code{print.gbif_validator()} don't return anything, and are called for the
 side-effect of printing useful information to the console.
 }
 \description{
 Check whether a specified Darwin Core Archive is ready for
 sharing and publication, according to the Darwin Core Standard.
-\code{\link[=check_archive]{check_archive()}} tests the specified archive using an online validation
+\code{check_archive()} tests the specified archive using an online validation
 service by sending the archive via an API and returning the results.
 Currently only supports validation using GBIF.
 }
@@ -52,28 +52,17 @@ Note that there is no \code{file} argument to \code{check_archive()}; instead, t
 location where files will be built and checked is set using the
 \code{archive} argument to \link{galaxias_config}.
 
-Internally, \code{\link[=check_archive]{check_archive()}} both \code{POST}s the specified archive to the GBIF
-validator API and then calls \code{\link[=get_report]{get_report()}} to retrieve (\code{GET}) the result.
+Internally, \code{check_archive()} both \code{POST}s the specified archive to the GBIF
+validator API and then calls \code{get_report()} to retrieve (\code{GET}) the result.
 \code{\link[=get_report]{get_report()}} is exported to allow the user to download results at a later
 time should they wish; this is more efficient than repeatedly generating
-queries with \code{\link[=check_archive]{check_archive()}} if the underlying data are unchanged. A third
-option is simply to assign the outcome of \code{\link[=check_archive]{check_archive()}} or \code{\link[=get_report]{get_report()}}
-to an object, then call \code{\link[=view_report]{view_report()}} to format the result nicely. This
+queries with \code{check_archive()} if the underlying data are unchanged. A third
+option is simply to assign the outcome of \code{check_archive()} or \code{get_report()}
+to an object, then call \code{view_report()} to format the result nicely. This
 approach doesn't require any further API calls and is considerably faster.
 
 Note that information returned by these functions is provided verbatim from
 the institution API, not from galaxias.
-}
-\examples{
-\dontrun{
-# add GBIF login details
-galaxias_config(gbif = list(username = "your-gbif-username",
-                            email = "your-gbif-email",
-                            password = "your-gbif-password"))
-
-# Check archive against Darwin Core Standard criteria
-check_archive("dwc-archive.zip")
-}
 }
 \seealso{
 \code{\link[=check_directory]{check_directory()}} which runs checks on a folder directory locally,

@@ -7,8 +7,8 @@
 #' files in a specified directory; these should all be Darwin Core terms for 
 #' this function to produce reliable results. The publishing directory is 
 #' set using [galaxias_config()] and defaults to `"data-publish"`.
-#' @param overwrite By default, `use_schema()` will not 
-#'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
+#' @param overwrite By default, `use_schema()` will not overwrite existing 
+#' files. If you really want to do so, set this to `TRUE`. 
 #' @param quiet (logical) Should progress messages be suppressed? Default is 
 #' set to `FALSE`; i.e. messages are shown. 
 #' @details
@@ -17,12 +17,8 @@
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a schema file in the publication directory.
 #' @examples
-#' \dontshow{
-#' .old_wd <- setwd(tempdir())
-#' }
+#' \dontrun{
 #' use_schema()
-#' \dontshow{
-#' setwd(.old_wd)
 #' }
 #' @export
 use_schema <- function(overwrite = FALSE, 

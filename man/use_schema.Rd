@@ -7,8 +7,8 @@
 use_schema(overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{overwrite}{By default, \code{use_schema()} will not
-overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
+\item{overwrite}{By default, \code{use_schema()} will not overwrite existing
+files. If you really want to do so, set this to \code{TRUE}.}
 
 \item{quiet}{(logical) Should progress messages be suppressed? Default is
 set to \code{FALSE}; i.e. messages are shown.}
@@ -30,11 +30,7 @@ To be compliant with the Darwin Core Standard, the schema file \strong{must} be
 called \code{meta.xml}, and this function enforces that.
 }
 \examples{
-\dontshow{
-.old_wd <- setwd(tempdir())
-}
+\dontrun{
 use_schema()
-\dontshow{
-setwd(.old_wd)
 }
 }

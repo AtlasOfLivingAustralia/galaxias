@@ -43,19 +43,9 @@
 #' `FALSE`.
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
 #' Default is set to `FALSE`; i.e. messages are shown.
-#' @return Invisibly returns the location of the built zip file; but typically
-#' called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip 
-#' file).
+#' @return Doesn't return anything; called for the side-effect of building a 
+#' 'Darwin Core Archive' (i.e. a zip file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
-#' @examples
-#' \dontshow{
-#' .old_wd <- setwd(tempdir())
-#' }
-#' # set up an archive somehow?
-#' build_archive()
-#' \dontshow{
-#' setwd(.old_wd)
-#' }
 #' @export
 build_archive <- function(overwrite = FALSE,
                           quiet = FALSE) {
@@ -119,8 +109,7 @@ build_archive <- function(overwrite = FALSE,
   }
 
   if(!quiet){cli::cli_progress_done()}
-  
-  # invisible(archive)
+  return(invisible())
 }
 
 #' Internal function to automatically build_schema() inside build_archive()

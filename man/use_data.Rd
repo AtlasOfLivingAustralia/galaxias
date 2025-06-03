@@ -24,7 +24,9 @@ overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 \item{df}{A \code{tibble}/\code{data.frame} to save.}
 }
 \value{
-Invisibly returns the location of the saved csv file.
+Does not return anything to the workspace; called for the side-effect
+of saving a \code{.csv} file to the directory specified by
+\code{galaxias_config()$directory}.
 }
 \description{
 Once data conform to Darwin Core Standard, \code{use_data()} makes it
@@ -47,6 +49,16 @@ supplied data.
 \itemize{
 \item Event: (\code{eventID}, \code{parentEventID}, \code{eventType})
 \item Multimedia: not yet supported
+}
+}
+\examples{
+\dontrun{
+df <- tibble::tibble(
+  occurrenceID = c("a1", "a2"),
+  species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
+  
+use_data(df)
+)
 }
 }
 \seealso{

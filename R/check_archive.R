@@ -3,7 +3,7 @@
 #' @description
 #' Check whether a specified Darwin Core Archive is ready for
 #' sharing and publication, according to the Darwin Core Standard. 
-#' [check_archive()] tests the specified archive using an online validation 
+#' `check_archive()` tests the specified archive using an online validation 
 #' service by sending the archive via an API and returning the results. 
 #' Currently only supports validation using GBIF.
 #' @param wait (logical) Whether to wait for a completed report from the API
@@ -16,30 +16,21 @@
 #' location where files will be built and checked is set using the
 #' `archive` argument to [galaxias_config].
 #' 
-#' Internally, [check_archive()] both `POST`s the specified archive to the GBIF 
-#' validator API and then calls [get_report()] to retrieve (`GET`) the result. 
+#' Internally, `check_archive()` both `POST`s the specified archive to the GBIF 
+#' validator API and then calls `get_report()` to retrieve (`GET`) the result. 
 #' [get_report()] is exported to allow the user to download results at a later 
 #' time should they wish; this is more efficient than repeatedly generating 
-#' queries with [check_archive()] if the underlying data are unchanged. A third 
-#' option is simply to assign the outcome of [check_archive()] or [get_report()] 
-#' to an object, then call [view_report()] to format the result nicely. This 
+#' queries with `check_archive()` if the underlying data are unchanged. A third 
+#' option is simply to assign the outcome of `check_archive()` or `get_report()` 
+#' to an object, then call `view_report()` to format the result nicely. This 
 #' approach doesn't require any further API calls and is considerably faster.
 #' 
 #' Note that information returned by these functions is provided verbatim from 
 #' the institution API, not from galaxias.
-#' @returns Both [check_archive()] and [get_report()] return an object of class
-#' `gbif_validator` to the workspace. [view_report()] and 
-#' [print.gbif_validator()] don't return anything, and are called for the
+#' @returns Both `check_archive()` and `get_report()` return an object of class
+#' `gbif_validator` to the workspace. `view_report()` and 
+#' `print.gbif_validator()` don't return anything, and are called for the
 #' side-effect of printing useful information to the console.
-#' @examples \dontrun{
-#' # add GBIF login details
-#' galaxias_config(gbif = list(username = "your-gbif-username",
-#'                             email = "your-gbif-email",
-#'                             password = "your-gbif-password"))
-#' 
-#' # Check archive against Darwin Core Standard criteria
-#' check_archive("dwc-archive.zip")
-#' }
 #' @seealso [check_directory()] which runs checks on a folder directory locally, 
 #' rather than via API.
 #' @order 1
