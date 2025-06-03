@@ -13,6 +13,11 @@ test_that("get_report() fails when no objects are given", {
     expect_error(label = "Please provide one of either `key` or `response`")
 })
 
+test_that("get_report() fails when objects of wrong class are given", {
+  get_report(list()) |>
+    expect_error(label = "Argument `obj` must be of class <character> or <gbif_validator>")
+})
+
 test_that("check_archive() works", {
   skip_if_offline()
   

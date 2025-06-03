@@ -16,6 +16,10 @@ test_that("check_directory() fails when galaxias_config does not contain an exis
 })
 
 test_that("check_directory() works with no arguments", {
+  skip_if_offline() 
+  # note that delma::check_metadata() requires an internet connection to 
+  # perform well; meaning this function cannot be safely be called when offline
+  
   # set up
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
