@@ -40,7 +40,8 @@ fix_times <- function(out) {
 
 fix_filenames <- function(out) {
   out |>
-    sub("(['\"]).*?\\.zip", "\\112345.zip", x = _, perl = TRUE)
+    sub("(['\"]).*?\\.zip", "\\112345.zip", x = _, perl = TRUE) |>
+    sub("(['\"]).*?\\.\\.\\.", "\\112345.zip\\1", x = _, perl = TRUE)
 }
 
 fix_emojis <- function(out) {
