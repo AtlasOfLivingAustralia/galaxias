@@ -14,21 +14,19 @@ build_archive(overwrite = FALSE, quiet = FALSE)
 Default is set to \code{FALSE}; i.e. messages are shown.}
 }
 \value{
-Invisibly returns the location of the built zip file; but typically
-called for the side-effect of building a 'Darwin Core Archive' (i.e. a zip
-file).
+Doesn't return anything; called for the side-effect of building a
+'Darwin Core Archive' (i.e. a zip file).
 }
 \description{
 A Darwin Core archive is a zip file containing a combination of
-data and metadata. \code{build_archive()} constructs this zip file. It assumes
-that all necessary files have been pre-constructed, and can be found inside a
-single folder with no additional or redundant information. Both the source
-folder and the file name and path of the archive \code{.zip} file are set using
-\code{\link[=galaxias_config]{galaxias_config()}}.
+data and metadata. \code{build_archive()} constructs this zip file in the parent
+directory, by default naming it \code{"dwc_archive.zip"} and placing it in the
+parent directory. The function assumes that all necessary files have been
+pre-constructed, and can be found inside a single directory (which by default
+is called \code{"data-publish"}) with no additional or redundant information.
 
-Structurally,
-\code{build_archive()} is similar to \code{devtools::build()}, in the sense that it
-takes a repository and wraps it for publication.
+Structurally, \code{build_archive()} is similar to \code{devtools::build()}, in the
+sense that it takes a repository and wraps it for publication.
 }
 \details{
 This function looks for three types of objects in the specified \code{directory}:
@@ -55,18 +53,10 @@ separately using \code{\link[=use_schema]{use_schema()}}.
 }
 
 \code{build_archive()} will not build a Darwin Core Archive with these files
-present in the source directory. The resulting Archive is saved as a zip
-folder in the parent directory by default.
-}
-\examples{
-\dontshow{
-.old_wd <- setwd(tempdir())
-}
-# set up an archive somehow?
-build_archive()
-\dontshow{
-setwd(.old_wd)
-}
+present in the source directory.
+
+Both the source folder and the file name and path of the archive \code{.zip} file
+are set using \code{\link[=galaxias_config]{galaxias_config()}}.
 }
 \seealso{
 \code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=use_schema]{use_schema()}}

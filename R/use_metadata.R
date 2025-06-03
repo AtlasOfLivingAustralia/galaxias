@@ -21,14 +21,13 @@
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file in the `data-publish` directory.
 #' @seealso [use_metadata_template()] to create a metadata statement template.
-#' @examples
-#' \dontshow{
-#' .old_wd <- setwd(tempdir())
-#' }
-#' use_metadata_template(quiet = TRUE)
-#' use_metadata()
-#' \dontshow{
-#' setwd(.old_wd)
+#' @examples 
+#' \dontrun{
+#' # get a boilerplate metadata statement
+#' use_metadata_template(file = "my_metadata.Rmd", quiet = TRUE)
+#' 
+#' # once editting is complete, call `use_metadata()` to format it
+#' use_metadata("my_metadata.Rmd")
 #' }
 #' @export
 use_metadata <- function(file = NULL,

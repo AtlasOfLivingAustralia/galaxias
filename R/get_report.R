@@ -103,20 +103,20 @@ wait_for_gbif_response <- function(x,
   current_status <- x$status
   iter <- 1
   if(!quiet){
-    cli_progress_bar()
+    cli::cli_progress_bar()
   }
 
   # queuing is actually a `while` loop with multiple conditions
   while(continue == TRUE){
     x <- query_gbif_validator_api(x)
     if(!quiet){
-      cli_progress_update()  
+      cli::cli_progress_update()  
     }
     continue <- !is_gbif_validator_complete(x)
     if(continue){
       iter <- iter + 1
       if(iter < 100){
-        rate_sleep(rate_object, quiet = quiet)
+        purrr::rate_sleep(rate_object, quiet = quiet)
       }else{
         cli::cli_inform(
           c("No data were returned after 100 tries.", 
@@ -125,7 +125,7 @@ wait_for_gbif_response <- function(x,
       }
     }else{
       if(!quiet){
-        cli_progress_done()
+        cli::cli_progress_done()
       }
       x
     }

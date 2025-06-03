@@ -23,9 +23,19 @@
 #' @param overwrite By default, `use_data()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
 #' @param quiet Whether to message about what is happening. Default is set to 
-#'  `FALSE`. 
-#' @return Invisibly returns the location of the saved csv file.
+#' @returns Does not return anything to the workspace; called for the side-effect
+#' of saving a `.csv` file to the directory specified by 
+#' `galaxias_config()$directory`.
 #' @seealso [use_metadata()]
+#' @examples
+#' \dontrun{
+#' df <- tibble::tibble(
+#'   occurrenceID = c("a1", "a2"),
+#'   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
+#'   
+#' use_data(df)
+#' )
+#' }
 #' @export
 use_data <- function(...,
                      overwrite = FALSE,

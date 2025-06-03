@@ -15,7 +15,9 @@ Defaults to \code{data-publish}.}
 
 \item{archive}{Name of the zip file where the completed archive will be
 built. Defaults to \code{dwc-archive.zip}. Note this file will always be
-saved in the parent directory as per behaviour of \code{devtools::build()}.}
+saved in the parent directory as per behaviour of \code{devtools::build()}. The
+complete path is automatically generated, and can be viewed in the output of
+\code{galaxias_config()}.}
 
 \item{gbif}{An (optional) list containing the entries \code{username}, \code{email} and
 \code{password}. Only required if you intend to call \code{\link[=check_archive]{check_archive()}}.}
@@ -39,4 +41,17 @@ service. This function allows you to store that information for access by
 \code{galaxias} API functions. This function also enables you to change the
 \code{directory} where working documents are stored, and the name of the \code{archive}
 file where the resulting zip file will be placed.
+}
+\examples{
+\dontshow{
+ cached_directory <- galaxias_config()$directory
+}
+# show cached entries
+galaxias_config()
+
+# update an entry
+galaxias_config(directory = "my-data-lives-here")
+\dontshow{
+galaxias_config(directory = cached_directory)
+}
 }

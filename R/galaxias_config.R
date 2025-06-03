@@ -21,7 +21,18 @@
 #' @returns An object of class `galaxias_config`, which is a list containing 
 #' the cached values. If `galaxias_config()` is used to update (rather than 
 #' view) the cache, this is returned invisibly.
+#' @examples
+#' \dontshow{
+#'  cached_directory <- galaxias_config()$directory
+#' }
+#' # show cached entries
+#' galaxias_config()
 #' 
+#' # update an entry
+#' galaxias_config(directory = "my-data-lives-here")
+#' \dontshow{
+#' galaxias_config(directory = cached_directory)
+#' }
 #' @export
 galaxias_config <- function(directory = NULL,
                             archive = NULL,
