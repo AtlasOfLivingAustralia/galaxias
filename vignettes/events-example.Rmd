@@ -10,17 +10,35 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-In a single research project, data collection usually takes place in multiple locations and at several time points. At each site location multiple samples are usually taken, which are used to capture variation in a study area or time-period. In Darwin Core, each of these samples and site locations in Darwin Core are known as *Events*. 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%"
+)
+```
 
-*Events* refer to any action that "occurs at some location during some time." ([from TDWG](https://dwc.tdwg.org/list/#dwc_Event)). Each sample, for example, is a unique event, with its own environmental attributes (like topography, tree cover, precipitation and soil composition) that affect what organisms occur there and how likely they are to occur. Observations of organisms take place within each Event. As such, Events add *hierarchy* to a dataset (as opposed to occurrences-only data which is processed as if all occurrences take place in a single "Event"), which adds richness to ecological data that can be useful for more advanced modelling techniques.
+```{r}
+#| include: false
 
-Here we will demonstrate an example of converting data with Events and Occurrences to Darwin Core standard. These data will be saved as two csv files, events.csv and occurrences.csv, and used to build a Darwin Core Archive.
+library(corella)
+```
+
+
+In a research project, data collection can take place at multiple locations and times. At each location and time, there often multiple collected samples to capture variation in a study area or time-period. In Darwin Core, the data collected from this type of project is *Event*-based. 
+
+*Events* are any action that "occurs at some location during some time." ([from TDWG](https://dwc.tdwg.org/list/#dwc_Event)). Each sample, for example, is a unique event, with its own environmental attributes (like topography, tree cover and soil composition) that affect what organisms occur there and how likely they are to occur. Observations of organisms take place *within* each Event. As such, Events add hierarchy to a dataset by grouping simultaneous observations into groups, as opposed to Occurrence-only data which is processed as if all occurrences are independent. Event-based data collection adds richness to ecological data that can be useful for more advanced modelling techniques.
+
+Here we will demonstrate an example of how to convert Event-based data to Darwin Core standard. To do so, we will create two csv files, events.csv and occurrences.csv, to build a Darwin Core Archive.
 
 ## The dataset
 
-For this example, we'll use a sample dataset containing observations of frogs. Data was collected at using 5-minute audio surveys, where each row records whether each frog species was detected within a 5-minute audio recording, recorded as present (`1`) or absent (`0`). 
+For this example, we'll use a dataset containing observations of frogs [in x area over x time]. Data were collected using 5-minute audio surveys, where each row documents whether each frog species was detected over that 5-minute recording, recorded as present (`1`) or absent (`0`). Our dataset consists of 3 spreadsheets: `species list`, `observations` and `sites`.
 
-First, let's view a list of the eight frog species recorded in this dataset. The `abbreviation` column contains the abbreviated column name used in the observational dataset.
+##### Species list
+
+The `species list` spreadsheet lists the eight frog species recorded in this dataset. The `abbreviation` column contains the abbreviated column name used in the observations spreadsheet.
+
 ```{r}
 #| warning: false
 #| message: false
@@ -35,8 +53,9 @@ species <- read_xlsx("Frogwatch_dataset.xlsx",
 species
 ```
 
-Now let's view our observational dataset. Our data contains columns that describe the site location (e.g. `site_code`, `water_type`, `veg_canopy`) and columns containing data on whether each frog species was present or absent in a sample (e.g. `cpar`, `csig`, `limdum`). 
-:::{.panel-tabset}
+##### Observations
+
+The `observations` spreadsheet contains columns that describe the sample's location (e.g. `site_code`, `water_type`, `veg_canopy`) and the occurrence of each frog species (e.g. `cpar`, `csig`, `limdum`). 
 
 ```{r}
 #| warning: false
@@ -44,43 +63,145 @@ Now let's view our observational dataset. Our data contains columns that describ
 obs <- read_xlsx("Frogwatch_dataset.xlsx", 
                  sheet = "observations") |>
   janitor::clean_names()
+
+obs |> rmarkdown::paged_table()
 ```
 
-## Glimpse
+##### Sites
 
-```{r}
-obs |> tibble::glimpse()
-```
-
-## Sample
-
-```{r}
-obs |> 
-  print(n = 8) |>
-  rmarkdown::paged_table()
-```
-
-:::
-
-Our observational dataset is in *wide* format. Each row represents one sample, containing multiple observations. For a Darwin Core Archive, we require data in *long* format, where each row contains one observation. Let's make this adjustment and 
-
-```{r}
-obs |>
-  select(site_code, any_of(species$abbreviation)) |>
-  pivot_longer(cols = species$abbreviation,
-               names_to = "abbreviation") |>
-  left_join(species, by = "abbreviation", keep = FALSE) |>
-  select(-abbreviation) |>
-  relocate(value, .after = last_col())
-```
+The `sites` spreadsheet contains columns that describe each site location (e.g. `depth`, `water_type`, `latitude`, `longitude`) and overall presence/absence of each frog species in a site (e.g. `cpar`, `csig`, `limdum`). 
 
 ```{r}
 sites <- read_xlsx("Frogwatch_dataset.xlsx", 
                    sheet = "sites") |>
   janitor::clean_names()
 
+sites |> rmarkdown::paged_table()
+```
+
+# Prepare `events.csv`
+
+As the `observations` spreadsheet is organised at the sample-level, where each row contains multiple observations in one 5-minute audio recording, we can create an *Event*-based dataframe at the sample-level to use as our `events.csv`.
+
+First, let's assign a unique identifier `eventID` to data, which is a requirement of Darwin Core Standard. Using `set_events()` and `composite_id()`, we can create a new column `eventID` containing a unique ID constructed several types of information in our dataframe.
+
+```{r}
+obs_id <- obs |>
+  select(site_code, year, any_of(species$abbreviation)) |>
+  set_events(
+    eventID = composite_id(sequential_id(), site_code, year)
+    ) |>
+  relocate(eventID, .before = 1) # re-position
+
+obs_id
+```
+
+Next we'll add site information from the `sites` spreadsheet. Then we use `set_coordinates()` to assign our existing columns to use valid Darwin Core Standard column names, and add 2 other required columns `geodeticDatum` and `coordinateUncertaintyInMetres`.
+
+```{r}
+obs_id_site <- obs_id |>
+  left_join(
+    select(sites, site_code, latitude, longitude),
+    join_by(site_code)
+    ) |>
+  set_coordinates(
+    decimalLatitude = latitude, 
+    decimalLongitude = longitude,
+    geodeticDatum = "WGS84",
+    coordinateUncertaintyInMeters = 30
+    ) |>
+  relocate(decimalLatitude, decimalLongitude, .after = eventID) # re-position cols
+
+obs_id_site
+```
+
+We now have a dataframe with sampling and site information, organised at the sample-level. Our final step is to reduce `obs_id_site` to only include columns with valid column names in Event-based datasets. This drops the frog species columns from our dataframe.
+
+```{r}
+events <- obs_id_site |>
+  select(
+    any_of(event_terms())
+    )
+
+events
+```
+
+We can specify that we wish to use `events` in our Darwin Core Archive with `use_data()`, which will save `events` as a csv file in the default directory `data-publish` as `./data-publish/events.csv`.
+
+```{r}
+#| eval: false
+events |> use_data()
 ```
 
 
+# Prepare `occurrences.csv`
 
-This added hierarchical structure to data collection (ie Site -> Sample -> Occurrence) adds richness to ecological data. Events data can also allow for recording presences and absences data, which enables for more nuanced probabilistic analyses like species distribution models or occupancy models.
+Let's return to `obs_id_site`, which contains an `eventID` and site information for each sample. To create an **Occurrence**-based dataframe that conforms to Darwin Core Standard, we will need to transpose this wide-format dataframe to *long* format, where each row contains one observation. We'll select the `eventID` and abbreviated species columns, then pivot our data so that each species observation is under `abbreviation` and each presence/absence recorded under `presence`.
+
+```{r}
+obs_long <- obs_id_site |>
+  select(eventID, any_of(species$abbreviation)) |>
+  pivot_longer(cols = species$abbreviation,
+               names_to = "abbreviation",
+               values_to = "presence")
+
+obs_long
+```
+
+Now we'll merge the correct names to our frog species by joining `species` with `obs_long`.
+
+```{r}
+obs_long <- obs_long |>
+  left_join(species, join_by(abbreviation), keep = FALSE) |>
+  relocate(presence, .after = last_col()) # re-position column
+```
+
+Now we can reformat our data to use valid Darwin Core column names using `set_` functions. Importantly, Darwin Core Standard requires that we add a unique `occurrenceID` and the type of observation in the column `basisOfRecord`.
+
+```{r}
+obs_long_dwc <- obs_long |>
+ set_occurrences(
+   occurrenceID = composite_id(eventID, sequential_id()),
+   basisOfRecord = "humanObservation",
+   occurrenceStatus = dplyr::case_when(presence == 1 ~ "present",
+                                       .default = "absent")
+   ) |>
+ set_scientific_name(
+   scientificName = scientific_name
+   ) |>
+ set_taxonomy(
+   vernacularName = common_name
+   )
+
+obs_long_dwc
+```
+
+
+We now have a dataframe with observations organised at the occurrence-level. Our final step is to reduce `obs_long_dwc` to only include columns with valid column names in Occurrence-based datasets. This drops the `abbreviation` column from our dataframe.
+
+```{r}
+occurrences <- obs_long_dwc |>
+  select(
+    any_of(occurrence_terms())
+    )
+```
+
+We can specify that we wish to use `occurrences` in our Darwin Core Archive with `use_data()`, which will save `occurrences` as a csv file in the default directory `data-publish` as `./data-publish/occurrences.csv`.
+
+```{r}
+#| eval: false
+
+occurrences |> use_data()
+```
+
+
+<!-- 
+### Taxonomy?
+
+Additional information on how to use galah to crosscheck scientificName matching?
+
+-->
+
+## Summary
+
+The hierarchical structure of Event-based data (ie Site -> Sample -> Occurrence) adds richness, allowing for information like repeated sampling and presence/absence information to be preserved. This richness can enable more nuanced probabilistic analyses like species distribution models or occupancy models. We encourage users with Event-based data to use galaxias to standardise their data for publication and sharing.

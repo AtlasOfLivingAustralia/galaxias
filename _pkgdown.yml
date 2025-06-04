@@ -30,7 +30,7 @@ navbar:
       menu:
       - text: Standardise occurrence-based data
         href: articles/occurrences-example.html
-      - text: Standardise monitoring data
+      - text: Standardise event-based data
         href: articles/events-example.html
     news:
       text: News
