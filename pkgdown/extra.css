@@ -44,16 +44,19 @@ body { font-family: Roboto; }
 }
 
 .navbar-nav .nav-link {
-    color: #4d4d4d;
+  border-radius: .375rem;
+  color: #4d4d4d;
 }
 
 .navbar-nav .nav-link:hover {
-    color: #ffffff;
+  border-radius: .375rem;
+  color: #ffffff;
 }
 
 .navbar-nav .nav-link:focus {
-    color: #d7eaf7;
-    background-color: #076064!important;
+  border-radius: .375rem;
+  color: #f58e80;
+  background-color: #4d4d4d!important;
 }
 
 .navbar-nav .active>.nav-link {

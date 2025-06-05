@@ -11,26 +11,27 @@ status](https://www.r-pkg.org/badges/version/galaxias)](https://CRAN.R-project.o
 
 ## Overview
 
-`galaxias` is an R package that helps users describe, bundle and share
+`galaxias` is an R package that helps users describe, bundle, and share
 biodiversity information using the [‘Darwin Core’](https://dwc.tdwg.org)
 data standard. `galaxias` provides tools in R to build a [Darwin Core
-Archive](), a zip file containing standardised data and metadata
-accepted by global data infrastructures. The package mirrors
-functionality in [devtools](https://devtools.r-lib.org/),
-[usethis](https://usethis.r-lib.org/) and
-[dplyr](https://dplyr.tidyverse.org/) to manage data, files and folders.
-`galaxias` was created by the [Science & Decision Support
+Archive](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a),
+a zip file containing standardised data and metadata accepted by global
+data infrastructures. The package mirrors functionality in
+[devtools](https://devtools.r-lib.org/),
+[usethis](https://usethis.r-lib.org/), and
+[dplyr](https://dplyr.tidyverse.org/) to manage data, files, and
+folders. `galaxias` was created by the [Science & Decision Support
 Team](https://labs.ala.org.au) at the [Atlas of Living
 Australia](https://www.ala.org.au) (ALA).
 
 The package is named for a genus of freshwater fish that is found only
-in the Southern Hemisphere, and predominantly in Australia and New
-Zealand. The logo shows a [Spotted
+in the Southern Hemisphere, and predominantly in Australia and Aotearoa
+New Zealand. The logo shows a [Spotted
 Galaxias](https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec)
 (*Galaxias truttaceus*) drawn by [Ian
 Brennan](http://www.iangbrennan.org).
 
-If you have any comments, questions or suggestions, please [contact
+If you have any comments, questions, or suggestions, please [contact
 us](mailto:support@ala.org.au).
 
 ## Installation
@@ -54,21 +55,19 @@ library(galaxias)
 `galaxias` contains tools to:
 
 - Standardise and save data with `use_data()`.
-- Convert and save metadata statements written in Rmarkdown or Quarto as
-  EML files with `use_metadata()`.
-- Build Darwin Core Archives for sharing or publication using
+- Convert and save metadata statements written in R Markdown or Quarto
+  as EML files with `use_metadata()`.
+- Build Darwin Core Archives for sharing or publishing using
   `build_archive()`.
 - Check files for consistency with the Darwin Core Standard, either
-  locally using `check_directory()`, or via API using `check_archive()`.
+  locally using `check_directory()` or via API using `check_archive()`.
 
-`galaxias` is part of a group of packages that help users publish data
-using the Darwin Core standard. These packages are loaded with
-`galaxias`. The other packages are:
-
-- [`corella`](https://corella.ala.org.au) for converting tibbles to the
-  required column names
-- [`delma`](https://delma.ala.org.au) for converting markdown files to
-  `xml`
+`galaxias` is part of a group of packages that helps users publish data
+using the Darwin Core standard. Other packages in this group are
+[`corella`](https://corella.ala.org.au) and
+[`delma`](https://delma.ala.org.au), and they are automatically loaded
+with `galaxias`. `corella` converts tibbles to use standard column names
+and `delma` converts markdown files to `xml` format.
 
 ## Usage
 
@@ -93,7 +92,8 @@ df
 #> 2 Eolophus roseicapilla       -35.3      149. 2023-01-15 present
 ```
 
-We can standardise data according to Darwin Core Standard.
+We can standardise data according to Darwin Core Standard using `set_`
+functions.
 
 ``` r
 df_dwc <- df |>
@@ -107,14 +107,14 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 1881b588-36… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 1881b592-36… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… ff8d9d10-40… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… ff8d9d1a-40… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
-Once standardised, we can specify that we wish to use these standardised
-data in a Darwin Core Archive.`use_data()` saves the `df_dwc`  
-with a valid csv file name and location.
+We can then specify that we wish to use these standardised data in a
+Darwin Core Archive with `use_data()`. This saves `df_dwc` with a valid
+file extension and in the right location.
 
 ``` r
 use_data(df_dwc)
@@ -126,22 +126,23 @@ Create a template metadata statement for our data.
 use_metadata_template("metadata.Rmd")
 ```
 
-After editing, we can specify that we wish to use this metadata in a
-Darwin Core Archive. `use_metadata()` converts our metadata to
-[EML](https://eml.ecoinformatics.org/) format and saves it with a valid
-xml file name and location.
+After editing, we can specify that we wish to use “metadata.Rmd” in a
+Darwin Core Archive with `use_metadata()`. This converts our metadata to
+[EML](https://eml.ecoinformatics.org/) format, and saves it in the right
+location with the correct filename extension.
 
 ``` r
 use_metadata("metadata.Rmd")
 ```
 
-Build a Darwin Core Archive and save it to the working directory.
+Build a Darwin Core Archive and save it to the parent directory of your
+working directory.
 
 ``` r
 build_archive()
 ```
 
-Validate whether the constructed archive passes Darwin Core Standard
+Check whether the constructed archive passes Darwin Core Standard
 criteria.
 
 ``` r

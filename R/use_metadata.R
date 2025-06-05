@@ -4,8 +4,7 @@
 #' A metadata statement lists the owner of the dataset, how it was collected,
 #' and how it can be used (i.e. its' licence). This function reads and
 #' converts metadata saved in markdown (.md), Rmarkdown (.Rmd) or Quarto (.qmd) 
-#' to xml, and saves it in the publishing directory. This directory is 
-#' set using [galaxias_config()] and defaults to `"data-publish"`. folder.
+#' to xml, and saves it in the `data-publish` directory.
 #' 
 #' This function is a convenience wrapper function of [delma::read_md()] and 
 #' [delma::write_eml()]. 
@@ -21,14 +20,13 @@
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a file in the `data-publish` directory.
 #' @seealso [use_metadata_template()] to create a metadata statement template.
-#' @examples
-#' \dontshow{
-#' .old_wd <- setwd(tempdir())
-#' }
-#' use_metadata_template(quiet = TRUE)
-#' use_metadata()
-#' \dontshow{
-#' setwd(.old_wd)
+#' @examples 
+#' \dontrun{
+#' # get a boilerplate metadata statement
+#' use_metadata_template(file = "my_metadata.Rmd", quiet = TRUE)
+#' 
+#' # once editting is complete, call `use_metadata()` to format it
+#' use_metadata("my_metadata.Rmd")
 #' }
 #' @export
 use_metadata <- function(file = NULL,

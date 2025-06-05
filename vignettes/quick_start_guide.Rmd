@@ -10,10 +10,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-`galaxias` is an R package to help users bundle their data into a 
-standardised format optimised for storing, documenting and sharing biodiversity data. This standardised format is called a [**Darwin Core Archive**](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a)---a zip file containing data and metadata that conform to the [Darwin Core Standard](https://dwc.tdwg.org/), the accepted data standard of the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and its partner nodes (e.g. the Atlas of Living Australia). 
+`galaxias` is an R package that helps users bundle their data into a 
+standardised format optimised for storing, documenting, and sharing biodiversity data. This standardised format is called a [**Darwin Core Archive**](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a)---a zip file containing data and metadata that conform to the [Darwin Core Standard](https://dwc.tdwg.org/), the accepted data standard of the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and its partner nodes (e.g. the Atlas of Living Australia). 
 
-Sharing Darwin Core Archives with data infrastructures allows data to be reconstructed and aggregated accurately. Let's see how to prepare a Darwin Core Archive using galaxias.
+Sharing Darwin Core Archives with data infrastructures allows data to be reconstructed and aggregated accurately. Let's see how to prepare a Darwin Core Archive using `galaxias`.
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # load packages now to avoid messages later
@@ -45,13 +45,13 @@ devtools::load_all()
 └── plots                            : Folder containing plots/dataviz
 ```
 
-Let's see how galaxias helps us to prepare our 
+Let's see how galaxias can help us to package our 
 data as a Darwin Core Archive.
 
 
 ## Use standardised data in an archive
 
-Data that we wish to share are in the `data` folder. They look something like this.
+Data that we wish to share are in the `data` folder. They look something like this:
 
 ```{r}
 #| echo: false
@@ -68,16 +68,15 @@ my_data <- tibble(
   species = c("Callocephalon fimbriatum", "Eolophus roseicapilla"),
   location_id = c("ARD001", "ARD001")
   )
+```
 
+```{r}
+#| collapse: true
+#| comment: "#>"
 my_data
 ```
 
-First, we can standardise our data to conform to the Darwin Core Standard. We'll do this by using `set_` functions automatically loaded with galaxias.
-
-`set_` functions work a lot like `dplyr::mutate()`: we can use them to modify and create columns. 
-The suffix of each `set_` function gives an indication of the type of data it accepts (e.g. `set_coordinates()`, `set_scientific_name`). Their arguments are valid Darwin Core terms to use as column names. 
-
-To see how to start standardising our data, we can use `suggest_workflow()` to summarise our data and suggest the steps we should take to prepare `my_data`.
+First, we'll need to standardise our data to conform to the Darwin Core Standard. `suggest_workflow()` can help by summarising our dataset and suggesting the steps we should take. 
 
 ```{r}
 #| collapse: true
@@ -86,12 +85,13 @@ To see how to start standardising our data, we can use `suggest_workflow()` to s
 my_data |> suggest_workflow()
 ```
 
-Following the advice of `suggest_workflow()`, we can use `set_` functions 
-to standardise `my_data`. In addition, each `set_` function checks to make sure that each column contains valid data according to Darwin Core Standard.
+Following the advice of `suggest_workflow()`, we can use the `set_` functions to standardise `my_data`. `set_` functions work a lot like `dplyr::mutate()`: they modify existing columns or create new columns. The suffix of each `set_` function gives an indication of the type of data it accepts (e.g. `set_coordinates()`, `set_scientific_name`), and function arguments are valid Darwin Core terms to use as column names. Each `set_` function also checks to make sure that each column contains valid data according to Darwin Core Standard.
 
 ```{r}
-#| echo: true
+#| echo: false
 #| eval: false
+
+# I think we can get rid of this chunk?
 library(lubridate)
 
 my_data_dwc <- df |>
@@ -116,7 +116,7 @@ my_data_dwc |> print(n = 5)
 ```
 
 ```{r}
-#| echo: false
+#| echo: true
 #| message: false
 #| collapse: true
 #| comment: "#>"
@@ -139,12 +139,11 @@ my_data_dwc <- my_data |>
   set_taxonomy(kingdom = "Animalia",
                family = "Cacatuidae") 
 
-my_data_dwc |> print(n = 5)
+my_data_dwc 
 ```
 
-Notice that we added several additional columns with more information to our 
-data (`country`, `locality`, `taxonRank`, `kingdom`, `family`). We encourage 
-users to specify additional information to avoid ambiguity once their data 
+You may have noticed that we added some additional columns that were not included in the advice of `suggest_workflow()` (`country`, `locality`, `taxonRank`, `kingdom`, `family`). We encourage 
+users to specify additional information where possible to avoid ambiguity once their data 
 are shared.
 
 To use our standardised data in a Darwin Core Archive, we can select columns that use valid Darwin Core terms as column names. Invalid columns won't be accepted when we try to build our Darwin Core Archive. Our data is an occurrence-based dataset (each row contains information at the observation level, as opposed to site/survey level), so we'll select columns that match names in `occurrence_terms()`.
@@ -154,23 +153,22 @@ To use our standardised data in a Darwin Core Archive, we can select columns tha
 #| message: false
 library(dplyr)
 
-my_data_dwc <- my_data_dwc |>
+my_data_dwc_occ <- my_data_dwc |>
   select(any_of(occurrence_terms()))
 
-my_data_dwc
+my_data_dwc_occ
 ```
 
-Now we can specify that we wish to use `my_data_dwc` in our Darwin Core Archive with `use_data()`, which saves this data in the 
-`data_publish` folder with the correct file name `occurrences.csv`.
+Now we can specify that we wish to use `my_data_dwc_occ` in our Darwin Core Archive with `use_data()`, which saves this dataset in the `data_publish` folder with the correct file name `occurrences.csv`.
 
 ```{r}
 #| eval: false
-use_data(my_data_dwc) 
+use_data(my_data_dwc_occ) 
 ```
 
-## Adding metadata
+## Add metadata
 
-A critical part of a Darwin Core archive is a metadata statement; this tells 
+A critical part of a Darwin Core archive is a metadata statement: this tells 
 users who owns the data, what the data were collected for, and what uses they
 can be put to (i.e. a data licence). To get an example statement, call
 `use_metadata_template()`. 
@@ -180,8 +178,7 @@ use_metadata_template()
 ```
 
 By default, this creates an R Markdown template named 
-`metadata.Rmd` in your top working directory. Here's a small example of what 
-`metadata.Rmd` looks like.
+`metadata.Rmd` in your working directory. We can edit this template to include information about our dataset, and specify that we wish to use it in our Darwin Core Archive with `use_metadata()`.
 
 ```{r, echo=FALSE, eval=FALSE}
 # this code doesn't work any more
@@ -193,17 +190,11 @@ metadata_string <- as_eml_chr(metadata_example)[3:15]
   cat()
 ```
 
-We can edit this template statement with information we wish to 
-convey about our data. 
-
-Once our metadata statement is complete, we can specify that we wish to use it in 
-our Darwin Core Archive with `use_metadata()`. This converts our 
-markdown metadata statement to Ecological Meta Language (`EML`), the accepted 
-format of metadata for Darwin Core Archives, and saves it as `eml.xml` in the `data-publish` folder.
-
 ```{r, eval=FALSE}
 use_metadata("metadata.Rmd")
 ```
+
+This converts our metadata statement to Ecological Meta Language (`EML`), the accepted format of metadata for Darwin Core Archives, and saves it as `eml.xml` in the `data-publish` folder.
 
 ## Build an archive
 
@@ -216,16 +207,15 @@ contains at least two files:
 We can now run `build_archive()` to build our Darwin Core Archive!
 
 ```{r eval=FALSE}
-build_archive(file = "dwc-archive.zip")
+build_archive()
 ```
 
 Running `build_archive()` first checks whether we have a 'schema' document (`meta.xml`) in our `data-publish` folder. This is a machine-readable `xml` document that describes the content of the archive's data files and their structure. The schema 
 document is a required file in a Darwin Core Archive. If it is missing, `build_archive()` will build one. We can also build a schema document ourselves using `use_schema()`.
 
-At the end of this process, you should have a Darwin Core Archive zip file (`dwc-archive.zip`). 
-You should also have a `data-publish` folder containing 
-standardised data files (e.g., `occurrences.csv`), a metadata statement in EML 
-format (`eml.xml`), and a schema document (`meta.xml`). These files can be edited at any time to update your final Darwin Core Archive.
+At the end of this process, you should have a Darwin Core Archive zip file (`dwc-archive.zip`) in your paernt directory. You should also have a `data-publish` folder in your working directory containing 
+standardised data files (e.g. `occurrences.csv`), a metadata statement in EML 
+format (`eml.xml`), and a schema document (`meta.xml`). 
 
 ## Check archive
 
@@ -235,21 +225,18 @@ The first is to run local tests on the files inside a local folder directory tha
 
 ```{r}
 #| eval: false
-check_directory("data-publish")
+check_directory()
 ```
 
 The second is to check whether a complete Darwin Core Archive meets institution's Darwin Core criteria via an API. For example, we can test an archive against GBIF's API tests. 
 
 ```{r}
 #| eval: false
-
-# Add valid GBIF login details
-galaxias_config(GBIF = list(email = "your-email",
-                            username = "your-username",
-                            password = "your-password"))
-
 # Check against GBIF API
-check_archive("dwc-archive.zip")
+check_archive("dwc-archive.zip",
+              email = "your-email",
+              username = "your-username",
+              password = "your-password")
 ```
 
 
@@ -262,7 +249,6 @@ The final step is to share your completed Darwin Core Archive with a data infras
 submit_archive()
 ```
 
-This function will encourage you to open a GitHub Issue where you can attach your archive. We will run the galaxias test suite on your dataset and respond as soon as we can.
+This function will provide you with the option to open a GitHub issue where you can attach your archive. We will run the galaxias test suite on your dataset and respond as soon as we can.
 
 If you'd prefer not to use GitHub, you can send your file and a brief description to [support@ala.org.au](mailto:support@ala.org.au).
-

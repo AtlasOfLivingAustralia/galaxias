@@ -12,8 +12,8 @@
 #' [use_data_occurrences()] or [use_data_events()] to 
 #' specify data type manually.
 #' @details
-#' By default, this function saves data in the `data-publish` folder. To change 
-#' this default, see [galaxias_config()].
+#' This function saves data in the `data-publish` folder. It will create that
+#' folder if it is not already present.
 #' 
 #' Data type is determined by detecting type-specific column names in 
 #' supplied data. 
@@ -23,9 +23,18 @@
 #' @param overwrite By default, `use_data()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`. 
 #' @param quiet Whether to message about what is happening. Default is set to 
-#'  `FALSE`. 
-#' @return Invisibly returns the location of the saved csv file.
+#' @returns Does not return anything to the workspace; called for the side-effect
+#' of saving a `.csv` file to `/data-publish`.
 #' @seealso [use_metadata()]
+#' @examples
+#' \dontrun{
+#' df <- tibble::tibble(
+#'   occurrenceID = c("a1", "a2"),
+#'   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
+#'   
+#' use_data(df)
+#' )
+#' }
 #' @export
 use_data <- function(...,
                      overwrite = FALSE,

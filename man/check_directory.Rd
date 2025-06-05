@@ -7,30 +7,17 @@
 check_directory()
 }
 \value{
-Invisibly returns a tibble to the workspace containing check
-results; but primarily called for the side-effect of generating a report in
-the console.
+Doesn't return anything; called for the side-effect of generating a
+report in the console.
 }
 \description{
-Checks that files in a directory meet Darwin Core Standard. The path of the
-directory is set to the \code{directory} specified in \verb{[galaxias_config()]}.
-Users can run \code{galaxias_config()} to print the current specified \code{directory}.
-
-\code{check_archive()} runs
-\code{\link[corella:check_dataset]{corella::check_dataset()}} on \code{occurrences.csv} and \code{events.csv} files, and
-\code{\link[delma:check_metadata]{delma::check_metadata()}} on \code{eml.xml} and \code{meta.xml} files, if they are
-present. These \code{check_} functions run tests to determine whether data and
-metadata pass Darwin Core Standard criteria.
-}
-\examples{
-\donttest{
-# Run checks csv or xml files in specified directory
-# Defaults to folder data-publish/ 
-check_directory()
-
-}
+Checks that files in the \code{data-publish} directory meet Darwin Core Standard.
+\code{check_directory()} runs \code{\link[corella:check_dataset]{corella::check_dataset()}} on \code{occurrences.csv} and
+\code{events.csv} files, and \code{\link[delma:check_metadata]{delma::check_metadata()}} on the \code{eml.xml}
+file, if they are present. These \code{check_} functions run tests to determine
+whether data and metadata pass Darwin Core Standard criteria.
 }
 \seealso{
-\code{check_archive()} checks a Darwin Core Archive via a GBIF API,
+\code{\link[=check_archive]{check_archive()}} checks a Darwin Core Archive via a GBIF API,
 rather than locally.
 }
