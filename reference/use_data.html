@@ -35,7 +35,7 @@ specify data type manually.'><meta property="og:image" content="https://galaxias
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/occurrences-example.html">Standardise occurrence-based data</a></li>
-    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise monitoring data</a></li>
+    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise event-based data</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -99,12 +99,13 @@ overwrite existing files. If you really want to do so, set this to <code>TRUE</c
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Invisibly returns the location of the saved csv file.</p>
+    <p>Does not return anything to the workspace; called for the side-effect
+of saving a <code>.csv</code> file to <code>/data-publish</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>By default, this function saves data in the <code>data-publish</code> folder. To change
-this default, see <code><a href="galaxias_config.html">galaxias_config()</a></code>.</p>
+    <p>This function saves data in the <code>data-publish</code> folder. It will create that
+folder if it is not already present.</p>
 <p>Data type is determined by detecting type-specific column names in
 supplied data.</p><ul><li><p>Event: (<code>eventID</code>, <code>parentEventID</code>, <code>eventType</code>)</p></li>
 <li><p>Multimedia: not yet supported</p></li>
@@ -114,6 +115,10 @@ supplied data.</p><ul><li><p>Event: (<code>eventID</code>, <code>parentEventID</
     <div class="dont-index"><p><code><a href="use_metadata.html">use_metadata()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

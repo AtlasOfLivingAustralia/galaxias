@@ -3,13 +3,13 @@
 This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
-this function to produce reliable results. The publishing directory is
-set using galaxias_config() and defaults to "data-publish".'><meta property="og:description" content='A schema is an xml document that maps the files and field names in a DwCA.
+this function to produce reliable results. This function assumes that the
+publishing directory is named "data-publish".'><meta property="og:description" content='A schema is an xml document that maps the files and field names in a DwCA.
 This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
-this function to produce reliable results. The publishing directory is
-set using galaxias_config() and defaults to "data-publish".'><meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png"></head><body>
+this function to produce reliable results. This function assumes that the
+publishing directory is named "data-publish".'><meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -29,7 +29,7 @@ set using galaxias_config() and defaults to "data-publish".'><meta property="og:
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-examples"><li><a class="dropdown-item" href="../articles/occurrences-example.html">Standardise occurrence-based data</a></li>
-    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise monitoring data</a></li>
+    <li><a class="dropdown-item" href="../articles/events-example.html">Standardise event-based data</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -53,8 +53,8 @@ set using galaxias_config() and defaults to "data-publish".'><meta property="og:
 This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
-this function to produce reliable results. The publishing directory is
-set using <code><a href="galaxias_config.html">galaxias_config()</a></code> and defaults to <code>"data-publish"</code>.</p>
+this function to produce reliable results. This function assumes that the
+publishing directory is named <code>"data-publish"</code>.</p>
     </div>
 
     <div class="section level2">
@@ -67,8 +67,8 @@ set using <code><a href="galaxias_config.html">galaxias_config()</a></code> and 
 
 
 <dl><dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
-<dd><p>By default, <code>use_schema()</code> will not
-overwrite existing files. If you really want to do so, set this to <code>TRUE</code>.</p></dd>
+<dd><p>By default, <code>use_schema()</code> will not overwrite existing
+files. If you really want to do so, set this to <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-quiet">quiet<a class="anchor" aria-label="anchor" href="#arg-quiet"></a></dt>
@@ -89,11 +89,9 @@ called <code>meta.xml</code>, and this function enforces that.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">use_schema</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Building schema</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in proj_set("."):</span> <span style="color: #BB0000;">✖</span> Path <span style="color: #0000BB;">/tmp/RtmpSXBh1I/</span> does not appear to be inside a project or</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>   package.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Read more in the help for `usethis::proj_get()`.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">use_schema</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
