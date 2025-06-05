@@ -24,8 +24,7 @@ effect of building a file in the \code{data-publish} directory.
 A metadata statement lists the owner of the dataset, how it was collected,
 and how it can be used (i.e. its' licence). This function reads and
 converts metadata saved in markdown (.md), Rmarkdown (.Rmd) or Quarto (.qmd)
-to xml, and saves it in the publishing directory. This directory is
-set using \code{\link[=galaxias_config]{galaxias_config()}} and defaults to \code{"data-publish"}. folder.
+to xml, and saves it in the \code{data-publish} directory.
 
 This function is a convenience wrapper function of \code{\link[delma:read_md]{delma::read_md()}} and
 \code{\link[delma:write_eml]{delma::write_eml()}}.

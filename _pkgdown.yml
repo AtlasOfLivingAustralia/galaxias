@@ -40,14 +40,14 @@ reference:
   contents:
   - use_metadata_template
   - suggest_workflow
-- title: Add information to a folder
+- title: Add information to the `data-publish` directory
   contents: 
   - use_data
   - use_data_events
   - use_data_occurrences
   - use_metadata
   - use_schema
-- title: Archive management
+- title: Build an archive
   contents:
   - build_archive
   - check_directory
@@ -56,7 +56,4 @@ reference:
   - view_report
   - print.gbif_validator
   - submit_archive
-- title: Package management
-  contents:
-  - galaxias_config
 

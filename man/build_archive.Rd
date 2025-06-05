@@ -4,9 +4,12 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(overwrite = FALSE, quiet = FALSE)
+build_archive(filename = "dwc-archive.zip", overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
+\item{filename}{The name of the file to be built in the parent directory.
+Should end in \code{.zip}.}
+
 \item{overwrite}{(logical) Should existing files be overwritten? Defaults to
 \code{FALSE}.}
 
@@ -20,16 +23,15 @@ Doesn't return anything; called for the side-effect of building a
 \description{
 A Darwin Core archive is a zip file containing a combination of
 data and metadata. \code{build_archive()} constructs this zip file in the parent
-directory, by default naming it \code{"dwc_archive.zip"} and placing it in the
-parent directory. The function assumes that all necessary files have been
-pre-constructed, and can be found inside a single directory (which by default
-is called \code{"data-publish"}) with no additional or redundant information.
-
-Structurally, \code{build_archive()} is similar to \code{devtools::build()}, in the
-sense that it takes a repository and wraps it for publication.
+directory. The function assumes that all necessary files have been
+pre-constructed, and can be found inside the \code{"data-publish"} directory
+with no additional or redundant information. Structurally, \code{build_archive()}
+is similar to \code{devtools::build()}, in the sense that it takes a repository
+and wraps it for publication.
 }
 \details{
-This function looks for three types of objects in the specified \code{directory}:
+This function looks for three types of objects in the \code{data-publish}
+directory:
 \itemize{
 \item Data
 
@@ -51,12 +53,6 @@ A 'schema' document in xml format with the file name \code{meta.xml}.
 schema file if missing. This file can also be constructed
 separately using \code{\link[=use_schema]{use_schema()}}.
 }
-
-\code{build_archive()} will not build a Darwin Core Archive with these files
-present in the source directory.
-
-Both the source folder and the file name and path of the archive \code{.zip} file
-are set using \code{\link[=galaxias_config]{galaxias_config()}}.
 }
 \seealso{
 \code{\link[=use_data]{use_data()}}, \code{\link[=use_metadata]{use_metadata()}}, \code{\link[=use_schema]{use_schema()}}

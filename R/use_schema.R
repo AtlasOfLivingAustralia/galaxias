@@ -5,8 +5,8 @@
 #' This map makes it easier to reconstruct one or more related datasets so that 
 #' information is matched correctly. It works by detecting column names on csv 
 #' files in a specified directory; these should all be Darwin Core terms for 
-#' this function to produce reliable results. The publishing directory is 
-#' set using [galaxias_config()] and defaults to `"data-publish"`.
+#' this function to produce reliable results. This function assumes that the 
+#' publishing directory is named `"data-publish"`.
 #' @param overwrite By default, `use_schema()` will not overwrite existing 
 #' files. If you really want to do so, set this to `TRUE`. 
 #' @param quiet (logical) Should progress messages be suppressed? Default is 

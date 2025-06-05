@@ -242,14 +242,11 @@ The second is to check whether a complete Darwin Core Archive meets institution'
 
 ```{r}
 #| eval: false
-
-# Add valid GBIF login details
-galaxias_config(GBIF = list(email = "your-email",
-                            username = "your-username",
-                            password = "your-password"))
-
 # Check against GBIF API
-check_archive("dwc-archive.zip")
+check_archive("dwc-archive.zip",
+              email = "your-email",
+              username = "your-username",
+              password = "your-password")
 ```
 
 

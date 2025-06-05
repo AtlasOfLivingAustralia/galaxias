@@ -107,14 +107,33 @@ is_testing <- function() {
 ## -- checks -- ##
 
 
+#' Simple checks on filename argument
+#' @noRd
+#' @keywords Internal
+check_filename <- function(x,
+                           error_call = rlang::caller_env()){
+  if(is.null(x)){
+    cli::cli_abort("Argument {.arg filename} must not be `NULL`",
+                   call = error_call)
+  }
+  if(!inherits(x, "character")){
+    cli::cli_abort("Argument {.arg filename} must inherit from class {.cls character}",
+                   call = error_call)
+  }
+  if(!grepl(".zip$", x)){
+    cli::cli_abort("Argument {.arg filename} must end in `.zip`",
+                   call = error_call)
+  }
+}
+
+
 #' Check whether publish directory exists, and if not, build it,
 #' depending on quiet and interactive
 #' @noRd
 #' @keywords Internal
 check_publish_directory <- function(quiet,
                                     error_call = rlang::caller_env()){
-  directory <- potions::pour("directory",
-                             .pkg = "galaxias")
+  directory <- "data-publish"
   
   if(!fs::dir_exists(directory)){
     if(rlang::is_interactive() & !quiet){ 
@@ -130,8 +149,7 @@ check_publish_directory <- function(quiet,
       if (choice == 1) {
         usethis::use_directory(directory)
       } else {
-        cli::cli_abort(c("Unable to build working directory.", 
-                         i = "To change the default directory, see `galaxias_config()`."),
+        cli::cli_abort(c("Unable to build working directory."),
                        call = error_call)
       }
     }else{
@@ -140,12 +158,3 @@ check_publish_directory <- function(quiet,
   }
   directory
 }
-
-
-#' Get a path to the parent directory for use with archive functions
-#' @noRd
-#' @keywords Internal
-# get_archive_path <- function(){
-#   getwd() |> 
-#     dirname()
-# }

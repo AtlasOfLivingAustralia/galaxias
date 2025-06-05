@@ -1,20 +1,3 @@
-
-test_that("check_directory() fails when galaxias_config does not contain an existing folder.", {
-  # set up
-  current_wd <- here::here()
-  temp_dir <- withr::local_tempdir()
-  usethis::local_project(temp_dir, force = TRUE)
-  galaxias_config(directory = "a-random-name")
-  
-  # tests
-  check_directory() |>
-    expect_error("Directory 'a-random-name' does not exist.") # this error message will change
-  
-  # clean up
-  galaxias_config(directory = "data-publish")
-  unlink(temp_dir)
-})
-
 test_that("check_directory() works with no arguments", {
   skip_if_offline() 
   # note that delma::check_metadata() requires an internet connection to 
@@ -25,7 +8,6 @@ test_that("check_directory() works with no arguments", {
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
-  galaxias_config(directory = "data-publish")
   use_metadata_template(quiet = TRUE)
   use_metadata("metadata.Rmd", quiet = TRUE)
   df_occ <- tibble::tibble(

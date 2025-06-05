@@ -3,15 +3,14 @@
 #' @description
 #' A Darwin Core archive is a zip file containing a combination of 
 #' data and metadata. `build_archive()` constructs this zip file in the parent
-#' directory, by default naming it `"dwc_archive.zip"` and placing it in the 
-#' parent directory. The function assumes that all necessary files have been 
-#' pre-constructed, and can be found inside a single directory (which by default
-#' is called `"data-publish"`) with no additional or redundant information.
-#' 
-#' Structurally, `build_archive()` is similar to `devtools::build()`, in the 
-#' sense that it takes a repository and wraps it for publication.
+#' directory. The function assumes that all necessary files have been 
+#' pre-constructed, and can be found inside the `"data-publish"` directory
+#' with no additional or redundant information. Structurally, `build_archive()` 
+#' is similar to `devtools::build()`, in the sense that it takes a repository 
+#' and wraps it for publication.
 #' @details
-#' This function looks for three types of objects in the specified `directory`:
+#' This function looks for three types of objects in the `data-publish` 
+#' directory:
 #' 
 #'  * Data 
 #'    
@@ -34,12 +33,9 @@
 #'    `build_archive()` will detect whether this file is present and build a 
 #'    schema file if missing. This file can also be constructed 
 #'    separately using [use_schema()].
-#'
-#' `build_archive()` will not build a Darwin Core Archive with these files 
-#' present in the source directory.
 #' 
-#' Both the source folder and the file name and path of the archive `.zip` file 
-#' are set using [galaxias_config()].
+#' @param filename The name of the file to be built in the parent directory.
+#' Should end in `.zip`.
 #' @param overwrite (logical) Should existing files be overwritten? Defaults to 
 #' `FALSE`.
 #' @param quiet (logical) Whether to suppress messages about what is happening. 
@@ -48,8 +44,11 @@
 #' 'Darwin Core Archive' (i.e. a zip file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
-build_archive <- function(overwrite = FALSE,
+build_archive <- function(filename = "dwc-archive.zip",
+                          overwrite = FALSE,
                           quiet = FALSE) {
+  
+  check_filename(filename)
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -63,11 +62,9 @@ build_archive <- function(overwrite = FALSE,
   # Users will hit an error if they are 
   #  - missing all data files, or
   #  - missing an EML metadata statement
-  source <- potions::pour("directory",
-                          .pkg = "galaxias")
+  source <- "data-publish"
   if(!fs::dir_exists(source)){
-    cli::cli_abort(c("Directory {.file {source}} does not exist.",
-                     i = "See {.code ?galaxias_config()}."))
+    cli::cli_abort("Directory {.file {source}} does not exist.")
   }
   
   files_in <- find_data(source, quiet = quiet)
@@ -83,9 +80,7 @@ build_archive <- function(overwrite = FALSE,
   }
   
   # run checks on `archive`
-  file_name <- potions::pour("archive",
-                             .pkg = "galaxias")
-  archive <- fs::path_abs(glue::glue("../{file_name}"))
+  archive <- fs::path_abs(glue::glue("../{filename}"))
   
   if(fs::file_exists(archive)){
     if(overwrite){
@@ -102,7 +97,7 @@ build_archive <- function(overwrite = FALSE,
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step(c("Writing {.file {file_name}}"))
+      cli::cli_progress_step(c("Writing {.file {filename}}"))
     }
     zip::zip(zipfile = archive, 
              files = files_in,
@@ -111,7 +106,7 @@ build_archive <- function(overwrite = FALSE,
 
   if(!quiet){cli::cli_progress_done()}
 
-  cli::cli_inform(c("Saved {.file {file_name}} to the parent directory of the working directory.",
+  cli::cli_inform(c("Saved {.file {filename}} to the parent directory of the working directory.",
                     "*" = cli::col_grey("Path: {.file {fs::path(archive)}}")))
   
   return(invisible())
@@ -242,8 +237,8 @@ is_file_present <- function(files, directory) {
   user_files <- files |>
     dplyr::mutate(
       present = glue::glue("{directory}/{files$file}") |>
-        purrr::map(\(file_name)
-                   fs::file_exists(file_name)) |>
+        purrr::map(\(filename)
+                   fs::file_exists(filename)) |>
         unlist())
   
   user_files <- user_files |>

@@ -25,8 +25,7 @@ overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 }
 \value{
 Does not return anything to the workspace; called for the side-effect
-of saving a \code{.csv} file to the directory specified by
-\code{galaxias_config()$directory}.
+of saving a \code{.csv} file to \verb{/data-publish}.
 }
 \description{
 Once data conform to Darwin Core Standard, \code{use_data()} makes it
@@ -41,8 +40,8 @@ Alternatively, users can call the underlying functions
 specify data type manually.
 }
 \details{
-By default, this function saves data in the \code{data-publish} folder. To change
-this default, see \code{\link[=galaxias_config]{galaxias_config()}}.
+This function saves data in the \code{data-publish} folder. It will create that
+folder if it is not already present.
 
 Data type is determined by detecting type-specific column names in
 supplied data.

@@ -11,10 +11,7 @@ Doesn't return anything; called for the side-effect of generating a
 report in the console.
 }
 \description{
-Checks that files in a directory meet Darwin Core Standard. The path of the
-directory is set to the \code{directory} specified in \code{\link[=galaxias_config]{galaxias_config()}}.
-Users can run \code{galaxias_config()} to print the current specified \code{directory}.
-
+Checks that files in the \code{data-publish} directory meet Darwin Core Standard.
 \code{check_directory()} runs \code{\link[corella:check_dataset]{corella::check_dataset()}} on \code{occurrences.csv} and
 \code{events.csv} files, and \code{\link[delma:check_metadata]{delma::check_metadata()}} on the \code{eml.xml}
 file, if they are present. These \code{check_} functions run tests to determine

@@ -6,9 +6,15 @@
 #' @order 2
 #' @export
 get_report <- function(obj,
+                       username = NULL,
+                       password = NULL,
                        n = 5,
                        wait = TRUE,
                        quiet = FALSE){
+  
+  check_gbif_credentials(username = username, 
+                         password = password,
+                         email_needed = FALSE)
   
   # check class of supplied object
   if(inherits(obj, "gbif_validator")){
@@ -22,7 +28,9 @@ get_report <- function(obj,
   # run query
   # NOTE: This approach means that this function *always* hits the API
   # If you don't want that, call `view_report()` instead.
-  gbif_response <- query_gbif_validator_api(key)
+  gbif_response <- query_gbif_validator_api(key,
+                                            username,
+                                            password)
 
   # quick error catcher
   if(is.null(gbif_response)){
@@ -58,12 +66,16 @@ get_report <- function(obj,
 #' Internal function to run the actual query
 #' @noRd
 #' @keywords Internal
-query_gbif_validator_api <- function(key){
+query_gbif_validator_api <- function(key, 
+                                     username,
+                                     password){
+  userpwd_string <-   glue::glue("{username}:{password}") |>
+    as.character()
   result <- glue::glue("https://api.gbif.org/v1/validation/{key}") |>
     httr2::request() |>
     httr2::req_options(
       httpauth = 1,
-      userpwd = gbif_username_string()) |>
+      userpwd = userpwd_string) |>
     httr2::req_perform() |>
     httr2::resp_body_json()
   class(result) <- c("gbif_validator", "list")

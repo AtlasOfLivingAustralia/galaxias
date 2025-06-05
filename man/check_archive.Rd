@@ -8,15 +8,38 @@
 \alias{print.gbif_validator}
 \title{Check whether an archive meets the Darwin Core Standard via API}
 \usage{
-check_archive(wait = TRUE, quiet = FALSE)
+check_archive(
+  filename = "dwc-archive.zip",
+  username = NULL,
+  email = NULL,
+  password = NULL,
+  wait = TRUE,
+  quiet = FALSE
+)
 
-get_report(obj, n = 5, wait = TRUE, quiet = FALSE)
+get_report(
+  obj,
+  username = NULL,
+  password = NULL,
+  n = 5,
+  wait = TRUE,
+  quiet = FALSE
+)
 
 view_report(x, n = 5)
 
 \method{print}{gbif_validator}(x, ...)
 }
 \arguments{
+\item{filename}{The name of the file in the parent directory to pass to the
+validator API, ideally created using \code{\link[=build_archive]{build_archive()}}.}
+
+\item{username}{Your GBIF username.}
+
+\item{email}{The email address used to register with \code{gbif.org}.}
+
+\item{password}{Your GBIF password.}
+
 \item{wait}{(logical) Whether to wait for a completed report from the API
 before exiting (\code{TRUE}, the default), or try the API once and return the
 result regardless (\code{FALSE}).}
@@ -43,15 +66,11 @@ side-effect of printing useful information to the console.
 \description{
 Check whether a specified Darwin Core Archive is ready for
 sharing and publication, according to the Darwin Core Standard.
-\code{check_archive()} tests an archive - defaulting to \code{"dwc_archive.zip"} in
+\code{check_archive()} tests an archive - defaulting to \code{"dwc-archive.zip"} in
 the users' parent directory - using an online validation service. Currently
 only supports validation using GBIF.
 }
 \details{
-Note that there is no \code{file} argument to \code{check_archive()}; instead, the
-location where files will be built and checked is set using the
-\code{archive} argument to \link{galaxias_config}.
-
 Internally, \code{check_archive()} both \code{POST}s the specified archive to the GBIF
 validator API and then calls \code{get_report()} to retrieve (\code{GET}) the result.
 \code{\link[=get_report]{get_report()}} is exported to allow the user to download results at a later
@@ -65,6 +84,6 @@ Note that information returned by these functions is provided verbatim from
 the institution API, not from galaxias.
 }
 \seealso{
-\code{\link[=check_directory]{check_directory()}} which runs checks on a folder directory locally,
-rather than via API.
+\code{\link[=check_directory]{check_directory()}} which runs checks on a directory (but \strong{not}
+an archive) locally, rather than via API.
 }
