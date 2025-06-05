@@ -22,8 +22,8 @@ A schema is an xml document that maps the files and field names in a DwCA.
 This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
-this function to produce reliable results. The publishing directory is
-set using \code{\link[=galaxias_config]{galaxias_config()}} and defaults to \code{"data-publish"}.
+this function to produce reliable results. This function assumes that the
+publishing directory is named \code{"data-publish"}.
 }
 \details{
 To be compliant with the Darwin Core Standard, the schema file \strong{must} be

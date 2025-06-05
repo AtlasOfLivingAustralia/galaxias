@@ -1,3 +1,23 @@
+test_that("build_archive() fails when `/data-publish` is missing", {
+  build_archive() |>
+    expect_error(label = "Directory data-publish does not exist.")
+})
+
+test_that("build_archive() fails when `filename` is `NULL`", {
+  build_archive(filename = NULL) |>
+    expect_error(label = "Argument `filename` must not be `NULL`")
+})
+
+test_that("build_archive() fails when `filename` is not a character", {
+  build_archive(filename = 1L) |>
+    expect_error(label = "Argument `filename` must inherit from class <character>")
+})
+
+test_that("build_archive() fails when `filename` doesn't end in `.zip`", {
+  build_archive(filename = "something.csv") |>
+    expect_error(label = "Argument `filename` must end in `.zip`")
+})
+
 test_that("build_archive() fails when specified directory is missing all files", {
   # set up
   current_wd <- here::here()

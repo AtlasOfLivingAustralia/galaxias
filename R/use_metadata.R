@@ -4,8 +4,7 @@
 #' A metadata statement lists the owner of the dataset, how it was collected,
 #' and how it can be used (i.e. its' licence). This function reads and
 #' converts metadata saved in markdown (.md), Rmarkdown (.Rmd) or Quarto (.qmd) 
-#' to xml, and saves it in the publishing directory. This directory is 
-#' set using [galaxias_config()] and defaults to `"data-publish"`. folder.
+#' to xml, and saves it in the `data-publish` directory.
 #' 
 #' This function is a convenience wrapper function of [delma::read_md()] and 
 #' [delma::write_eml()]. 

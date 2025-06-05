@@ -1,10 +1,7 @@
 #' Check whether contents of directory comply with the Darwin Core Standard
 #' 
 #' @description
-#' Checks that files in a directory meet Darwin Core Standard. The path of the
-#' directory is set to the `directory` specified in [galaxias_config()]. 
-#' Users can run `galaxias_config()` to print the current specified `directory`.
-#' 
+#' Checks that files in the `data-publish` directory meet Darwin Core Standard. 
 #' `check_directory()` runs [corella::check_dataset()] on `occurrences.csv` and 
 #' `events.csv` files, and [delma::check_metadata()] on the `eml.xml` 
 #' file, if they are present. These `check_` functions run tests to determine 
@@ -17,8 +14,7 @@
 check_directory <- function(){ 
   
   # run checks on `directory`
-  directory <- potions::pour("directory",
-                          .pkg = "galaxias")
+  directory <- "data-publish"
   if(!fs::dir_exists(directory)){
     cli::cli_abort(c("Directory {.file {directory}} does not exist."))
   }

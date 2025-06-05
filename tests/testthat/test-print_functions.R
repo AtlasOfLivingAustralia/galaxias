@@ -1,19 +1,3 @@
-
-test_that("print.galaxias_config() works with only `directory` given", {
-  print.galaxias_config(list(directory = "something")) |>
-    expect_no_error()
-})
-
-test_that("print.galaxias_config() works with only `directory` given", {
-  print.galaxias_config(list(archive = "something")) |>
-    expect_no_error()
-})
-
-test_that("print.galaxias_config() works with only `gbif` given", {
-  print.galaxias_config(list(gbif = list(email = "something"))) |>
-    expect_no_error()
-})
-
 test_that("print.gbif_validator() runs", {
   print.gbif_validator(list(status = "downloading")) |>
     expect_message()
