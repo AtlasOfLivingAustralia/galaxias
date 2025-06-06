@@ -34,7 +34,7 @@
 #'    schema file if missing. This file can also be constructed 
 #'    separately using [use_schema()].
 #' 
-#' @param filen The name of the file to be built in the parent directory.
+#' @param file The name of the file to be built in the parent directory.
 #' Should end in `.zip`.
 #' @param overwrite (logical) Should existing files be overwritten? Defaults to 
 #' `FALSE`.

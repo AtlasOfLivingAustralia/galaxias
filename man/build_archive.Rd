@@ -7,14 +7,14 @@
 build_archive(file = "dwc-archive.zip", overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
+\item{file}{The name of the file to be built in the parent directory.
+Should end in \code{.zip}.}
+
 \item{overwrite}{(logical) Should existing files be overwritten? Defaults to
 \code{FALSE}.}
 
 \item{quiet}{(logical) Whether to suppress messages about what is happening.
 Default is set to \code{FALSE}; i.e. messages are shown.}
-
-\item{filen}{The name of the file to be built in the parent directory.
-Should end in \code{.zip}.}
 }
 \value{
 Doesn't return anything; called for the side-effect of building a
