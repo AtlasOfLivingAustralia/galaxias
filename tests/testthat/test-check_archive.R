@@ -18,32 +18,32 @@ test_that("get_report() fails when objects of wrong class are given", {
     expect_error(label = "Argument `obj` must be of class <character> or <gbif_validator>")
 })
 
-test_that("check_archive() fails when `filename` is `NULL`", {
-  check_archive(filename = NULL) |>
-    expect_error(label = "Argument `filename` must not be `NULL`")
+test_that("check_archive() fails when `file` is `NULL`", {
+  check_archive(file = NULL) |>
+    expect_error(label = "Argument `file` must not be `NULL`")
 })
 
-test_that("check_archive() fails when `filename` is not a character", {
-  check_archive(filename = 1L) |>
-    expect_error(label = "Argument `filename` must inherit from class <character>")
+test_that("check_archive() fails when `file` is not a character", {
+  check_archive(file = 1L) |>
+    expect_error(label = "Argument `file` must inherit from class <character>")
 })
 
-test_that("check_archive() fails when `filename` doesn't end in `.zip`", {
-  check_archive(filename = "something.csv") |>
-    expect_error(label = "Argument `filename` must end in `.zip`")
+test_that("check_archive() fails when `file` doesn't end in `.zip`", {
+  check_archive(file = "something.csv") |>
+    expect_error(label = "Argument `file` must end in `.zip`")
 })
 
-test_that("check_archive() fails when `filename` doesn't exist", {
-  check_archive(filename = "something.zip") |>
+test_that("check_archive() fails when `file` doesn't exist", {
+  check_archive(file = "something.zip") |>
     expect_error(label = "Specified archive something.zip does not exist")
 })
 
 test_that("check_archive() fails when `username` is `NULL` (i.e. not specified", {
-  # create a file to avoid the `exists` requirement in `filename`
+  # create a file to avoid the `exists` requirement in `file`
   file.create("../TEST.zip") |> 
     invisible()
   # run check
-  check_archive(filename = "TEST.zip",
+  check_archive(file = "TEST.zip",
                 email = "hello@ala.org.au",
                 password = "my-password") |>
     expect_error(label = "All GBIF credentials should be supplied.")
@@ -51,11 +51,11 @@ test_that("check_archive() fails when `username` is `NULL` (i.e. not specified",
 })
 
 test_that("check_archive() fails when `username` is `NULL (i.e. not specified", {
-  # create a file to avoid the `exists` requirement in `filename`
+  # create a file to avoid the `exists` requirement in `file`
   file.create("../TEST.zip") |> 
     invisible()
   # run check
-  check_archive(filename = "TEST.zip",
+  check_archive(file = "TEST.zip",
                 username = 1L,
                 email = "hello@ala.org.au",
                 password = "my-password") |>
@@ -64,11 +64,11 @@ test_that("check_archive() fails when `username` is `NULL (i.e. not specified", 
 })
 
 test_that("check_archive() fails when `username` is `NULL (i.e. not specified", {
-  # create a file to avoid the `exists` requirement in `filename`
+  # create a file to avoid the `exists` requirement in `file`
   file.create("../TEST.zip") |> 
     invisible()
   # run check
-  check_archive(filename = "TEST.zip",
+  check_archive(file = "TEST.zip",
                 username = c("username1", "username2"),
                 email = "hello@ala.org.au",
                 password = "my-password") |>

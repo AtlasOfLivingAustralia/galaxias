@@ -113,15 +113,15 @@ is_testing <- function() {
 check_filename <- function(x,
                            error_call = rlang::caller_env()){
   if(is.null(x)){
-    cli::cli_abort("Argument {.arg filename} must not be `NULL`",
+    cli::cli_abort("Argument {.arg file} must not be `NULL`",
                    call = error_call)
   }
   if(!inherits(x, "character")){
-    cli::cli_abort("Argument {.arg filename} must inherit from class {.cls character}",
+    cli::cli_abort("Argument {.arg file} must inherit from class {.cls character}",
                    call = error_call)
   }
   if(!grepl(".zip$", x)){
-    cli::cli_abort("Argument {.arg filename} must end in `.zip`",
+    cli::cli_abort("Argument {.arg file} must end in `.zip`",
                    call = error_call)
   }
 }

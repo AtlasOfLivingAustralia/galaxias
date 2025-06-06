@@ -34,7 +34,7 @@
 #'    schema file if missing. This file can also be constructed 
 #'    separately using [use_schema()].
 #' 
-#' @param filename The name of the file to be built in the parent directory.
+#' @param filen The name of the file to be built in the parent directory.
 #' Should end in `.zip`.
 #' @param overwrite (logical) Should existing files be overwritten? Defaults to 
 #' `FALSE`.
@@ -44,11 +44,11 @@
 #' 'Darwin Core Archive' (i.e. a zip file).
 #' @seealso [use_data()], [use_metadata()], [use_schema()]
 #' @export
-build_archive <- function(filename = "dwc-archive.zip",
+build_archive <- function(file = "dwc-archive.zip",
                           overwrite = FALSE,
                           quiet = FALSE) {
   
-  check_filename(filename)
+  check_filename(file)
   
   if(!quiet){
     cli::cli_alert_info("Building Darwin Core Archive")
@@ -80,7 +80,7 @@ build_archive <- function(filename = "dwc-archive.zip",
   }
   
   # run checks on `archive`
-  archive <- fs::path_abs(glue::glue("../{filename}"))
+  archive <- fs::path_abs(glue::glue("../{file}"))
   
   if(fs::file_exists(archive)){
     if(overwrite){
@@ -97,7 +97,7 @@ build_archive <- function(filename = "dwc-archive.zip",
     }
   }else{
     if(!quiet){
-      cli::cli_progress_step(c("Writing {.file {filename}}"))
+      cli::cli_progress_step(c("Writing {.file {file}}"))
     }
     zip::zip(zipfile = archive, 
              files = files_in,
@@ -106,7 +106,7 @@ build_archive <- function(filename = "dwc-archive.zip",
 
   if(!quiet){cli::cli_progress_done()}
 
-  cli::cli_inform(c("Saved {.file {filename}} to the parent directory of the working directory.",
+  cli::cli_inform(c("Saved {.file {file}} to the parent directory of the working directory.",
                     "*" = cli::col_grey("Path: {.file {fs::path(archive)}}")))
   
   return(invisible())
@@ -237,8 +237,8 @@ is_file_present <- function(files, directory) {
   user_files <- files |>
     dplyr::mutate(
       present = glue::glue("{directory}/{files$file}") |>
-        purrr::map(\(filename)
-                   fs::file_exists(filename)) |>
+        purrr::map(\(file)
+                   fs::file_exists(file)) |>
         unlist())
   
   user_files <- user_files |>
