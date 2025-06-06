@@ -36,15 +36,20 @@ us](mailto:support@ala.org.au).
 
 ## Installation
 
-This package is under active development, and is not yet available on
-CRAN. You can install the latest development version from GitHub with:
+You can install the latest version from GitHub with:
 
 ``` r
 install.packages("remotes")
 remotes::install_github("atlasoflivingaustralia/galaxias")
 ```
 
-Load the package:
+Once on CRAN, you can use:
+
+``` r
+install.packages("galaxias")
+```
+
+To load the package, call:
 
 ``` r
 library(galaxias)
@@ -54,20 +59,20 @@ library(galaxias)
 
 `galaxias` contains tools to:
 
-- Standardise and save data with `use_data()`.
-- Convert and save metadata statements written in R Markdown or Quarto
-  as EML files with `use_metadata()`.
-- Build Darwin Core Archives for sharing or publishing using
-  `build_archive()`.
+- Standardise `tibbles` containing biodiversity observations to match
+  the Darwin Core Standard.
+- Convert metadata statements written in R Markdown or Quarto to EML
+  files.
+- Store all your publication-ready files in a single directory, and zip
+  that directory for publication.
 - Check files for consistency with the Darwin Core Standard, either
-  locally using `check_directory()` or via API using `check_archive()`.
+  locally using or via API.
 
-`galaxias` is part of a group of packages that helps users publish data
-using the Darwin Core standard. Other packages in this group are
-[`corella`](https://corella.ala.org.au) and
-[`delma`](https://delma.ala.org.au), and they are automatically loaded
-with `galaxias`. `corella` converts tibbles to use standard column names
-and `delma` converts markdown files to `xml` format.
+`galaxias` draws on functionality from two underlying packages that
+address different challenges of the data publication workflow:
+[`corella`](https://corella.ala.org.au), which converts tibbles to use
+standard column names; and [`delma`](https://delma.ala.org.au) which
+converts markdown files to `EML` format.
 
 ## Usage
 
@@ -107,51 +112,51 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… ff8d9d10-40… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… ff8d9d1a-40… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 421e938c-42… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 421e9396-42… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
 We can then specify that we wish to use these standardised data in a
 Darwin Core Archive with `use_data()`. This saves `df_dwc` with a valid
-file extension and in the right location.
+file name and extension, and in a standardised location (a new directory
+called `/data-publish`).
 
 ``` r
 use_data(df_dwc)
 ```
 
-Create a template metadata statement for our data.
+Before publishing your data, it is also necessary to create a metadata
+statement that describes who owns the data, what the data shows, and
+what licence it is released under. `galaxias` enables you to write your
+metadata statement in R Markdown or Quarto format, and seamlessly
+convert it to [EML](https://eml.ecoinformatics.org/) for publication.
 
 ``` r
+# 1. Create a boilerplate file
 use_metadata_template("metadata.Rmd")
-```
 
-After editing, we can specify that we wish to use “metadata.Rmd” in a
-Darwin Core Archive with `use_metadata()`. This converts our metadata to
-[EML](https://eml.ecoinformatics.org/) format, and saves it in the right
-location with the correct filename extension.
+# 2. Edit in your preferred IDE
 
-``` r
+# 3. Load into /data-publish as an EML file
 use_metadata("metadata.Rmd")
 ```
 
-Build a Darwin Core Archive and save it to the parent directory of your
-working directory.
+The final step in your data publication workflow is to zip your
+directory into a single file. This file is then placed in your parent
+directory.
 
 ``` r
-build_archive()
+build_archive(file = "my_biodiversity_data.zip")
 ```
 
-Check whether the constructed archive passes Darwin Core Standard
-criteria.
+You can share your data via any mechanism you wish, but `galaxias`
+provides the `submit_archive()` function to open a submission window for
+the Atlas of Living Australia.
 
-``` r
-check_archive()
-```
-
-See the [Quick Start
-Guide](https://galaxias.ala.org.au/articles/quick_start_guide.html) for
-an in-depth explanation of building Darwin Core Archives.
+Please see the [Quick Start
+Guide](https://galaxias.ala.org.au/R/articles/quick_start_guide.html)
+for a more in-depth explanation of building Darwin Core Archives.
 
 ## Citing galaxias
 
