@@ -10,8 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-`galaxias` is an R package that helps users bundle their data into a 
-standardised format optimised for storing, documenting, and sharing biodiversity data. This standardised format is called a [**Darwin Core Archive**](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a)---a zip file containing data and metadata that conform to the [Darwin Core Standard](https://dwc.tdwg.org/), the accepted data standard of the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and its partner nodes (e.g. the Atlas of Living Australia). 
+`galaxias` is an R package that helps users bundle their data into a standardised format optimised for storing, documenting, and sharing biodiversity data. This standardised format is called a [**Darwin Core Archive**](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a)---a zip file containing data and metadata that conform to the [Darwin Core Standard](https://dwc.tdwg.org/), the accepted data standard of the [Global Biodiversity Information Facility (GBIF)](https://gbif.org) and its partner nodes (e.g. the Atlas of Living Australia). 
 
 Sharing Darwin Core Archives with data infrastructures allows data to be reconstructed and aggregated accurately. Let's see how to prepare a Darwin Core Archive using `galaxias`.
 
@@ -24,9 +23,7 @@ library(dplyr)
 
 ## Getting started
 
-Here we have an existing R project containing data collected over the course of 
-a research project. Our project uses a fairly standard folder 
-structure.
+Here we have an existing R project containing data collected over the course of a research project. Our project uses a fairly standard folder structure.
 
 ```{r}
 #| eval: false
@@ -39,19 +36,20 @@ devtools::load_all()
 ```
 ├── README.md                        : Description of the repository
 ├── my-project-name.Rproj            : RStudio project file
-├── data-raw                         : Folder to store original/source data
 ├── data                             : Folder to store cleaned data
-├── scripts                          : Folder with analytic coding scripts
-└── plots                            : Folder containing plots/dataviz
+|  └── my_data.csv
+├── data-raw                         : Folder to store original/source data
+|  └── my_raw_data.csv
+├── plots                            : Folder containing plots/dataviz
+└── scripts                          : Folder with analytic coding scripts
 ```
 
-Let's see how galaxias can help us to package our 
-data as a Darwin Core Archive.
+Let's see how galaxias can help us to package our data as a Darwin Core Archive.
 
 
 ## Use standardised data in an archive
 
-Data that we wish to share are in the `data` folder. They look something like this:
+Data that we wish to share are in the `data` folder. They might look something like this:
 
 ```{r}
 #| echo: false
@@ -165,6 +163,22 @@ Now we can specify that we wish to use `my_data_dwc_occ` in our Darwin Core Arch
 #| eval: false
 use_data(my_data_dwc_occ) 
 ```
+
+If we look again at our file structure, we now find our data has been added to our new folder:
+
+```
+├── README.md
+├── my-project-name.Rproj
+├── data
+|  └── my_data.csv
+├── data-publish                    : New folder to store data for publication
+|  └── occurrences.csv              : Data formatted as per Darwin Core Standard
+├── data-raw
+|  └── my_raw_data.csv
+├── plots
+└── scripts
+```
+
 
 ## Add metadata
 
