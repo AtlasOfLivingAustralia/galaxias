@@ -44,7 +44,6 @@ Suggests:
   janitor,
   knitr,
   lubridate,
-  readxl,
   rmarkdown,
   R.utils,
   testthat (>= 3.0.0),

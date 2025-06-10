@@ -7,3 +7,4 @@
 README.Rmd
 ^\.github$
 ^Meta$
+vignettes/events-example-formatting.R

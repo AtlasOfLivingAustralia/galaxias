@@ -1,11 +1,11 @@
 ---
-title: "Standardise an Events dataset"
+title: "Standardise an Event dataset"
 author: "Dax Kellie & Martin Westgate"
-date: '2025-01-15'
+date: '2025-06-10'
 output:
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Standardise an Events dataset}
+  %\VignetteIndexEntry{Standardise an Event dataset}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -33,50 +33,46 @@ Here we will demonstrate an example of how to convert Event-based data to Darwin
 
 ## The dataset
 
-For this example, we'll use a dataset containing observations of frogs [in x area over x time]. Data were collected using 5-minute audio surveys, where each row documents whether each frog species was detected over that 5-minute recording, recorded as present (`1`) or absent (`0`). Our dataset consists of 3 spreadsheets: `species list`, `observations` and `sites`.
+For this example, we'll use a dataset of frog observations from a [2015 paper in PLOS ONE](https://doi.org/10.1371/journal.pone.0140973). Data were collected by volunteers using 5-minute audio surveys, where each row documents whether each frog species was detected over that 5-minute recording, recorded as present (`1`) or absent (`0`). For the purpose of this vignette, we have downloaded the source data from [Dryad](https://doi.org/10.5061/dryad.75s51), reduced the number of rows, and converted the original excel spreadsheet to three `.csv` files: `sites`, `observations` and `species list`.
 
-##### Species list
+##### Sites
 
-The `species list` spreadsheet lists the eight frog species recorded in this dataset. The `abbreviation` column contains the abbreviated column name used in the observations spreadsheet.
+The `sites` spreadsheet contains columns that describe each survey location (e.g. `depth`, `water_type`, `latitude`, `longitude`) and overall presence/absence of each frog species in a site (e.g. `cpar`, `csig`, `limdum`). We won't use the aggregated species data stored here - we'll instead export the raw observations - but we'll still import the data, because it's the only place that spatial information are stored.
 
 ```{r}
 #| warning: false
 #| message: false
-library(readxl)
+library(readr)
+library(readr)
 library(dplyr)
 library(tidyr)
+sites <- read_csv("events_sites.csv")
 
-species <- read_xlsx("Frogwatch_dataset.xlsx", 
-                     sheet = "species list") |> 
-  janitor::clean_names()
-
-species
+sites |> rmarkdown::paged_table()
 ```
 
 ##### Observations
 
-The `observations` spreadsheet contains columns that describe the sample's location (e.g. `site_code`, `water_type`, `veg_canopy`) and the occurrence of each frog species (e.g. `cpar`, `csig`, `limdum`). 
+The `observations` spreadsheet contains columns that describe the sample's physical properties (e.g. `water_type`, `veg_canopy`), linked to `sites` by the `site_code` column. More importantly, it records whether each species in the region was recorded during that particular survey (e.g. `cpar`, `csig`, `limdum`). 
 
 ```{r}
 #| warning: false
 #| message: false
-obs <- read_xlsx("Frogwatch_dataset.xlsx", 
-                 sheet = "observations") |>
-  janitor::clean_names()
+obs <- read_csv("events_observations.csv")
 
 obs |> rmarkdown::paged_table()
 ```
 
-##### Sites
 
-The `sites` spreadsheet contains columns that describe each site location (e.g. `depth`, `water_type`, `latitude`, `longitude`) and overall presence/absence of each frog species in a site (e.g. `cpar`, `csig`, `limdum`). 
+##### Species list
+Finally, the `species list` spreadsheet lists the eight frog species recorded in this dataset, and the `abbreviation` column contains the abbreviated column name used in the `observations` dataset.
 
 ```{r}
-sites <- read_xlsx("Frogwatch_dataset.xlsx", 
-                   sheet = "sites") |>
-  janitor::clean_names()
+#| warning: false
+#| message: false
+species <- read_csv("events_species.csv")
 
-sites |> rmarkdown::paged_table()
+species
 ```
 
 # Prepare `events.csv`
