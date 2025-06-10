@@ -6,7 +6,7 @@
 #' `check_archive()` tests an archive - defaulting to `"dwc-archive.zip"` in
 #' the users' parent directory - using an online validation service. Currently 
 #' only supports validation using GBIF.
-#' @param filename The name of the file in the parent directory to pass to the 
+#' @param file The name of the file in the parent directory to pass to the 
 #' validator API, ideally created using [build_archive()].
 #' @param username Your GBIF username.
 #' @param email The email address used to register with `gbif.org`.
@@ -36,20 +36,20 @@
 #' an archive) locally, rather than via API.
 #' @order 1
 #' @export
-check_archive <- function(filename = "dwc-archive.zip",
+check_archive <- function(file = "dwc-archive.zip",
                           username = NULL,
                           email = NULL,
                           password = NULL,
                           wait = TRUE,
                           quiet = FALSE){
 
-  # check if `filename` exists
-  check_filename(filename)
+  # check if `file` exists
+  check_filename(file)
   
   # if so, create path
-  archive <- fs::path_abs(glue::glue("../{filename}"))
+  archive <- fs::path_abs(glue::glue("../{file}"))
   if(!fs::file_exists(archive)){
-    cli::cli_abort(c("Specified archive {.file {filename}} does not exist.",
+    cli::cli_abort(c("Specified archive {.file {file}} does not exist.",
                      x = "Can't find {.path {archive}}."))
   }
   
@@ -130,7 +130,7 @@ check_gbif_credentials <- function(username,
 #' https://techdocs.gbif.org/en/openapi/v1/validator#/validation-resource/submitFile
 #' @noRd
 #' @keywords Internal
-api_gbif_validator_post <- function(filename,
+api_gbif_validator_post <- function(file,
                                     username,
                                     email,
                                     password){
@@ -147,7 +147,7 @@ api_gbif_validator_post <- function(filename,
     notificationEmail = email_string) |>
     jsonlite::toJSON() |>
     form_json()
-  validation_request_file <- form_zip(file_path = filename)
+  validation_request_file <- form_zip(file_path = file)
 
   # build query
   query <- httr2::request("https://api.gbif.org/v1/validation") |>

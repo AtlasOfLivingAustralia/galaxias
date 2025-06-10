@@ -9,7 +9,7 @@
 \title{Check whether an archive meets the Darwin Core Standard via API}
 \usage{
 check_archive(
-  filename = "dwc-archive.zip",
+  file = "dwc-archive.zip",
   username = NULL,
   email = NULL,
   password = NULL,
@@ -31,7 +31,7 @@ view_report(x, n = 5)
 \method{print}{gbif_validator}(x, ...)
 }
 \arguments{
-\item{filename}{The name of the file in the parent directory to pass to the
+\item{file}{The name of the file in the parent directory to pass to the
 validator API, ideally created using \code{\link[=build_archive]{build_archive()}}.}
 
 \item{username}{Your GBIF username.}

@@ -1,11 +1,11 @@
 ---
-title: "Standardise an Occurrences dataset"
+title: "Standardise an Occurrence dataset"
 author: "Dax Kellie & Martin Westgate"
-date: '2025-02-04'
+date: '2025-06-06'
 output:
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Standardise an Occurrences dataset}
+  %\VignetteIndexEntry{Standardise an Occurrence dataset}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -32,10 +32,10 @@ Let's use an small example dataset of bird observations taken from 4 different s
 #| message: false
 library(galaxias)
 library(dplyr)
-library(readxl)
+library(readr)
 
-obs <- read_xlsx("dummy-dataset-sb.xlsx",
-                 sheet = 1) |>
+obs <- read_csv("dummy-dataset-sb.csv",
+                show_col_types = FALSE) |>
   janitor::clean_names()
 
 obs |> 

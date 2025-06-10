@@ -3,19 +3,19 @@ test_that("build_archive() fails when `/data-publish` is missing", {
     expect_error(label = "Directory data-publish does not exist.")
 })
 
-test_that("build_archive() fails when `filename` is `NULL`", {
-  build_archive(filename = NULL) |>
-    expect_error(label = "Argument `filename` must not be `NULL`")
+test_that("build_archive() fails when `file` is `NULL`", {
+  build_archive(file = NULL) |>
+    expect_error(label = "Argument `file` must not be `NULL`")
 })
 
-test_that("build_archive() fails when `filename` is not a character", {
-  build_archive(filename = 1L) |>
-    expect_error(label = "Argument `filename` must inherit from class <character>")
+test_that("build_archive() fails when `file` is not a character", {
+  build_archive(file = 1L) |>
+    expect_error(label = "Argument `file` must inherit from class <character>")
 })
 
-test_that("build_archive() fails when `filename` doesn't end in `.zip`", {
-  build_archive(filename = "something.csv") |>
-    expect_error(label = "Argument `filename` must end in `.zip`")
+test_that("build_archive() fails when `file` doesn't end in `.zip`", {
+  build_archive(file = "something.csv") |>
+    expect_error(label = "Argument `file` must end in `.zip`")
 })
 
 test_that("build_archive() fails when specified directory is missing all files", {
@@ -120,7 +120,7 @@ test_that("build_archive() menu appears", {
   # tests
   build_archive_with_mock <- function(x) {
     local_user_input(x)
-    build_archive()
+    build_archive(overwrite = TRUE) # `overwrite` added to avoid ERRORS on macbuilder and winbuilder
   }
   
   msgs <- build_archive_with_mock(1) |>
@@ -154,7 +154,8 @@ test_that("build_archive() builds schema when missing", {
     write.csv("data-publish/occurrences.csv")
   
   # tests
-  build_archive(quiet = TRUE) |>
+  build_archive(overwrite = TRUE, # `overwrite` added to avoid ERRORS on macbuilder and winbuilder
+                quiet = TRUE) |> 
     expect_no_error()
   expect_in("dwc-archive.zip", list.files(".."))
   expect_in("meta.xml", list.files("data-publish"))

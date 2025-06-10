@@ -1,12 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
+^doc$
 ^docs$
 ^pkgdown$
-^data-raw/
-^data-raw$
-^inst/hex.R$
 README.Rmd
-^doc$
 ^\.github$
-^tests/testthat/testdata/build_example_zip_file.R
+^Meta$
+vignettes/.events-example-formatting.R

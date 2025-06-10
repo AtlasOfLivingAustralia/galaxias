@@ -33,7 +33,6 @@
 #'   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
 #'   
 #' use_data(df)
-#' )
 #' }
 #' @export
 use_data <- function(...,
@@ -214,7 +213,7 @@ write_data_file <- function(file_path,
         cli::cli_progress_done()
       }
     }else{
-      c("{.file {file_path}} already exists.",
+      c("File {.file {file_path}} already exists.",
         i = "Use `overwrite = TRUE` to overwrite.") |>
         cli::cli_inform()     
     }

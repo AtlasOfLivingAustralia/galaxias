@@ -4,10 +4,10 @@
 \alias{build_archive}
 \title{Build a Darwin Core Archive from a folder}
 \usage{
-build_archive(filename = "dwc-archive.zip", overwrite = FALSE, quiet = FALSE)
+build_archive(file = "dwc-archive.zip", overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
-\item{filename}{The name of the file to be built in the parent directory.
+\item{file}{The name of the file to be built in the parent directory.
 Should end in \code{.zip}.}
 
 \item{overwrite}{(logical) Should existing files be overwritten? Defaults to

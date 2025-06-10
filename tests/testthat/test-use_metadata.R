@@ -107,6 +107,8 @@ test_that("use_metadata() overwrites file when overwrite = TRUE", {
 })
 
 test_that("use_metadata() reads quarto doc", {
+  skip_on_cran() # do not expect Quarto to be installed on CRAN
+  
   # set up
   current_wd <- here::here()
   temp_dir <- withr::local_tempdir()

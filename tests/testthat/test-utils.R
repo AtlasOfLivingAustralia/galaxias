@@ -75,8 +75,3 @@ test_that("cli_menu(exit =) works", {
   expect_snapshot(error = TRUE, cli_menu_with_mock(1))
   expect_snapshot(cli_menu_with_mock(2))
 })
-
-
-test_that("check_publish_directory() performs correctly", {
-  skip("Tests not ready")
-})
