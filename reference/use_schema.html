@@ -4,12 +4,16 @@ This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
 this function to produce reliable results. This function assumes that the
-publishing directory is named "data-publish".'><meta property="og:description" content='A schema is an xml document that maps the files and field names in a DwCA.
+publishing directory is named "data-publish". This function is primarily
+internal and is called by build_archive(), but is exported for clarity
+and debugging purposes.'><meta property="og:description" content='A schema is an xml document that maps the files and field names in a DwCA.
 This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
 this function to produce reliable results. This function assumes that the
-publishing directory is named "data-publish".'><meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png"></head><body>
+publishing directory is named "data-publish". This function is primarily
+internal and is called by build_archive(), but is exported for clarity
+and debugging purposes.'><meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -54,7 +58,9 @@ This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
 this function to produce reliable results. This function assumes that the
-publishing directory is named <code>"data-publish"</code>.</p>
+publishing directory is named <code>"data-publish"</code>. This function is primarily
+internal and is called by <code><a href="build_archive.html">build_archive()</a></code>, but is exported for clarity
+and debugging purposes.</p>
     </div>
 
     <div class="section level2">
@@ -85,6 +91,10 @@ effect of building a schema file in the publication directory.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>To be compliant with the Darwin Core Standard, the schema file <strong>must</strong> be
 called <code>meta.xml</code>, and this function enforces that.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="build_archive.html">build_archive()</a></code> which calls this function.</p></div>
     </div>
 
     <div class="section level2">
