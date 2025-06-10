@@ -33,7 +33,6 @@
 #'   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
 #'   
 #' use_data(df)
-#' )
 #' }
 #' @export
 use_data <- function(...,

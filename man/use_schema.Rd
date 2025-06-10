@@ -23,7 +23,9 @@ This map makes it easier to reconstruct one or more related datasets so that
 information is matched correctly. It works by detecting column names on csv
 files in a specified directory; these should all be Darwin Core terms for
 this function to produce reliable results. This function assumes that the
-publishing directory is named \code{"data-publish"}.
+publishing directory is named \code{"data-publish"}. This function is primarily
+internal and is called by \code{\link[=build_archive]{build_archive()}}, but is exported for clarity
+and debugging purposes.
 }
 \details{
 To be compliant with the Darwin Core Standard, the schema file \strong{must} be
@@ -33,4 +35,7 @@ called \code{meta.xml}, and this function enforces that.
 \dontrun{
 use_schema()
 }
+}
+\seealso{
+\code{\link[=build_archive]{build_archive()}} which calls this function.
 }

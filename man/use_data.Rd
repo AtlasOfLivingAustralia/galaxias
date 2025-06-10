@@ -57,7 +57,6 @@ df <- tibble::tibble(
   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
   
 use_data(df)
-)
 }
 }
 \seealso{

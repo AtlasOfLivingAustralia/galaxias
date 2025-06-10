@@ -6,7 +6,9 @@
 #' information is matched correctly. It works by detecting column names on csv 
 #' files in a specified directory; these should all be Darwin Core terms for 
 #' this function to produce reliable results. This function assumes that the 
-#' publishing directory is named `"data-publish"`.
+#' publishing directory is named `"data-publish"`. This function is primarily 
+#' internal and is called by [build_archive()], but is exported for clarity
+#' and debugging purposes.
 #' @param overwrite By default, `use_schema()` will not overwrite existing 
 #' files. If you really want to do so, set this to `TRUE`. 
 #' @param quiet (logical) Should progress messages be suppressed? Default is 
@@ -16,6 +18,7 @@
 #' called `meta.xml`, and this function enforces that.
 #' @returns Does not return an object to the workspace; called for the side
 #' effect of building a schema file in the publication directory.
+#' @seealso [build_archive()] which calls this function.
 #' @examples
 #' \dontrun{
 #' use_schema()
