@@ -120,7 +120,7 @@ test_that("build_archive() menu appears", {
   # tests
   build_archive_with_mock <- function(x) {
     local_user_input(x)
-    build_archive()
+    build_archive(overwrite = TRUE) # `overwrite` added to avoid ERRORS on macbuilder and winbuilder
   }
   
   msgs <- build_archive_with_mock(1) |>
@@ -154,7 +154,8 @@ test_that("build_archive() builds schema when missing", {
     write.csv("data-publish/occurrences.csv")
   
   # tests
-  build_archive(quiet = TRUE) |>
+  build_archive(overwrite = TRUE, # `overwrite` added to avoid ERRORS on macbuilder and winbuilder
+                quiet = TRUE) |> 
     expect_no_error()
   expect_in("dwc-archive.zip", list.files(".."))
   expect_in("meta.xml", list.files("data-publish"))

@@ -19,21 +19,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-`galaxias` is an R package that helps users describe, bundle, and share 
-biodiversity information using the ['Darwin Core'](https://dwc.tdwg.org) data 
-standard. `galaxias` provides tools in R to build a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a), 
-a zip file containing standardised data and metadata accepted by global data 
-infrastructures. The package mirrors functionality in [devtools](https://devtools.r-lib.org/), 
-[usethis](https://usethis.r-lib.org/), and [dplyr](https://dplyr.tidyverse.org/) to manage data, files, and folders. 
-`galaxias` was created by the 
-[Science & Decision Support Team](https://labs.ala.org.au) at the 
-[Atlas of Living Australia](https://www.ala.org.au) (ALA).
+`galaxias` is an R package that helps users describe, bundle, and share biodiversity information using the ['Darwin Core'](https://dwc.tdwg.org) data standard. `galaxias` provides tools in R to build a [Darwin Core Archive](https://ipt.gbif.org/manual/en/ipt/latest/dwca-guide#what-is-darwin-core-archive-dwc-a), a zip file containing standardised data and metadata accepted by global data infrastructures. The package mirrors functionality in [devtools](https://devtools.r-lib.org/), [usethis](https://usethis.r-lib.org/), and [dplyr](https://dplyr.tidyverse.org/) to manage data, files, and folders. `galaxias` was created by the [Science & Decision Support Team](https://labs.ala.org.au) at the [Atlas of Living Australia](https://www.ala.org.au) (ALA).
 
-The package is named for a genus of freshwater fish that is found only in the 
-Southern Hemisphere, and predominantly in Australia and Aotearoa New Zealand. The logo 
-shows a 
-[Spotted Galaxias](https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec) 
-(_Galaxias truttaceus_) drawn by [Ian Brennan](http://www.iangbrennan.org).
+The package is named for a genus of freshwater fish that is found only in the Southern Hemisphere, and predominantly in Australia and Aotearoa New Zealand. The logo shows a Spotted Galaxias (_Galaxias truttaceus_) drawn by [Ian Brennan](http://www.iangbrennan.org).
 
 If you have any comments, questions, or suggestions, please [contact us](mailto:support@ala.org.au).
  
@@ -76,11 +64,7 @@ library(corella)
  - Check files for consistency with the Darwin Core Standard, either locally 
    using or via API.
 
-`galaxias` draws on functionality from two underlying packages that address
-different challenges of the data publication workflow: 
-[`corella`](https://corella.ala.org.au), which converts tibbles to use standard 
-column names; and [`delma`](https://delma.ala.org.au) which converts markdown 
-files to `EML` format.
+`galaxias` draws on functionality from two underlying packages that address different challenges of the data publication workflow: [`corella`](https://corella.ala.org.au), which converts tibbles to use standard column names; and [`delma`](https://delma.ala.org.au) which converts markdown files to `EML` format.
 
 ## Usage
 
@@ -115,19 +99,14 @@ df_dwc <- df |>
 df_dwc
 ```
 
-We can then specify that we wish to use these standardised data in a Darwin Core Archive with `use_data()`. This saves `df_dwc` with a valid file name and extension,
-and in a standardised location (a new directory called `/data-publish`).
+We can then specify that we wish to use these standardised data in a Darwin Core Archive with `use_data()`. This saves `df_dwc` with a valid file name and extension, and in a standardised location (a new directory called `/data-publish`).
 
 ```{r}
 #| eval: false
 use_data(df_dwc)
 ```
 
-Before publishing your data, it is also necessary to create a metadata statement
-that describes who owns the data, what the data shows, and what licence it is
-released under. `galaxias` enables you to write your metadata statement in R 
-Markdown or Quarto format, and seamlessly convert it to
-[EML](https://eml.ecoinformatics.org/) for publication.
+Before publishing your data, it is also necessary to create a metadata statement that describes who owns the data, what the data shows, and what licence it is released under. `galaxias` enables you to write your metadata statement in R Markdown or Quarto format, and seamlessly convert it to [EML](https://eml.ecoinformatics.org/) for publication.
 
 ```{r}
 #| eval: false
@@ -148,13 +127,9 @@ a single file. This file is placed in your parent directory.
 build_archive(file = "my_biodiversity_data.zip")
 ```
 
-You can share your data via any mechanism you wish, but `galaxias` provides 
-the `submit_archive()` function to open a submission window for the Atlas of
-Living Australia. 
+You can share your data via any mechanism you wish, but `galaxias` provides the `submit_archive()` function to open a submission window for the Atlas of Living Australia. 
 
-Please see the 
-[Quick Start Guide](https://galaxias.ala.org.au/R/articles/quick_start_guide.html) 
-for a more in-depth explanation of building Darwin Core Archives.
+Please see the [Quick Start Guide](https://galaxias.ala.org.au/R/articles/quick_start_guide.html) for a more in-depth explanation of building Darwin Core Archives.
 
 ## Citing galaxias
 To generate a citation for the package version you are using, you can run:
@@ -170,8 +145,7 @@ The current recommended citation is:
 > and Share Biodiversity Data. R Package version 0.1.0.
 
 ## Contributors
-Developers who have contributed to `galaxias` are as follows (in alphabetical 
-order by surname):
+Developers who have contributed to `galaxias` are as follows (in alphabetical order by surname):
 
 Amanda Buyan ([@acbuyan](https://github.com/acbuyan)), 
 Fonti Kar ([@fontikar](https://github.com/fontikar)), 

@@ -26,10 +26,8 @@ Australia](https://www.ala.org.au) (ALA).
 
 The package is named for a genus of freshwater fish that is found only
 in the Southern Hemisphere, and predominantly in Australia and Aotearoa
-New Zealand. The logo shows a [Spotted
-Galaxias](https://bie.ala.org.au/species/https://biodiversity.org.au/afd/taxa/e4d85845-3e34-4112-90a9-f954176721ec)
-(*Galaxias truttaceus*) drawn by [Ian
-Brennan](http://www.iangbrennan.org).
+New Zealand. The logo shows a Spotted Galaxias (*Galaxias truttaceus*)
+drawn by [Ian Brennan](http://www.iangbrennan.org).
 
 If you have any comments, questions, or suggestions, please [contact
 us](mailto:support@ala.org.au).
@@ -112,8 +110,8 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 421e938c-42… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 421e9396-42… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 5cfe0c2a-45… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 5cfe0c34-45… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 
@@ -143,7 +141,7 @@ use_metadata("metadata.Rmd")
 ```
 
 The final step in your data publication workflow is to zip your
-directory into a single file. This file is then placed in your parent
+directory into a single file. This file is placed in your parent
 directory.
 
 ``` r

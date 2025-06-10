@@ -15,10 +15,10 @@ Authors@R:
              family = "Kellie",
              email = "dax.kellie@csiro.au",
              role = c("aut")))
-Description: `galaxias` helps users describe, package, and share biodiversity 
+Description: This package helps users describe, package, and share biodiversity 
   information using the 'Darwin Core' data standard, which is the format used
-  and accepted by the Global Biodiversity Information Facility (GBIF) and its
-  partner nodes. It is functionally similar to `devtools`, but with a focus on
+  and accepted by the Global Biodiversity Information Facility ('GBIF') and its
+  partner nodes. It is functionally similar to 'devtools', but with a focus on
   building 'Darwin Core Archives' rather than R packages.
 Depends: 
   R (>= 4.3.0),
@@ -50,7 +50,7 @@ Suggests:
   tidyr,
   xml2
 License: MPL-2.0
-URL: https://galaxias.ala.org.au/R
+URL: https://galaxias.ala.org.au/R/
 BugReports: https://github.com/AtlasOfLivingAustralia/galaxias/issues
 Maintainer: Martin Westgate <martin.westgate@csiro.au>
 Encoding: UTF-8

@@ -42,7 +42,7 @@ If you have any questions, comments or suggestions, please email
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://galaxias.ala.org.au/R}
+  \item \url{https://galaxias.ala.org.au/R/}
   \item Report bugs at \url{https://github.com/AtlasOfLivingAustralia/galaxias/issues}
 }
 
