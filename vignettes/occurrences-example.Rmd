@@ -23,7 +23,7 @@ Using occurrence-based datasets assume that all observations are independent of 
 
 Let's see how to build an occurrence-based dataset using galaxias.
 
-## The dataset
+# The dataset
 
 Let's use an small example dataset of bird observations taken from 4 different site locations. This dataset has many different types of data like landscape type and age class. Importantly for standardising to Darwin Core, this dataset contains the scientific name (`species`), coordinate location (`lat` & `lon`) and date of observation (`date`).
 
@@ -44,7 +44,7 @@ obs |>
 ```
 
 
-## Standardise to Darwin Core
+# Standardise to Darwin Core
 
 To determine what we need to do to standardise our dataset, let's use `suggest_workflow()`. The output tells us we have one matching Darwin Core term in our data already (`sex`), but we are missing all minimum required Darwin Core terms.
 

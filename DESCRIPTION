@@ -15,11 +15,12 @@ Authors@R:
              family = "Kellie",
              email = "dax.kellie@csiro.au",
              role = c("aut")))
-Description: This package helps users describe, package, and share biodiversity 
-  information using the 'Darwin Core' data standard, which is the format used
-  and accepted by the Global Biodiversity Information Facility ('GBIF') and its
-  partner nodes. It is functionally similar to 'devtools', but with a focus on
-  building 'Darwin Core Archives' rather than R packages.
+Description: The 'Darwin Core' data standard is widely used to share 
+  biodiversity information, most notably by the Global Biodiversity Information 
+  Facility ('GBIF') and its partner nodes; but converting data to this standard
+  can be tricky. 'galaxias' is functionally similar to 'devtools', but with a 
+  focus on building 'Darwin Core Archives' rather than R packages, enabling
+  data to be shared and re-used with relative ease.
 Depends: 
   R (>= 4.3.0),
   corella
