@@ -95,9 +95,9 @@ useful for more advanced modelling techniques.</p>
 <p>Here we will demonstrate an example of how to convert Event-based
 data to Darwin Core standard. To do so, we will create two csv files,
 events.csv and occurrences.csv, to build a Darwin Core Archive.</p>
-<div class="section level3">
-<h3 id="the-dataset">The dataset<a class="anchor" aria-label="anchor" href="#the-dataset"></a>
-</h3>
+<div class="section level2">
+<h2 id="the-dataset">The dataset<a class="anchor" aria-label="anchor" href="#the-dataset"></a>
+</h2>
 <p>For this example, we’ll use a dataset of frog observations from a <a href="https://doi.org/10.1371/journal.pone.0140973" class="external-link">2015 paper in PLOS
 ONE</a>. Data were collected by volunteers using 5-minute audio surveys,
 where each row documents whether each frog species was detected over
@@ -107,9 +107,9 @@ the source data from <a href="https://doi.org/10.5061/dryad.75s51" class="extern
 of rows, and converted the original excel spreadsheet to three
 <code>.csv</code> files: <code>sites</code>, <code>observations</code>
 and <code>species list</code>.</p>
-<div class="section level6">
-<h6 id="sites">Sites<a class="anchor" aria-label="anchor" href="#sites"></a>
-</h6>
+<div class="section level3">
+<h3 id="sites">Sites<a class="anchor" aria-label="anchor" href="#sites"></a>
+</h3>
 <p>The <code>sites</code> spreadsheet contains columns that describe
 each survey location (e.g. <code>depth</code>, <code>water_type</code>,
 <code>latitude</code>, <code>longitude</code>) and overall
@@ -132,9 +132,9 @@ spatial information are stored.</p>
   </script>
 </div>
 </div>
-<div class="section level6">
-<h6 id="observations">Observations<a class="anchor" aria-label="anchor" href="#observations"></a>
-</h6>
+<div class="section level3">
+<h3 id="observations">Observations<a class="anchor" aria-label="anchor" href="#observations"></a>
+</h3>
 <p>The <code>observations</code> spreadsheet contains columns that
 describe the sample’s physical properties (e.g. <code>water_type</code>,
 <code>veg_canopy</code>), linked to <code>sites</code> by the
@@ -151,9 +151,9 @@ species in the region was recorded during that particular survey
   </script>
 </div>
 </div>
-<div class="section level6">
-<h6 id="species-list">Species list<a class="anchor" aria-label="anchor" href="#species-list"></a>
-</h6>
+<div class="section level3">
+<h3 id="species-list">Species list<a class="anchor" aria-label="anchor" href="#species-list"></a>
+</h3>
 <p>Finally, the <code>species list</code> spreadsheet lists the eight
 frog species recorded in this dataset, and the <code>abbreviation</code>
 column contains the abbreviated column name used in the
@@ -184,18 +184,18 @@ sample-level, where each row contains multiple observations in one
 dataframe at the sample-level to use as our <code>events.csv</code>.</p>
 <p>First, let’s assign a unique identifier <code>eventID</code> to data,
 which is a requirement of Darwin Core Standard. Using
-<code><a href="https://corella.ala.org.au/reference/set_events.html" class="external-link">set_events()</a></code> and <code><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">composite_id()</a></code>, we can create
+<code><a href="https://corella.ala.org.au/R/reference/set_events.html" class="external-link">set_events()</a></code> and <code><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">composite_id()</a></code>, we can create
 a new column <code>eventID</code> containing a unique ID constructed
 several types of information in our dataframe.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_id</span> <span class="op">&lt;-</span> <span class="va">obs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">site_code</span>, <span class="va">year</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="va">species</span><span class="op">$</span><span class="va">abbreviation</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_events.html" class="external-link">set_events</a></span><span class="op">(</span></span>
-<span>    eventID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">site_code</span>, <span class="va">year</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_events.html" class="external-link">set_events</a></span><span class="op">(</span></span>
+<span>    eventID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">site_code</span>, <span class="va">year</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="va">eventID</span>, .before <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># re-position</span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">eventID</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventID</span> <span style="color: #B2B2B2;">[313ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventID</span> <span style="color: #B2B2B2;">[314ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="va">obs_id</span></span>
@@ -214,7 +214,7 @@ several types of information in our dataframe.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 0010-AMA1… AMA100     <span style="text-decoration: underline;">2</span>014     1     1      1      0      1     0     0     0</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 113 more rows</span></span></span></code></pre></div>
 <p>Next we’ll add site information from the <code>sites</code>
-spreadsheet. Then we use <code><a href="https://corella.ala.org.au/reference/set_coordinates.html" class="external-link">set_coordinates()</a></code> to assign our
+spreadsheet. Then we use <code><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates()</a></code> to assign our
 existing columns to use valid Darwin Core Standard column names, and add
 2 other required columns <code>geodeticDatum</code> and
 <code>coordinateUncertaintyInMetres</code>.</p>
@@ -224,7 +224,7 @@ existing columns to use valid Darwin Core Standard column names, and add
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sites</span>, <span class="va">site_code</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link">join_by</a></span><span class="op">(</span><span class="va">site_code</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span></span>
 <span>    decimalLatitude <span class="op">=</span> <span class="va">latitude</span>, </span>
 <span>    decimalLongitude <span class="op">=</span> <span class="va">longitude</span>,</span>
 <span>    geodeticDatum <span class="op">=</span> <span class="st">"WGS84"</span>,</span>
@@ -261,7 +261,7 @@ dataframe.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">events</span> <span class="op">&lt;-</span> <span class="va">obs_id_site</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">event_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/R/reference/accepted_terms.html" class="external-link">event_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="va">events</span></span>
@@ -333,26 +333,26 @@ requires that we add a unique <code>occurrenceID</code> and the type of
 observation in the column <code>basisOfRecord</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_long_dwc</span> <span class="op">&lt;-</span> <span class="va">obs_long</span> <span class="op">|&gt;</span></span>
-<span> <span class="fu"><a href="https://corella.ala.org.au/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span></span>
-<span>   occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="va">eventID</span>, <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span></span>
+<span>   occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="va">eventID</span>, <span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>   basisOfRecord <span class="op">=</span> <span class="st">"humanObservation"</span>,</span>
 <span>   occurrenceStatus <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">presence</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">~</span> <span class="st">"present"</span>,</span>
 <span>                                       .default <span class="op">=</span> <span class="st">"absent"</span><span class="op">)</span></span>
 <span>   <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span> <span class="fu"><a href="https://corella.ala.org.au/reference/set_scientific_name.html" class="external-link">set_scientific_name</a></span><span class="op">(</span></span>
+<span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_scientific_name.html" class="external-link">set_scientific_name</a></span><span class="op">(</span></span>
 <span>   scientificName <span class="op">=</span> <span class="va">scientific_name</span></span>
 <span>   <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span> <span class="fu"><a href="https://corella.ala.org.au/reference/set_taxonomy.html" class="external-link">set_taxonomy</a></span><span class="op">(</span></span>
+<span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_taxonomy.html" class="external-link">set_taxonomy</a></span><span class="op">(</span></span>
 <span>   vernacularName <span class="op">=</span> <span class="va">common_name</span></span>
 <span>   <span class="op">)</span></span>
 <span><span class="co">#&gt; ⠙ Checking 3 columns: <span style="color: #00BB00;">occurrenceID</span>, <span style="color: #00BB00;">basisOfRecord</span>, and <span style="color: #00BB00;">occurrenceStatus</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 3 columns: <span style="color: #00BB00;">occurrenceID</span>, <span style="color: #00BB00;">basisOfRecord</span>, and <span style="color: #00BB00;">occurrenceStatus</span> <span style="color: #B2B2B2;">[919ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 3 columns: <span style="color: #00BB00;">occurrenceID</span>, <span style="color: #00BB00;">basisOfRecord</span>, and <span style="color: #00BB00;">occurrenceStatus</span> <span style="color: #B2B2B2;">[918ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[310ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">vernacularName</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">vernacularName</span> <span style="color: #B2B2B2;">[310ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">vernacularName</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="va">obs_long_dwc</span></span>
@@ -379,7 +379,7 @@ dataframe.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">occurrences</span> <span class="op">&lt;-</span> <span class="va">obs_long_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/R/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
 <p>We can specify that we wish to use <code>occurrences</code> in our
 Darwin Core Archive with <code><a href="../reference/use_data.html">use_data()</a></code>, which will save
@@ -394,16 +394,19 @@ Darwin Core Archive with <code><a href="../reference/use_data.html">use_data()</
 Additional information on how to use galah to crosscheck scientificName matching?
 
 -->
-<div class="section level3">
-<h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-</h3>
+<p>In data terms, that’s it! Don’t forget to add your metadata using
+<code><a href="https://rdrr.io/pkg/delma/man/use_metadata_template.html" class="external-link">use_metadata_template()</a></code> and <code><a href="../reference/use_metadata.html">use_metadata()</a></code>
+before you build and submit your archive.</p>
+</div>
+<div class="section level2">
+<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h2>
 <p>The hierarchical structure of Event-based data (ie Site -&gt; Sample
 -&gt; Occurrence) adds richness, allowing for information like repeated
 sampling and presence/absence information to be preserved. This richness
 can enable more nuanced probabilistic analyses like species distribution
 models or occupancy models. We encourage users with Event-based data to
 use galaxias to standardise their data for publication and sharing.</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

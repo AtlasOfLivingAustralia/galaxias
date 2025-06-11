@@ -18,8 +18,8 @@
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Describe, Package, and Share Biodiversity Data">
-<meta name="description" content="This package helps users describe, package, and share biodiversity information using the Darwin Core data standard, which is the format used and accepted by the Global Biodiversity Information Facility (GBIF) and its partner nodes. It is functionally similar to devtools, but with a focus on building Darwin Core Archives rather than R packages.">
-<meta property="og:description" content="This package helps users describe, package, and share biodiversity information using the Darwin Core data standard, which is the format used and accepted by the Global Biodiversity Information Facility (GBIF) and its partner nodes. It is functionally similar to devtools, but with a focus on building Darwin Core Archives rather than R packages.">
+<meta name="description" content="The Darwin Core data standard is widely used to share biodiversity information, most notably by the Global Biodiversity Information Facility (GBIF) and its partner nodes; but converting data to this standard can be tricky. galaxias is functionally similar to devtools, but with a focus on building Darwin Core Archives rather than R packages, enabling data to be shared and re-used with relative ease.">
+<meta property="og:description" content="The Darwin Core data standard is widely used to share biodiversity information, most notably by the Global Biodiversity Information Facility (GBIF) and its partner nodes; but converting data to this standard can be tricky. galaxias is functionally similar to devtools, but with a focus on building Darwin Core Archives rather than R packages, enabling data to be shared and re-used with relative ease.">
 <meta property="og:image" content="https://galaxias.ala.org.au/R/logo.png">
 </head>
 <body>
@@ -126,10 +126,10 @@
 <p>We can standardise data according to Darwin Core Standard using <code>set_</code> functions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_dwc</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://corella.ala.org.au/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/reference/identifier_functions.html" class="external-link">random_id</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>   <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">random_id</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                   basisOfRecord <span class="op">=</span> <span class="st">"humanObservation"</span>,</span>
 <span>                   occurrenceStatus <span class="op">=</span> <span class="va">status</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://corella.ala.org.au/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>,</span>
+<span>   <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>,</span>
 <span>                   decimalLongitude <span class="op">=</span> <span class="va">longitude</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df_dwc</span></span>
