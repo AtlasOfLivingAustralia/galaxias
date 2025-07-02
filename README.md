@@ -7,6 +7,8 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/galaxias)](https://CRAN.R-project.org/package=galaxias)
+[![Codecov test
+coverage](https://codecov.io/gh/AtlasOfLivingAustralia/galaxias/graph/badge.svg)](https://app.codecov.io/gh/AtlasOfLivingAustralia/galaxias)
 <!-- badges: end -->
 
 ## Overview
@@ -110,8 +112,8 @@ df_dwc
 #> # A tibble: 2 × 7
 #>   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus
 #>   <chr>                   <date>     <chr>         <chr>        <chr>           
-#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 5cfe0c2a-45… present         
-#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… 5cfe0c34-45… present         
+#> 1 Callocephalon fimbriat… 2023-01-14 humanObserva… e16986de-57… present         
+#> 2 Eolophus roseicapilla   2023-01-15 humanObserva… e16986f2-57… present         
 #> # ℹ 2 more variables: decimalLatitude <dbl>, decimalLongitude <dbl>
 ```
 

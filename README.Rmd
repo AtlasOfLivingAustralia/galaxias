@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/galaxias)](https://CRAN.R-project.org/package=galaxias)
+[![Codecov test coverage](https://codecov.io/gh/AtlasOfLivingAustralia/galaxias/graph/badge.svg)](https://app.codecov.io/gh/AtlasOfLivingAustralia/galaxias)
 <!-- badges: end -->
 
 ## Overview
