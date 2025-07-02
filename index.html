@@ -126,18 +126,18 @@
 <p>We can standardise data according to Darwin Core Standard using <code>set_</code> functions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_dwc</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">random_id</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span>occurrenceID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">random_id</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                   basisOfRecord <span class="op">=</span> <span class="st">"humanObservation"</span>,</span>
 <span>                   occurrenceStatus <span class="op">=</span> <span class="va">status</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>,</span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">latitude</span>,</span>
 <span>                   decimalLongitude <span class="op">=</span> <span class="va">longitude</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df_dwc</span></span>
 <span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
 <span><span class="co">#&gt;   scientificName          eventDate  basisOfRecord occurrenceID occurrenceStatus</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;                   &lt;date&gt;     &lt;chr&gt;         &lt;chr&gt;        &lt;chr&gt;           </span></span>
-<span><span class="co">#&gt; 1 Callocephalon fimbriat… 2023-01-14 humanObserva… 5cfe0c2a-45… present         </span></span>
-<span><span class="co">#&gt; 2 Eolophus roseicapilla   2023-01-15 humanObserva… 5cfe0c34-45… present         </span></span>
+<span><span class="co">#&gt; 1 Callocephalon fimbriat… 2023-01-14 humanObserva… e16986de-57… present         </span></span>
+<span><span class="co">#&gt; 2 Eolophus roseicapilla   2023-01-15 humanObserva… e16986f2-57… present         </span></span>
 <span><span class="co">#&gt; # ℹ 2 more variables: decimalLatitude &lt;dbl&gt;, decimalLongitude &lt;dbl&gt;</span></span></code></pre></div>
 <p>We can then specify that we wish to use these standardised data in a Darwin Core Archive with <code><a href="reference/use_data.html">use_data()</a></code>. This saves <code>df_dwc</code> with a valid file name and extension, and in a standardised location (a new directory called <code>/data-publish</code>).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

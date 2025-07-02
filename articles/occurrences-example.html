@@ -564,12 +564,12 @@ Darwin Core, this dataset contains the scientific name
 <h2 id="standardise-to-darwin-core">Standardise to Darwin Core<a class="anchor" aria-label="anchor" href="#standardise-to-darwin-core"></a>
 </h2>
 <p>To determine what we need to do to standardise our dataset, let’s use
-<code><a href="https://corella.ala.org.au/R/reference/suggest_workflow.html" class="external-link">suggest_workflow()</a></code>. The output tells us we have one
+<code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code>. The output tells us we have one
 matching Darwin Core term in our data already (<code>sex</code>), but we
 are missing all minimum required Darwin Core terms.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Matching Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; Matched 1 of 12 column names to DwC terms:</span></span>
@@ -614,27 +614,26 @@ column is correctly formatted. We’ll save our modified dataframe as
 <code>obs_dwc</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_scientific_name.html" class="external-link">set_scientific_name</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">lat</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_scientific_name.html" class="external-link">set_scientific_name</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span>decimalLatitude <span class="op">=</span> <span class="va">lat</span>,</span>
 <span>                  decimalLongitude <span class="op">=</span> <span class="va">lon</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_datetime.html" class="external-link">set_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="co"># specify year-month-day format</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_datetime.html" class="external-link">set_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="co"># specify year-month-day format</span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
-<span><span class="co">#&gt; ⠹ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[326ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[319ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[621ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[617ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">eventDate</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventDate</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventDate</span> <span style="color: #B2B2B2;">[310ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
-<p>Running <code><a href="https://corella.ala.org.au/R/reference/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> again will reflect our
+<p>Running <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> again will reflect our
 progress and show us what’s left to do. Now the output tells us that we
 still need to add several columns to our dataset to meet minimum Darwin
 Core requirements.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Matching Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; Matched 5 of 12 column names to DwC terms:</span></span>
@@ -669,13 +668,13 @@ Core requirements.</p>
 <li>
 <code>occurrenceID</code>: Unique identifiers of each record. This
 ensures that we can identify the specific record for any future updates
-or corrections. We can use <code><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">composite_id()</a></code>,
-<code><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">sequential_id()</a></code> or <code><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">random_id()</a></code> to add a unique
+or corrections. We can use <code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">composite_id()</a></code>,
+<code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">sequential_id()</a></code> or <code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">random_id()</a></code> to add a unique
 IDs to each row.</li>
 <li>
 <code>basisOfRecord</code>: The type of record (e.g. human
 observation, specimen, machine observation). See a list of acceptable
-values with <code><a href="https://corella.ala.org.au/R/reference/accepted_values.html" class="external-link">corella::basisOfRecord_values()</a></code>.</li>
+values with <code><a href="https://rdrr.io/pkg/corella/man/accepted_values.html" class="external-link">corella::basisOfRecord_values()</a></code>.</li>
 <li>
 <code>geodeticDatum</code>: The Coordinate Reference System (CRS)
 projection of your data (for example, the CRS of Google Maps is
@@ -685,38 +684,38 @@ projection of your data (for example, the CRS of Google Maps is
 around your observation. You may know this value based on your method of
 data collection</li>
 </ul>
-<!-- or you can use `with_uncertainty()` to provide a default value based on the method used --><p>Now let’s add these columns using <code><a href="https://corella.ala.org.au/R/reference/set_occurrences.html" class="external-link">set_occurrences()</a></code> and
-<code><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates()</a></code>. We can also add the suggested function
-<code><a href="https://corella.ala.org.au/R/reference/set_individual_traits.html" class="external-link">set_individual_traits()</a></code> which will automatically identify
+<!-- or you can use `with_uncertainty()` to provide a default value based on the method used --><p>Now let’s add these columns using <code><a href="https://rdrr.io/pkg/corella/man/set_occurrences.html" class="external-link">set_occurrences()</a></code> and
+<code><a href="https://rdrr.io/pkg/corella/man/set_coordinates.html" class="external-link">set_coordinates()</a></code>. We can also add the suggested function
+<code><a href="https://rdrr.io/pkg/corella/man/set_individual_traits.html" class="external-link">set_individual_traits()</a></code> which will automatically identify
 the matched column name <code>sex</code> and check the column’s
 format.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span></span>
-<span>    occurrenceID <span class="op">=</span> <span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/R/reference/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">site</span>, <span class="va">landscape</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span></span>
+<span>    occurrenceID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">site</span>, <span class="va">landscape</span><span class="op">)</span>,</span>
 <span>    basisOfRecord <span class="op">=</span> <span class="st">"humanObservation"</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_coordinates.html" class="external-link">set_coordinates</a></span><span class="op">(</span></span>
 <span>    geodeticDatum <span class="op">=</span> <span class="st">"WGS84"</span>,</span>
 <span>    coordinateUncertaintyInMeters <span class="op">=</span> <span class="fl">30</span></span>
 <span>    <span class="co"># coordinateUncertaintyInMeters = with_uncertainty(method = "phone")</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/set_individual_traits.html" class="external-link">set_individual_traits</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_individual_traits.html" class="external-link">set_individual_traits</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span></span></span>
 <span><span class="co">#&gt; ⠹ Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span> <span style="color: #B2B2B2;">[632ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span> <span style="color: #B2B2B2;">[630ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">sex</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">sex</span> <span style="color: #B2B2B2;">[314ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">sex</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
-<p>Running <code><a href="https://corella.ala.org.au/R/reference/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> once more will confirm that
+<p>Running <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> once more will confirm that
 our dataset is ready to be used in a Darwin Core Archive!</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://corella.ala.org.au/R/reference/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Matching Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; Matched 9 of 16 column names to DwC terms:</span></span>
@@ -756,7 +755,7 @@ folder called <code>data-processed</code>, which galaxias looks for
 automatically when building a Darwin Core Archive.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://corella.ala.org.au/R/reference/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># select any matching terms</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/corella/man/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># select any matching terms</span></span>
 <span></span>
 <span><span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
