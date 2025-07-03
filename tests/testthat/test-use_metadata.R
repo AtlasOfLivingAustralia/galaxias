@@ -2,7 +2,10 @@
 # To set this up locally prior pushing to `main`/GH Actions:
 # - Find quarto location with `quarto::quarto_path()`
 # - Assign that location to Env variable "quarto_path" with `usethis::edit_r_environ()`
-Sys.setenv(QUARTO_PATH=Sys.getenv("quarto_path"))
+# Sys.setenv(QUARTO_PATH=Sys.getenv("quarto_path")) 
+
+# above lines commented out by MW 2025-07-03
+# though fixing this up is a good idea if it allows testing of quarto on CI
 
 test_that("use_metadata() fails when `file` is not set", {
   # set up
