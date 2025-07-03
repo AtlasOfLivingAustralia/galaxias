@@ -1,5 +1,5 @@
 # Set quarto path so that quarto can work correctly on CRAN
-Sys.setenv(QUARTO_PATH=quarto::quarto_path())
+Sys.setenv(QUARTO_PATH=Sys.getenv("quarto_path"))
 
 test_that("use_metadata() fails when `file` is not set", {
   # set up
