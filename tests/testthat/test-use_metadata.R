@@ -1,3 +1,9 @@
+# Set quarto path so that quarto can work correctly on CRAN
+# To set this up locally prior pushing to `main`/GH Actions:
+# - Find quarto location with `quarto::quarto_path()`
+# - Assign that location to Env variable "quarto_path" with `usethis::edit_r_environ()`
+Sys.setenv(QUARTO_PATH=Sys.getenv("quarto_path"))
+
 test_that("use_metadata() fails when `file` is not set", {
   # set up
   temp_dir <- withr::local_tempdir()
@@ -102,6 +108,7 @@ test_that("use_metadata() overwrites file when overwrite = TRUE", {
 
 test_that("use_metadata() reads quarto doc", {
   skip_on_cran() # do not expect Quarto to be installed on CRAN
+  skip_on_ci()   # cannot find Quarto on CI environment
   
   # set up
   temp_dir <- withr::local_tempdir()

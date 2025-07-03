@@ -24,7 +24,6 @@ test_that("check_directory() works with no arguments", {
     ) |>
     write.csv("data-publish/events.csv")
   use_schema(quiet = TRUE)
-  build_archive(quiet = TRUE) # a complete archive
   
   # tests
   check_directory_mock <- function() {
@@ -38,7 +37,6 @@ test_that("check_directory() works with no arguments", {
   expect_snapshot(msgs)
 
   # clean up
-  unlink("../dwc-archive.zip")
   unlink("metadata.Rmd")
   unlink("data-publish")
   unlink(temp_dir)
