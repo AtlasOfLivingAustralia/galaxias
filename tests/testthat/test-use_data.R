@@ -1,7 +1,6 @@
 
 test_that("use_data() fails when no data is supplied", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   
@@ -15,7 +14,6 @@ test_that("use_data() fails when no data is supplied", {
 
 test_that("use_data() fails when supplied object isn't a data.frame/tibble", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   string <- "how ya doin'"
@@ -30,7 +28,6 @@ test_that("use_data() fails when supplied object isn't a data.frame/tibble", {
 
 test_that("use_data() fails when supplied object isn't real", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df_occ <- tibble::tibble(
@@ -58,7 +55,6 @@ test_that("use_data() fails when supplied object isn't real", {
 
 test_that("use_data() fails when supplied more than one data.frame/tibble", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df_occ <- tibble::tibble(
@@ -104,7 +100,6 @@ test_that("check_data_type() identifies occurrences/events correctly", {
 
 test_that("use_data() works with no arguments", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df_occ <- tibble::tibble(
@@ -135,7 +130,6 @@ test_that("use_data() works with no arguments", {
 
 test_that("use_data() messages work", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df <- tibble::tibble(
@@ -163,7 +157,6 @@ test_that("use_data() messages work", {
 
 test_that("use_data_occurrences() & use_data_events() fail if supplied object isn't a data.frame/tibble", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   string <- "a string"
@@ -182,7 +175,6 @@ test_that("use_data_occurrences() & use_data_events() fail if supplied object is
 
 test_that("use_data_occurrences() works with no arguments", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df <- tibble::tibble(
@@ -203,7 +195,6 @@ test_that("use_data_occurrences() works with no arguments", {
 
 test_that("use_data_events() works with no arguments", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df <- tibble::tibble(
@@ -225,7 +216,6 @@ test_that("use_data_events() works with no arguments", {
 
 test_that("use_data() overwrites file when overwrite = TRUE", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   df <- tibble::tibble(
@@ -256,7 +246,6 @@ test_that("use_data() overwrites file when overwrite = TRUE", {
 #   skip_on_cran()
 #   skip_on_ci()
 #   # set up
-#   current_wd <- here::here()
 #   temp_dir <- withr::local_tempdir()
 #   usethis::local_project(temp_dir, force = TRUE)
 #   df <- tibble::tibble(

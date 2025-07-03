@@ -20,7 +20,6 @@ test_that("build_archive() fails when `file` doesn't end in `.zip`", {
 
 test_that("build_archive() fails when specified directory is missing all files", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -36,7 +35,6 @@ test_that("build_archive() fails when specified directory is missing all files",
 
 test_that("build_archive() works with no arguments", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -66,7 +64,6 @@ test_that("build_archive() works with no arguments", {
 
 test_that("build_archive() messages work", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -103,7 +100,6 @@ test_that("build_archive() messages work", {
 
 test_that("build_archive() menu appears", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -139,7 +135,6 @@ test_that("build_archive() menu appears", {
 
 test_that("build_archive() builds schema when missing", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -170,7 +165,6 @@ test_that("build_archive() builds schema when missing", {
 
 test_that("build_archive() fails when missing data", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -189,7 +183,6 @@ test_that("build_archive() fails when missing data", {
 
 test_that("build_archive() fails when missing metadata", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")

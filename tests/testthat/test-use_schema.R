@@ -1,7 +1,6 @@
 
 test_that("use_schema() works with no arguments", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")
@@ -29,7 +28,6 @@ test_that("use_schema() works with no arguments", {
 
 test_that("use_schema() fails when no matching DwC csv files exist in directory", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   

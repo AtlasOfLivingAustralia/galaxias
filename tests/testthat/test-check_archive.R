@@ -80,7 +80,6 @@ test_that("check_archive() works", {
   skip_if_offline()
   
   # set up directory
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   

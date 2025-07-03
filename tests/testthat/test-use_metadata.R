@@ -6,7 +6,6 @@ Sys.setenv(QUARTO_PATH=Sys.getenv("quarto_path"))
 
 test_that("use_metadata() fails when `file` is not set", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   use_metadata_template(quiet = TRUE) # add metadata.Rmd
@@ -21,7 +20,6 @@ test_that("use_metadata() fails when `file` is not set", {
 
 test_that("use_metadata() works when `file` is set", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   use_metadata_template(quiet = TRUE) # add metadata.Rmd
@@ -38,7 +36,6 @@ test_that("use_metadata() works when `file` is set", {
 
 test_that("use_metadata() fails when input doesn't exist", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   use_metadata_template(quiet = TRUE) # add metadata.Rmd
@@ -54,7 +51,6 @@ test_that("use_metadata() fails when input doesn't exist", {
 
 # test_that("use_metadata() saves xml file using provided filename", {
 #   # set up
-#   current_wd <- here::here()
 #   temp_dir <- withr::local_tempdir()
 #   usethis::local_project(temp_dir, force = TRUE)
 #   use_metadata_template(quiet = TRUE) # add metadata.Rmd
@@ -73,7 +69,6 @@ test_that("use_metadata() fails when input doesn't exist", {
 
 test_that("use_metadata() does not overwrite existing file by default", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   use_metadata_template(quiet = TRUE) # add metadata.Rmd
@@ -93,7 +88,6 @@ test_that("use_metadata() does not overwrite existing file by default", {
 
 test_that("use_metadata() overwrites file when overwrite = TRUE", {
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   use_metadata_template(quiet = TRUE) # add metadata.Rmd
@@ -117,7 +111,6 @@ test_that("use_metadata() reads quarto doc", {
   skip_on_ci()   # cannot find Quarto on CI environment
   
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   use_metadata_template("metadata.qmd", quiet = TRUE) # add metadata.qmd

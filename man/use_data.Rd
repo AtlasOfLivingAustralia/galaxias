@@ -51,14 +51,33 @@ supplied data.
 }
 }
 \examples{
-\dontrun{
+\dontshow{
+.old_wd <- getwd()
+temp_dir <- tempdir()
+usethis::proj_set(path = temp_dir, force = TRUE) # without this use_data_occurrences() will fail
+setwd(temp_dir)
+}
 df <- tibble::tibble(
   occurrenceID = c("a1", "a2"),
   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
-  
-use_data(df)
+
+# The default function *always* asks about data type
+if(interactive()){
+  use_data(df)
+}
+
+# To manually specify the type of data - and avoid questions in your 
+# console - use the underlying functions instead
+use_data_occurrences(df, quiet = TRUE)
+
+# Check that file has been created
+list.files("data-publish") # returns "occurrences.csv" as expected
+\dontshow{
+unlink("data-publish", recursive = TRUE)
+usethis::proj_set(path = .old_wd, force = TRUE)
+setwd(.old_wd)
 }
 }
 \seealso{
-\code{\link[=use_metadata]{use_metadata()}}
+\code{\link[=use_metadata]{use_metadata()}} to save metadata to \verb{/data-publish}.
 }

@@ -34,14 +34,28 @@ To be compliant with the Darwin Core Standard, the schema file \strong{must} be
 called \code{eml.xml}, and this function enforces that.
 }
 \examples{
-\dontrun{
-# get a boilerplate metadata statement
+\dontshow{
+.old_wd <- getwd()
+temp_dir <- tempdir()
+usethis::proj_set(path = temp_dir, force = TRUE)
+setwd(temp_dir)
+}
+# Get a boilerplate metadata statement
 use_metadata_template(file = "my_metadata.Rmd", quiet = TRUE)
 
-# once editting is complete, call `use_metadata()` to format it
-use_metadata("my_metadata.Rmd")
+# Once editing is complete, call `use_metadata()` to convert to an EML file
+use_metadata("my_metadata.Rmd", quiet = TRUE)
+
+# Check that file has been created
+list.files("data-publish") # returns "eml.xml" as expected
+\dontshow{
+unlink("my_metadata.Rmd")
+unlink("data-publish", recursive = TRUE)
+usethis::proj_set(path = .old_wd, force = TRUE)
+setwd(.old_wd)
 }
 }
 \seealso{
-\code{\link[=use_metadata_template]{use_metadata_template()}} to create a metadata statement template.
+\code{\link[=use_metadata_template]{use_metadata_template()}} to create a metadata statement template;
+\code{\link[=use_data]{use_data()}} to save data to \verb{/data-publish}.
 }

@@ -32,7 +32,8 @@ the locations of threatened or at-risk species.
 
 This mechanism is \strong{entirely public}; your data will be visible to others
 from the point you put it on this webpage. If your data contains sensitive
-information, contact us to arrange a different delivery mechanism.
+information, contact \href{mailto:support@ala.org.au}{support@ala.org.au} to
+arrange a different delivery mechanism.
 }
 \examples{
 if(interactive()){

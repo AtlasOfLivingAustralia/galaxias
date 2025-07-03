@@ -88,14 +88,18 @@ query_gbif_validator_api <- function(key,
 #' @keywords Internal
 is_gbif_validator_complete <- function(x){
   status <- tolower(x$status)
-  if(status %in% c("downloading", "submitted", "running", "queued")){
-    FALSE
-  }else if(status %in% c("finished", "aborted", "failed")){
+  if(is.null(status)){ # not sure when this might happen, but good to be defensive
     TRUE
   }else{
-    TRUE
-    # Note: TRUE catches 'unknown' values in this scenario;
-    # this may be unnecessary, but is desirable to prevent infinite loops
+    if(status %in% c("downloading", "submitted", "running", "queued")){
+      FALSE
+    }else if(status %in% c("finished", "aborted", "failed")){
+      TRUE
+    }else{
+      TRUE
+      # Note: TRUE catches 'unknown' values in this scenario;
+      # this may be unnecessary, but is desirable to prevent infinite loops
+    }    
   }
 }
 
