@@ -30,6 +30,7 @@
 #' usethis::proj_set(path = temp_dir, force = TRUE)
 #' setwd(temp_dir)
 #' }
+#' 
 #' # First build some data to add to our archive
 #' df <- tibble::tibble(
 #'   occurrenceID = c("a1", "a2"),
@@ -42,9 +43,11 @@
 #' 
 #' # Check that specified files have been created
 #' list.files("data-publish") 
+#' 
 #' # The publish directory now contains:
 #' #  - "occurrences.csv" which contains data
 #' #  - "meta.xml" which is the schema document
+#' 
 #' \dontshow{
 #' unlink("data-publish", recursive = TRUE)
 #' usethis::proj_set(path = .old_wd, force = TRUE)

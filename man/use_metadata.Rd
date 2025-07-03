@@ -40,6 +40,7 @@ temp_dir <- tempdir()
 usethis::proj_set(path = temp_dir, force = TRUE)
 setwd(temp_dir)
 }
+
 # Get a boilerplate metadata statement
 use_metadata_template(file = "my_metadata.Rmd", quiet = TRUE)
 
@@ -47,7 +48,10 @@ use_metadata_template(file = "my_metadata.Rmd", quiet = TRUE)
 use_metadata("my_metadata.Rmd", quiet = TRUE)
 
 # Check that file has been created
-list.files("data-publish") # returns "eml.xml" as expected
+list.files("data-publish")
+
+# returns "eml.xml" as expected
+
 \dontshow{
 unlink("my_metadata.Rmd")
 unlink("data-publish", recursive = TRUE)

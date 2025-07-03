@@ -33,6 +33,8 @@
 #' usethis::proj_set(path = temp_dir, force = TRUE) # without this use_data_occurrences() will fail
 #' setwd(temp_dir)
 #' }
+#' 
+#' # Build an example dataset
 #' df <- tibble::tibble(
 #'   occurrenceID = c("a1", "a2"),
 #'   species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
@@ -47,7 +49,10 @@
 #' use_data_occurrences(df, quiet = TRUE)
 #' 
 #' # Check that file has been created
-#' list.files("data-publish") # returns "occurrences.csv" as expected
+#' list.files("data-publish")
+#' 
+#' # returns "occurrences.csv" as expected
+#' 
 #' \dontshow{
 #' unlink("data-publish", recursive = TRUE)
 #' usethis::proj_set(path = .old_wd, force = TRUE)
