@@ -15,12 +15,13 @@ Authors@R:
              family = "Kellie",
              email = "dax.kellie@csiro.au",
              role = c("aut")))
-Description: The 'Darwin Core' data standard is widely used to share 
+Description: The Darwin Core data standard is widely used to share 
   biodiversity information, most notably by the Global Biodiversity Information 
-  Facility ('GBIF') and its partner nodes; but converting data to this standard
+  Facility (GBIF) and its partner nodes; but converting data to this standard
   can be tricky. 'galaxias' is functionally similar to 'devtools', but with a 
-  focus on building 'Darwin Core Archives' rather than R packages, enabling
-  data to be shared and re-used with relative ease.
+  focus on building Darwin Core Archives rather than R packages, enabling
+  data to be shared and re-used with relative ease. For details see 
+  Wieczorek et al. (2012) <doi:10.1371/journal.pone.0029715>.
 Depends: 
   R (>= 4.3.0),
   corella

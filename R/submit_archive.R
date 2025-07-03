@@ -18,7 +18,8 @@
 #' 
 #' This mechanism is **entirely public**; your data will be visible to others
 #' from the point you put it on this webpage. If your data contains sensitive
-#' information, contact us to arrange a different delivery mechanism.
+#' information, contact [support@ala.org.au](mailto:support@ala.org.au) to 
+#' arrange a different delivery mechanism.
 #' @returns Does not return anything to the workspace; called for the side-effect
 #' of opening a submission form in the users' default browser.
 #' @examples

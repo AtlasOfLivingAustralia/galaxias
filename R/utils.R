@@ -140,7 +140,7 @@ check_publish_directory <- function(quiet,
       
       choice <- cli_menu(
         c(" ",
-          "Your working directory for data publication is set to {.file {directory}}, which does not exist."
+          "Your working directory for data publication is {.file {directory}}, which does not exist."
           ),
         "Would you like to create it? (0 to exit)",
         choices = c("Yes", "No")

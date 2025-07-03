@@ -4,7 +4,6 @@ test_that("check_directory() works with no arguments", {
   # perform well; meaning this function cannot be safely be called when offline
   
   # set up
-  current_wd <- here::here()
   temp_dir <- withr::local_tempdir()
   usethis::local_project(temp_dir, force = TRUE)
   usethis::use_directory("data-publish")

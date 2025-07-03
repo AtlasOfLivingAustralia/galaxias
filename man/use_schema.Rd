@@ -32,8 +32,35 @@ To be compliant with the Darwin Core Standard, the schema file \strong{must} be
 called \code{meta.xml}, and this function enforces that.
 }
 \examples{
-\dontrun{
-use_schema()
+\dontshow{
+# Note we use `setwd()` and `proj_set()` in place of 
+# `usethis::local_project()` because, unlike 
+# in /tests, these sections are wrapped in `dontshow` which exits the 
+# temporary directory *before* any actual code is run.
+.old_wd <- getwd()
+temp_dir <- tempdir()
+usethis::proj_set(path = temp_dir, force = TRUE)
+setwd(temp_dir)
+}
+# First build some data to add to our archive
+df <- tibble::tibble(
+  occurrenceID = c("a1", "a2"),
+  species = c("Eolophus roseicapilla", "Galaxias truttaceus"))
+  
+use_data_occurrences(df, quiet = TRUE)
+
+# Now we can build a schema document to describe that dataset
+use_schema(quiet = TRUE)
+
+# Check that specified files have been created
+list.files("data-publish") 
+# The publish directory now contains:
+#  - "occurrences.csv" which contains data
+#  - "meta.xml" which is the schema document
+\dontshow{
+unlink("data-publish", recursive = TRUE)
+usethis::proj_set(path = .old_wd, force = TRUE)
+setwd(.old_wd)
 }
 }
 \seealso{
