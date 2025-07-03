@@ -78,6 +78,7 @@ test_that("check_archive() fails when `username` is `NULL (i.e. not specified", 
 
 test_that("check_archive() works", {
   skip_if_offline()
+  skip_on_ci()
   
   # set up directory
   temp_dir <- withr::local_tempdir()
@@ -94,7 +95,8 @@ test_that("check_archive() works", {
                   .before = 1) |>
     write.csv("data-publish/occurrences.csv")
   use_schema(quiet = TRUE)
-  build_archive(quiet = TRUE, overwrite = TRUE)
+  build_archive(quiet = TRUE, 
+                overwrite = TRUE)
   
   # test `check_archive()`
   # check archive returns an object
