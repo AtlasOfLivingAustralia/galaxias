@@ -1,3 +1,6 @@
+# Set quarto path so that quarto can work correctly on CRAN
+Sys.setenv(QUARTO_PATH=quarto::quarto_path())
+
 test_that("use_metadata() fails when `file` is not set", {
   # set up
   current_wd <- here::here()
