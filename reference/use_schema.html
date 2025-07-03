@@ -99,7 +99,8 @@ called <code>meta.xml</code>, and this function enforces that.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpKD3Dj0"</span>.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpwTvLeR"</span>.</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># First build some data to add to our archive</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  occurrenceID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a1"</span>, <span class="st">"a2"</span><span class="op">)</span>,</span></span>
@@ -114,9 +115,11 @@ called <code>meta.xml</code>, and this function enforces that.</p>
 <span class="r-in"><span><span class="co"># Check that specified files have been created</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"data-publish"</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "meta.xml"        "occurrences.csv"</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The publish directory now contains:</span></span></span>
 <span class="r-in"><span><span class="co">#  - "occurrences.csv" which contains data</span></span></span>
 <span class="r-in"><span><span class="co">#  - "meta.xml" which is the schema document</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">"/home/runner/work/galaxias/galaxias/docs/reference"</span>.</span>
 </code></pre></div>
