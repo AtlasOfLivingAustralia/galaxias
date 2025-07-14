@@ -63,7 +63,7 @@ library(corella)
  - Store all your publication-ready files in a single directory, and zip
    that directory for publication.
  - Check files for consistency with the Darwin Core Standard, either locally 
-   using or via API.
+   or via API.
 
 `galaxias` draws on functionality from two underlying packages that address different challenges of the data publication workflow: [`corella`](https://corella.ala.org.au), which converts tibbles to use standard column names; and [`delma`](https://delma.ala.org.au) which converts markdown files to `EML` format.
 
@@ -107,7 +107,7 @@ We can then specify that we wish to use these standardised data in a Darwin Core
 use_data(df_dwc)
 ```
 
-Before publishing your data, it is also necessary to create a metadata statement that describes who owns the data, what the data shows, and what licence it is released under. `galaxias` enables you to write your metadata statement in R Markdown or Quarto format, and seamlessly convert it to [EML](https://eml.ecoinformatics.org/) for publication.
+Before publishing your data, it is also necessary to create a metadata statement that describes who owns the data, what the data show, and what licence they are released under. `galaxias` enables you to write your metadata statement in R Markdown or Quarto format, and seamlessly convert it to [EML](https://eml.ecoinformatics.org/) for publication.
 
 ```{r}
 #| eval: false
