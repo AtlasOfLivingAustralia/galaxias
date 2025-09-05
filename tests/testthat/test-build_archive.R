@@ -54,6 +54,8 @@ test_that("build_archive() works with no arguments", {
     expect_no_error()
   expect_in("dwc-archive.zip", 
             list.files(".."))
+  expect_in(c("occurrences.csv", "eml.xml", "meta.xml"), 
+            zip::zip_list("../dwc-archive.zip")$filename) # correct files in archive
   
   # clean up
   unlink("../dwc-archive.zip")
@@ -153,7 +155,9 @@ test_that("build_archive() builds schema when missing", {
                 quiet = TRUE) |> 
     expect_no_error()
   expect_in("dwc-archive.zip", list.files(".."))
-  expect_in("meta.xml", list.files("data-publish"))
+  expect_in("meta.xml", list.files("data-publish")) # in directory
+  expect_in(c("occurrences.csv", "eml.xml", "meta.xml"), 
+            zip::zip_list("../dwc-archive.zip")$filename) # correct files in archive
   
   # clean up
   unlink("../dwc-archive.zip")
