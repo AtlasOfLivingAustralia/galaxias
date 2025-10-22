@@ -87,7 +87,7 @@ use_data <- function(...,
 #' @noRd
 #' @keywords Internal
 check_is_data <- function(obj, error_call = rlang::caller_env()) {
-  
+  # browser()
   # check whether more than one data.frame/tibble is supplied
   tibble_check <- obj |> 
     purrr::map(
@@ -178,7 +178,7 @@ use_data_occurrences <- function(df,
                                  quiet = FALSE) {
   
   # check if it's a dataframe
-  if (!tibble::is_tibble(df)) {
+  if (!tibble::is_tibble(df) & !is.data.frame(df)) {
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   
@@ -203,7 +203,7 @@ use_data_events <- function(df,
                             quiet = FALSE) {
   
   # check if it's a dataframe
-  if (!tibble::is_tibble(df)) {
+  if (!tibble::is_tibble(df) & !is.data.frame(df)) {
     cli::cli_abort("Must provide a `tibble`/`data.frame`.")
   }
   

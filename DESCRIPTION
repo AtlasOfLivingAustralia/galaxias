@@ -1,7 +1,7 @@
 Package: galaxias
 Type: Package
 Title: Describe, Package, and Share Biodiversity Data
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     c(person(given = "Martin",
              family = "Westgate",

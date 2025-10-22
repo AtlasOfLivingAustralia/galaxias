@@ -73,6 +73,9 @@ build_archive <- function(file = "dwc-archive.zip",
   if(!any(files_in %in% glue::glue("{source}/meta.xml"))){
     build_schema_internal(source = source, 
                           quiet = quiet)
+    
+    # update files_in to include schema
+    files_in <- find_data(source, quiet = quiet)
   }
   
   if(!quiet) {

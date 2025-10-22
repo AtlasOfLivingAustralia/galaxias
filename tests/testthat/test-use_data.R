@@ -128,6 +128,26 @@ test_that("use_data() works with no arguments", {
   unlink(temp_dir)
 })
 
+test_that("use_data() accepts a data.frame", {
+  # set up
+  temp_dir <- withr::local_tempdir()
+  usethis::local_project(temp_dir, force = TRUE)
+  dataframe_occ <- data.frame(
+    decimalLatitude = c(44.4, 44.4)
+  ) |>
+    dplyr::mutate(
+      occurrenceID = random_id()
+    )
+  
+  # tests
+  dataframe_occ |> use_data(quiet = TRUE)
+  expect_length(list.files("data-publish"), 1)
+  expect_in("occurrences.csv", list.files("data-publish"))
+
+  # clean up
+  unlink(temp_dir)
+})
+
 test_that("use_data() messages work", {
   # set up
   temp_dir <- withr::local_tempdir()
