@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">galaxias</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
             
             <h4 data-toc-skip class="date">2025-06-06</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/v0.1.1/vignettes/occurrences-example.Rmd" class="external-link"><code>vignettes/occurrences-example.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/main/vignettes/occurrences-example.Rmd" class="external-link"><code>vignettes/occurrences-example.Rmd</code></a></small>
       <div class="d-none name"><code>occurrences-example.Rmd</code></div>
     </div>
 
@@ -619,13 +619,14 @@ column is correctly formatted. We’ll save our modified dataframe as
 <span>                  decimalLongitude <span class="op">=</span> <span class="va">lon</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_datetime.html" class="external-link">set_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="co"># specify year-month-day format</span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[320ms]</span></span></span>
+<span><span class="co">#&gt; ⠹ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[327ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[618ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[623ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">eventDate</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventDate</span> <span style="color: #B2B2B2;">[312ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventDate</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Running <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> again will reflect our
 progress and show us what’s left to do. Now the output tells us that we
@@ -703,7 +704,7 @@ format.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_individual_traits.html" class="external-link">set_individual_traits</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span></span></span>
 <span><span class="co">#&gt; ⠹ Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span> <span style="color: #B2B2B2;">[633ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span> <span style="color: #B2B2B2;">[631ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
