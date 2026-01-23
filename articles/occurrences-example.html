@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">galaxias</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,8 +61,8 @@
 
 
 
-<script src="occurrences-example_files/core-js-2.5.3/shim.min.js"></script><script src="occurrences-example_files/react-18.2.0/react.min.js"></script><script src="occurrences-example_files/react-18.2.0/react-dom.min.js"></script><script src="occurrences-example_files/reactwidget-2.0.0/react-tools.js"></script><script src="occurrences-example_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="occurrences-example_files/reactable-0.4.4/reactable.css" rel="stylesheet">
-<script src="occurrences-example_files/reactable-binding-0.4.4/reactable.js"></script><div class="row">
+<script src="occurrences-example_files/core-js-2.5.3/shim.min.js"></script><script src="occurrences-example_files/react-18.2.0/react.min.js"></script><script src="occurrences-example_files/react-18.2.0/react-dom.min.js"></script><script src="occurrences-example_files/reactwidget-2.0.0/react-tools.js"></script><script src="occurrences-example_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="occurrences-example_files/reactable-0.4.5/reactable.css" rel="stylesheet">
+<script src="occurrences-example_files/reactable-binding-0.4.5/reactable.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Standardise an Occurrence dataset</h1>
                         <h4 data-toc-skip class="author">Dax Kellie
@@ -70,31 +70,30 @@
             
             <h4 data-toc-skip class="date">2025-06-06</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/v0.1.1/vignettes/occurrences-example.Rmd" class="external-link"><code>vignettes/occurrences-example.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/main/vignettes/occurrences-example.Rmd" class="external-link"><code>vignettes/occurrences-example.Rmd</code></a></small>
       <div class="d-none name"><code>occurrences-example.Rmd</code></div>
     </div>
 
     
     
-<p>Data of species observations is referred to as <em>occurrence</em>
-data. In Living Atlases like the Atlas of Living Australia (ALA), this
-is the default type of data stored.</p>
-<p>Using occurrence-based datasets assume that all observations are
-independent of each other. The benefit of this assumption is that
-observational data can remain simple in structure - every observation is
-made at a specific place and time. This simplicity allows all
-occurrence-based data to be aggregated and used together.</p>
-<p>Let’s see how to build an occurrence-based dataset using
-galaxias.</p>
+<p>In Living Atlases like the Atlas of Living Australia (ALA), the
+default type of data is <em>occurrence</em> data, where a record refers
+to the presence/absence of an organism or taxon in a particular place at
+a specific time. This is a relatively simple data structure, where it is
+assumed that each observation or record is independent of each other.
+This simplicity also allows occurrence-based data to be easily
+aggregated.</p>
+<p>Here, we’ll go through the steps to standardise and build an
+occurrence dataset using galaxias.</p>
 <div class="section level2">
 <h2 id="the-dataset">The dataset<a class="anchor" aria-label="anchor" href="#the-dataset"></a>
 </h2>
-<p>Let’s use an small example dataset of bird observations taken from 4
-different site locations. This dataset has many different types of data
-like landscape type and age class. Importantly for standardising to
-Darwin Core, this dataset contains the scientific name
-(<code>species</code>), coordinate location (<code>lat</code> &amp;
-<code>lon</code>) and date of observation (<code>date</code>).</p>
+<p>The data we’ll use are of bird observations from 4 different sites.
+As these are <em>occurrence</em> data, this dataset contains evidence of
+the presence of certain bird species (<code>species</code>) at
+particular locations (<code>lat</code>, <code>lon</code>) at specific
+times (<code>date</code>). It also contains additional information about
+the landscape type, and sex and age class of birds.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galaxias.ala.org.au/R/">galaxias</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -563,10 +562,8 @@ Darwin Core, this dataset contains the scientific name
 <div class="section level2">
 <h2 id="standardise-to-darwin-core">Standardise to Darwin Core<a class="anchor" aria-label="anchor" href="#standardise-to-darwin-core"></a>
 </h2>
-<p>To determine what we need to do to standardise our dataset, let’s use
-<code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code>. The output tells us we have one
-matching Darwin Core term in our data already (<code>sex</code>), but we
-are missing all minimum required Darwin Core terms.</p>
+<p>We can use <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> to determine what we need
+to do to standardise this dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -601,17 +598,17 @@ are missing all minimum required Darwin Core terms.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `set_individual_traits()`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">See all `set_` functions at</span></span></span>
 <span><span class="co">#&gt;   <span style="color: #555555;">http://corella.ala.org.au/reference/index.html#add-rename-or-edit-columns-to-match-darwin-core-terms</span></span></span></code></pre></div>
-<p>Under “Suggest workflow”, the output above suggests a series of piped
-<code>set_</code> functions that we can use to rename, modify or add
-columns that are missing from <code>obs</code> but required by Darwin
-Core. <code>set_</code> functions are specialised wrappers around
+<p>Calling <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> tells us that one column in
+the dataset matches Darwin Core terms (<code>sex</code>), and we are
+missing all the minimum required Darwin Core terms. We’re also given a
+suggested workflow consisting of a series of piped <code>set_</code>
+functions for renaming, modifying, or adding missing columns
+(<code>set_</code> functions are specialised wrappers around
 <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code>, with additional functionality to support
-using Darwin Core Standard.</p>
-<p>For simplicity, let’s do the easy part first of renaming columns we
-already have in our dataset to use accepted standard Darwin Core terms.
-<code>set_</code> functions will automatically check to make sure each
-column is correctly formatted. We’ll save our modified dataframe as
-<code>obs_dwc</code>.</p>
+using Darwin Core Standard).</p>
+<p>Let’s start by renaming existing columns to align with Darwin Core
+terms. <code>set_</code> functions will automatically check to make sure
+each column is correctly formatted.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_scientific_name.html" class="external-link">set_scientific_name</a></span><span class="op">(</span>scientificName <span class="op">=</span> <span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -619,36 +616,56 @@ column is correctly formatted. We’ll save our modified dataframe as
 <span>                  decimalLongitude <span class="op">=</span> <span class="va">lon</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_datetime.html" class="external-link">set_datetime</a></span><span class="op">(</span>eventDate <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html" class="external-link">ymd</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">)</span> <span class="co"># specify year-month-day format</span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
-<span><span class="co">#&gt; ⠹ Checking 1 column: <span style="color: #00BB00;">scientificName</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[326ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">scientificName</span> <span style="color: #B2B2B2;">[319ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[621ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">decimalLatitude</span> and <span style="color: #00BB00;">decimalLongitude</span> <span style="color: #B2B2B2;">[618ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">eventDate</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">eventDate</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
-<p>Running <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> again will reflect our
-progress and show us what’s left to do. Now the output tells us that we
-still need to add several columns to our dataset to meet minimum Darwin
-Core requirements.</p>
+<p>One thing that is still missing are the required taxonomic terms
+<code>kingdom</code> and <code>family</code> (noting that you could add
+other taxonomic terms as well if you wish). These aren’t present in our
+dataset, so we’ll have to add them. This is a fairly trivial exercise
+for most biologists, and we’ll add them in text here; but it would be
+possible to look this up with <code>galah::search_taxa()</code> as
+well.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_taxonomy.html" class="external-link">set_taxonomy</a></span><span class="op">(</span>kingdom <span class="op">=</span> <span class="st">"Animalia"</span>,</span>
+<span>               phylum <span class="op">=</span> <span class="st">"Chordata"</span>,</span>
+<span>               class <span class="op">=</span> <span class="st">"Aves"</span>,</span>
+<span>               family <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">scientificName</span>, <span class="st">"^Acanthiza"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Acanthizidae"</span>,</span>
+<span>                                  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">scientificName</span>, <span class="st">"^Artamus"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Artamidae"</span>,</span>
+<span>                                  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">scientificName</span>, <span class="st">"^Climacteris"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Climacteridae"</span>,</span>
+<span>                                  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">scientificName</span>, <span class="st">"^Malurus"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Maluridae"</span>,</span>
+<span>                                  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">scientificName</span>, <span class="st">"^Ptilotula|^Melithreptus"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Meliphagidae"</span>,</span>
+<span>                                  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">scientificName</span>, <span class="st">"^Pardalotus"</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Pardalotidae"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ⠙ Checking 4 columns: <span style="color: #00BB00;">class</span>, <span style="color: #00BB00;">family</span>, <span style="color: #00BB00;">kingdom</span>, and <span style="color: #00BB00;">phylum</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 4 columns: <span style="color: #00BB00;">class</span>, <span style="color: #00BB00;">family</span>, <span style="color: #00BB00;">kingdom</span>, and <span style="color: #00BB00;">phylum</span> <span style="color: #B2B2B2;">[1.2s]</span></span></span>
+<span><span class="co">#&gt; </span></span></code></pre></div>
+<p>Calling <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> again accounts for our
+progress and shows us what still needs to be done. Here, we can see that
+we’re still missing a couple of minimum required terms.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Matching Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; Matched 5 of 12 column names to DwC terms:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Matched: <span style="color: #00BB00;">decimalLatitude, decimalLongitude, eventDate, scientificName, sex</span></span></span>
+<span><span class="co">#&gt; Matched 8 of 15 column names to DwC terms:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Matched: <span style="color: #00BB00;">class, decimalLatitude, decimalLongitude, eventDate, family,</span></span></span>
+<span><span class="co">#&gt;   <span style="color: #00BB00;">kingdom, phylum, sex</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Unmatched: <span style="color: #BB0000;">age_class, comments, landscape, molecular_sex, sample_id, site,</span></span></span>
 <span><span class="co">#&gt;   <span style="color: #BB0000;">species_code</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Minimum required Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">Type</span>                      <span style="color: #0000BB;">Matched term(s)</span>                  <span style="color: #0000BB;">Missing term(s)</span>                            </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Scientific name           <span style="color: #00BB00;">scientificName</span>                   <span style="color: #BB0000;">-               </span>                            </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Date/Time                 <span style="color: #00BB00;">eventDate</span>                        <span style="color: #BB0000;">-               </span>                            </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Identifier (at least one) <span style="color: #00BB00;">-               </span>                 <span style="color: #BB0000;">occurrenceID, catalogNumber, recordNumber</span>   </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Record type               <span style="color: #00BB00;">-               </span>                 <span style="color: #BB0000;">basisOfRecord</span>                               </span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Scientific name           <span style="color: #00BB00;">-               </span>                 <span style="color: #BB0000;">scientificName</span>                              </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Location                  <span style="color: #00BB00;">decimalLatitude decimalLongitude</span> <span style="color: #BB0000;">geodeticDatum coordinateUncertaintyInMeters</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Suggested workflow</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span></span>
@@ -657,40 +674,42 @@ Core requirements.</p>
 <span><span class="co"><span style="font-style: italic;">#&gt; </span></span></span>
 <span><span class="co">#&gt; df |&gt;</span></span>
 <span><span class="co">#&gt;   set_occurrences() |&gt;</span></span>
-<span><span class="co">#&gt;   set_coordinates()</span></span>
+<span><span class="co">#&gt;   set_coordinates() |&gt;</span></span>
+<span><span class="co">#&gt;   set_scientific_name()</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="color: #555555;">Additional functions</span></span></span>
 <span><span class="co">#&gt; Based on your matched terms, you can also add to your pipe:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `set_individual_traits()`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `set_individual_traits()` `set_taxonomy()`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">See all `set_` functions at</span></span></span>
 <span><span class="co">#&gt;   <span style="color: #555555;">http://corella.ala.org.au/reference/index.html#add-rename-or-edit-columns-to-match-darwin-core-terms</span></span></span></code></pre></div>
 <p>Here’s a rundown of the columns we need to add:</p>
 <ul>
 <li>
-<code>occurrenceID</code>: Unique identifiers of each record. This
-ensures that we can identify the specific record for any future updates
-or corrections. We can use <code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">composite_id()</a></code>,
-<code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">sequential_id()</a></code> or <code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">random_id()</a></code> to add a unique
-IDs to each row.</li>
+<code>occurrenceID</code>: Unique identifier for each record, which
+ensures that we can identify specific records for future updates or
+corrections. We can use <code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">composite_id()</a></code>,
+<code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">sequential_id()</a></code>, or <code><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">random_id()</a></code> to add a
+unique ID to each row.</li>
 <li>
 <code>basisOfRecord</code>: The type of record (e.g. human
-observation, specimen, machine observation). See a list of acceptable
-values with <code><a href="https://rdrr.io/pkg/corella/man/accepted_values.html" class="external-link">corella::basisOfRecord_values()</a></code>.</li>
+observation, specimen from a museum collection, machine observation).
+See a list of acceptable values with
+<code><a href="https://rdrr.io/pkg/corella/man/accepted_values.html" class="external-link">corella::basisOfRecord_values()</a></code>.</li>
 <li>
-<code>geodeticDatum</code>: The Coordinate Reference System (CRS)
-projection of your data (for example, the CRS of Google Maps is
-“WGS84”).</li>
+<code>geodeticDatum</code>: The geographic coordinate reference
+system (CRS), which is a framework for representing spatial data (for
+example, the CRS of Google Maps is “WGS84”).</li>
 <li>
 <code>coordinateUncertaintyInMeters</code>: The area of uncertainty
-around your observation. You may know this value based on your method of
-data collection</li>
+around your observation, which you may be able to infer based on your
+data collection method.</li>
 </ul>
-<!-- or you can use `with_uncertainty()` to provide a default value based on the method used --><p>Now let’s add these columns using <code><a href="https://rdrr.io/pkg/corella/man/set_occurrences.html" class="external-link">set_occurrences()</a></code> and
-<code><a href="https://rdrr.io/pkg/corella/man/set_coordinates.html" class="external-link">set_coordinates()</a></code>. We can also add the suggested function
-<code><a href="https://rdrr.io/pkg/corella/man/set_individual_traits.html" class="external-link">set_individual_traits()</a></code> which will automatically identify
-the matched column name <code>sex</code> and check the column’s
-format.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<!-- or you can use `with_uncertainty()` to provide a default value based on the method used --><p>As suggested, let’s add these columns using
+<code><a href="https://rdrr.io/pkg/corella/man/set_occurrences.html" class="external-link">set_occurrences()</a></code> and <code><a href="https://rdrr.io/pkg/corella/man/set_coordinates.html" class="external-link">set_coordinates()</a></code>. We
+can also add the suggested function <code><a href="https://rdrr.io/pkg/corella/man/set_individual_traits.html" class="external-link">set_individual_traits()</a></code>
+which will automatically identify the matched column name
+<code>sex</code> and check the column’s format.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_occurrences.html" class="external-link">set_occurrences</a></span><span class="op">(</span></span>
 <span>    occurrenceID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">composite_id</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/corella/man/identifier_functions.html" class="external-link">sequential_id</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">site</span>, <span class="va">landscape</span><span class="op">)</span>,</span>
@@ -703,25 +722,26 @@ format.</p>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/set_individual_traits.html" class="external-link">set_individual_traits</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ⠙ Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span></span></span>
-<span><span class="co">#&gt; ⠹ Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span> <span style="color: #B2B2B2;">[632ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 2 columns: <span style="color: #00BB00;">occurrenceID</span> and <span style="color: #00BB00;">basisOfRecord</span> <span style="color: #B2B2B2;">[622ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 4 columns: <span style="color: #00BB00;">decimalLatitude</span>, <span style="color: #00BB00;">decimalLongitude</span>, <span style="color: #00BB00;">coordinateUncertaintyI</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ⠙ Checking 1 column: <span style="color: #00BB00;">sex</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">sex</span> <span style="color: #B2B2B2;">[311ms]</span></span></span>
+<span><span class="co">#&gt; ⠹ Checking 1 column: <span style="color: #00BB00;">sex</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Checking 1 column: <span style="color: #00BB00;">sex</span> <span style="color: #B2B2B2;">[317ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
-<p>Running <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> once more will confirm that
-our dataset is ready to be used in a Darwin Core Archive!</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Running <code><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow()</a></code> once more confirms that our
+dataset is ready to be used in a Darwin Core Archive!</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/corella/man/suggest_workflow.html" class="external-link">suggest_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Matching Darwin Core terms</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; Matched 9 of 16 column names to DwC terms:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Matched: <span style="color: #00BB00;">basisOfRecord, coordinateUncertaintyInMeters, decimalLatitude,</span></span></span>
-<span><span class="co">#&gt;   <span style="color: #00BB00;">decimalLongitude, eventDate, geodeticDatum, occurrenceID, scientificName, sex</span></span></span>
+<span><span class="co">#&gt; Matched 12 of 19 column names to DwC terms:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Matched: <span style="color: #00BB00;">basisOfRecord, class, coordinateUncertaintyInMeters,</span></span></span>
+<span><span class="co">#&gt;   <span style="color: #00BB00;">decimalLatitude, decimalLongitude, eventDate, family, geodeticDatum, kingdom,</span></span></span>
+<span><span class="co">#&gt;   <span style="color: #00BB00;">occurrenceID, phylum, sex</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Unmatched: <span style="color: #BB0000;">age_class, comments, landscape, molecular_sex, sample_id, site,</span></span></span>
 <span><span class="co">#&gt;   <span style="color: #BB0000;">species_code</span></span></span>
 <span><span class="co">#&gt; </span></span>
@@ -730,54 +750,48 @@ our dataset is ready to be used in a Darwin Core Archive!</p>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">Type</span>                      <span style="color: #0000BB;">Matched term(s)</span>                                                                 <span style="color: #0000BB;">Missing term(s)</span> </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Identifier (at least one) <span style="color: #00BB00;">occurrenceID</span>                                                                    <span style="color: #BB0000;">-               </span> </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Record type               <span style="color: #00BB00;">basisOfRecord</span>                                                                   <span style="color: #BB0000;">-               </span> </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Scientific name           <span style="color: #00BB00;">scientificName</span>                                                                  <span style="color: #BB0000;">-               </span> </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Location                  <span style="color: #00BB00;">decimalLatitude, decimalLongitude, geodeticDatum, coordinateUncertaintyInMeters</span> <span style="color: #BB0000;">-               </span> </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Date/Time                 <span style="color: #00BB00;">eventDate</span>                                                                       <span style="color: #BB0000;">-               </span> </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 🥇 <span style="color: #00BB00;">All minimum column requirements met!</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Scientific name           <span style="color: #00BB00;">-               </span>                                                                <span style="color: #BB0000;">scientificName</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Suggested workflow</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 🥇 <span style="color: #00BB00;">Your dataframe is Darwin Core compliant!</span></span></span>
-<span><span class="co">#&gt; Run checks, or use your dataframe to build a Darwin Core Archive with <span style="color: #0000BB;">galaxias</span>:</span></span>
+<span><span class="co"><span style="font-style: italic;">#&gt; To make your data Darwin Core compliant, use the following workflow:</span></span></span>
+<span><span class="co"><span style="font-style: italic;">#&gt; </span></span></span>
 <span><span class="co">#&gt; df |&gt;</span></span>
-<span><span class="co">#&gt;   check_dataset()</span></span>
+<span><span class="co">#&gt;   set_scientific_name()</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="color: #555555;">Additional functions</span></span></span>
 <span><span class="co">#&gt; Based on your matched terms, you can also add to your pipe:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `set_individual_traits()`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> `set_individual_traits()` `set_taxonomy()`</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> <span style="color: #555555;">See all `set_` functions at</span></span></span>
 <span><span class="co">#&gt;   <span style="color: #555555;">http://corella.ala.org.au/reference/index.html#add-rename-or-edit-columns-to-match-darwin-core-terms</span></span></span></code></pre></div>
-<p>To submit our dataset, let’s select columns with valid occurrence
-term names and save this dataframe to the file
-<code>occurrences.csv</code>. Importantly, we will save our csv in a
-folder called <code>data-processed</code>, which galaxias looks for
-automatically when building a Darwin Core Archive.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>To submit our dataset, we’ll select only the columns that match
+Darwin Core terms …</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obs_dwc</span> <span class="op">&lt;-</span> <span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/corella/man/accepted_terms.html" class="external-link">occurrence_terms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># select any matching terms</span></span>
 <span></span>
 <span><span class="va">obs_dwc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_interactive.html" class="external-link">opt_interactive</a></span><span class="op">(</span>page_size_default <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<div id="xombwkkeul" class=".gt_table" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xombwkkeul table {
+<div id="eexombwkke" class=".gt_table" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eexombwkke table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xombwkkeul thead, #xombwkkeul tbody, #xombwkkeul tfoot, #xombwkkeul tr, #xombwkkeul td, #xombwkkeul th {
+#eexombwkke thead, #eexombwkke tbody, #eexombwkke tfoot, #eexombwkke tr, #eexombwkke td, #eexombwkke th {
   border-style: none;
 }
 
-#xombwkkeul p {
+#eexombwkke p {
   margin: 0;
   padding: 0;
 }
 
-#xombwkkeul .gt_table {
+#eexombwkke .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -803,12 +817,12 @@ automatically when building a Darwin Core Archive.</p>
   border-left-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_caption {
+#eexombwkke .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xombwkkeul .gt_title {
+#eexombwkke .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -820,7 +834,7 @@ automatically when building a Darwin Core Archive.</p>
   border-bottom-width: 0;
 }
 
-#xombwkkeul .gt_subtitle {
+#eexombwkke .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -832,7 +846,7 @@ automatically when building a Darwin Core Archive.</p>
   border-top-width: 0;
 }
 
-#xombwkkeul .gt_heading {
+#eexombwkke .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -844,13 +858,13 @@ automatically when building a Darwin Core Archive.</p>
   border-right-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_bottom_border {
+#eexombwkke .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_col_headings {
+#eexombwkke .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -865,7 +879,7 @@ automatically when building a Darwin Core Archive.</p>
   border-right-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_col_heading {
+#eexombwkke .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -885,7 +899,7 @@ automatically when building a Darwin Core Archive.</p>
   overflow-x: hidden;
 }
 
-#xombwkkeul .gt_column_spanner_outer {
+#eexombwkke .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -897,15 +911,15 @@ automatically when building a Darwin Core Archive.</p>
   padding-right: 4px;
 }
 
-#xombwkkeul .gt_column_spanner_outer:first-child {
+#eexombwkke .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xombwkkeul .gt_column_spanner_outer:last-child {
+#eexombwkke .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xombwkkeul .gt_column_spanner {
+#eexombwkke .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -917,11 +931,11 @@ automatically when building a Darwin Core Archive.</p>
   width: 100%;
 }
 
-#xombwkkeul .gt_spanner_row {
+#eexombwkke .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xombwkkeul .gt_group_heading {
+#eexombwkke .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -947,7 +961,7 @@ automatically when building a Darwin Core Archive.</p>
   text-align: left;
 }
 
-#xombwkkeul .gt_empty_group_heading {
+#eexombwkke .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -962,15 +976,15 @@ automatically when building a Darwin Core Archive.</p>
   vertical-align: middle;
 }
 
-#xombwkkeul .gt_from_md > :first-child {
+#eexombwkke .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xombwkkeul .gt_from_md > :last-child {
+#eexombwkke .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xombwkkeul .gt_row {
+#eexombwkke .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -989,7 +1003,7 @@ automatically when building a Darwin Core Archive.</p>
   overflow-x: hidden;
 }
 
-#xombwkkeul .gt_stub {
+#eexombwkke .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1002,7 +1016,7 @@ automatically when building a Darwin Core Archive.</p>
   padding-right: 5px;
 }
 
-#xombwkkeul .gt_stub_row_group {
+#eexombwkke .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1016,15 +1030,15 @@ automatically when building a Darwin Core Archive.</p>
   vertical-align: top;
 }
 
-#xombwkkeul .gt_row_group_first td {
+#eexombwkke .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xombwkkeul .gt_row_group_first th {
+#eexombwkke .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xombwkkeul .gt_summary_row {
+#eexombwkke .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1034,16 +1048,16 @@ automatically when building a Darwin Core Archive.</p>
   padding-right: 5px;
 }
 
-#xombwkkeul .gt_first_summary_row {
+#eexombwkke .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_first_summary_row.thick {
+#eexombwkke .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xombwkkeul .gt_last_summary_row {
+#eexombwkke .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1053,7 +1067,7 @@ automatically when building a Darwin Core Archive.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_grand_summary_row {
+#eexombwkke .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1063,7 +1077,7 @@ automatically when building a Darwin Core Archive.</p>
   padding-right: 5px;
 }
 
-#xombwkkeul .gt_first_grand_summary_row {
+#eexombwkke .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1073,7 +1087,7 @@ automatically when building a Darwin Core Archive.</p>
   border-top-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_last_grand_summary_row_top {
+#eexombwkke .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1083,11 +1097,11 @@ automatically when building a Darwin Core Archive.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_striped {
+#eexombwkke .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xombwkkeul .gt_table_body {
+#eexombwkke .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1096,7 +1110,7 @@ automatically when building a Darwin Core Archive.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_footnotes {
+#eexombwkke .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1110,7 +1124,7 @@ automatically when building a Darwin Core Archive.</p>
   border-right-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_footnote {
+#eexombwkke .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1119,7 +1133,7 @@ automatically when building a Darwin Core Archive.</p>
   padding-right: 5px;
 }
 
-#xombwkkeul .gt_sourcenotes {
+#eexombwkke .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1133,7 +1147,7 @@ automatically when building a Darwin Core Archive.</p>
   border-right-color: #D3D3D3;
 }
 
-#xombwkkeul .gt_sourcenote {
+#eexombwkke .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1141,84 +1155,87 @@ automatically when building a Darwin Core Archive.</p>
   padding-right: 5px;
 }
 
-#xombwkkeul .gt_left {
+#eexombwkke .gt_left {
   text-align: left;
 }
 
-#xombwkkeul .gt_center {
+#eexombwkke .gt_center {
   text-align: center;
 }
 
-#xombwkkeul .gt_right {
+#eexombwkke .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xombwkkeul .gt_font_normal {
+#eexombwkke .gt_font_normal {
   font-weight: normal;
 }
 
-#xombwkkeul .gt_font_bold {
+#eexombwkke .gt_font_bold {
   font-weight: bold;
 }
 
-#xombwkkeul .gt_font_italic {
+#eexombwkke .gt_font_italic {
   font-style: italic;
 }
 
-#xombwkkeul .gt_super {
+#eexombwkke .gt_super {
   font-size: 65%;
 }
 
-#xombwkkeul .gt_footnote_marks {
+#eexombwkke .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xombwkkeul .gt_asterisk {
+#eexombwkke .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xombwkkeul .gt_indent_1 {
+#eexombwkke .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xombwkkeul .gt_indent_2 {
+#eexombwkke .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xombwkkeul .gt_indent_3 {
+#eexombwkke .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xombwkkeul .gt_indent_4 {
+#eexombwkke .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xombwkkeul .gt_indent_5 {
+#eexombwkke .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xombwkkeul .katex-display {
+#eexombwkke .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xombwkkeul div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#eexombwkke div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
-<div id="xombwkkeul" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="xombwkkeul">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"basisOfRecord":["humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation"],"occurrenceID":["001-KKNP-01-KKNP","002-KKNP-01-KKNP","003-KKNP-02-KKNP","004-KKNP-02-KKNP","005-KKNP-03-KKNP","006-KKNP-03-KKNP","007-PRSP-01-PRSP","008-PRSP-01-PRSP","009-PRSP-02-PRSP","010-PRSP-02-PRSP","011-PRSP-03-PRSP","012-PRSP-03-PRSP","013-MBRP-01-MBRP","014-MBRP-01-MBRP","015-MBRP-02-MBRP","016-MBRP-02-MBRP","017-RSNC-01-RSNC","018-RSNC-01-RSNC","019-RSNC-02-RSNC","020-RSNC-02-RSNC"],"sex":["F","F","F","F","?","M","?","M","M","M","M","F","?","?","?","?","F","?","F","F"],"eventDate":["2008-05-05","2008-08-22","2008-02-05","2008-08-22","2008-02-06","2008-08-22","2008-08-21","2008-02-06","2008-02-06","2008-02-06","2008-02-05","2008-02-06","2008-02-06","2008-02-06","2008-02-06","2008-08-22","2008-08-21","2008-02-06","2008-02-06","2008-02-06"],"decimalLatitude":[-36.86753623,-36.87776688,-36.85016158,-36.85253109,-36.88116535,-36.89122256,-37.06920071,-37.07700759,-37.08471097,-37.08724436,-37.10494145,-37.10850091,-37.06966298,-37.07048907,-37.06709048,-37.06777963,-37.17755418,-37.16223393,-37.23265402,-37.28675759],"decimalLongitude":[143.2585859,143.2546377,143.2939053,143.3133888,143.306694,143.3118868,143.6905932,143.6930823,143.7015366,143.6963439,143.6915803,143.6897778,143.720473,143.7211275,143.725065,143.7272966,144.0702572,144.0633908,144.0469113,144.0664807],"geodeticDatum":["WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84"],"coordinateUncertaintyInMeters":[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],"scientificName":["Climacteris picumnus","Climacteris picumnus","Climacteris picumnus","Climacteris picumnus","Artamus cyanopterus","Acanthiza lineata","Artamus cyanopterus","Acanthiza reguloides","Malurus cyaneus","Malurus cyaneus","Acanthiza reguloides","Acanthiza lineata","Ptilotula fusca","Ptilotula fusca","Melithreptus brevirostris","Melithreptus brevirostris","Malurus cyaneus","Ptilotula fusca","Pardalotus punctatus","Pardalotus punctatus"]},"columns":[{"id":"basisOfRecord","name":"basisOfRecord","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"occurrenceID","name":"occurrenceID","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"sex","name":"sex","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"eventDate","name":"eventDate","type":"Date","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"decimalLatitude","name":"decimalLatitude","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"decimalLongitude","name":"decimalLongitude","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"geodeticDatum","name":"geodeticDatum","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"coordinateUncertaintyInMeters","name":"coordinateUncertaintyInMeters","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"scientificName","name":"scientificName","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"}],"defaultPageSize":5,"showPageSizeOptions":false,"pageSizeOptions":[10,25,50,100],"paginationType":"numbers","showPagination":true,"showPageInfo":true,"minRows":1,"height":"auto","theme":{"color":"#333333","backgroundColor":"#FFFFFF","stripedColor":"rgba(128,128,128,0.05)","style":{"font-family":"system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif","fontSize":"16px"},"tableStyle":{"borderTopStyle":"solid","borderTopWidth":"2px","borderTopColor":"#D3D3D3"},"headerStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"groupHeaderStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"cellStyle":{"fontWeight":"normal"}},"elementId":"xombwkkeul","dataKey":"a9029eaa63c666c0d3de3de9d3001200"},"children":[]},"class":"reactR_markup"},"evals":["tag.attribs.columns.0.style","tag.attribs.columns.1.style","tag.attribs.columns.2.style","tag.attribs.columns.3.style","tag.attribs.columns.4.style","tag.attribs.columns.5.style","tag.attribs.columns.6.style","tag.attribs.columns.7.style","tag.attribs.columns.8.style"],"jsHooks":[]}</script>
+<div id="eexombwkke" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="eexombwkke">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"basisOfRecord":["humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation","humanObservation"],"occurrenceID":["001-KKNP-01-KKNP","002-KKNP-01-KKNP","003-KKNP-02-KKNP","004-KKNP-02-KKNP","005-KKNP-03-KKNP","006-KKNP-03-KKNP","007-PRSP-01-PRSP","008-PRSP-01-PRSP","009-PRSP-02-PRSP","010-PRSP-02-PRSP","011-PRSP-03-PRSP","012-PRSP-03-PRSP","013-MBRP-01-MBRP","014-MBRP-01-MBRP","015-MBRP-02-MBRP","016-MBRP-02-MBRP","017-RSNC-01-RSNC","018-RSNC-01-RSNC","019-RSNC-02-RSNC","020-RSNC-02-RSNC"],"sex":["F","F","F","F","?","M","?","M","M","M","M","F","?","?","?","?","F","?","F","F"],"eventDate":["2008-05-05","2008-08-22","2008-02-05","2008-08-22","2008-02-06","2008-08-22","2008-08-21","2008-02-06","2008-02-06","2008-02-06","2008-02-05","2008-02-06","2008-02-06","2008-02-06","2008-02-06","2008-08-22","2008-08-21","2008-02-06","2008-02-06","2008-02-06"],"decimalLatitude":[-36.86753623,-36.87776688,-36.85016158,-36.85253109,-36.88116535,-36.89122256,-37.06920071,-37.07700759,-37.08471097,-37.08724436,-37.10494145,-37.10850091,-37.06966298,-37.07048907,-37.06709048,-37.06777963,-37.17755418,-37.16223393,-37.23265402,-37.28675759],"decimalLongitude":[143.2585859,143.2546377,143.2939053,143.3133888,143.306694,143.3118868,143.6905932,143.6930823,143.7015366,143.6963439,143.6915803,143.6897778,143.720473,143.7211275,143.725065,143.7272966,144.0702572,144.0633908,144.0469113,144.0664807],"geodeticDatum":["WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84","WGS84"],"coordinateUncertaintyInMeters":[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30],"kingdom":["Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia","Animalia"],"phylum":["Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata","Chordata"],"class":["Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves","Aves"],"family":["Climacteridae","Climacteridae","Climacteridae","Climacteridae","Artamidae","Acanthizidae","Artamidae","Acanthizidae","Maluridae","Maluridae","Acanthizidae","Acanthizidae","Meliphagidae","Meliphagidae","Meliphagidae","Meliphagidae","Maluridae","Meliphagidae","Pardalotidae","Pardalotidae"]},"columns":[{"id":"basisOfRecord","name":"basisOfRecord","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"occurrenceID","name":"occurrenceID","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"sex","name":"sex","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"eventDate","name":"eventDate","type":"Date","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"decimalLatitude","name":"decimalLatitude","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"decimalLongitude","name":"decimalLongitude","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"geodeticDatum","name":"geodeticDatum","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"coordinateUncertaintyInMeters","name":"coordinateUncertaintyInMeters","type":"numeric","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"right"},{"id":"kingdom","name":"kingdom","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"phylum","name":"phylum","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"class","name":"class","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"},{"id":"family","name":"family","type":"character","na":"NA","minWidth":125,"style":"function(rowInfo, colInfo) {\nconst rowIndex = rowInfo.index + 1\n}","html":true,"align":"left"}],"defaultPageSize":5,"showPageSizeOptions":false,"pageSizeOptions":[10,25,50,100],"paginationType":"numbers","showPagination":true,"showPageInfo":true,"minRows":1,"height":"auto","theme":{"color":"#333333","backgroundColor":"#FFFFFF","stripedColor":"rgba(128,128,128,0.05)","style":{"font-family":"system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif","fontSize":"16px"},"tableStyle":{"borderTopStyle":"solid","borderTopWidth":"2px","borderTopColor":"#D3D3D3"},"headerStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"groupHeaderStyle":{"fontWeight":"normal","backgroundColor":"transparent","borderBottomStyle":"solid","borderBottomWidth":"2px","borderBottomColor":"#D3D3D3"},"cellStyle":{"fontWeight":"normal"}},"elementId":"eexombwkke","dataKey":"b7719f5043e9c1af368bb9d0b210ed99"},"children":[]},"class":"reactR_markup"},"evals":["tag.attribs.columns.0.style","tag.attribs.columns.1.style","tag.attribs.columns.2.style","tag.attribs.columns.3.style","tag.attribs.columns.4.style","tag.attribs.columns.5.style","tag.attribs.columns.6.style","tag.attribs.columns.7.style","tag.attribs.columns.8.style","tag.attribs.columns.9.style","tag.attribs.columns.10.style","tag.attribs.columns.11.style"],"jsHooks":[]}</script>
 </div>
-<p>Our final step is to save this to our ‘publishing’ directory:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Save in ./data-processed</span></span>
+<p>… and save this as a file named <code>occurrences.csv</code> in a
+folder named <code>data-publish</code>. It’s important to follow this
+naming convention because galaxias automatically looks for particular
+directories in some steps.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Save in ./data-publish</span></span>
 <span><span class="fu"><a href="../reference/use_data.html">use_data_occurrences</a></span><span class="op">(</span><span class="va">obs_dwc</span><span class="op">)</span></span></code></pre></div>
-<p>All done! See the <a href="quick_start_guide.html">Quick start guide
-vignette</a> for how to build a Darwin Core Archive.</p>
+<p>All done! See the <a href="quick_start_guide.html">Quick start
+guide</a> for instructions on building a Darwin Core Archive.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -1231,7 +1248,7 @@ vignette</a> for how to build a Darwin Core Archive.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

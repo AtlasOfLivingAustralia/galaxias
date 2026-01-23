@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">galaxias</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ Westgate, Dax Kellie, Shandiya Balasubramaniam</h4>
             
             <h4 data-toc-skip class="date">2025-05-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/v0.1.1/vignettes/quick_start_guide.Rmd" class="external-link"><code>vignettes/quick_start_guide.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/AtlasOfLivingAustralia/galaxias/blob/main/vignettes/quick_start_guide.Rmd" class="external-link"><code>vignettes/quick_start_guide.Rmd</code></a></small>
       <div class="d-none name"><code>quick_start_guide.Rmd</code></div>
     </div>
 
@@ -239,9 +239,9 @@ added to our new folder:</p>
 <p>A critical part of a Darwin Core archive is a metadata statement:
 this tells users who owns the data, what the data were collected for,
 and what uses they can be put to (i.e. a data licence). To get an
-example statement, call <code><a href="https://rdrr.io/pkg/delma/man/use_metadata_template.html" class="external-link">use_metadata_template()</a></code>.</p>
+example statement, call <code><a href="https://delma.ala.org.au/R/reference/use_metadata_template.html" class="external-link">use_metadata_template()</a></code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/delma/man/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://delma.ala.org.au/R/reference/use_metadata_template.html" class="external-link">use_metadata_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>By default, this creates an R Markdown template named
 <code>metadata.Rmd</code> in your working directory. We can edit this
 template to include information about our dataset, and specify that we
@@ -278,7 +278,7 @@ in a Darwin Core Archive. If it is missing, <code><a href="../reference/build_ar
 will build one. We can also build a schema document ourselves using
 <code><a href="../reference/use_schema.html">use_schema()</a></code>.</p>
 <p>At the end of this process, you should have a Darwin Core Archive zip
-file (<code>dwc-archive.zip</code>) in your paernt directory. You should
+file (<code>dwc-archive.zip</code>) in your parent directory. You should
 also have a <code>data-publish</code> folder in your working directory
 containing standardised data files (e.g. <code>occurrences.csv</code>),
 a metadata statement in EML format (<code>eml.xml</code>), and a schema
@@ -290,9 +290,9 @@ document (<code>meta.xml</code>).</p>
 <p>There are two ways to check whether the contents of your Darwin Core
 Archive meet the Darwin Core Standard.</p>
 <p>The first is to run local tests on the files inside a local folder
-directory that will be used to build a Darwin Core Archive.
+that will be used to build a Darwin Core Archive.
 <code><a href="../reference/check_directory.html">check_directory()</a></code> allows us to check csv files and xml
-files in the directory against Darwin Core Standard criteria, using the
+files in the folder against Darwin Core Standard criteria, using the
 same checking functionality that is built into the <code>set_</code>
 functions. This function is especially beneficial if you have
 standardized your data to Darwin Core headers using functions outside of
@@ -301,8 +301,8 @@ standardized your data to Darwin Core headers using functions outside of
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_directory.html">check_directory</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>The second is to check whether a complete Darwin Core Archive meets
-institution’s Darwin Core criteria via an API. For example, we can test
-an archive against GBIF’s API tests.</p>
+an institution’s Darwin Core criteria via an API. For example, we can
+test an archive against GBIF’s API tests.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check against GBIF API</span></span>
 <span><span class="fu"><a href="../reference/check_archive.html">check_archive</a></span><span class="op">(</span><span class="st">"dwc-archive.zip"</span>,</span>
@@ -336,7 +336,7 @@ description to <a href="mailto:support@ala.org.au">support@ala.org.au</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
