@@ -1,7 +1,7 @@
 Package: galaxias
 Type: Package
 Title: Describe, Package, and Share Biodiversity Data
-Version: 0.1.1
+Version: 0.1.2
 Authors@R:
     c(person(given = "Martin",
              family = "Westgate",
@@ -48,6 +48,7 @@ Suggests:
   lubridate,
   rmarkdown,
   R.utils,
+  stringr,
   testthat (>= 3.0.0),
   tidyr,
   xml2

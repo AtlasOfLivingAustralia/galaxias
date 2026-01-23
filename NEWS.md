@@ -1,3 +1,8 @@
+# galaxias 0.1.2
+
+* clean up vignette text
+* add advice for including `set_taxonomy()` in the occurrences-example vignette
+
 # galaxias 0.1.1
 
 ### Bug fixes

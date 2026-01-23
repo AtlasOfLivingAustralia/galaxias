@@ -62,6 +62,22 @@ obs_dwc <- obs |>
   set_datetime(eventDate = lubridate::ymd(date)) # specify year-month-day format
 ```
 
+One thing that is still missing are the required taxonomic terms `kingdom` and `family` (noting that you could add other taxonomic terms as well if you wish). These aren't present in our dataset, so we'll have to add them. This is a fairly trivial exercise for most biologists, and we'll add them in text here; but it would be possible to look this up with `galah::search_taxa()` as well. 
+
+```{r}
+obs_dwc <- obs_dwc |>
+  set_taxonomy(kingdom = "Animalia",
+               phylum = "Chordata",
+               class = "Aves",
+               family = case_when(stringr::str_detect(scientificName, "^Acanthiza") ~ "Acanthizidae",
+                                  stringr::str_detect(scientificName, "^Artamus") ~ "Artamidae",
+                                  stringr::str_detect(scientificName, "^Climacteris") ~ "Climacteridae",
+                                  stringr::str_detect(scientificName, "^Malurus") ~ "Maluridae",
+                                  stringr::str_detect(scientificName, "^Ptilotula|^Melithreptus") ~ "Meliphagidae",
+                                  stringr::str_detect(scientificName, "^Pardalotus") ~ "Pardalotidae"))
+
+```
+
 Calling `suggest_workflow()` again accounts for our progress and shows us what still needs to be done. Here, we can see that we're still missing a couple of minimum required terms.  
 
 ```{r}
@@ -112,14 +128,11 @@ obs_dwc |>
   gt::opt_interactive(page_size_default = 5)
 ```
 
-**clarify this bit with Dax: data-processed and data-publish**
-... and save this as a file named `occurrences.csv` in a folder named `data-processed`. It's important to follow this naming convention because galaxias automatically looks for particular directories in some steps. 
-
-Our final step is to save this to our 'publishing' directory:
+... and save this as a file named `occurrences.csv` in a folder named `data-publish`. It's important to follow this naming convention because galaxias automatically looks for particular directories in some steps. 
 
 ```{r}
 #| eval: false
-# Save in ./data-processed
+# Save in ./data-publish
 use_data_occurrences(obs_dwc)
 ```
 
