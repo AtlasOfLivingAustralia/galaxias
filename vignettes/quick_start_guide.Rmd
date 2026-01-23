@@ -227,7 +227,7 @@ build_archive()
 Running `build_archive()` first checks whether we have a 'schema' document (`meta.xml`) in our `data-publish` folder. This is a machine-readable `xml` document that describes the content of the archive's data files and their structure. The schema 
 document is a required file in a Darwin Core Archive. If it is missing, `build_archive()` will build one. We can also build a schema document ourselves using `use_schema()`.
 
-At the end of this process, you should have a Darwin Core Archive zip file (`dwc-archive.zip`) in your paernt directory. You should also have a `data-publish` folder in your working directory containing 
+At the end of this process, you should have a Darwin Core Archive zip file (`dwc-archive.zip`) in your parent directory. You should also have a `data-publish` folder in your working directory containing 
 standardised data files (e.g. `occurrences.csv`), a metadata statement in EML 
 format (`eml.xml`), and a schema document (`meta.xml`). 
 
@@ -235,7 +235,7 @@ format (`eml.xml`), and a schema document (`meta.xml`).
 
 There are two ways to check whether the contents of your Darwin Core Archive meet the Darwin Core Standard.
 
-The first is to run local tests on the files inside a local folder directory that will be used to build a Darwin Core Archive. `check_directory()` allows us to check csv files and xml files in the directory against Darwin Core Standard criteria, using the same checking functionality that is built into the `set_` functions. This function is especially beneficial if you have standardized your data to Darwin Core headers using functions outside of `galaxias`/`corella`, such as `dplyr::mutate()` for example.
+The first is to run local tests on the files inside a local folder that will be used to build a Darwin Core Archive. `check_directory()` allows us to check csv files and xml files in the folder against Darwin Core Standard criteria, using the same checking functionality that is built into the `set_` functions. This function is especially beneficial if you have standardized your data to Darwin Core headers using functions outside of `galaxias`/`corella`, such as `dplyr::mutate()` for example.
 
 
 ```{r}
@@ -243,7 +243,7 @@ The first is to run local tests on the files inside a local folder directory tha
 check_directory()
 ```
 
-The second is to check whether a complete Darwin Core Archive meets institution's Darwin Core criteria via an API. For example, we can test an archive against GBIF's API tests. 
+The second is to check whether a complete Darwin Core Archive meets an institution's Darwin Core criteria via an API. For example, we can test an archive against GBIF's API tests. 
 
 ```{r}
 #| eval: false
