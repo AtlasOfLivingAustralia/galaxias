@@ -5,19 +5,20 @@
 #' easy to save data in the correct place for building a Darwin Core Archive 
 #' with [build_archive()].
 #' 
-#' `use_data()` is an all-in-one function for accepted data types "occurrence", 
-#' "event" and "multimedia". `use_data()` attempts to detect and save the 
-#' correct data type based on the provided `tibble`/`data.frame`.
-#' Alternatively, users can call the underlying functions 
-#' [use_data_occurrences()] or [use_data_events()] to 
-#' specify data type manually.
+#' `use_data()` is an all-in-one function for accepted data types "occurrence",
+#' "event", "resourceRelationship" and "multimedia". `use_data()` attempts to
+#' detect and save the correct data type based on the provided
+#' `tibble`/`data.frame`. Alternatively, users can call the underlying functions
+#' [use_data_occurrences()], [use_data_resource_relationship()], or
+#' [use_data_events()] to specify data type manually.
 #' @details
 #' This function saves data in the `data-publish` folder. It will create that
 #' folder if it is not already present.
 #' 
-#' Data type is determined by detecting type-specific column names in 
-#' supplied data. 
-#' * Event: (`eventID`, `parentEventID`, `eventType`)
+#' Data type is determined by detecting the presence or absence of type-specific
+#' column names in supplied data.
+#' * Event: `eventID` and not `occurrenceID` 
+#' * Resource relationship: `resourceRelationshipID`
 #' * Multimedia: not yet supported
 #' @param ... Unquoted name of `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data()` will not 
@@ -87,7 +88,6 @@ use_data <- function(...,
 #' @noRd
 #' @keywords Internal
 check_is_data <- function(obj, error_call = rlang::caller_env()) {
-  # browser()
   # check whether more than one data.frame/tibble is supplied
   tibble_check <- obj |> 
     purrr::map(
@@ -114,17 +114,31 @@ check_is_data <- function(obj, error_call = rlang::caller_env()) {
 #' @keywords Internal
 check_data_type <- function(data, error_call = rlang::caller_env()) {
   
-  if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
-    # Event
+  if ("resourceRelationshipID" %in% colnames(data)) {
+    # resourceRelationship
+    type <- "resourceRelationship"
+    file_name <- "resourceRelationship.csv"
+  } else if ("eventID" %in% colnames(data) & !"occurrenceID" %in% colnames(data)) {
+    # event
     type <- "event"
     file_name <- "events.csv"
-    not <- "occurrence"
   } else {
-    # Occurrence
+    # occurrence
     type <- "occurrence"
     file_name <- "occurrences.csv"
-    not <- "event"
   }
+  
+  # if (any(colnames(data) %in% c("eventID", "parentEventID"))) {
+  #   # Event
+  #   type <- "event"
+  #   file_name <- "events.csv"
+  #   not <- "occurrence"
+  # } else {
+  #   # Occurrence
+  #   type <- "occurrence"
+  #   file_name <- "occurrences.csv"
+  #   not <- "event"
+  # }
   
   if (rlang::is_interactive()) {
     choice <- cli_menu(
@@ -149,7 +163,7 @@ check_data_type <- function(data, error_call = rlang::caller_env()) {
   }
 }
 
-#' Switch to occurrence, event or multimedia type `use_data()` functions
+#' Switch to occurrence, event, resourceRelationship or multimedia type `use_data()` functions
 #' @noRd
 #' @keywords Internal
 switch_data_type <- function(user_data, type, overwrite, quiet) {
@@ -160,9 +174,12 @@ switch_data_type <- function(user_data, type, overwrite, quiet) {
                                              quiet = quiet),
          "event" = use_data_events(user_data, 
                                    overwrite = overwrite, 
-                                   quiet = quiet)
+                                   quiet = quiet),
+         "resourceRelationship" = use_data_resource_relationship(user_data, 
+                                                                 overwrite = overwrite, 
+                                                                 quiet = quiet)
          # "multimedia" = {use_data_multimedia(data)} # multimedia not yet supported
-         )
+  )
 }
 
 #' Use occurrence-type data in a Darwin Core Archive
@@ -215,6 +232,32 @@ use_data_events <- function(df,
                   quiet)
   
 }
+
+#' Use resource relationship data in a Darwin Core Archive
+#' @param df A `tibble`/`data.frame` to save.
+#' @param overwrite By default, `use_data_resource_relationship()` will not 
+#'   overwrite existing files. If you really want to do so, set this to `TRUE`.
+#' @param quiet Whether to message about what is happening. Default is set to 
+#'  `FALSE`. 
+#' @rdname use_data
+#' @export
+use_data_resource_relationship <- function(df,
+                                           overwrite = FALSE,
+                                           quiet = FALSE) {
+  
+  # check if it's a dataframe
+  if (!tibble::is_tibble(df) & !is.data.frame(df)) {
+    cli::cli_abort("Must provide a `tibble`/`data.frame`.")
+  }
+  
+  directory <- check_publish_directory(quiet = quiet)
+  file_path <- fs::path(directory, "resourceRelationship.csv")
+  write_data_file(file_path,
+                  df,
+                  overwrite,
+                  quiet)
+}
+
 
 #' Save data to file path
 #' @noRd

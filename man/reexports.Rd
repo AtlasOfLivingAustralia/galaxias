@@ -12,8 +12,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{corella}{\code{\link[corella]{suggest_workflow}}}
+  \item{corella}{\code{\link[corella:suggest_workflow]{suggest_workflow()}}}
 
-  \item{delma}{\code{\link[delma]{use_metadata_template}}}
+  \item{delma}{\code{\link[delma:use_metadata_template]{use_metadata_template()}}}
 }}
 
