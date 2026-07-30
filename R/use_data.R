@@ -18,7 +18,7 @@
 #' Data type is determined by detecting the presence or absence of type-specific
 #' column names in supplied data.
 #' * Event: `eventID` and not `occurrenceID` 
-#' * Resource relationship: `resourceRelationshipID`
+#' * Resource relationship: `resourceID` and `relatedResourceID`
 #' * Multimedia: not yet supported
 #' @param ... Unquoted name of `tibble`/`data.frame` to save.
 #' @param overwrite By default, `use_data()` will not 
@@ -114,7 +114,7 @@ check_is_data <- function(obj, error_call = rlang::caller_env()) {
 #' @keywords Internal
 check_data_type <- function(data, error_call = rlang::caller_env()) {
   
-  if ("resourceRelationshipID" %in% colnames(data)) {
+  if (all(c("resourceID", "relatedResourceID") %in% colnames(data))) {
     # resourceRelationship
     type <- "resourceRelationship"
     file_name <- "resourceRelationship.csv"
