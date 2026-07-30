@@ -156,8 +156,8 @@ detect_dwc_files <- function(directory,
   # check whether there are no csvs, and if so, abort
   if(all(!available_exts$present)){
     file_names <- cli::ansi_collapse(available_exts$file,
-                                sep = ", ",
-                                last = " or ")
+                                     sep = ", ",
+                                     last = " or ")
     bullets <- c(
       "Must include at least one Darwin Core-compliant csv file in {.file {directory}}.",
       i = "Accepted files are {.file {file_names}}.",
@@ -166,15 +166,44 @@ detect_dwc_files <- function(directory,
       cli::cli_fmt()
     cli::cli_abort(bullets)
   }
-  available_exts |>
-    dplyr::filter(.data$present == TRUE) |>
-    dplyr::mutate(label = c("core", 
-                            rep("extension", 
-                                length(which(.data$present == TRUE)) - 1)),
+  
+  present_exts <- available_exts |>
+    dplyr::filter(.data$present == TRUE)
+  
+  # check at least one present file is eligible to be the core e.g. resourceRelationship is not standalone 
+  core_candidates <- which(present_exts$core_eligible)
+  
+  if(length(core_candidates) < 1){
+    extension_files <- cli::ansi_collapse(present_exts$file, 
+                                          sep = ", ", 
+                                          last = " or ")
+    bullets <- c(
+      "No core-eligible Darwin Core file found in {.file {directory}}.",
+      i = "{.file {extension_files}} {?is/are} extension file{?s}, and must be paired with a core file such as {.file occurrences.csv} or {.file events.csv}.") |>
+      cli::cli_bullets() |>
+      cli::cli_fmt()
+    cli::cli_abort(bullets)
+  }
+  
+  present_exts |>
+    dplyr::mutate(label = dplyr::if_else(dplyr::row_number() == core_candidates[1],
+                                         "core",
+                                         "extension"),
                   level = 2,
                   directory = glue::glue("{directory}")) |>
     dplyr::select("type", "directory", "file", "level", "label", "attributes")
 }
+  
+
+#   available_exts |>
+#     dplyr::filter(.data$present == TRUE) |>
+#     dplyr::mutate(label = c("core", 
+#                             rep("extension", 
+#                                 length(which(.data$present == TRUE)) - 1)),
+#                   level = 2,
+#                   directory = glue::glue("{directory}")) |>
+#     dplyr::select("type", "directory", "file", "level", "label", "attributes")
+# }
 
 #' Internal function to list metadata for Darwin Core extensions
 #' @noRd
@@ -189,6 +218,7 @@ dwc_extensions <- function(){
              "occurrences.csv",
              "resourceRelationship.csv",
              "multimedia.csv"),
+    core_eligible = c(TRUE, TRUE, FALSE, FALSE),
     attributes = list(
       list(encoding="UTF-8",
            rowType="http://rs.gbif.org/terms/Event",
