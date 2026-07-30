@@ -149,6 +149,7 @@ detect_dwc_files <- function(directory,
   if(!quiet){
     file_check_message(available_exts, "occurrences.csv")
     file_check_message(available_exts, "events.csv")
+    file_check_message(available_exts, "resourceRelationship.csv")
     file_check_message(available_exts, "multimedia.csv")
   }
   
@@ -182,9 +183,11 @@ dwc_extensions <- function(){
   tibble::tibble(
     type = c("event",
              "occurrence", 
+             "resourceRelationship",
              "multimedia"),
     file = c("events.csv",
              "occurrences.csv",
+             "resourceRelationship.csv",
              "multimedia.csv"),
     attributes = list(
       list(encoding="UTF-8",
@@ -195,6 +198,12 @@ dwc_extensions <- function(){
            ignoreHeaderLines="1"),
       list(encoding="UTF-8",
            rowType="http://rs.tdwg.org/dwc/terms/Occurrence",
+           fieldsTerminatedBy=",",
+           linesTerminatedBy="\r\n",
+           fieldsEnclosedBy="&quot;",
+           ignoreHeaderLines="1"),
+      list(encoding="UTF-8",
+           rowType="http://rs.tdwg.org/dwc/terms/ResourceRelationship",
            fieldsTerminatedBy=",",
            linesTerminatedBy="\r\n",
            fieldsEnclosedBy="&quot;",
