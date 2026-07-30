@@ -50,7 +50,7 @@ Data type is determined by detecting the presence or absence of type-specific
 column names in supplied data.
 \itemize{
 \item Event: \code{eventID} and not \code{occurrenceID}
-\item Resource relationship: \code{resourceRelationshipID}
+\item Resource relationship: \code{resourceID} and \code{relatedResourceID}
 \item Multimedia: not yet supported
 }
 }
