@@ -36,7 +36,7 @@ directory:
 \item Data
 
 One or more csv files named \code{occurrences.csv}, \code{events.csv} and/or
-\code{multimedia.csv}.
+\code{multimedia.csv}, \code{resourceRelationship.csv}.
 These csv files contain data standardised using Darwin Core Standard
 (see \code{\link[corella:corella-package]{corella::corella-package()}} for details). A \code{data.frame}/\code{tibble}
 can be added to the correct folder using \code{\link[=use_data]{use_data()}}.

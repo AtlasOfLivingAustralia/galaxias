@@ -15,7 +15,7 @@
 #'  * Data 
 #'    
 #'    One or more csv files named `occurrences.csv`, `events.csv` and/or 
-#'    `multimedia.csv`.
+#'    `multimedia.csv`, `resourceRelationship.csv`.
 #'    These csv files contain data standardised using Darwin Core Standard 
 #'    (see [corella::corella-package()] for details). A `data.frame`/`tibble` 
 #'    can be added to the correct folder using [use_data()].
@@ -171,6 +171,7 @@ find_data <- function(directory,
     cli::cat_line("Data (minimum of one)")
     file_check_message(user_files, "occurrences.csv")
     file_check_message(user_files, "events.csv")
+    file_check_message(user_files, "resourceRelationship.csv")
     file_check_message(user_files, "multimedia.csv")
   }
   
@@ -182,7 +183,7 @@ find_data <- function(directory,
   
   if(n_data_present < 1){
     bullets <- c("Didn't find data files in {.file {directory}}.",
-                 i = "{directory/} must contain at least one of `occurrences.csv`, `events.csv` or `multimedia.csv`.",
+                 i = "{directory} must contain at least one of `occurrences.csv`, `events.csv`, `resourceRelationship.csv` or `multimedia.csv`.",
                  i = "See `use_data()`.")
     cli::cli_abort(bullets,
                    call = call)
@@ -222,10 +223,10 @@ find_data <- function(directory,
 #' @keywords Internal
 darwin_core_files <- function() {
   x <- tibble::tibble(
-    file = c("occurrences.csv", "events.csv", "multimedia.csv",
+    file = c("occurrences.csv", "events.csv", "resourceRelationship.csv", "multimedia.csv",
              "eml.xml",
              "meta.xml"),
-    type = c("data", "data", "data",
+    type = c("data", "data", "data", "data",
              "metadata",
              "schema")
   )
