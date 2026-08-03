@@ -9,7 +9,7 @@
 #' "event", "resourceRelationship" and "multimedia". `use_data()` attempts to
 #' detect and save the correct data type based on the provided
 #' `tibble`/`data.frame`. Alternatively, users can call the underlying functions
-#' [use_data_occurrences()], [use_data_resource_relationship()], or
+#' [use_data_occurrences()], [use_data_relationships()], or
 #' [use_data_events()] to specify data type manually.
 #' @details
 #' This function saves data in the `data-publish` folder. It will create that
@@ -175,9 +175,9 @@ switch_data_type <- function(user_data, type, overwrite, quiet) {
          "event" = use_data_events(user_data, 
                                    overwrite = overwrite, 
                                    quiet = quiet),
-         "resourceRelationship" = use_data_resource_relationship(user_data, 
-                                                                 overwrite = overwrite, 
-                                                                 quiet = quiet)
+         "resourceRelationship" = use_data_relationships(user_data, 
+                                                         overwrite = overwrite, 
+                                                         quiet = quiet)
          # "multimedia" = {use_data_multimedia(data)} # multimedia not yet supported
   )
 }
@@ -235,13 +235,13 @@ use_data_events <- function(df,
 
 #' Use resource relationship data in a Darwin Core Archive
 #' @param df A `tibble`/`data.frame` to save.
-#' @param overwrite By default, `use_data_resource_relationship()` will not 
+#' @param overwrite By default, `use_data_relationships()` will not 
 #'   overwrite existing files. If you really want to do so, set this to `TRUE`.
 #' @param quiet Whether to message about what is happening. Default is set to 
 #'  `FALSE`. 
 #' @rdname use_data
 #' @export
-use_data_resource_relationship <- function(df,
+use_data_relationships <- function(df,
                                            overwrite = FALSE,
                                            quiet = FALSE) {
   

@@ -4,7 +4,7 @@
 \alias{use_data}
 \alias{use_data_occurrences}
 \alias{use_data_events}
-\alias{use_data_resource_relationship}
+\alias{use_data_relationships}
 \title{Use standardised data in a Darwin Core Archive}
 \usage{
 use_data(..., overwrite = FALSE, quiet = FALSE)
@@ -13,12 +13,12 @@ use_data_occurrences(df, overwrite = FALSE, quiet = FALSE)
 
 use_data_events(df, overwrite = FALSE, quiet = FALSE)
 
-use_data_resource_relationship(df, overwrite = FALSE, quiet = FALSE)
+use_data_relationships(df, overwrite = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{...}{Unquoted name of \code{tibble}/\code{data.frame} to save.}
 
-\item{overwrite}{By default, \code{use_data_resource_relationship()} will not
+\item{overwrite}{By default, \code{use_data_relationships()} will not
 overwrite existing files. If you really want to do so, set this to \code{TRUE}.}
 
 \item{quiet}{Whether to message about what is happening. Default is set to
@@ -39,7 +39,7 @@ with \code{\link[=build_archive]{build_archive()}}.
 "event", "resourceRelationship" and "multimedia". \code{use_data()} attempts to
 detect and save the correct data type based on the provided
 \code{tibble}/\code{data.frame}. Alternatively, users can call the underlying functions
-\code{\link[=use_data_occurrences]{use_data_occurrences()}}, \code{\link[=use_data_resource_relationship]{use_data_resource_relationship()}}, or
+\code{\link[=use_data_occurrences]{use_data_occurrences()}}, \code{\link[=use_data_relationships]{use_data_relationships()}}, or
 \code{\link[=use_data_events]{use_data_events()}} to specify data type manually.
 }
 \details{
